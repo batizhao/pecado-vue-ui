@@ -9,16 +9,17 @@ export function login(username, password, code, uuid) {
     uuid
   }
   return request({
-    url: '/login',
+    url: '/uaa/oauth/token?username='+username+'&password='+password+'&grant_type=password',
     method: 'post',
-    data: data
+    // data: data,
+    headers: {'Authorization': 'Basic Y2xpZW50X2FwcDoxMjM0NTY='}
   })
 }
 
 // 获取用户详细信息
 export function getInfo() {
   return request({
-    url: '/getInfo',
+    url: '/ims/user/me',
     method: 'get'
   })
 }
