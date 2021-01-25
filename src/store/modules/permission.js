@@ -44,16 +44,16 @@ function filterAsyncRouter(asyncRouterMap, isRewrite = false) {
     if (isRewrite && route.children) {
       route.children = filterChildren(route.children)
     }
-    if (route.component) {
+    // if (route.component) {
       // Layout ParentView 组件特殊处理
-      if (route.component === 'Layout') {
+      if (route.children.length > 0) {
         route.component = Layout
-      } else if (route.component === 'ParentView') {
-        route.component = ParentView
+      // } else if (route.component === 'ParentView') {
+        // route.component = ParentView
       } else {
-        route.component = loadView(route.component)
+        route.component = loadView(route.path)
       }
-    }
+    // }
     if (route.children != null && route.children && route.children.length) {
       route.children = filterAsyncRouter(route.children, route, isRewrite)
     }
@@ -83,7 +83,7 @@ function filterChildren(childrenMap) {
 }
 
 export const loadView = (view) => { // 路由懒加载
-  return (resolve) => require([`@/views/${view}`], resolve)
+  return (resolve) => require([`@/views${view}`], resolve)
 }
 
 export default permission
