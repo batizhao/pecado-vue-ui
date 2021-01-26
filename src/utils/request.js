@@ -5,6 +5,11 @@ import { getToken } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
 
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
+
+axios.defaults.validateStatus = function (status) {
+  return status >= 200 && status <= 500 // 默认的
+}
+
 // 创建axios实例
 const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
@@ -50,29 +55,29 @@ service.interceptors.request.use(config => {
 // 响应拦截器
 service.interceptors.response.use(res => {
     // 未设置状态码则默认成功状态
-    const code = res.status || 200;
+    const status = Number(res.status) || 200
+    const message = res.data.message || errorCode[status] || errorCode['default']
     // 获取错误信息
-    const msg = errorCode[code] || res.data.message || errorCode['default']
-    if (code === 401) {
+    if (status === 401) {
       MessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
           confirmButtonText: '重新登录',
           cancelButtonText: '取消',
           type: 'warning'
         }
       ).then(() => {
-        store.dispatch('LogOut').then(() => {
+        store.dispatch('FedLogOut').then(() => {
           location.href = '/index';
         })
       })
-    } else if (code === 500) {
+    } else if (status === 500) {
       Message({
-        message: msg,
+        message: message,
         type: 'error'
       })
-      return Promise.reject(new Error(msg))
-    } else if (code !== 200) {
+      return Promise.reject(new Error(message))
+    } else if (status !== 200) {
       Notification.error({
-        title: msg
+        title: message
       })
       return Promise.reject('error')
     } else {
