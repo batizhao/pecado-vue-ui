@@ -19,18 +19,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="创建时间">
-        <el-date-picker
-          v-model="dateRange"
-          size="small"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        ></el-date-picker>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -88,9 +76,9 @@
           ></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createdTime" min-width="2">
+      <el-table-column label="创建时间" align="center" prop="createTime" min-width="2">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createdTime) }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="2" class-name="small-padding fixed-width">
@@ -150,7 +138,7 @@
 import { listDsPage, getDs, addOrUpdateDs, deleteDs, changeDsStatus } from "@/api/dp/ds";
 
 export default {
-  name: "Ds",
+  name: "ds",
   data() {
     return {
       // 遮罩层
@@ -171,8 +159,6 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      // 日期范围
-      dateRange: [],
       // 查询参数
       queryParams: {
         current: 1,
@@ -182,10 +168,6 @@ export default {
       },
       // 表单参数
       form: {},
-      // defaultProps: {
-      //   children: "children",
-      //   label: "label"
-      // },
       // 表单校验
       rules: {
         name: [
@@ -210,7 +192,7 @@ export default {
     /** 查询数据源列表 */
     getList() {
       this.loading = true;
-      listDsPage(this.addDateRange(this.queryParams, this.dateRange)).then(
+      listDsPage(this.queryParams).then(
         response => {
           this.dsList = response.data.records;
           this.total = response.data.total;
@@ -249,7 +231,6 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },
@@ -281,7 +262,7 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           addOrUpdateDs(this.form).then(response => {
-            this.msgSuccess("修改成功");
+            this.msgSuccess("保存成功");
             this.open = false;
             this.getList();
           });
@@ -291,7 +272,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$confirm('确认删除数据源"' + row.name + '"吗?', "警告", {
+      const names = row.name || ids;
+      this.$confirm('确认删除数据源"' + names + '"吗?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"

@@ -100,9 +100,9 @@
           ></el-switch>
         </template>
       </el-table-column> -->
-      <el-table-column label="创建时间" align="center" prop="createdTime">
+      <el-table-column label="创建时间" align="center" prop="createTime">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createdTime) }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
