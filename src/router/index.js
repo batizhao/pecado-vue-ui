@@ -113,8 +113,8 @@ export const constantRoutes = [
     hidden: true,
     children: [
       {
-        path: 'edit/:tableId(\\d+)',
-        component: (resolve) => require(['@/views/tool/gen/editTable'], resolve),
+        path: 'edit/:id(\\d+)',
+        component: (resolve) => require(['@/views/dp/code/editTable'], resolve),
         name: 'GenEdit',
         meta: { title: '修改生成配置' }
       }

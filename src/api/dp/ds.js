@@ -24,7 +24,7 @@ export function addOrUpdateDs(data) {
 
 // 删除数据源
 export function deleteDs(ids) {
-  request.delete(`/dp/ds?ids=${ids}`);
+  return request.delete(`/dp/ds?ids=${ids}`);
 }
 
 // 数据源状态修改

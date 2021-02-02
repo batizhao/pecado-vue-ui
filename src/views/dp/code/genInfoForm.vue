@@ -36,7 +36,7 @@
         </el-form-item>
       </el-col>
 
-      <el-col :span="12">
+      <!-- <el-col :span="12">
         <el-form-item prop="businessName">
           <span slot="label">
             生成业务名
@@ -58,7 +58,7 @@
           </span>
           <el-input v-model="info.functionName" />
         </el-form-item>
-      </el-col>
+      </el-col> -->
 
       <el-col :span="12">
         <el-form-item>

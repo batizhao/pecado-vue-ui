@@ -1,6 +1,6 @@
 <template>
   <!-- 导入表 -->
-  <el-dialog title="导入表" :visible.sync="visible" width="800px" top="5vh" append-to-body>
+  <el-dialog title="导入表" :visible.sync="visible" width="850px" top="5vh" append-to-body>
     <el-form :model="queryParams" ref="queryForm" :inline="true">
       <el-form-item label="表名称" prop="tableName">
         <el-input
@@ -27,16 +27,17 @@
     </el-form>
     <el-row>
       <el-table @row-click="clickRow" ref="table" :data="dbTableList" @selection-change="handleSelectionChange" height="260px">
-        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="tableName" label="表名称" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="tableComment" label="表描述" :show-overflow-tooltip="true"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
-        <el-table-column prop="updateTime" label="更新时间"></el-table-column>
+        <el-table-column type="selection" min-width="1" />
+        <el-table-column prop="dsName" label="数据源" :show-overflow-tooltip="true" min-width="1" />
+        <el-table-column prop="tableName" label="表名称" :show-overflow-tooltip="true" min-width="1" />
+        <el-table-column prop="tableComment" label="表描述" :show-overflow-tooltip="true" min-width="1.5" />
+        <el-table-column prop="createTime" label="创建时间" min-width="2" />
+        <el-table-column prop="updateTime" label="更新时间" min-width="2" />
       </el-table>
       <pagination
         v-show="total>0"
         :total="total"
-        :page.sync="queryParams.pageNum"
+        :page.sync="queryParams.current"
         :limit.sync="queryParams.pageSize"
         @pagination="getList"
       />
@@ -49,7 +50,7 @@
 </template>
 
 <script>
-import { listDbTable, importTable } from "@/api/tool/gen";
+import { listCodeTablePage, importCodeTable } from "@/api/dp/code";
 export default {
   data() {
     return {
@@ -63,7 +64,7 @@ export default {
       dbTableList: [],
       // 查询参数
       queryParams: {
-        pageNum: 1,
+        current: 1,
         pageSize: 10,
         tableName: undefined,
         tableComment: undefined
@@ -81,20 +82,20 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.tables = selection.map(item => item.tableName);
+      this.tables = selection;
     },
     // 查询表数据
     getList() {
-      listDbTable(this.queryParams).then(res => {
-        if (res.code === 200) {
-          this.dbTableList = res.rows;
-          this.total = res.total;
+      listCodeTablePage(this.queryParams).then(res => {
+        if (res.code === 0) {
+          this.dbTableList = res.data.records;
+          this.total = res.data.total;
         }
       });
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
+      this.queryParams.current = 1;
       this.getList();
     },
     /** 重置按钮操作 */
@@ -104,9 +105,9 @@ export default {
     },
     /** 导入按钮操作 */
     handleImportTable() {
-      importTable({ tables: this.tables.join(",") }).then(res => {
-        this.msgSuccess(res.msg);
-        if (res.code === 200) {
+      importCodeTable(this.tables).then(res => {
+        this.msgSuccess(res.message);
+        if (res.code === 0) {
           this.visible = false;
           this.$emit("ok");
         }

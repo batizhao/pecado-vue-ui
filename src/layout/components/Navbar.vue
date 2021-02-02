@@ -94,7 +94,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('FedLogOut').then(() => {
-          location.href = '/index';
+          location.href = '/';
         })
       })
     }

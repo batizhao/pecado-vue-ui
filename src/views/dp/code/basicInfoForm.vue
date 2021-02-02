@@ -13,18 +13,18 @@
       </el-col>
 
       <el-col :span="12">
-        <el-form-item label="实体类名称" prop="className">
+        <el-form-item label="类名" prop="className">
           <el-input placeholder="请输入" v-model="info.className" />
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item label="作者" prop="functionAuthor">
-          <el-input placeholder="请输入" v-model="info.functionAuthor" />
+        <el-form-item label="类作者" prop="classAuthor">
+          <el-input placeholder="请输入" v-model="info.classAuthor" />
         </el-form-item>
       </el-col>
       <el-col :span="24">
-        <el-form-item label="备注" prop="remark">
-          <el-input type="textarea" :rows="3" v-model="info.remark"></el-input>
+        <el-form-item label="类注释" prop="classComment">
+          <el-input type="textarea" :rows="3" v-model="info.classComment"></el-input>
         </el-form-item>
       </el-col>
     </el-row>

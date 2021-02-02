@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" v-show="showSearch" :inline="true">
       <el-form-item label="表名称" prop="tableName">
         <el-input
           v-model="queryParams.tableName"
@@ -9,27 +9,6 @@
           size="small"
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
-      <el-form-item label="表描述" prop="tableComment">
-        <el-input
-          v-model="queryParams.tableComment"
-          placeholder="请输入表描述"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="创建时间">
-        <el-date-picker
-          v-model="dateRange"
-          size="small"
-          style="width: 240px"
-          value-format="yyyy-MM-dd"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        ></el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -44,8 +23,8 @@
           plain
           icon="el-icon-download"
           size="mini"
-          @click="handleGenTable"
-          v-hasPermi="['tool:gen:code']"
+          @click="handleGenCode"
+          v-hasPermi="['dp:code:admin']"
         >生成</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -55,7 +34,7 @@
           icon="el-icon-upload"
           size="mini"
           @click="openImportTable"
-          v-hasPermi="['tool:gen:import']"
+          v-hasPermi="['dp:code:admin']"
         >导入</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -66,7 +45,7 @@
           size="mini"
           :disabled="single"
           @click="handleEditTable"
-          v-hasPermi="['tool:gen:edit']"
+          v-hasPermi="['dp:code:admin']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -77,78 +56,79 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['tool:gen:remove']"
+          v-hasPermi="['dp:code:admin']"
         >删除</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="tableList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" align="center" width="55"></el-table-column>
-      <el-table-column label="序号" type="index" width="50" align="center">
-        <template slot-scope="scope">
-          <span>{{(queryParams.pageNum - 1) * queryParams.pageSize + scope.$index + 1}}</span>
-        </template>
-      </el-table-column>
+      <el-table-column type="selection" min-width="1" align="center" />
+      <el-table-column
+        label="数据源"
+        align="center"
+        prop="dsName"
+        :show-overflow-tooltip="true"
+        min-width="1"
+      />
       <el-table-column
         label="表名称"
         align="center"
         prop="tableName"
         :show-overflow-tooltip="true"
-        width="120"
+        min-width="1"
       />
       <el-table-column
         label="表描述"
         align="center"
         prop="tableComment"
         :show-overflow-tooltip="true"
-        width="120"
+        min-width="1"
       />
       <el-table-column
         label="实体"
         align="center"
         prop="className"
         :show-overflow-tooltip="true"
-        width="120"
+        min-width="1"
       />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="160" />
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="160" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="创建时间" align="center" prop="createTime" min-width="2" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" min-width="2">
         <template slot-scope="scope">
           <el-button
             type="text"
             size="small"
             icon="el-icon-view"
             @click="handlePreview(scope.row)"
-            v-hasPermi="['tool:gen:preview']"
+            v-hasPermi="['dp:code:admin']"
           >预览</el-button>
           <el-button
             type="text"
             size="small"
             icon="el-icon-edit"
             @click="handleEditTable(scope.row)"
-            v-hasPermi="['tool:gen:edit']"
+            v-hasPermi="['dp:code:admin']"
           >编辑</el-button>
           <el-button
             type="text"
             size="small"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['tool:gen:remove']"
+            v-hasPermi="['dp:code:admin']"
           >删除</el-button>
           <el-button
             type="text"
             size="small"
             icon="el-icon-refresh"
             @click="handleSynchDb(scope.row)"
-            v-hasPermi="['tool:gen:edit']"
+            v-hasPermi="['dp:code:admin']"
           >同步</el-button>
           <el-button
             type="text"
             size="small"
             icon="el-icon-download"
-            @click="handleGenTable(scope.row)"
-            v-hasPermi="['tool:gen:code']"
+            @click="handleGenCode(scope.row)"
+            v-hasPermi="['dp:code:admin']"
           >生成代码</el-button>
         </template>
       </el-table-column>
@@ -156,7 +136,7 @@
     <pagination
       v-show="total>0"
       :total="total"
-      :page.sync="queryParams.pageNum"
+      :page.sync="queryParams.current"
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
@@ -178,9 +158,9 @@
 </template>
 
 <script>
-import { listTable, previewTable, delTable, genCode, synchDb } from "@/api/tool/gen";
-import importTable from "./importTable";
-import { downLoadZip } from "@/utils/zipdownload";
+import { listCodePage, previewCode, deleteCode, syncCodeMeta } from "@/api/dp/code";
+import importTable from "./import";
+import {downLoadZip } from "@/utils/zipdownload";
 import hljs from "highlight.js/lib/highlight";
 import "highlight.js/styles/github-gist.css";
 hljs.registerLanguage("java", require("highlight.js/lib/languages/java"));
@@ -191,7 +171,7 @@ hljs.registerLanguage("javascript", require("highlight.js/lib/languages/javascri
 hljs.registerLanguage("sql", require("highlight.js/lib/languages/sql"));
 
 export default {
-  name: "Gen",
+  name: "Code",
   components: { importTable },
   data() {
     return {
@@ -213,11 +193,9 @@ export default {
       total: 0,
       // 表数据
       tableList: [],
-      // 日期范围
-      dateRange: "",
       // 查询参数
       queryParams: {
-        pageNum: 1,
+        current: 1,
         pageSize: 10,
         tableName: undefined,
         tableComment: undefined
@@ -227,7 +205,7 @@ export default {
         open: false,
         title: "代码预览",
         data: {},
-        activeName: "domain.java"
+        activeName: "Domain.java"
       }
     };
   },
@@ -245,32 +223,32 @@ export default {
     /** 查询表集合 */
     getList() {
       this.loading = true;
-      listTable(this.addDateRange(this.queryParams, this.dateRange)).then(response => {
-          this.tableList = response.rows;
-          this.total = response.total;
+      listCodePage(this.queryParams).then(response => {
+          this.tableList = response.data.records;
+          this.total = response.data.total;
           this.loading = false;
         }
       );
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
+      this.queryParams.current = 1;
       this.getList();
     },
     /** 生成代码操作 */
-    handleGenTable(row) {
-      const tableNames = row.tableName || this.tableNames;
-      if (tableNames == "") {
+    handleGenCode(row) {
+      const ids = row.id || this.ids;
+      if (ids == "") {
         this.msgError("请选择要生成的数据");
         return;
       }
-      if(row.genType === "1") {
-        genCode(row.tableName).then(response => {
-          this.msgSuccess("成功生成到自定义路径：" + row.genPath);
-        });
-      } else {
-        downLoadZip("/tool/gen/batchGenCode?tables=" + tableNames, "ruoyi");
-      }
+      // if(row.genType === "1") {
+      //   genCode(row.tableName).then(response => {
+      //     this.msgSuccess("成功生成到自定义路径：" + row.genPath);
+      //   });
+      // } else {
+        downLoadZip("/dp/code?ids=" + ids, "ruoyi");
+      // }
     },
     /** 同步数据库操作 */
     handleSynchDb(row) {
@@ -280,7 +258,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(function() {
-          return synchDb(tableName);
+          return syncCodeMeta(row.id);
       }).then(() => {
           this.msgSuccess("同步成功");
       })
@@ -291,13 +269,12 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.dateRange = [];
       this.resetForm("queryForm");
       this.handleQuery();
     },
     /** 预览按钮 */
     handlePreview(row) {
-      previewTable(row.tableId).then(response => {
+      previewCode(row.id).then(response => {
         this.preview.data = response.data;
         this.preview.open = true;
       });
@@ -311,25 +288,26 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.tableId);
+      this.ids = selection.map(item => item.id);
       this.tableNames = selection.map(item => item.tableName);
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
     /** 修改按钮操作 */
     handleEditTable(row) {
-      const tableId = row.tableId || this.ids[0];
-      this.$router.push("/gen/edit/" + tableId);
+      const id = row.id || this.ids[0];
+      this.$router.push("/gen/edit/" + id);
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const tableIds = row.tableId || this.ids;
-      this.$confirm('是否确认删除表编号为"' + tableIds + '"的数据项?', "警告", {
+      const ids = row.id || this.ids;
+      const names = row.tableName || this.tableNames;
+      this.$confirm('确认删除"' + names + '"吗?', "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(function() {
-          return delTable(tableIds);
+          return deleteCode(ids);
       }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");

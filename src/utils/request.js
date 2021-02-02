@@ -66,7 +66,7 @@ service.interceptors.response.use(res => {
         }
       ).then(() => {
         store.dispatch('FedLogOut').then(() => {
-          location.href = '/index';
+          location.href = '/';
         })
       })
     } else if (status === 500) {

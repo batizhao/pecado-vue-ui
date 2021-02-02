@@ -2,10 +2,10 @@
   <el-card>
     <el-tabs v-model="activeName">
       <el-tab-pane label="基本信息" name="basic">
-        <basic-info-form ref="basicInfo" :info="info" />
+        <basic-info-form ref="basicInfo" :info="code" />
       </el-tab-pane>
       <el-tab-pane label="字段信息" name="cloum">
-        <el-table ref="dragTable" :data="cloumns" row-key="columnId" :max-height="tableHeight">
+        <el-table ref="dragTable" :data="codeMetas" row-key="id" :max-height="tableHeight">
           <el-table-column label="序号" type="index" min-width="5%" class-name="allowDrag" />
           <el-table-column
             label="字段列名"
@@ -44,27 +44,27 @@
 
           <el-table-column label="插入" min-width="5%">
             <template slot-scope="scope">
-              <el-checkbox true-label="1" v-model="scope.row.isInsert"></el-checkbox>
+              <el-checkbox true-label="1" v-model="scope.row.save"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="编辑" min-width="5%">
             <template slot-scope="scope">
-              <el-checkbox true-label="1" v-model="scope.row.isEdit"></el-checkbox>
+              <el-checkbox true-label="1" v-model="scope.row.edit"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="列表" min-width="5%">
             <template slot-scope="scope">
-              <el-checkbox true-label="1" v-model="scope.row.isList"></el-checkbox>
+              <el-checkbox true-label="1" v-model="scope.row.display"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="查询" min-width="5%">
             <template slot-scope="scope">
-              <el-checkbox true-label="1" v-model="scope.row.isQuery"></el-checkbox>
+              <el-checkbox true-label="1" v-model="scope.row.search"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="查询方式" min-width="10%">
             <template slot-scope="scope">
-              <el-select v-model="scope.row.queryType">
+              <el-select v-model="scope.row.searchType">
                 <el-option label="=" value="EQ" />
                 <el-option label="!=" value="NE" />
                 <el-option label=">" value="GT" />
@@ -78,7 +78,7 @@
           </el-table-column>
           <el-table-column label="必填" min-width="5%">
             <template slot-scope="scope">
-              <el-checkbox true-label="1" v-model="scope.row.isRequired"></el-checkbox>
+              <el-checkbox true-label="1" v-model="scope.row.required"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="显示类型" min-width="12%">
@@ -113,7 +113,7 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="生成信息" name="genInfo">
-        <gen-info-form ref="genInfo" :info="info" :tables="tables" :menus="menus"/>
+        <gen-info-form ref="genInfo" :info="code" :tables="codes" :menus="menus"/>
       </el-tab-pane>
     </el-tabs>
     <el-form label-width="100px">
@@ -125,7 +125,7 @@
   </el-card>
 </template>
 <script>
-import { getGenTable, updateGenTable } from "@/api/tool/gen";
+import { getCode, updateGenTable } from "@/api/dp/code";
 import { optionselect as getDictOptionselect } from "@/api/system/dict/type";
 import { listMenu as getMenuTreeselect } from "@/api/system/menu";
 import basicInfoForm from "./basicInfoForm";
@@ -145,34 +145,34 @@ export default {
       // 表格的高度
       tableHeight: document.documentElement.scrollHeight - 245 + "px",
       // 表信息
-      tables: [],
+      codes: [],
       // 表列信息
-      cloumns: [],
+      codeMetas: [],
       // 字典信息
       dictOptions: [],
       // 菜单信息
       menus: [],
       // 表详细信息
-      info: {}
+      code: {}
     };
   },
   created() {
-    const tableId = this.$route.params && this.$route.params.tableId;
-    if (tableId) {
+    const id = this.$route.params && this.$route.params.id;
+    if (id) {
       // 获取表详细信息
-      getGenTable(tableId).then(res => {
-        this.cloumns = res.data.rows;
-        this.info = res.data.info;
-        this.tables = res.data.tables;
+      getCode(id).then(res => {
+        this.codeMetas = res.data.codeMetas;
+        this.code = res.data.code;
+        this.codes = res.data.codes;
       });
-      /** 查询字典下拉列表 */
-      getDictOptionselect().then(response => {
-        this.dictOptions = response.data;
-      });
+      // /** 查询字典下拉列表 */
+      // getDictOptionselect().then(response => {
+      //   this.dictOptions = response.data;
+      // });
       /** 查询菜单下拉列表 */
-      getMenuTreeselect().then(response => {
-        this.menus = this.handleTree(response.data, "menuId");
-      });
+      // getMenuTreeselect().then(response => {
+      //   this.menus = this.handleTree(response.data, "menuId");
+      // });
     }
   },
   methods: {
@@ -184,7 +184,7 @@ export default {
         const validateResult = res.every(item => !!item);
         if (validateResult) {
           const genTable = Object.assign({}, basicForm.model, genForm.model);
-          genTable.columns = this.cloumns;
+          genTable.columns = this.codeMetas;
           genTable.params = {
             treeCode: genTable.treeCode,
             treeName: genTable.treeName,
@@ -212,7 +212,7 @@ export default {
     /** 关闭按钮 */
     close() {
       this.$store.dispatch("tagsView/delView", this.$route);
-      this.$router.push({ path: "/tool/gen", query: { t: Date.now()}})
+      this.$router.push({ path: "/dp/code", query: { t: Date.now()}})
     }
   },
   mounted() {
@@ -220,10 +220,10 @@ export default {
     const sortable = Sortable.create(el, {
       handle: ".allowDrag",
       onEnd: evt => {
-        const targetRow = this.cloumns.splice(evt.oldIndex, 1)[0];
-        this.cloumns.splice(evt.newIndex, 0, targetRow);
-        for (let index in this.cloumns) {
-          this.cloumns[index].sort = parseInt(index) + 1;
+        const targetRow = this.codeMetas.splice(evt.oldIndex, 1)[0];
+        this.codeMetas.splice(evt.newIndex, 0, targetRow);
+        for (let index in this.codeMetas) {
+          this.codeMetas[index].sort = parseInt(index) + 1;
         }
       }
     });
