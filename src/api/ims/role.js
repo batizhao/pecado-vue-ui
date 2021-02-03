@@ -4,7 +4,6 @@ import request from '@/utils/request'
 export function listRole(query) {
   return request({
     url: '/ims/roles',
-    method: 'get',
     params: query
   })
 }
@@ -13,7 +12,6 @@ export function listRole(query) {
 export function getRole(roleId) {
   return request({
     url: '/ims/role/' + roleId,
-    method: 'get'
   })
 }
 
@@ -69,7 +67,6 @@ export function delRole(roleId) {
 export function exportRole(query) {
   return request({
     url: '/ims/role/export',
-    method: 'get',
     params: query
   })
 }

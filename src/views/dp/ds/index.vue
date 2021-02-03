@@ -70,8 +70,6 @@
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.status"
-            :active-value="0"
-            :inactive-value="1"
             @change="handleStatusChange(scope.row)"
           ></el-switch>
         </template>
@@ -203,7 +201,7 @@ export default {
     },
     // 数据源状态修改
     handleStatusChange(row) {
-      let text = row.status === 0 ? "启用" : "停用";
+      let text = row.status ? "启用" : "停用";
       this.$confirm('确认要"' + text + '""' + row.name + '"吗?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -213,7 +211,7 @@ export default {
         }).then(() => {
           this.msgSuccess(text + "成功");
         }).catch(function() {
-          row.status = row.status === 0 ? 1 : 0;
+          row.status = row.status ? false : true;
         });
     },
     // 取消按钮

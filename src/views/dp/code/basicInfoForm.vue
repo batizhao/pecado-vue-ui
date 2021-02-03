@@ -51,7 +51,7 @@ export default {
         className: [
           { required: true, message: "请输入实体类名称", trigger: "blur" }
         ],
-        functionAuthor: [
+        classAuthor: [
           { required: true, message: "请输入作者", trigger: "blur" }
         ]
       }
