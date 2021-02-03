@@ -125,7 +125,7 @@
   </el-card>
 </template>
 <script>
-import { getCode, updateGenTable } from "@/api/dp/code";
+import { getCode, addOrUpdateCode } from "@/api/dp/code";
 import { optionselect as getDictOptionselect } from "@/api/system/dict/type";
 import { listMenu as getMenuTreeselect } from "@/api/system/menu";
 import basicInfoForm from "./basicInfoForm";
@@ -184,16 +184,16 @@ export default {
         const validateResult = res.every(item => !!item);
         if (validateResult) {
           const genTable = Object.assign({}, basicForm.model, genForm.model);
-          genTable.columns = this.codeMetas;
+          genTable.codeMetaList = this.codeMetas;
           genTable.params = {
             treeCode: genTable.treeCode,
             treeName: genTable.treeName,
             treeParentCode: genTable.treeParentCode,
             parentMenuId: genTable.parentMenuId
           };
-          updateGenTable(genTable).then(res => {
-            this.msgSuccess(res.msg);
-            if (res.code === 200) {
+          addOrUpdateCode(genTable).then(res => {
+            this.msgSuccess(res.message);
+            if (res.code === 0) {
               this.close();
             }
           });

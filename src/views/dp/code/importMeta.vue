@@ -26,7 +26,7 @@
       </el-form-item>
     </el-form>
     <el-row>
-      <el-table @row-click="clickRow" ref="table" :data="dbTableList" @selection-change="handleSelectionChange" height="260px">
+      <el-table @row-click="clickRow" ref="table" :data="dbTableList" @selection-change="handleSelectionChange" height="300px">
         <el-table-column type="selection" min-width="1" />
         <el-table-column prop="dsName" label="数据源" :show-overflow-tooltip="true" min-width="1" />
         <el-table-column prop="tableName" label="表名称" :show-overflow-tooltip="true" min-width="1" />
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { listCodeTablePage, importCodeTable } from "@/api/dp/code";
+import { listCodeMetaPage, importCodeMeta } from "@/api/dp/code";
 export default {
   data() {
     return {
@@ -86,7 +86,7 @@ export default {
     },
     // 查询表数据
     getList() {
-      listCodeTablePage(this.queryParams).then(res => {
+      listCodeMetaPage(this.queryParams).then(res => {
         if (res.code === 0) {
           this.dbTableList = res.data.records;
           this.total = res.data.total;
@@ -105,7 +105,7 @@ export default {
     },
     /** 导入按钮操作 */
     handleImportTable() {
-      importCodeTable(this.tables).then(res => {
+      importCodeMeta(this.tables).then(res => {
         this.msgSuccess(res.message);
         if (res.code === 0) {
           this.visible = false;

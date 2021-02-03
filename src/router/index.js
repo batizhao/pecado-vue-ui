@@ -63,7 +63,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: (resolve) => require(['@/views/dashboard'], resolve),
         name: '工作台',
-        meta: { title: '工作台', icon: 'dashboard', noCache: true, affix: true }
+        icon: 'dashboard'
       }
     ]
   },
@@ -76,8 +76,8 @@ export const constantRoutes = [
       {
         path: 'profile',
         component: (resolve) => require(['@/views/ims/user/profile/index'], resolve),
-        name: 'Profile',
-        meta: { title: '个人中心', icon: 'user' }
+        name: '个人中心',
+        icon: 'user'
       }
     ]
   },
@@ -89,8 +89,7 @@ export const constantRoutes = [
       {
         path: 'type/data/:dictId(\\d+)',
         component: (resolve) => require(['@/views/system/dict/data'], resolve),
-        name: 'Data',
-        meta: { title: '字典数据', icon: '' }
+        name: '字典数据',
       }
     ]
   },
@@ -102,21 +101,19 @@ export const constantRoutes = [
       {
         path: 'log',
         component: (resolve) => require(['@/views/monitor/job/log'], resolve),
-        name: 'JobLog',
-        meta: { title: '调度日志' }
+        name: '调度日志',
       }
     ]
   },
   {
-    path: '/gen',
+    path: '/code',
     component: Layout,
     hidden: true,
     children: [
       {
         path: 'edit/:id(\\d+)',
-        component: (resolve) => require(['@/views/dp/code/editTable'], resolve),
-        name: 'GenEdit',
-        meta: { title: '修改生成配置' }
+        component: (resolve) => require(['@/views/dp/code/editMeta'], resolve),
+        name: '修改生成配置',
       }
     ]
   }

@@ -153,14 +153,14 @@
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
-    <import-table ref="import" @ok="handleQuery" />
+    <import-meta ref="import" @ok="handleQuery" />
   </div>
 </template>
 
 <script>
 import { listCodePage, previewCode, deleteCode, syncCodeMeta } from "@/api/dp/code";
-import importTable from "./import";
-import {downLoadZip } from "@/utils/zipdownload";
+import importMeta from "./importMeta";
+import { downLoadZip } from "@/utils/zipdownload";
 import hljs from "highlight.js/lib/highlight";
 import "highlight.js/styles/github-gist.css";
 hljs.registerLanguage("java", require("highlight.js/lib/languages/java"));
@@ -172,7 +172,7 @@ hljs.registerLanguage("sql", require("highlight.js/lib/languages/sql"));
 
 export default {
   name: "Code",
-  components: { importTable },
+  components: { importMeta },
   data() {
     return {
       // 遮罩层
@@ -296,7 +296,7 @@ export default {
     /** 修改按钮操作 */
     handleEditTable(row) {
       const id = row.id || this.ids[0];
-      this.$router.push("/gen/edit/" + id);
+      this.$router.push("/code/edit/" + id);
     },
     /** 删除按钮操作 */
     handleDelete(row) {

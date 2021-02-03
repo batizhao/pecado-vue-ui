@@ -2,9 +2,9 @@
   <el-form ref="genInfoForm" :model="info" :rules="rules" label-width="150px">
     <el-row>
       <el-col :span="12">
-        <el-form-item prop="tplCategory">
+        <el-form-item prop="template">
           <span slot="label">生成模板</span>
-          <el-select v-model="info.tplCategory" @change="tplSelectChange">
+          <el-select v-model="info.template" @change="tplSelectChange">
             <el-option label="单表（增删改查）" value="crud" />
             <el-option label="树表（增删改查）" value="tree" />
             <el-option label="主子表（增删改查）" value="sub" />
@@ -16,7 +16,7 @@
         <el-form-item prop="packageName">
           <span slot="label">
             生成包路径
-            <el-tooltip content="生成在哪个java包下，例如 com.ruoyi.system" placement="top">
+            <el-tooltip content="生成在哪个java包下，例如 me.batizhao.system" placement="top">
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
@@ -115,7 +115,7 @@
       </el-col>
     </el-row>
 
-    <el-row v-show="info.tplCategory == 'tree'">
+    <el-row v-show="info.template == 'tree'">
       <h4 class="form-header">其他信息</h4>
       <el-col :span="12">
         <el-form-item>
@@ -172,7 +172,7 @@
         </el-form-item>
       </el-col>
     </el-row>
-    <el-row v-show="info.tplCategory == 'sub'">
+    <el-row v-show="info.template == 'sub'">
       <h4 class="form-header">关联信息</h4>
       <el-col :span="12">
         <el-form-item>
@@ -238,7 +238,7 @@ export default {
     return {
       subColumns: [],
       rules: {
-        tplCategory: [
+        template: [
           { required: true, message: "请选择生成模板", trigger: "blur" }
         ],
         packageName: [
@@ -247,12 +247,12 @@ export default {
         moduleName: [
           { required: true, message: "请输入生成模块名", trigger: "blur" }
         ],
-        businessName: [
-          { required: true, message: "请输入生成业务名", trigger: "blur" }
-        ],
-        functionName: [
-          { required: true, message: "请输入生成功能名", trigger: "blur" }
-        ],
+        // businessName: [
+        //   { required: true, message: "请输入生成业务名", trigger: "blur" }
+        // ],
+        // functionName: [
+        //   { required: true, message: "请输入生成功能名", trigger: "blur" }
+        // ],
       }
     };
   },
