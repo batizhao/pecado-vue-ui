@@ -58,9 +58,9 @@ export function previewCode(id) {
 }
 
 // 生成代码（自定义路径）
-export function genCode(tableName) {
+export function genCode(id) {
   return request({
-    url: 'dp/code/genCode/' + tableName,
-    method: 'get'
+    url: `/dp/code/path/${id}`,
+    method: 'post',
   })
 }

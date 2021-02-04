@@ -127,7 +127,7 @@
 <script>
 import { getCode, addOrUpdateCode } from "@/api/dp/code";
 import { optionselect as getDictOptionselect } from "@/api/system/dict/type";
-import { listMenu as getMenuTreeselect } from "@/api/ims/menu";
+import { listMenu as getMenuTreeSelect } from "@/api/ims/menu";
 import basicInfoForm from "./basicInfoForm";
 import genInfoForm from "./genInfoForm";
 import Sortable from 'sortablejs'
@@ -170,9 +170,9 @@ export default {
       //   this.dictOptions = response.data;
       // });
       /** 查询菜单下拉列表 */
-      // getMenuTreeselect().then(response => {
-      //   this.menus = this.handleTree(response.data, "menuId");
-      // });
+      getMenuTreeSelect().then(response => {
+        this.menus = response.data;
+      });
     }
   },
   methods: {

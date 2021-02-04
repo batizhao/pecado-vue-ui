@@ -10,7 +10,7 @@ const baseUrl = process.env.VUE_APP_BASE_API
 export function downLoadZip(str, filename) {
   var url = baseUrl + str
   axios({
-    method: 'put',
+    method: 'post',
     url: url,
     responseType: 'blob',
     headers: { 'Authorization': 'Bearer ' + getToken() }

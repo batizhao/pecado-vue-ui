@@ -158,7 +158,7 @@
 </template>
 
 <script>
-import { listCodePage, previewCode, deleteCode, syncCodeMeta } from "@/api/dp/code";
+import { listCodePage, previewCode, deleteCode, genCode, syncCodeMeta } from "@/api/dp/code";
 import importMeta from "./importMeta";
 import { downLoadZip } from "@/utils/zipdownload";
 import hljs from "highlight.js/lib/highlight";
@@ -242,13 +242,13 @@ export default {
         this.msgError("请选择要生成的数据");
         return;
       }
-      // if(row.genType === "1") {
-      //   genCode(row.tableName).then(response => {
-      //     this.msgSuccess("成功生成到自定义路径：" + row.genPath);
-      //   });
-      // } else {
-        downLoadZip("/dp/code?ids=" + ids, "ruoyi");
-      // }
+      if(row.type === "path") {
+        genCode(row.id).then(response => {
+          this.msgSuccess("成功生成到自定义路径：" + row.path);
+        });
+      } else {
+        downLoadZip("/dp/code/zip?ids=" + ids, "ruoyi");
+      }
     },
     /** 同步数据库操作 */
     handleSynchDb(row) {

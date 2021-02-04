@@ -24,6 +24,12 @@
       </el-col>
       <el-col :span="24">
         <el-form-item label="类注释" prop="classComment">
+          <span slot="label">
+            类注释
+            <el-tooltip content="用于类注解和菜单" placement="top">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </span>
           <el-input type="textarea" :rows="3" v-model="info.classComment"></el-input>
         </el-form-item>
       </el-col>
@@ -52,7 +58,10 @@ export default {
           { required: true, message: "请输入实体类名称", trigger: "blur" }
         ],
         classAuthor: [
-          { required: true, message: "请输入作者", trigger: "blur" }
+          { required: true, message: "请输入类作者", trigger: "blur" }
+        ],
+        classComment: [
+          { required: true, message: "请输入类注释", trigger: "blur" }
         ]
       }
     };

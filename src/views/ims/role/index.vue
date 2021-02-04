@@ -326,7 +326,7 @@ export default {
       );
     },
     /** 查询菜单树结构 */
-    getMenuTreeselect() {
+    getMenuTreeSelect() {
       menuTreeselect().then(response => {
         this.menuOptions = response.data;
       });
@@ -467,7 +467,7 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.getMenuTreeselect();
+      this.getMenuTreeSelect();
       this.open = true;
       this.title = "添加角色";
     },
