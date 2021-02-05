@@ -30,7 +30,7 @@
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-input type="textarea" :rows="3" v-model="info.classComment"></el-input>
+          <el-input placeholder="请输入" v-model="info.classComment" />
         </el-form-item>
       </el-col>
     </el-row>
