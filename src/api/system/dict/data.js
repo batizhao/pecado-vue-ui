@@ -25,7 +25,7 @@ export function getDicts(dictType) {
   })
 }
 
-// 新增字典数据
+// 添加字典数据
 export function addData(data) {
   return request({
     url: '/system/dict/data',

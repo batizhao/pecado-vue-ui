@@ -17,7 +17,7 @@ export function getJob(jobId) {
   })
 }
 
-// 新增定时任务调度
+// 添加定时任务调度
 export function addJob(data) {
   return request({
     url: '/monitor/job',

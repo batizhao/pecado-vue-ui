@@ -35,7 +35,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['system:dept:add']"
-        >新增</el-button>
+        >添加</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -70,7 +70,7 @@
             icon="el-icon-plus" 
             @click="handleAdd(scope.row)"
             v-hasPermi="['system:dept:add']"
-          >新增</el-button>
+          >添加</el-button>
           <el-button
             v-if="scope.row.parentId != 0"
             size="mini"
@@ -255,7 +255,7 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-    /** 新增按钮操作 */
+    /** 添加按钮操作 */
     handleAdd(row) {
       this.reset();
       if (row != undefined) {
@@ -291,7 +291,7 @@ export default {
             });
           } else {
             addDept(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.msgSuccess("添加成功");
               this.open = false;
               this.getList();
             });

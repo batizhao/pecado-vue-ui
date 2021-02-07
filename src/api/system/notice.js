@@ -17,7 +17,7 @@ export function getNotice(noticeId) {
   })
 }
 
-// 新增公告
+// 添加公告
 export function addNotice(data) {
   return request({
     url: '/system/notice',

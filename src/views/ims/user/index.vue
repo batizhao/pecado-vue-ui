@@ -91,7 +91,7 @@
               size="mini"
               @click="handleAdd"
               v-hasPermi="['system:user:add']"
-            >新增</el-button>
+            >添加</el-button>
           </el-col>
           <el-col :span="1.5">
             <el-button
@@ -557,7 +557,7 @@ export default {
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
-    /** 新增按钮操作 */
+    /** 添加按钮操作 */
     handleAdd() {
       this.reset();
       this.getTreeselect();
@@ -608,7 +608,7 @@ export default {
             });
           } else {
             addUser(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.msgSuccess("添加成功");
               this.open = false;
               this.getList();
             });

@@ -24,7 +24,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleGenCode"
-          v-hasPermi="['dp:code:admin']"
+          v-hasPermi="['dp:code:gen']"
         >生成</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -34,7 +34,7 @@
           icon="el-icon-upload"
           size="mini"
           @click="openImportTable"
-          v-hasPermi="['dp:code:admin']"
+          v-hasPermi="['dp:code:import']"
         >导入</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -45,7 +45,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['dp:code:admin']"
+          v-hasPermi="['dp:code:edit']"
         >编辑</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -56,7 +56,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['dp:code:admin']"
+          v-hasPermi="['dp:code:delete']"
         >删除</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -99,7 +99,7 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['dp:code:admin']"
+            v-hasPermi="['dp:code:edit']"
           >编辑</el-button>
           <el-divider direction="vertical"></el-divider>
           <el-dropdown>
@@ -107,10 +107,10 @@
                更多 <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-view" @click.native="handlePreview(scope.row)" v-hasPermi="['dp:code:admin']">预览</el-dropdown-item>
-              <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['dp:code:admin']">删除</el-dropdown-item>
-              <el-dropdown-item icon="el-icon-refresh" @click.native="handleSynchMeta(scope.row)" v-hasPermi="['dp:code:admin']">同步</el-dropdown-item>
-              <el-dropdown-item icon="el-icon-download" @click.native="handleGenCode(scope.row)" v-hasPermi="['dp:code:admin']" divided>生成代码</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-view" @click.native="handlePreview(scope.row)" v-hasPermi="['dp:code:preview']">预览</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['dp:code:delete']">删除</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-refresh" @click.native="handleSynchMeta(scope.row)" v-hasPermi="['dp:code:sync']">同步</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-download" @click.native="handleGenCode(scope.row)" v-hasPermi="['dp:code:gen']" divided>生成代码</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>

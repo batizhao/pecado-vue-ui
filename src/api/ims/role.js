@@ -15,7 +15,7 @@ export function getRole(roleId) {
   })
 }
 
-// 新增角色
+// 添加角色
 export function addRole(data) {
   return request({
     url: '/ims/role',

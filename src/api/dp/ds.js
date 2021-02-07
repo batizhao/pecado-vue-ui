@@ -13,7 +13,7 @@ export function getDs(id) {
   return request(`/dp/ds/${id}`);
 }
 
-// 新增/修改数据源
+// 添加/修改数据源
 export function addOrUpdateDs(data) {
   return request({
     url: '/dp/ds',

@@ -33,8 +33,8 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['dp:ds:admin']"
-        >新增</el-button>
+          v-hasPermi="['dp:ds:add']"
+        >添加</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -44,7 +44,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['dp:ds:admin']"
+          v-hasPermi="['dp:ds:edit']"
         >编辑</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -55,7 +55,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['dp:ds:admin']"
+          v-hasPermi="['dp:ds:delete']"
         >删除</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -85,13 +85,13 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['dp:ds:admin']"
+            v-hasPermi="['dp:ds:edit']"
           >编辑</el-button>
           <el-button
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['dp:ds:admin']"
+            v-hasPermi="['dp:ds:delete']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -238,7 +238,7 @@ export default {
       this.single = selection.length!=1
       this.multiple = !selection.length
     },
-    /** 新增按钮操作 */
+    /** 添加按钮操作 */
     handleAdd() {
       this.reset();
       this.open = true;

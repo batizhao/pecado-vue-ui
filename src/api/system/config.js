@@ -25,7 +25,7 @@ export function getConfigKey(configKey) {
   })
 }
 
-// 新增参数配置
+// 添加参数配置
 export function addConfig(data) {
   return request({
     url: '/system/config',

@@ -18,7 +18,7 @@ export function getUser(userId) {
   })
 }
 
-// 新增用户
+// 添加用户
 export function addUser(data) {
   return request({
     url: '/system/user',

@@ -41,7 +41,7 @@ export function roleDeptTreeselect(roleId) {
   })
 }
 
-// 新增部门
+// 添加部门
 export function addDept(data) {
   return request({
     url: '/system/dept',

@@ -34,8 +34,8 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['ims:menu:admin']"
-        >新增</el-button>
+          v-hasPermi="['ims:menu:add']"
+        >添加</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -72,21 +72,21 @@
         <template slot-scope="scope">
           <el-button 
             type="text" 
-            icon="el-icon-edit" 
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['ims:menu:admin']"
-          >编辑</el-button>
-          <el-button 
-            type="text" 
             icon="el-icon-plus" 
             @click="handleAdd(scope.row)"
-            v-hasPermi="['ims:menu:admin']"
-          >新增</el-button>
+            v-hasPermi="['ims:menu:add']"
+          >添加</el-button>
+          <el-button 
+            type="text" 
+            icon="el-icon-edit" 
+            @click="handleUpdate(scope.row)"
+            v-hasPermi="['ims:menu:edit']"
+          >编辑</el-button>
           <el-button
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['ims:menu:admin']"
+            v-hasPermi="['ims:menu:delete']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -360,7 +360,7 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
-    /** 新增按钮操作 */
+    /** 添加按钮操作 */
     handleAdd(row) {
       this.reset();
       this.getTreeselect();
@@ -394,7 +394,7 @@ export default {
             });
           } else {
             addOrUpdateMenu(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.msgSuccess("添加成功");
               this.open = false;
               this.getList();
             });

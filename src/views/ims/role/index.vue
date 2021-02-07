@@ -47,8 +47,8 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:role:add']"
-        >新增</el-button>
+          v-hasPermi="['ims:role:add']"
+        >添加</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -58,7 +58,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['system:role:edit']"
+          v-hasPermi="['ims:role:edit']"
         >编辑</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -69,7 +69,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:role:remove']"
+          v-hasPermi="['ims:role:delete']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -79,7 +79,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:role:export']"
+          v-hasPermi="['ims:role:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -108,25 +108,22 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
-            size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:role:edit']"
+            v-hasPermi="['ims:role:edit']"
           >编辑</el-button>
           <el-button
-            size="mini"
             type="text"
             icon="el-icon-circle-check"
             @click="handleDataScope(scope.row)"
-            v-hasPermi="['system:role:edit']"
+            v-hasPermi="['ims:role:edit']"
           >数据权限</el-button>
           <el-button
-            size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:role:remove']"
+            v-hasPermi="['ims:role:delete']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -464,7 +461,7 @@ export default {
         this.form.deptCheckStrictly = value ? true: false;
       }
     },
-    /** 新增按钮操作 */
+    /** 添加按钮操作 */
     handleAdd() {
       this.reset();
       this.getMenuTreeSelect();
@@ -516,7 +513,7 @@ export default {
           } else {
             this.form.menuIds = this.getMenuAllCheckedKeys();
             addRole(this.form).then(response => {
-              this.msgSuccess("新增成功");
+              this.msgSuccess("添加成功");
               this.open = false;
               this.getList();
             });

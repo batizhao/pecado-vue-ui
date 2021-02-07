@@ -17,7 +17,7 @@ export function getPost(postId) {
   })
 }
 
-// 新增岗位
+// 添加岗位
 export function addPost(data) {
   return request({
     url: '/system/post',

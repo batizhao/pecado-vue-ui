@@ -8,7 +8,7 @@ export function listMenu(query) {
   })
 }
 
-// 新增/修改数菜单
+// 添加/修改菜单
 export function addOrUpdateMenu(data) {
   return request({
     url: '/ims/menu',
