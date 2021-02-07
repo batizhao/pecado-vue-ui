@@ -1,6 +1,6 @@
 <template>
   <!-- 导入表 -->
-  <el-dialog title="导入表" :visible.sync="visible" width="850px" top="5vh" append-to-body>
+  <el-dialog title="导入表" :visible.sync="visible" width="1100px" top="5vh" append-to-body>
     <el-form :model="queryParams" ref="queryForm" :inline="true">
       <el-form-item label="表名称" prop="tableName">
         <el-input
@@ -20,13 +20,22 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="数据源" prop="dsName">
+        <el-input
+          v-model="queryParams.dsName"
+          placeholder="请输入数据源"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
     <el-row>
-      <el-table @row-click="clickRow" ref="table" :data="dbTableList" @selection-change="handleSelectionChange" height="300px">
+      <el-table @row-click="clickRow" ref="table" :data="dbTableList" @selection-change="handleSelectionChange" max-height="400">
         <el-table-column type="selection" min-width="1" />
         <el-table-column prop="dsName" label="数据源" :show-overflow-tooltip="true" min-width="1" />
         <el-table-column prop="tableName" label="表名称" :show-overflow-tooltip="true" min-width="1" />
