@@ -102,7 +102,7 @@
               :disabled="single"
               @click="handleUpdate"
               v-hasPermi="['system:user:edit']"
-            >修改</el-button>
+            >编辑</el-button>
           </el-col>
           <el-col :span="1.5">
             <el-button
@@ -173,7 +173,7 @@
                 icon="el-icon-edit"
                 @click="handleUpdate(scope.row)"
                 v-hasPermi="['system:user:edit']"
-              >修改</el-button>
+              >编辑</el-button>
               <el-button
                 v-if="scope.row.userId !== 1"
                 size="mini"

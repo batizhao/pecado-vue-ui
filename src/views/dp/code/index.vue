@@ -44,9 +44,9 @@
           icon="el-icon-edit"
           size="mini"
           :disabled="single"
-          @click="handleEditTable"
+          @click="handleUpdate"
           v-hasPermi="['dp:code:admin']"
-        >修改</el-button>
+        >编辑</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -83,7 +83,7 @@
         align="center"
         prop="tableComment"
         :show-overflow-tooltip="true"
-        min-width="1"
+        min-width="2"
       />
       <el-table-column
         label="实体"
@@ -97,39 +97,22 @@
         <template slot-scope="scope">
           <el-button
             type="text"
-            size="small"
-            icon="el-icon-view"
-            @click="handlePreview(scope.row)"
-            v-hasPermi="['dp:code:admin']"
-          >预览</el-button>
-          <el-button
-            type="text"
-            size="small"
             icon="el-icon-edit"
-            @click="handleEditTable(scope.row)"
+            @click="handleUpdate(scope.row)"
             v-hasPermi="['dp:code:admin']"
           >编辑</el-button>
-          <el-button
-            type="text"
-            size="small"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['dp:code:admin']"
-          >删除</el-button>
-          <el-button
-            type="text"
-            size="small"
-            icon="el-icon-refresh"
-            @click="handleSynchDb(scope.row)"
-            v-hasPermi="['dp:code:admin']"
-          >同步</el-button>
-          <el-button
-            type="text"
-            size="small"
-            icon="el-icon-download"
-            @click="handleGenCode(scope.row)"
-            v-hasPermi="['dp:code:admin']"
-          >生成代码</el-button>
+          <el-divider direction="vertical"></el-divider>
+          <el-dropdown>
+            <span class="el-dropdown-link">
+               更多 <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item icon="el-icon-view" @click.native="handlePreview(scope.row)" v-hasPermi="['dp:code:admin']">预览</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['dp:code:admin']">删除</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-refresh" @click.native="handleSynchMeta(scope.row)" v-hasPermi="['dp:code:admin']">同步</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-download" @click.native="handleGenCode(scope.row)" v-hasPermi="['dp:code:admin']" divided>生成代码</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -251,7 +234,7 @@ export default {
       }
     },
     /** 同步数据库操作 */
-    handleSynchDb(row) {
+    handleSynchMeta(row) {
       const tableName = row.tableName;
       this.$confirm('确认要强制同步"' + tableName + '"表结构吗？', "警告", {
         confirmButtonText: "确定",
@@ -294,7 +277,7 @@ export default {
       this.multiple = !selection.length;
     },
     /** 修改按钮操作 */
-    handleEditTable(row) {
+    handleUpdate(row) {
       const id = row.id || this.ids[0];
       this.$router.push("/code/edit/" + id);
     },

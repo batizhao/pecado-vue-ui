@@ -56,7 +56,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['monitor:job:edit']"
-        >修改</el-button>
+        >编辑</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button

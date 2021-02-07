@@ -63,7 +63,7 @@
             icon="el-icon-edit" 
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:dept:edit']"
-          >修改</el-button>
+          >编辑</el-button>
           <el-button 
             size="mini" 
             type="text" 

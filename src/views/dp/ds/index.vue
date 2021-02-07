@@ -45,7 +45,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['dp:ds:admin']"
-        >修改</el-button>
+        >编辑</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -82,14 +82,12 @@
       <el-table-column label="操作" align="center" min-width="2" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
-            size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['dp:ds:admin']"
-          >修改</el-button>
+          >编辑</el-button>
           <el-button
-            size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
