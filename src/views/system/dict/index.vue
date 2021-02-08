@@ -64,7 +64,6 @@
 
     <el-table v-loading="loading" :data="dictTypeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="id" />
       <el-table-column label="名称" align="center" prop="name" />
       <el-table-column label="代码" align="center" prop="code" />
       <el-table-column label="状态" align="center" width="80">
@@ -86,14 +85,12 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
-            size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:dict:edit']"
           >编辑</el-button>
           <el-button
-            size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
@@ -101,10 +98,10 @@
           >删除</el-button>
           <el-button
             type="text"
-            icon="el-icon-edit"
+            icon="el-icon-view"
             @click="handleDictData(scope.row)"
             v-hasPermi="['dp:code:edit']"
-          >编辑</el-button>
+          >详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -151,6 +148,8 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      // 选中数组
+      names: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -187,9 +186,6 @@ export default {
   },
   created() {
     this.getList();
-    // this.listDictDataByCode("status").then(response => {
-    //   this.statusOptions = response.data;
-    // });
   },
   methods: {
     /** 查询字典类型列表 */
@@ -243,6 +239,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
+      this.names = selection.map(item => item.name);
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -282,7 +279,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$confirm('是否确认删除字典类型编号为"' + ids + '"的数据项?', "警告", {
+      const names = row.name || this.names;
+      this.$confirm('确认删除"' + names + '"吗?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"

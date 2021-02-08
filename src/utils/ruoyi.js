@@ -73,8 +73,8 @@ export function addDateRange(params, dateRange, propName) {
 export function selectDictLabel(datas, value) {
 	var actions = [];
 	Object.keys(datas).some((key) => {
-		if (datas[key].dictValue == ('' + value)) {
-			actions.push(datas[key].dictLabel);
+		if (datas[key].value == ('' + value)) {
+			actions.push(datas[key].label);
 			return true;
 		}
 	})
