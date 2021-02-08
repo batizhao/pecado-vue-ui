@@ -101,11 +101,11 @@
               <el-select v-model="scope.row.dictType" clearable filterable placeholder="请选择">
                 <el-option
                   v-for="dict in dictOptions"
-                  :key="dict.dictType"
-                  :label="dict.dictName"
-                  :value="dict.dictType">
-                  <span style="float: left">{{ dict.dictName }}</span>
-                  <span style="float: right; color: #8492a6; font-size: 13px">{{ dict.dictType }}</span>
+                  :key="dict.code"
+                  :label="dict.name"
+                  :value="dict.code">
+                  <span style="float: left">{{ dict.name }}</span>
+                  <span style="float: right; color: #8492a6; font-size: 13px">{{ dict.code }}</span>
               </el-option>
               </el-select>
             </template>
@@ -126,7 +126,7 @@
 </template>
 <script>
 import { getCode, addOrUpdateCode } from "@/api/dp/code";
-import { optionselect as getDictOptionselect } from "@/api/system/dict/type";
+import { optionSelect as getDictOptionSelect } from "@/api/system/dict/type";
 import { listMenu as getMenuTreeSelect } from "@/api/ims/menu";
 import basicInfoForm from "./basicInfoForm";
 import genInfoForm from "./genInfoForm";
@@ -165,10 +165,10 @@ export default {
         this.code = res.data.code;
         this.codes = res.data.codes;
       });
-      // /** 查询字典下拉列表 */
-      // getDictOptionselect().then(response => {
-      //   this.dictOptions = response.data;
-      // });
+      /** 查询字典下拉列表 */
+      getDictOptionSelect().then(response => {
+        this.dictOptions = response.data;
+      });
       /** 查询菜单下拉列表 */
       getMenuTreeSelect().then(response => {
         this.menus = response.data;

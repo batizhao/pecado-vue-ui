@@ -71,7 +71,7 @@ export default {
       // 是否显示cropper
       visible: false,
       // 弹出层标题
-      title: "修改头像",
+      title: "编辑头像",
       options: {
         img: store.getters.avatar, //裁剪图片的地址
         autoCrop: true, // 是否默认生成截图框
@@ -128,7 +128,7 @@ export default {
           this.open = false;
           this.options.img = process.env.VUE_APP_BASE_API + response.imgUrl;
           store.commit('SET_AVATAR', this.options.img);
-          this.msgSuccess("修改成功");
+          this.msgSuccess("编辑成功");
           this.visible = false;
         });
       });

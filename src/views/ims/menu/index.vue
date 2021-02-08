@@ -60,6 +60,8 @@
           <el-switch
             v-model="scope.row.status"
             @change="handleStatusChange(scope.row)"
+            active-value="open"
+            inactive-value="close"
           ></el-switch>
         </template>
       </el-table-column>
@@ -92,7 +94,7 @@
       </el-table-column>
     </el-table>
 
-    <!-- 添加或修改菜单对话框 -->
+    <!-- 添加或编辑菜单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
@@ -261,10 +263,10 @@ export default {
   },
   created() {
     this.getList();
-    // this.getDicts("sys_show_hide").then(response => {
+    // this.listDictDataByCode("sys_show_hide").then(response => {
     //   this.visibleOptions = response.data;
     // });
-    // this.getDicts("sys_normal_disable").then(response => {
+    // this.listDictDataByCode("sys_normal_disable").then(response => {
     //   this.statusOptions = response.data;
     // });
   },
@@ -281,9 +283,9 @@ export default {
         this.loading = false;
       });
     },
-    // 菜单状态修改
+    // 菜单状态编辑
     handleStatusChange(row) {
-      let text = row.status ? "启用" : "停用";
+      let text = row.status === "open" ? "启用" : "停用";
       this.$confirm('确认要"' + text + '""' + row.name + '"吗?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -293,7 +295,7 @@ export default {
         }).then(() => {
           this.msgSuccess(text + "成功");
         }).catch(function() {
-          row.status = row.status ? false : true;
+          row.status = row.status === "open" ? "close" : "open";
         });
     },
     /** 转换菜单数据结构 */
@@ -372,14 +374,14 @@ export default {
       this.open = true;
       this.title = "添加菜单";
     },
-    /** 修改按钮操作 */
+    /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
       this.getTreeselect();
       getMenu(row.id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改菜单";
+        this.title = "编辑菜单";
       });
     },
     /** 提交按钮 */
@@ -388,7 +390,7 @@ export default {
         if (valid) {
           if (this.form.id != undefined) {
             addOrUpdateMenu(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.msgSuccess("编辑成功");
               this.open = false;
               this.getList();
             });

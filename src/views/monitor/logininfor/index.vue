@@ -152,7 +152,7 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_common_status").then(response => {
+    this.listDictDataByCode("sys_common_status").then(response => {
       this.statusOptions = response.data;
     });
   },

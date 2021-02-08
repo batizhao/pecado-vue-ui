@@ -86,7 +86,7 @@ export const constantRoutes = [
     hidden: true,
     children: [
       {
-        path: 'type/data/:dictId(\\d+)',
+        path: 'data/:code(\\w+)',
         component: (resolve) => require(['@/views/system/dict/data'], resolve),
         name: '字典数据',
       }
@@ -112,7 +112,7 @@ export const constantRoutes = [
       {
         path: 'edit/:id(\\d+)',
         component: (resolve) => require(['@/views/dp/code/editMeta'], resolve),
-        name: '修改生成配置',
+        name: '编辑生成配置',
       }
     ]
   }

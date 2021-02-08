@@ -83,7 +83,7 @@
       </el-table-column>
     </el-table>
 
-    <!-- 添加或修改部门对话框 -->
+    <!-- 添加或编辑部门对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
@@ -199,7 +199,7 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_normal_disable").then(response => {
+    this.listDictDataByCode("sys_normal_disable").then(response => {
       this.statusOptions = response.data;
     });
   },
@@ -267,13 +267,13 @@ export default {
 	        this.deptOptions = this.handleTree(response.data, "deptId");
       });
     },
-    /** 修改按钮操作 */
+    /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
       getDept(row.deptId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改部门";
+        this.title = "编辑部门";
       });
       listDeptExcludeChild(row.deptId).then(response => {
 	        this.deptOptions = this.handleTree(response.data, "deptId");
@@ -285,7 +285,7 @@ export default {
         if (valid) {
           if (this.form.deptId != undefined) {
             updateDept(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.msgSuccess("编辑成功");
               this.open = false;
               this.getList();
             });

@@ -26,7 +26,7 @@ export function addPost(data) {
   })
 }
 
-// 修改岗位
+// 编辑岗位
 export function updatePost(data) {
   return request({
     url: '/system/post',

@@ -26,7 +26,7 @@ export function addNotice(data) {
   })
 }
 
-// 修改公告
+// 编辑公告
 export function updateNotice(data) {
   return request({
     url: '/system/notice',

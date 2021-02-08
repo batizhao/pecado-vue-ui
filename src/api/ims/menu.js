@@ -8,7 +8,7 @@ export function listMenu(query) {
   })
 }
 
-// 添加/修改菜单
+// 添加/编辑菜单
 export function addOrUpdateMenu(data) {
   return request({
     url: '/ims/menu',
@@ -27,8 +27,7 @@ export function deleteMenu(ids) {
   return request.delete(`/ims/menu?ids=${ids}`);
 }
 
-
-// 菜单状态修改
+// 菜单状态编辑
 export function changeMenuStatus(id, status) {
   const data = {
     id,

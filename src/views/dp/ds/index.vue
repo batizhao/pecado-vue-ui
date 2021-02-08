@@ -71,6 +71,8 @@
           <el-switch
             v-model="scope.row.status"
             @change="handleStatusChange(scope.row)"
+            active-value="open"
+            inactive-value="close"
           ></el-switch>
         </template>
       </el-table-column>
@@ -105,7 +107,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改数据源配置对话框 -->
+    <!-- 添加或编辑数据源配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="名称" prop="name">
@@ -197,9 +199,9 @@ export default {
         }
       );
     },
-    // 数据源状态修改
+    // 数据源状态编辑
     handleStatusChange(row) {
-      let text = row.status ? "启用" : "停用";
+      let text = row.status === "open" ? "启用" : "停用";
       this.$confirm('确认要"' + text + '""' + row.name + '"吗?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -209,7 +211,7 @@ export default {
         }).then(() => {
           this.msgSuccess(text + "成功");
         }).catch(function() {
-          row.status = row.status ? false : true;
+          row.status = row.status === "open" ? "close" : "open";
         });
     },
     // 取消按钮
@@ -219,6 +221,12 @@ export default {
     },
     // 表单重置
     reset() {
+      this.form = {
+        name: undefined,
+        username: undefined,
+        password: undefined,
+        url: undefined
+      };
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -244,7 +252,7 @@ export default {
       this.open = true;
       this.title = "添加数据源";
     },
-    /** 修改按钮操作 */
+    /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
@@ -252,7 +260,7 @@ export default {
         this.form = response.data;
         this.form.password = "";
         this.open = true;
-        this.title = "修改数据源";
+        this.title = "编辑数据源";
       });
     },
     /** 提交按钮 */

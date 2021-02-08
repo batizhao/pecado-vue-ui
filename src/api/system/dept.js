@@ -50,7 +50,7 @@ export function addDept(data) {
   })
 }
 
-// 修改部门
+// 编辑部门
 export function updateDept(data) {
   return request({
     url: '/system/dept',

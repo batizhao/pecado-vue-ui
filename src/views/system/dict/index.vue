@@ -36,7 +36,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['system:dict:edit']"
-        >修改</el-button>
+        >编辑</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -67,11 +67,20 @@
       <el-table-column label="主键" align="center" prop="id" />
       <el-table-column label="名称" align="center" prop="name" />
       <el-table-column label="代码" align="center" prop="code" />
-      <el-table-column label="是否可用" align="center" prop="status" />
+      <el-table-column label="状态" align="center" width="80">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.status"
+            @change="handleStatusChange(scope.row)"
+            active-value="open"
+            inactive-value="close"
+          ></el-switch>
+        </template>
+      </el-table-column>
       <el-table-column label="描述" align="center" prop="description" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -90,6 +99,12 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['system:dict:delete']"
           >删除</el-button>
+          <el-button
+            type="text"
+            icon="el-icon-edit"
+            @click="handleDictData(scope.row)"
+            v-hasPermi="['dp:code:edit']"
+          >编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -111,11 +126,6 @@
         <el-form-item label="代码" prop="code">
           <el-input v-model="form.code" placeholder="请输入代码" />
         </el-form-item>
-        <el-form-item label="是否可用">
-          <el-radio-group v-model="form.status">
-            <el-radio label="1">请选择字典生成</el-radio>
-          </el-radio-group>
-        </el-form-item>
         <el-form-item label="描述" prop="description">
           <el-input v-model="form.description" placeholder="请输入描述" />
         </el-form-item>
@@ -129,7 +139,7 @@
 </template>
 
 <script>
-import { listDictType, getDictType, deleteDictType, addOrUpdateDictType, exportDictType } from "@/api/system/dict/type";
+import { listDictType, listDictDataByCode, deleteDictType, addOrUpdateDictType, exportDictType, changeDictTypeStatus } from "@/api/system/dict/type";
 
 export default {
   name: "DictType",
@@ -155,6 +165,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否可用字典
+      // statusOptions: [],
       // 查询参数
       queryParams: {
         current: 1,
@@ -175,6 +187,9 @@ export default {
   },
   created() {
     this.getList();
+    // this.listDictDataByCode("status").then(response => {
+    //   this.statusOptions = response.data;
+    // });
   },
   methods: {
     /** 查询字典类型列表 */
@@ -186,6 +201,21 @@ export default {
         this.loading = false;
       });
     },
+    // 字典类型状态编辑
+    handleStatusChange(row) {
+      let text = row.status === "open" ? "启用" : "停用";
+      this.$confirm('确认要"' + text + '""' + row.name + '"吗?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return changeDictTypeStatus(row.id, row.status);
+        }).then(() => {
+          this.msgSuccess(text + "成功");
+        }).catch(function() {
+          row.status = row.status === "open" ? "close" : "open";
+        });
+    },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -193,6 +223,11 @@ export default {
     },
     // 表单重置
     reset() {
+      this.form = {
+        name: undefined,
+        code: undefined,
+        description: undefined
+      };
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -221,18 +256,23 @@ export default {
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getDictType(id).then(response => {
+      listDictDataByCode(id).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "编辑字典类型";
       });
+    },
+    /** 详情按钮操作 */
+    handleDictData(row) {
+      const code = row.code;
+      this.$router.push("/dict/data/" + code);
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
           addOrUpdateDictType(this.form).then(response => {
-            this.msgSuccess("新增成功");
+            this.msgSuccess("保存成功");
             this.open = false;
             this.getList();
           });

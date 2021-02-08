@@ -207,10 +207,10 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_job_status").then(response => {
+    this.listDictDataByCode("sys_job_status").then(response => {
       this.statusOptions = response.data;
     });
-    this.getDicts("sys_job_group").then(response => {
+    this.listDictDataByCode("sys_job_group").then(response => {
       this.jobGroupOptions = response.data;
     });
   },

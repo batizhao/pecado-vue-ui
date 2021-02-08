@@ -121,7 +121,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改岗位对话框 -->
+    <!-- 添加或编辑岗位对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="岗位名称" prop="postName">
@@ -207,7 +207,7 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_normal_disable").then(response => {
+    this.listDictDataByCode("sys_normal_disable").then(response => {
       this.statusOptions = response.data;
     });
   },
@@ -264,14 +264,14 @@ export default {
       this.open = true;
       this.title = "添加岗位";
     },
-    /** 修改按钮操作 */
+    /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
       const postId = row.postId || this.ids
       getPost(postId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改岗位";
+        this.title = "编辑岗位";
       });
     },
     /** 提交按钮 */
@@ -280,7 +280,7 @@ export default {
         if (valid) {
           if (this.form.postId != undefined) {
             updatePost(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.msgSuccess("编辑成功");
               this.open = false;
               this.getList();
             });

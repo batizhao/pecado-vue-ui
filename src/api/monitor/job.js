@@ -26,7 +26,7 @@ export function addJob(data) {
   })
 }
 
-// 修改定时任务调度
+// 编辑定时任务调度
 export function updateJob(data) {
   return request({
     url: '/monitor/job',
@@ -52,7 +52,7 @@ export function exportJob(query) {
   })
 }
 
-// 任务状态修改
+// 任务状态编辑
 export function changeJobStatus(jobId, status) {
   const data = {
     jobId,

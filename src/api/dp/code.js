@@ -8,7 +8,7 @@ export function listCodePage(query) {
   })
 }
 
-// 修改代码表
+// 编辑代码表
 export function addOrUpdateCode(data) {
   return request({
     url: 'dp/code',

@@ -203,7 +203,7 @@
       </el-col>
     </el-row>
 
-    <!-- 添加或修改参数配置对话框 -->
+    <!-- 添加或编辑参数配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
@@ -465,10 +465,10 @@ export default {
   created() {
     this.getList();
     this.getTreeselect();
-    this.getDicts("sys_normal_disable").then(response => {
+    this.listDictDataByCode("sys_normal_disable").then(response => {
       this.statusOptions = response.data;
     });
-    this.getDicts("sys_user_sex").then(response => {
+    this.listDictDataByCode("sys_user_sex").then(response => {
       this.sexOptions = response.data;
     });
     this.getConfigKey("sys.user.initPassword").then(response => {
@@ -502,7 +502,7 @@ export default {
       this.queryParams.deptId = data.id;
       this.getList();
     },
-    // 用户状态修改
+    // 用户状态编辑
     handleStatusChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
       this.$confirm('确认要"' + text + '""' + row.userName + '"用户吗?', "警告", {
@@ -569,7 +569,7 @@ export default {
         this.form.password = this.initPassword;
       });
     },
-    /** 修改按钮操作 */
+    /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
       this.getTreeselect();
@@ -581,7 +581,7 @@ export default {
         this.form.postIds = response.postIds;
         this.form.roleIds = response.roleIds;
         this.open = true;
-        this.title = "修改用户";
+        this.title = "编辑用户";
         this.form.password = "";
       });
     },
@@ -592,7 +592,7 @@ export default {
         cancelButtonText: "取消"
       }).then(({ value }) => {
           resetUserPwd(row.userId, value).then(response => {
-            this.msgSuccess("修改成功，新密码是：" + value);
+            this.msgSuccess("编辑成功，新密码是：" + value);
           });
         }).catch(() => {});
     },
@@ -602,7 +602,7 @@ export default {
         if (valid) {
           if (this.form.userId != undefined) {
             updateUser(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.msgSuccess("编辑成功");
               this.open = false;
               this.getList();
             });

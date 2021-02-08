@@ -27,7 +27,7 @@ export function addUser(data) {
   })
 }
 
-// 修改用户
+// 编辑用户
 export function updateUser(data) {
   return request({
     url: '/system/user',
@@ -66,7 +66,7 @@ export function resetUserPwd(userId, password) {
   })
 }
 
-// 用户状态修改
+// 用户状态编辑
 export function changeUserStatus(userId, status) {
   const data = {
     userId,
@@ -87,7 +87,7 @@ export function getUserProfile() {
   })
 }
 
-// 修改用户个人信息
+// 编辑用户个人信息
 export function updateUserProfile(data) {
   return request({
     url: '/system/user/profile',

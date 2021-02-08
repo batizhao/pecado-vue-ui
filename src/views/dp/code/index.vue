@@ -276,7 +276,7 @@ export default {
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
-    /** 修改按钮操作 */
+    /** 编辑按钮操作 */
     handleUpdate(row) {
       const id = row.id || this.ids[0];
       this.$router.push("/code/edit/" + id);

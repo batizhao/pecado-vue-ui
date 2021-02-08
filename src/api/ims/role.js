@@ -24,7 +24,7 @@ export function addRole(data) {
   })
 }
 
-// 修改角色
+// 编辑角色
 export function updateRole(data) {
   return request({
     url: '/ims/role',
@@ -42,7 +42,7 @@ export function dataScope(data) {
   })
 }
 
-// 角色状态修改
+// 角色状态编辑
 export function changeRoleStatus(roleId, status) {
   const data = {
     roleId,

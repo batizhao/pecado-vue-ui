@@ -48,7 +48,7 @@
             <el-tab-pane label="基本资料" name="userinfo">
               <userInfo :user="user" />
             </el-tab-pane>
-            <el-tab-pane label="修改密码" name="resetPwd">
+            <el-tab-pane label="编辑密码" name="resetPwd">
               <resetPwd :user="user" />
             </el-tab-pane>
           </el-tabs>

@@ -146,7 +146,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改参数配置对话框 -->
+    <!-- 添加或编辑参数配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="参数名称" prop="configName">
@@ -234,7 +234,7 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_yes_no").then(response => {
+    this.listDictDataByCode("sys_yes_no").then(response => {
       this.typeOptions = response.data;
     });
   },
@@ -293,14 +293,14 @@ export default {
       this.single = selection.length!=1
       this.multiple = !selection.length
     },
-    /** 修改按钮操作 */
+    /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
       const configId = row.configId || this.ids
       getConfig(configId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改参数";
+        this.title = "编辑参数";
       });
     },
     /** 提交按钮 */
@@ -309,7 +309,7 @@ export default {
         if (valid) {
           if (this.form.configId != undefined) {
             updateConfig(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.msgSuccess("编辑成功");
               this.open = false;
               this.getList();
             });

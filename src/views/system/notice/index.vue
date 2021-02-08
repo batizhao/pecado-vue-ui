@@ -128,7 +128,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改公告对话框 -->
+    <!-- 添加或编辑公告对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="780px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
@@ -231,10 +231,10 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_notice_status").then(response => {
+    this.listDictDataByCode("sys_notice_status").then(response => {
       this.statusOptions = response.data;
     });
-    this.getDicts("sys_notice_type").then(response => {
+    this.listDictDataByCode("sys_notice_type").then(response => {
       this.typeOptions = response.data;
     });
   },
@@ -294,14 +294,14 @@ export default {
       this.open = true;
       this.title = "添加公告";
     },
-    /** 修改按钮操作 */
+    /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
       const noticeId = row.noticeId || this.ids
       getNotice(noticeId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改公告";
+        this.title = "编辑公告";
       });
     },
     /** 提交按钮 */
@@ -310,7 +310,7 @@ export default {
         if (valid) {
           if (this.form.noticeId != undefined) {
             updateNotice(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.msgSuccess("编辑成功");
               this.open = false;
               this.getList();
             });

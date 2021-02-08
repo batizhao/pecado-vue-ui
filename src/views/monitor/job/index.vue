@@ -137,7 +137,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改定时任务对话框 -->
+    <!-- 添加或编辑定时任务对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-row>
@@ -322,10 +322,10 @@ export default {
   },
   created() {
     this.getList();
-    this.getDicts("sys_job_group").then(response => {
+    this.listDictDataByCode("sys_job_group").then(response => {
       this.jobGroupOptions = response.data;
     });
-    this.getDicts("sys_job_status").then(response => {
+    this.listDictDataByCode("sys_job_status").then(response => {
       this.statusOptions = response.data;
     });
   },
@@ -382,7 +382,7 @@ export default {
       this.single = selection.length != 1;
       this.multiple = !selection.length;
     },
-    // 任务状态修改
+    // 任务状态编辑
     handleStatusChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
       this.$confirm('确认要"' + text + '""' + row.jobName + '"任务吗?', "警告", {
@@ -426,14 +426,14 @@ export default {
       this.open = true;
       this.title = "添加任务";
     },
-    /** 修改按钮操作 */
+    /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
       const jobId = row.jobId || this.ids;
       getJob(jobId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改任务";
+        this.title = "编辑任务";
       });
     },
     /** 提交按钮 */
@@ -442,7 +442,7 @@ export default {
         if (valid) {
           if (this.form.jobId != undefined) {
             updateJob(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.msgSuccess("编辑成功");
               this.open = false;
               this.getList();
             });

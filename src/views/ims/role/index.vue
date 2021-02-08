@@ -137,7 +137,7 @@
       @pagination="getList"
     /> -->
 
-    <!-- 添加或修改角色配置对话框 -->
+    <!-- 添加或编辑角色配置对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="名称" prop="name">
@@ -306,7 +306,7 @@ export default {
   },
   created() {
     this.getList();
-    // this.getDicts("sys_normal_disable").then(response => {
+    // this.listDictDataByCode("sys_normal_disable").then(response => {
     //   this.statusOptions = response.data;
     // });
   },
@@ -366,7 +366,7 @@ export default {
         return response;
       });
     },
-    // 角色状态修改
+    // 角色状态编辑
     handleStatusChange(row) {
       let text = row.status === "0" ? "启用" : "停用";
       this.$confirm('确认要"' + text + '""' + row.name + '"角色吗?', "警告", {
@@ -468,7 +468,7 @@ export default {
       this.open = true;
       this.title = "添加角色";
     },
-    /** 修改按钮操作 */
+    /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
@@ -481,7 +481,7 @@ export default {
             this.$refs.menu.setCheckedKeys(res.checkedKeys);
           });
         });
-        this.title = "修改角色";
+        this.title = "编辑角色";
       });
     },
     /** 分配数据权限操作 */
@@ -506,7 +506,7 @@ export default {
           if (this.form.id != undefined) {
             this.form.menuIds = this.getMenuAllCheckedKeys();
             updateRole(this.form).then(response => {
-              this.msgSuccess("修改成功");
+              this.msgSuccess("编辑成功");
               this.open = false;
               this.getList();
             });
@@ -526,7 +526,7 @@ export default {
       if (this.form.id != undefined) {
         this.form.deptIds = this.getDeptAllCheckedKeys();
         dataScope(this.form).then(response => {
-          this.msgSuccess("修改成功");
+          this.msgSuccess("编辑成功");
           this.openDataScope = false;
           this.getList();
         });
