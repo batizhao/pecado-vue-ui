@@ -73,7 +73,6 @@
 
     <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
       <el-table-column label="用户名" align="center" prop="username" />
       <el-table-column label="用户邮箱" align="center" prop="email" />
       <el-table-column label="用户姓名" align="center" prop="name" />
