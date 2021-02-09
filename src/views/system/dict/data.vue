@@ -85,6 +85,9 @@
         <el-form-item label="值" prop="value">
           <el-input v-model="form.value" placeholder="请输入值" />
         </el-form-item>
+        <el-form-item label="排序" prop="sort">
+          <el-input v-model="form.sort" placeholder="请输入排序" />
+        </el-form-item>
         <el-form-item label="默认">
           <el-radio-group v-model="form.isDefault">
             <el-radio
@@ -93,9 +96,6 @@
               :label="dict.value"
             >{{dict.label}}</el-radio>
           </el-radio-group>
-        </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input v-model="form.sort" placeholder="请输入排序" />
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="form.status">
@@ -194,10 +194,7 @@ export default {
     },
     // 表单重置
     reset() {
-      this.form = {
-        label: undefined,
-        value: undefined
-      };
+      this.form = {};
       this.resetForm("form");
     },
     /** 搜索按钮操作 */

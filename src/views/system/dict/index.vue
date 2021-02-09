@@ -219,11 +219,7 @@ export default {
     },
     // 表单重置
     reset() {
-      this.form = {
-        name: undefined,
-        code: undefined,
-        description: undefined
-      };
+      this.form = {};
       this.resetForm("form");
     },
     /** 搜索按钮操作 */

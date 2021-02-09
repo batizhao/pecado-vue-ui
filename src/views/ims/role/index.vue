@@ -400,18 +400,7 @@ export default {
       this.menuNodeAll = false,
       this.deptExpand = true,
       this.deptNodeAll = false,
-      this.form = {
-        id: undefined,
-        name: undefined,
-        code: undefined,
-        roleSort: 0,
-        status: "0",
-        menuIds: [],
-        deptIds: [],
-        menuCheckStrictly: true,
-        deptCheckStrictly: true,
-        remark: undefined
-      };
+      this.form = {};
       this.resetForm("form");
     },
     /** 搜索按钮操作 */

@@ -339,18 +339,7 @@ export default {
     },
     // 表单重置
     reset() {
-      this.form = {
-        id: undefined,
-        pid: 0,
-        name: undefined,
-        icon: undefined,
-        menuType: "M",
-        sort: undefined,
-        isFrame: "1",
-        isCache: "0",
-        visible: "0",
-        status: "0"
-      };
+      this.form = {};
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
