@@ -9,57 +9,34 @@ export function listRole(query) {
 }
 
 // 查询角色详细
-export function getRole(roleId) {
-  return request({
-    url: '/ims/role/' + roleId,
-  })
+export function getRole(id) {
+  return request(`/ims/role/${id}`);
 }
 
-// 添加角色
-export function addRole(data) {
+// 添加或者编辑角色
+export function addOrUpdateRole(data) {
   return request({
     url: '/ims/role',
     method: 'post',
-    data: data
-  })
-}
-
-// 编辑角色
-export function updateRole(data) {
-  return request({
-    url: '/ims/role',
-    method: 'post',
-    data: data
-  })
-}
-
-// 角色数据权限
-export function dataScope(data) {
-  return request({
-    url: '/ims/role/dataScope',
-    method: 'put',
-    data: data
-  })
-}
-
-// 角色状态编辑
-export function changeRoleStatus(roleId, status) {
-  const data = {
-    roleId,
-    status
-  }
-  return request({
-    url: '/ims/role/changeStatus',
-    method: 'put',
     data: data
   })
 }
 
 // 删除角色
-export function delRole(roleId) {
+export function deleteRole(ids) {
+  return request.delete(`/ims/role?ids=${ids}`);
+}
+
+// 角色状态编辑
+export function changeRoleStatus(id, status) {
+  const data = {
+    id,
+    status
+  }
   return request({
-    url: '/ims/role/' + roleId,
-    method: 'delete'
+    url: '/ims/role/status',
+    method: 'post',
+    data: data
   })
 }
 
