@@ -52,7 +52,16 @@
       <el-table-column label="值" align="center" prop="value" />
       <el-table-column label="排序" align="center" prop="sort" />
       <el-table-column label="默认" align="center" prop="default" :formatter="defaultFormat" />
-      <el-table-column label="状态" align="center" prop="status" :formatter="statusFormat" />
+      <el-table-column label="状态" align="center" width="80">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.status"
+            @change="handleStatusChange(scope.row)"
+            active-value="open"
+            inactive-value="close"
+          ></el-switch>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -97,15 +106,6 @@
             >{{dict.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="状态">
-          <el-radio-group v-model="form.status">
-            <el-radio
-              v-for="dict in statusOptions"
-              :key="dict.value"
-              :label="dict.value"
-            >{{dict.label}}</el-radio>
-          </el-radio-group>
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import { getDictData, deleteDictData, addOrUpdateDictData, exportDictData } from "@/api/system/dict/data";
+import { getDictData, deleteDictData, addOrUpdateDictData, changeDictDataStatus, exportDictData } from "@/api/system/dict/data";
 
 export default {
   name: "DictData",
@@ -144,8 +144,6 @@ export default {
       open: false,
       // 是否默认字典
       defaultOptions: [],
-      // 是否可用字典
-      statusOptions: [],
       // 表单参数
       form: {},
       // 表单校验
@@ -165,9 +163,6 @@ export default {
     this.listDictDataByCode("yes_or_no").then(response => {
       this.defaultOptions = response.data;
     });
-    this.listDictDataByCode("status").then(response => {
-      this.statusOptions = response.data;
-    });
   },
   methods: {
     /** 查询字典列表 */
@@ -179,13 +174,24 @@ export default {
         }
       );
     },
+    // 字典状态编辑
+    handleStatusChange(row) {
+      let text = row.status === "open" ? "启用" : "停用";
+      this.$confirm('确认要"' + text + '""' + row.label + '"吗?', "警告", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(function() {
+          return changeDictDataStatus(row.id, row.status);
+        }).then(() => {
+          this.msgSuccess(text + "成功");
+        }).catch(function() {
+          row.status = row.status === "open" ? "close" : "open";
+        });
+    },
     // 是否默认字典翻译
     defaultFormat(row, column) {
       return this.selectDictLabel(this.defaultOptions, row.isDefault);
-    },
-    // 是否可用字典翻译
-    statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status);
     },
     // 取消按钮
     cancel() {

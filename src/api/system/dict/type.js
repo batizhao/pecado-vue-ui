@@ -40,7 +40,7 @@ export function optionSelect() {
   return request('/system/dict/type')
 }
 
-// 菜单状态编辑
+// 字典类型状态编辑
 export function changeDictTypeStatus(id, status) {
   const data = {
     id,
