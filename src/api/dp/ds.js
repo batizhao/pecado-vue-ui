@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 // 查询数据源列表
-export function listDsPage(query) {
+export function listDs(query) {
   return request({
     url: '/dp/dss',
     params: query

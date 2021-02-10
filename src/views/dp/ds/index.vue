@@ -133,7 +133,7 @@
 </template>
 
 <script>
-import { listDsPage, getDs, addOrUpdateDs, deleteDs, changeDsStatus } from "@/api/dp/ds";
+import { listDs, getDs, addOrUpdateDs, deleteDs, changeDsStatus } from "@/api/dp/ds";
 
 export default {
   name: "Ds",
@@ -192,7 +192,7 @@ export default {
     /** 查询数据源列表 */
     getList() {
       this.loading = true;
-      listDsPage(this.queryParams).then(response => {
+      listDs(this.queryParams).then(response => {
           this.dsList = response.data.records;
           this.total = response.data.total;
           this.loading = false;

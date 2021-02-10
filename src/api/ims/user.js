@@ -40,6 +40,15 @@ export function changeUserStatus(id, status) {
   })
 }
 
+// 分配用户角色
+export function changeUserRoles(roles) {
+  return request({
+    url: '/ims/user/role',
+    method: 'post',
+    data: roles
+  })
+}
+
 // 导出用户
 export function exportUser(query) {
   return request({

@@ -1,11 +1,16 @@
 import request from '@/utils/request'
 
-// 查询角色列表
+// 查询角色列表（分页）
 export function listRole(query) {
   return request({
     url: '/ims/roles',
     params: query
   })
+}
+
+// 查询角色列表
+export function listAllRole() {
+  return request('/ims/role')
 }
 
 // 查询角色详细
@@ -38,6 +43,11 @@ export function changeRoleStatus(id, status) {
     method: 'post',
     data: data
   })
+}
+
+// 根据用户ID查询角色
+export function listRoleByUserId(userId) {
+  return request(`/ims/role?userId=${userId}`);
 }
 
 // 导出角色

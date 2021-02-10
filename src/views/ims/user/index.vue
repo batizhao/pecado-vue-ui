@@ -101,6 +101,12 @@
           >编辑</el-button>
           <el-button
             type="text"
+            icon="el-icon-circle-check"
+            @click="handleRole(scope.row)"
+            v-hasPermi="['ims:user:edit']"
+          >分配角色</el-button>
+          <el-button
+            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['ims:user:delete']"
@@ -135,11 +141,32 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 添加或编辑用户角色对话框 -->
+    <el-dialog :title="title" :visible.sync="openRole" width="500px" append-to-body>
+      <el-form ref="form" :model="form" label-width="80px">
+        <el-form-item label="角色">
+          <el-select v-model="form.roleIds" multiple placeholder="请选择" @change="change()">
+            <el-option
+              v-for="item in roleList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitRoleForm">确 定</el-button>
+        <el-button @click="cancelRoleForm">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { listUser, getUser, deleteUser, addOrUpdateUser, changeUserStatus, exportUser } from "@/api/ims/user";
+import { listUser, getUser, deleteUser, addOrUpdateUser, changeUserStatus, changeUserRoles, exportUser } from "@/api/ims/user";
+import { listAllRole, listRoleByUserId } from "@/api/ims/role";
 
 export default {
   name: "User",
@@ -163,10 +190,14 @@ export default {
       total: 0,
       // 用户表格数据
       userList: [],
+      // 用户角色数据
+      roleList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否显示弹出层（角色）
+      openRole: false,
       // 查询参数
       queryParams: {
         current: 1,
@@ -191,7 +222,7 @@ export default {
     };
   },
   created() {
-    this.getList();
+    this.getList();    
   },
   methods: {
     /** 查询用户列表 */
@@ -202,6 +233,10 @@ export default {
         this.total = response.data.total;
         this.loading = false;
       });
+    },
+    // 强制更新 this.form.roleIds
+    change() { 
+      this.$forceUpdate(); 
     },
     // 用户状态编辑
     handleStatusChange(row) {
@@ -221,6 +256,11 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.reset();
+    },
+    // 取消按钮（角色）
+    cancelRoleForm() {
+      this.openRole = false;
       this.reset();
     },
     // 表单重置
@@ -254,11 +294,25 @@ export default {
     /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const id = row.id || this.ids
+      const id = row.id || this.ids;
       getUser(id).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "编辑用户";
+      });
+    },
+    /** 分配角色操作 */
+    handleRole(row) {
+      this.reset();
+      const id = row.id || this.ids;
+      listAllRole().then(response => {
+        this.roleList = response.data;
+      });
+      listRoleByUserId(id).then(response => {
+        this.form.id = id;
+        this.form.roleIds = response.data.map(item => item.id);
+        this.openRole = true;
+        this.title = "分配角色";
       });
     },
     /** 提交按钮 */
@@ -269,6 +323,26 @@ export default {
             this.msgSuccess("保存成功");
             this.open = false;
             this.getList();
+          });
+        }
+      });
+    },
+    /** 提交角色按钮 */
+    submitRoleForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          const roles = this.form.roleIds;
+          const optionArray = [];
+          Object.keys(roles).forEach((key) =>
+            optionArray.push({
+              userId: this.form.id,
+              roleId: roles[key],
+            }),
+          );
+
+          changeUserRoles(optionArray).then(response => {
+            this.msgSuccess("保存成功");
+            this.openRole = false;
           });
         }
       });
