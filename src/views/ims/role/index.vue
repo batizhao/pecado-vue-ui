@@ -85,19 +85,21 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
-            size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['ims:role:edit']"
           >编辑</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['ims:role:delete']"
-          >删除</el-button>
+          <el-divider direction="vertical"></el-divider>
+          <el-dropdown>
+            <span class="el-dropdown-link">
+               更多 <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleMenu(scope.row)" v-hasPermi="['ims:role:edit']">分配菜单</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['ims:role:delete']">删除</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -128,11 +130,33 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 添加或编辑角色菜单对话框 -->
+    <el-dialog :title="title" :visible.sync="openMenu" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="菜单" prop="menuIds">
+          <el-tree
+            class="tree-border"
+            :data="menuList"
+            show-checkbox
+            ref="menu"
+            node-key="id"
+            :check-strictly="true"
+            :props="defaultProps"
+          ></el-tree>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitMenuForm">确 定</el-button>
+        <el-button @click="cancelMenuForm">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { listRole, getRole, deleteRole, addOrUpdateRole, changeRoleStatus, exportRole } from "@/api/ims/role";
+import { listRole, getRole, deleteRole, addOrUpdateRole, changeRoleStatus, changeRoleMenus, exportRole } from "@/api/ims/role";
+import { listMenusByRoleId, listMenu } from "@/api/ims/menu";
 
 export default {
   name: "Role",
@@ -156,10 +180,14 @@ export default {
       total: 0,
       // 角色表格数据
       roleList: [],
+      // 角色菜单数据
+      menuList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否显示弹出层（菜单）
+      openMenu: false,
       // 查询参数
       queryParams: {
         current: 1,
@@ -168,6 +196,10 @@ export default {
       },
       // 表单参数
       form: {},
+      defaultProps: {
+        children: "children",
+        label: "name"
+      },
       // 表单校验
       rules: {
         name: [
@@ -192,6 +224,15 @@ export default {
         this.loading = false;
       });
     },
+    // 所有菜单节点数据
+    getMenuAllCheckedKeys() {
+      // 目前被选中的菜单节点
+      let checkedKeys = this.$refs.menu.getCheckedKeys();
+      // 半选中的菜单节点
+      // let halfCheckedKeys = this.$refs.menu.getHalfCheckedKeys();
+      // checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys);
+      return checkedKeys;
+    },
     // 数据源状态编辑
     handleStatusChange(row) {
       let text = row.status === "open" ? "启用" : "停用";
@@ -210,6 +251,11 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.reset();
+    },
+    // 取消按钮（角色）
+    cancelMenuForm() {
+      this.openMenu = false;
       this.reset();
     },
     // 表单重置
@@ -250,6 +296,23 @@ export default {
         this.title = "编辑角色";
       });
     },
+    /** 分配菜单操作 */
+    handleMenu(row) {
+      this.reset();
+      const id = row.id || this.ids;
+      listMenu().then(response => {
+        this.menuList = response.data;
+      });
+      const menus = listMenusByRoleId(id);
+      this.$nextTick(() => {
+        menus.then(res => {
+          this.$refs.menu.setCheckedKeys(res.data.map(item => item.id));
+        });
+      });
+      this.form.id = id;
+      this.openMenu = true;
+      this.title = "分配菜单";
+    },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -258,6 +321,26 @@ export default {
             this.msgSuccess("保存成功");
             this.open = false;
             this.getList();
+          });
+        }
+      });
+    },
+    /** 提交菜单按钮 */
+    submitMenuForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          const menus = this.getMenuAllCheckedKeys();
+          const optionArray = [];
+          Object.keys(menus).forEach((key) =>
+            optionArray.push({
+              roleId: this.form.id,
+              menuId: menus[key],
+            }),
+          );
+
+          changeRoleMenus(optionArray).then(response => {
+            this.msgSuccess("保存成功");
+            this.openMenu = false;
           });
         }
       });

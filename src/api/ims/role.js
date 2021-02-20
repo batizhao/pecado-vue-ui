@@ -50,6 +50,15 @@ export function listRoleByUserId(userId) {
   return request(`/ims/role?userId=${userId}`);
 }
 
+// 分配用户角色
+export function changeRoleMenus(menus) {
+  return request({
+    url: '/ims/role/menu',
+    method: 'post',
+    data: menus
+  })
+}
+
 // 导出角色
 export function exportRole(query) {
   return request({

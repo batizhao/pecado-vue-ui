@@ -40,16 +40,7 @@ export function changeMenuStatus(id, status) {
   })
 }
 
-// 查询菜单下拉树结构
-export function treeselect() {
-  return request({
-    url: '/ims/menu/treeselect',
-  })
-}
-
 // 根据角色ID查询菜单下拉树结构
-export function roleMenuTreeselect(roleId) {
-  return request({
-    url: '/ims/menu/roleMenuTreeselect/' + roleId,
-  })
+export function listMenusByRoleId(roleId) {
+  return request(`/ims/menu?roleId=${roleId}`)
 }
