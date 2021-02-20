@@ -99,18 +99,16 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['ims:user:edit']"
           >编辑</el-button>
-          <el-button
-            type="text"
-            icon="el-icon-circle-check"
-            @click="handleRole(scope.row)"
-            v-hasPermi="['ims:user:edit']"
-          >分配角色</el-button>
-          <el-button
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['ims:user:delete']"
-          >删除</el-button>
+          <el-divider direction="vertical"></el-divider>
+          <el-dropdown>
+            <span class="el-dropdown-link">
+               更多 <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleRole(scope.row)" v-hasPermi="['ims:user:edit']">分配角色</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['ims:user:delete']">删除</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -144,8 +142,8 @@
 
     <!-- 添加或编辑用户角色对话框 -->
     <el-dialog :title="title" :visible.sync="openRole" width="500px" append-to-body>
-      <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="角色">
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="角色" prop="roleIds">
           <el-select v-model="form.roleIds" multiple placeholder="请选择" @change="change()">
             <el-option
               v-for="item in roleList"
@@ -173,6 +171,13 @@ export default {
   components: {
   },
   data() {
+    const roleNotBlank = (rule, value, callback) => {
+      if (this.form.roleIds.length === 0) {
+        callback(new Error("角色不能为空"));
+      } else {
+        callback();
+      }
+    };
     return {
       // 遮罩层
       loading: true,
@@ -218,7 +223,10 @@ export default {
         name: [
           { required: true, message: "用户姓名不能为空", trigger: "blur" }
         ],
-      }
+        roleIds: [
+          { required: true, validator: roleNotBlank, trigger: "blur" }
+        ],
+      },
     };
   },
   created() {
