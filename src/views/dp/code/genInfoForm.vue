@@ -27,7 +27,7 @@
       <el-col :span="12">
         <el-form-item prop="moduleName">
           <span slot="label">
-            生成模块名
+            模块名
             <el-tooltip content="可理解为子系统名，例如 system" placement="top">
               <i class="el-icon-question"></i>
             </el-tooltip>
@@ -36,29 +36,30 @@
         </el-form-item>
       </el-col>
 
-      <!-- <el-col :span="12">
-        <el-form-item prop="businessName">
+      <el-col :span="12">
+        <el-form-item prop="mappingPath">
           <span slot="label">
-            生成业务名
-            <el-tooltip content="可理解为功能英文名，例如 user" placement="top">
+            后端 API 路径
+            <el-tooltip content="/模块名/后端 API 路径=Contrller Mapping Path" placement="top">
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-input v-model="info.businessName" />
+          <el-input v-model="info.mappingPath" />
         </el-form-item>
       </el-col>
 
       <el-col :span="12">
-        <el-form-item prop="functionName">
+        <el-form-item prop="type">
           <span slot="label">
-            生成功能名
-            <el-tooltip content="用作类描述，例如 用户" placement="top">
+            生成代码方式
+            <el-tooltip content="默认为zip压缩包下载，也可以自定义生成路径" placement="top">
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-input v-model="info.functionName" />
+          <el-radio v-model="info.type" label="zip">zip压缩包</el-radio>
+          <el-radio v-model="info.type" label="path">自定义路径</el-radio>
         </el-form-item>
-      </el-col> -->
+      </el-col>
 
       <el-col :span="12">
         <el-form-item>
@@ -76,19 +77,6 @@
             :show-count="true"
             placeholder="请选择系统菜单"
           />
-        </el-form-item>
-      </el-col>
-
-      <el-col :span="12">
-        <el-form-item prop="type">
-          <span slot="label">
-            生成代码方式
-            <el-tooltip content="默认为zip压缩包下载，也可以自定义生成路径" placement="top">
-              <i class="el-icon-question"></i>
-            </el-tooltip>
-          </span>
-          <el-radio v-model="info.type" label="zip">zip压缩包</el-radio>
-          <el-radio v-model="info.type" label="path">自定义路径</el-radio>
         </el-form-item>
       </el-col>
 
@@ -247,9 +235,9 @@ export default {
         moduleName: [
           { required: true, message: "请输入生成模块名", trigger: "blur" }
         ],
-        // businessName: [
-        //   { required: true, message: "请输入生成业务名", trigger: "blur" }
-        // ],
+        mappingPath: [
+          { required: true, message: "请输入后端 API 路径", trigger: "blur" }
+        ],
         // functionName: [
         //   { required: true, message: "请输入生成功能名", trigger: "blur" }
         // ],
