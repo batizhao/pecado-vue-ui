@@ -167,6 +167,11 @@
               <el-input v-model="form.permission" placeholder="请输入权限标识" maxlength="50" />
             </el-form-item>
           </el-col>
+          <el-col :span="24">
+            <el-form-item label="菜单说明">
+              <el-input v-model="form.description" placeholder="请输入菜单说明" maxlength="50" />
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
