@@ -10,16 +10,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="菜单状态" clearable size="small">
-          <el-option
-            v-for="dict in statusOptions"
-            :key="dict.dictValue"
-            :label="dict.dictLabel"
-            :value="dict.dictValue"
-          />
-        </el-select>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -205,10 +195,6 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
-      // 显示状态数据字典
-      visibleOptions: [],
-      // 菜单状态数据字典
-      statusOptions: [],
       // 查询参数
       queryParams: {
         name: undefined,
@@ -287,20 +273,6 @@ export default {
         this.menuOptions.push(menu);
       });
     },
-    // 显示状态字典翻译
-    // visibleFormat(row, column) {
-    //   if (row.type == "F") {
-    //     return "";
-    //   }
-    //   return this.selectDictLabel(this.visibleOptions, row.visible);
-    // },
-    // 菜单状态字典翻译
-    // statusFormat(row, column) {
-    //   if (row.type == "F") {
-    //     return "";
-    //   }
-    //   return this.selectDictLabel(this.statusOptions, row.status);
-    // },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -308,7 +280,9 @@ export default {
     },
     // 表单重置
     reset() {
-      this.form = {};
+      this.form = {
+        icon: undefined,
+      };
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
@@ -346,25 +320,17 @@ export default {
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.id != undefined) {
-            addOrUpdateMenu(this.form).then(response => {
-              this.msgSuccess("编辑成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addOrUpdateMenu(this.form).then(response => {
-              this.msgSuccess("添加成功");
-              this.open = false;
-              this.getList();
-            });
-          }
+          addOrUpdateMenu(this.form).then(response => {
+            this.msgSuccess("保存成功");
+            this.open = false;
+            this.getList();
+          });
         }
       });
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      this.$confirm('是否确认删除名称为"' + row.name + '"的数据项?', "警告", {
+      this.$confirm('确认删除"' + row.name + '"吗?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
