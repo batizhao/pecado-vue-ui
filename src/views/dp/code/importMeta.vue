@@ -21,13 +21,18 @@
         />
       </el-form-item>
       <el-form-item label="数据源" prop="dsName">
-        <el-input
+        <el-select
           v-model="queryParams.dsName"
-          placeholder="请输入数据源"
+          placeholder="请选择数据源"
           clearable
           size="small"
-          @keyup.enter.native="handleQuery"
-        />
+        >
+          <el-option
+            v-for="ds in dsOptions"
+            :key="ds.id"
+            :value="ds.name"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -60,6 +65,7 @@
 
 <script>
 import { listCodeMetaPage, importCodeMeta } from "@/api/dp/code";
+import { listAllDs } from "@/api/dp/ds";
 export default {
   data() {
     return {
@@ -71,6 +77,8 @@ export default {
       total: 0,
       // 表数据
       dbTableList: [],
+      // 数据源
+      dsOptions: [],
       // 查询参数
       queryParams: {
         current: 1,
@@ -84,6 +92,7 @@ export default {
     // 显示弹框
     show() {
       this.getList();
+      this.getDsList();
       this.visible = true;
     },
     clickRow(row) {
@@ -99,6 +108,14 @@ export default {
         if (res.code === 0) {
           this.dbTableList = res.data.records;
           this.total = res.data.total;
+        }
+      });
+    },
+    // 查询数据源
+    getDsList() {
+      listAllDs().then(res => {
+        if (res.code === 0) {
+          this.dsOptions = res.data;
         }
       });
     },

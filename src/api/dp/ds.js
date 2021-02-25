@@ -1,11 +1,16 @@
 import request from '@/utils/request'
 
-// 查询数据源列表
+// 分页查询数据源
 export function listDs(query) {
   return request({
     url: '/dp/dss',
     params: query
   })
+}
+
+// 查询所有数据源
+export function listAllDs(query) {
+  return request('/dp/ds')
 }
 
 // 数据源详情
