@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Notification, MessageBox, Message } from 'element-ui'
+import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
@@ -48,61 +48,54 @@ service.interceptors.request.use(config => {
   }
   return config
 }, error => {
-    console.log(error)
     Promise.reject(error)
 })
 
-// 响应拦截器
+//响应拦截器
 service.interceptors.response.use(res => {
-    // 未设置状态码则默认成功状态
-    const status = Number(res.status) || 200
-    const message = res.data.message || errorCode[status] || errorCode['default']
-    // 获取错误信息
-    if (status === 401) {
-      MessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
-          confirmButtonText: '重新登录',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }
-      ).then(() => {
-        store.dispatch('FedLogOut').then(() => {
-          location.href = '/';
-        })
+  // 未设置状态码则默认成功状态
+  const status = Number(res.status) || 200
+  const message = res.data.message || errorCode[status] || errorCode['default']
+  // token 过期
+  if (status === 401) {
+    MessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
+        confirmButtonText: '重新登录',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+    ).then(() => {
+      store.dispatch('FedLogOut').then(() => {
+        location.href = '/';
       })
-    } else if (status === 500) {
-      Message({
-        message: message,
-        type: 'error'
-      })
-      return Promise.reject(new Error(message))
-    } else if (status !== 200) {
-      Notification.error({
-        title: message
-      })
-      return Promise.reject('error')
-    } else {
-      return res.data
-    }
-  },
-  error => {
-    console.log('err' + error)
-    let { message } = error;
-    if (message == "Network Error") {
-      message = "后端接口连接异常";
-    }
-    else if (message.includes("timeout")) {
-      message = "系统接口请求超时";
-    }
-    else if (message.includes("Request failed with status code")) {
-      message = "系统接口" + message.substr(message.length - 3) + "异常";
-    }
-    Message({
-      message: message,
-      type: 'error',
-      duration: 5 * 1000
     })
-    return Promise.reject(error)
+  } else if (status !== 200 || res.data.code !== 0) {
+    Message({
+      message: res.data.data || message,
+      type: 'error'
+    })
+    return Promise.reject(new Error(message))
+  } else {
+    return res.data
   }
+},
+error => {
+  let { message } = error;
+  if (message == "Network Error") {
+    message = "后端接口连接异常";
+  }
+  else if (message.includes("timeout")) {
+    message = "系统接口请求超时";
+  }
+  else if (message.includes("Request failed with status code")) {
+    message = "系统接口" + message.substr(message.length - 3) + "异常";
+  }
+  Message({
+    message: message,
+    type: 'error',
+    duration: 5 * 1000
+  })
+  return Promise.reject(new Error(error))
+}
 )
 
 export default service

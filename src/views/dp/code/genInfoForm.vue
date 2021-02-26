@@ -40,7 +40,7 @@
         <el-form-item prop="mappingPath">
           <span slot="label">
             后端 API 路径
-            <el-tooltip content="/模块名/后端 API 路径=Contrller Mapping Path" placement="top">
+            <el-tooltip content="Controller RequestMapping" placement="top">
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>

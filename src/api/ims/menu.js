@@ -23,8 +23,8 @@ export function getMenu(id) {
 }
 
 // 删除菜单
-export function deleteMenu(ids) {
-  return request.delete(`/ims/menu?ids=${ids}`);
+export function deleteMenu(id) {
+  return request.delete(`/ims/menu?id=${id}`);
 }
 
 // 菜单状态编辑
