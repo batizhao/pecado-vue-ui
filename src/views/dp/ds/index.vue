@@ -103,7 +103,7 @@
       v-show="total>0"
       :total="total"
       :page.sync="queryParams.current"
-      :limit.sync="queryParams.pageSize"
+      :limit.sync="queryParams.size"
       @pagination="getList"
     />
 
@@ -162,7 +162,7 @@ export default {
       // 查询参数
       queryParams: {
         current: 1,
-        pageSize: 10,
+        size: 10,
         name: undefined,
         username: undefined,
       },
