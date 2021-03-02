@@ -19,6 +19,21 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="日志类型" prop="type">
+        <el-select
+          v-model="queryParams.type"
+          placeholder="请选择日志类型"
+          clearable
+          size="small"
+        >
+          <el-option
+            v-for="dict in typeOptions"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -64,8 +79,14 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="id" align="center" prop="id" />
       <el-table-column label="HTTP方法" align="center" prop="httpRequestMethod" />
-      <el-table-column label="操作说明" align="center" prop="description" />
+      <el-table-column label="操作说明" align="center" prop="description" :show-overflow-tooltip="true" />
       <el-table-column label="操作时长" align="center" prop="spend" />
+      <el-table-column label="日志类型" align="center" prop="type">
+        <template slot-scope="scope">
+          <el-tag
+            :type="scope.row.type === 'success' ? 'success' : 'danger'">{{typeFormat(scope.row)}}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作用户" align="center" prop="username" />
       <el-table-column label="操作IP" align="center" prop="ip" />
       <el-table-column label="操作时间" align="center" prop="createTime" width="180">
@@ -96,6 +117,9 @@
     <el-dialog title="操作日志详细" :visible.sync="open" width="700px" append-to-body>
       <el-form ref="form" :model="form" label-width="100px" size="mini">
         <el-row>
+          <el-col :span="24">
+            <el-form-item label="id：">{{ form.id }}</el-form-item>
+          </el-col>
           <el-col :span="24">
             <el-form-item label="类名：">{{ form.className }}</el-form-item>
           </el-col>
@@ -160,6 +184,8 @@ export default {
       total: 0,
       // 日志表格数据
       logList: [],
+      // 日志类型字典
+      typeOptions: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -177,6 +203,9 @@ export default {
   },
   created() {
     this.getList();
+    this.listDictDataByCode("success_or_fail").then(response => {
+      this.typeOptions = response.data;
+    });
   },
   methods: {
     /** 查询日志列表 */
@@ -187,6 +216,10 @@ export default {
         this.total = response.data.total;
         this.loading = false;
       });
+    },
+    // 日志类型字典翻译
+    typeFormat(row, column) {
+      return this.selectDictLabel(this.typeOptions, row.type);
     },
     // 取消按钮
     cancel() {
