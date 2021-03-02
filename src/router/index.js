@@ -92,18 +92,18 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/job',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: 'log',
-        component: (resolve) => require(['@/views/monitor/job/log'], resolve),
-        name: '调度日志',
-      }
-    ]
-  },
+  // {
+  //   path: '/job',
+  //   component: Layout,
+  //   hidden: true,
+  //   children: [
+  //     {
+  //       path: 'log',
+  //       component: (resolve) => require(['@/views/monitor/job/log'], resolve),
+  //       name: '调度日志',
+  //     }
+  //   ]
+  // },
   {
     path: '/code',
     component: Layout,
