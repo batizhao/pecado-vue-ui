@@ -132,7 +132,7 @@
           :name="key.substring(key.lastIndexOf('/')+1,key.indexOf('.vm'))"
           :key="key"
         >
-        <pre><code class="hljs" v-html="highlightedCode(value, key)"></code></pre>
+          <pre><code class="hljs" v-html="highlightedCode(value, key)"></code></pre>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
@@ -144,7 +144,7 @@
 import { listCodePage, previewCode, deleteCode, genCode, syncCodeMeta } from "@/api/dp/code";
 import importMeta from "./importMeta";
 import { downLoadZip } from "@/utils/zipdownload";
-import hljs from "highlight.js/lib/highlight";
+import hljs from "highlight.js/lib/core";
 import "highlight.js/styles/github-gist.css";
 hljs.registerLanguage("java", require("highlight.js/lib/languages/java"));
 hljs.registerLanguage("xml", require("highlight.js/lib/languages/xml"));
