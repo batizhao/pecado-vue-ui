@@ -55,6 +55,8 @@ module.exports = {
     config.plugins.delete('preload') // TODO: need test
     config.plugins.delete('prefetch') // TODO: need test
 
+    config.resolve.alias.set('vue$', 'vue/dist/vue.esm.js')
+
     // set svg-sprite-loader
     config.module
       .rule('svg')
