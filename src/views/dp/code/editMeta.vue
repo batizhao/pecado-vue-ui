@@ -33,6 +33,7 @@
                 <el-option label="Double" value="Double" />
                 <el-option label="BigDecimal" value="BigDecimal" />
                 <el-option label="Date" value="Date" />
+                <el-option label="LocalDateTime" value="LocalDateTime" />
               </el-select>
             </template>
           </el-table-column>
