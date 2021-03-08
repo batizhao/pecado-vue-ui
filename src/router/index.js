@@ -115,6 +115,18 @@ export const constantRoutes = [
         name: '编辑生成配置',
       }
     ]
+  },
+  {
+    path: '/form',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: 'design/:id(\\d+)',
+        component: (resolve) => require(['@/views/dp/form/design'], resolve),
+        name: '表单设计',
+      }
+    ]
   }
 ]
 
