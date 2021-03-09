@@ -8,11 +8,6 @@ export function listForm(query) {
   })
 }
 
-// 查询所有表单
-export function listAllForm(query) {
-  return request('/dp/form')
-}
-
 // 查询表单详细
 export function getForm(id) {
   return request(`/dp/form/${id}`);
