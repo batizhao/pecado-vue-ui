@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       id: 0,
-      metadata: ""
+      metadata: "{}"
     }
   },
   created() {
