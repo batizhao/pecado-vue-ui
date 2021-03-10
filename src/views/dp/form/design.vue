@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     handleFormReady () {
-      this.$refs.makingform.setJSON(this.metadata)
+      this.$refs.makingform.setJSON(JSON.parse(this.metadata))
     },
     handleSave () {
       const json = this.$refs.makingform.getJSON()
