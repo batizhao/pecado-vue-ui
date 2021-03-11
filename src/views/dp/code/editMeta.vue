@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <div class="app-container">
     <el-tabs v-model="activeName">
       <el-tab-pane label="基本信息" name="basic">
         <basic-info-form ref="basicInfo" :info="code" />
@@ -124,7 +124,7 @@
         <el-button @click="close()">返回</el-button>
       </el-form-item>
     </el-form>
-  </el-card>
+  </div>
 </template>
 <script>
 import { getCode, addOrUpdateCode } from "@/api/dp/code";
