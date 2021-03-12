@@ -198,7 +198,6 @@ export default {
       // 查询参数
       queryParams: {
         name: undefined,
-        visible: undefined
       },
       // 表单参数
       form: {},

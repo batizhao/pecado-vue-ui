@@ -133,7 +133,7 @@ export function praseStrEmpty(str) {
  */
 export function handleTree(data, id, parentId, children, rootId) {
 	id = id || 'id'
-	parentId = parentId || 'parentId'
+	parentId = parentId || 'pid'
 	children = children || 'children'
 	rootId = rootId || Math.min.apply(Math, data.map(item => { return item[parentId] })) || 0
 	//对源数据深度克隆

@@ -103,63 +103,6 @@
       </el-col>
     </el-row>
 
-    <el-row v-show="info.template == 'tree'">
-      <h4 class="form-header">其他信息</h4>
-      <el-col :span="12">
-        <el-form-item>
-          <span slot="label">
-            树编码字段
-            <el-tooltip content="树显示的编码字段名， 如：dept_id" placement="top">
-              <i class="el-icon-question"></i>
-            </el-tooltip>
-          </span>
-          <el-select v-model="info.treeCode" placeholder="请选择">
-            <el-option
-              v-for="(column, index) in info.columns"
-              :key="index"
-              :label="column.columnName + '：' + column.columnComment"
-              :value="column.columnName"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item>
-          <span slot="label">
-            树父编码字段
-            <el-tooltip content="树显示的父编码字段名， 如：parent_Id" placement="top">
-              <i class="el-icon-question"></i>
-            </el-tooltip>
-          </span>
-          <el-select v-model="info.treeParentCode" placeholder="请选择">
-            <el-option
-              v-for="(column, index) in info.columns"
-              :key="index"
-              :label="column.columnName + '：' + column.columnComment"
-              :value="column.columnName"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-      <el-col :span="12">
-        <el-form-item>
-          <span slot="label">
-            树名称字段
-            <el-tooltip content="树节点的显示名称字段名， 如：dept_name" placement="top">
-              <i class="el-icon-question"></i>
-            </el-tooltip>
-          </span>
-          <el-select v-model="info.treeName" placeholder="请选择">
-            <el-option
-              v-for="(column, index) in info.columns"
-              :key="index"
-              :label="column.columnName + '：' + column.columnComment"
-              :value="column.columnName"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-col>
-    </el-row>
     <el-row v-show="info.template == 'sub'">
       <h4 class="form-header">关联信息</h4>
       <el-col :span="12">
