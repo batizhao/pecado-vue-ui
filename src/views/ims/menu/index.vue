@@ -331,15 +331,15 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       this.$confirm('确认删除"' + row.name + '"吗?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return deleteMenu(row.id);
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        })
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        return deleteMenu(row.id);
+      }).then(() => {
+        this.getList();
+        this.msgSuccess("删除成功");
+      })
     }
   }
 };
