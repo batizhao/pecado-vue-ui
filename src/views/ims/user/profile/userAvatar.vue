@@ -55,7 +55,8 @@
 <script>
 import store from "@/store";
 import { VueCropper } from "vue-cropper";
-import { uploadAvatar } from "@/api/ims/user";
+import { upload } from "@/api/system/file";
+import { changeUserAvatar } from "@/api/ims/user";
 
 export default {
   components: { VueCropper },
@@ -72,6 +73,7 @@ export default {
       visible: false,
       // 弹出层标题
       title: "编辑头像",
+      fileName: store.getters.avatar,
       options: {
         img: store.getters.avatar, //裁剪图片的地址
         autoCrop: true, // 是否默认生成截图框
@@ -113,6 +115,7 @@ export default {
         this.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。");
       } else {
         const reader = new FileReader();
+        this.fileName = file.name;
         reader.readAsDataURL(file);
         reader.onload = () => {
           this.options.img = reader.result;
@@ -123,10 +126,11 @@ export default {
     uploadImg() {
       this.$refs.cropper.getCropBlob(data => {
         let formData = new FormData();
-        formData.append("avatarfile", data);
-        uploadAvatar(formData).then(response => {
+        formData.append("file", data, this.fileName);
+        upload(formData).then(response => {
+          this.options.img = process.env.VUE_APP_BASE_API + "/system/file/image/" + response.data.fileName;
+          changeUserAvatar({ avatar: this.options.img });
           this.open = false;
-          this.options.img = process.env.VUE_APP_BASE_API + response.imgUrl;
           store.commit('SET_AVATAR', this.options.img);
           this.msgSuccess("编辑成功");
           this.visible = false;

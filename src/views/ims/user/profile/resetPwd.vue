@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { updateUserPwd } from "@/api/ims/user";
+import { changeUserPassword } from "@/api/ims/user";
 
 export default {
   data() {
@@ -55,7 +55,7 @@ export default {
     submit() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          updateUserPwd(this.user.oldPassword, this.user.newPassword).then(
+          changeUserPassword(this.user.oldPassword, this.user.newPassword).then(
             response => {
               this.msgSuccess("编辑成功");
             }

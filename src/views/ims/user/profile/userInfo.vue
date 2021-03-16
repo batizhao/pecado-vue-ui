@@ -1,7 +1,7 @@
 <template>
   <el-form ref="form" :model="user" :rules="rules" label-width="80px">
-    <el-form-item label="用户昵称" prop="nickName">
-      <el-input v-model="user.nickName" />
+    <el-form-item label="姓名" prop="name">
+      <el-input v-model="user.name" />
     </el-form-item> 
     <el-form-item label="手机号码" prop="phonenumber">
       <el-input v-model="user.phonenumber" maxlength="11" />
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { updateUserProfile } from "@/api/ims/user";
+import { addOrUpdateUser } from "@/api/ims/user";
 
 export default {
   props: {
@@ -35,8 +35,8 @@ export default {
     return {
       // 表单校验
       rules: {
-        nickName: [
-          { required: true, message: "用户昵称不能为空", trigger: "blur" }
+        name: [
+          { required: true, message: "姓名不能为空", trigger: "blur" }
         ],
         email: [
           { required: true, message: "邮箱地址不能为空", trigger: "blur" },
@@ -61,7 +61,7 @@ export default {
     submit() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          updateUserProfile(this.user).then(response => {
+          addOrUpdateUser(this.user).then(response => {
             this.msgSuccess("编辑成功");
           });
         }

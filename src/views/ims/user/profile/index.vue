@@ -12,27 +12,31 @@
             </div>
             <ul class="list-group list-group-striped">
               <li class="list-group-item">
-                <svg-icon icon-class="user" />用户名称
-                <div class="pull-right">{{ user.userName }}</div>
+                <svg-icon icon-class="user" /> 用户名
+                <div class="pull-right">{{ user.username }}</div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="phone" />手机号码
+                <svg-icon icon-class="user" /> 姓名
+                <div class="pull-right">{{ user.name }}</div>
+              </li>
+              <li class="list-group-item">
+                <svg-icon icon-class="phone" /> 手机号码
                 <div class="pull-right">{{ user.phonenumber }}</div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="email" />用户邮箱
+                <svg-icon icon-class="email" /> 用户邮箱
                 <div class="pull-right">{{ user.email }}</div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="tree" />所属部门
+                <svg-icon icon-class="tree" /> 所属部门
                 <div class="pull-right" v-if="user.dept">{{ user.dept.deptName }} / {{ postGroup }}</div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="peoples" />所属角色
+                <svg-icon icon-class="peoples" /> 所属角色
                 <div class="pull-right">{{ roleGroup }}</div>
               </li>
               <li class="list-group-item">
-                <svg-icon icon-class="date" />创建日期
+                <svg-icon icon-class="date" /> 创建日期
                 <div class="pull-right">{{ user.createTime }}</div>
               </li>
             </ul>
@@ -62,7 +66,7 @@
 import userAvatar from "./userAvatar";
 import userInfo from "./userInfo";
 import resetPwd from "./resetPwd";
-import { getUserProfile } from "@/api/ims/user";
+import { getInfo } from "@/api/ims/user";
 
 export default {
   name: "Profile",
@@ -80,8 +84,8 @@ export default {
   },
   methods: {
     getUser() {
-      getUserProfile().then(response => {
-        this.user = response.data;
+      getInfo().then(response => {
+        this.user = response.data.user;
         this.roleGroup = response.roleGroup;
         this.postGroup = response.postGroup;
       });

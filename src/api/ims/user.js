@@ -13,12 +13,39 @@ export function getUser(id) {
   return request(`/ims/user/${id}`);
 }
 
+// 获取当前用户详细信息
+export function getInfo() {
+  return request('/ims/user/me')
+}
+
 // 添加或者编辑用户
 export function addOrUpdateUser(data) {
   return request({
     url: '/ims/user',
     method: 'post',
     data: data
+  })
+}
+
+// 更换头像
+export function changeUserAvatar(data) {
+  return request({
+    url: `/ims/user/avatar`,
+    method: 'post',
+    data: data
+  })
+}
+
+// 更新密码
+export function changeUserPassword(oldPassword, newPassword) {
+  const data = {
+    oldPassword,
+    newPassword
+  }
+  return request({
+    url: `/ims/user/password`,
+    method: 'post',
+    params: data
   })
 }
 

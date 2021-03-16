@@ -16,14 +16,6 @@ export function login(username, password, code, uuid) {
   })
 }
 
-// 获取用户详细信息
-export function getInfo() {
-  return request({
-    url: '/ims/user/me',
-    method: 'get'
-  })
-}
-
 // 退出方法
 export function logout() {
   return request({
