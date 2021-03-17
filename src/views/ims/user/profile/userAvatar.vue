@@ -132,7 +132,7 @@ export default {
           changeUserAvatar({ avatar: this.options.img });
           this.open = false;
           store.commit('SET_AVATAR', this.options.img);
-          this.msgSuccess("编辑成功");
+          this.msgSuccess("保存成功");
           this.visible = false;
         });
       });

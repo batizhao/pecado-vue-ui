@@ -3,21 +3,23 @@
     <el-form-item label="姓名" prop="name">
       <el-input v-model="user.name" />
     </el-form-item> 
-    <el-form-item label="手机号码" prop="phonenumber">
-      <el-input v-model="user.phonenumber" maxlength="11" />
+    <el-form-item label="手机号码" prop="mobileNumber">
+      <el-input v-model="user.mobileNumber" maxlength="20" />
     </el-form-item>
     <el-form-item label="邮箱" prop="email">
       <el-input v-model="user.email" maxlength="50" />
     </el-form-item>
     <el-form-item label="性别">
       <el-radio-group v-model="user.sex">
-        <el-radio label="0">男</el-radio>
-        <el-radio label="1">女</el-radio>
+        <el-radio
+          v-for="dict in sexOptions"
+          :key="dict.value"
+          :label="dict.value"
+        >{{dict.label}}</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" size="mini" @click="submit">保存</el-button>
-      <el-button type="danger" size="mini" @click="close">关闭</el-button>
+      <el-button type="primary" @click="submit">保存</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -33,6 +35,8 @@ export default {
   },
   data() {
     return {
+      // 性别字典
+      sexOptions: [],
       // 表单校验
       rules: {
         name: [
@@ -46,7 +50,7 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        phonenumber: [
+        mobileNumber: [
           { required: true, message: "手机号码不能为空", trigger: "blur" },
           {
             pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
@@ -57,19 +61,20 @@ export default {
       }
     };
   },
+  created() {
+    this.listDictDataByCode("sex").then(response => {
+      this.sexOptions = response.data;
+    });
+  },
   methods: {
     submit() {
       this.$refs["form"].validate(valid => {
         if (valid) {
           addOrUpdateUser(this.user).then(response => {
-            this.msgSuccess("编辑成功");
+            this.msgSuccess("保存成功");
           });
         }
       });
-    },
-    close() {
-      this.$store.dispatch("tagsView/delView", this.$route);
-      this.$router.push({ path: "/index" });
     }
   }
 };

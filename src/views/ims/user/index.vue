@@ -127,10 +127,10 @@
         <el-form-item label="用户名" prop="username">
           <el-input v-model="form.username" placeholder="请输入用户名" />
         </el-form-item>
-        <el-form-item label="用户邮箱" prop="email">
+        <el-form-item label="邮箱" prop="email">
           <el-input v-model="form.email" placeholder="请输入用户邮箱" />
         </el-form-item>
-        <el-form-item label="用户姓名" prop="name">
+        <el-form-item label="姓名" prop="name">
           <el-input v-model="form.name" placeholder="请输入用户姓名" />
         </el-form-item>
       </el-form>
