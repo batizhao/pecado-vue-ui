@@ -48,6 +48,7 @@ function filterAsyncRouter(asyncRouterMap, isRewrite = false) {
       // Layout ParentView 组件特殊处理
       if (route.children.length > 0) {
         route.component = Layout
+        route.redirect = 'noRedirect'
       // } else if (route.component === 'ParentView') {
         // route.component = ParentView
       } else {

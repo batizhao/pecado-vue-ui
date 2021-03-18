@@ -113,8 +113,8 @@ export default {
           title: [...prefixTitle]
         }
 
-        if (router.name) {
-          data.title = [...data.title, router.name]
+        if (router.meta && router.meta.title) {
+          data.title = [...data.title, router.meta.title]
 
           if (router.redirect !== 'noRedirect') {
             // only push the routes with title

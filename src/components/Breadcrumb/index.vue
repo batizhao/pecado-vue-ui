@@ -2,14 +2,16 @@
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item,index) in levelList" :key="item.path">
-        <span v-if="index != 0" class="no-redirect">{{ item.name }}</span>
-        <a v-else @click.prevent="handleLink(item)">{{ item.name }}</a>
+        <span v-if="item.redirect==='noRedirect'||index==levelList.length-1" class="no-redirect">{{ item.meta.title }}</span>
+        <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
 </template>
 
 <script>
+// import * as pathToRegexp from 'path-to-regexp'
+
 export default {
   data() {
     return {
@@ -31,14 +33,14 @@ export default {
   methods: {
     getBreadcrumb() {
       // only show routes with meta.title
-      let matched = this.$route.matched.filter(item => item.name)
+      let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
       const first = matched[0]
 
       if (!this.isDashboard(first)) {
-        matched = [{ path: '/dashboard', name: '工作台' }].concat(matched)
+        matched = [{ path: '/dashboard', meta: { title: '工作台' }}].concat(matched)
       }
 
-      this.levelList = matched.filter(item => item.name && item.breadcrumb !== false)
+      this.levelList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
     },
     isDashboard(route) {
       const name = route && route.name
@@ -47,6 +49,12 @@ export default {
       }
       return name.trim() === '工作台'
     },
+    // pathCompile(path) {
+    //   // To solve this problem https://github.com/PanJiaChen/vue-element-admin/issues/561
+    //   const { params } = this.$route
+    //   var toPath = pathToRegexp.compile(path)
+    //   return toPath(params)
+    // },
     handleLink(item) {
       const { redirect, path } = item
       if (redirect) {

@@ -62,7 +62,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: (resolve) => require(['@/views/dashboard'], resolve),
         name: '工作台',
-        icon: 'dashboard'
+        meta: { title: '工作台', icon: 'dashboard', affix: true }
       }
     ]
   },
@@ -70,13 +70,13 @@ export const constantRoutes = [
     path: '/user',
     component: Layout,
     hidden: true,
-    redirect: 'noredirect',
+    redirect: 'noRedirect',
     children: [
       {
         path: 'profile',
         component: (resolve) => require(['@/views/ims/user/profile/index'], resolve),
         name: '个人中心',
-        icon: 'user'
+        meta: { title: '个人中心', icon: 'user' }
       }
     ]
   },
@@ -84,11 +84,14 @@ export const constantRoutes = [
     path: '/dict',
     component: Layout,
     hidden: true,
+    redirect: 'noRedirect',
+    meta: { title: '字典管理' },
     children: [
       {
         path: 'data/:code(\\w+)',
         component: (resolve) => require(['@/views/system/dict/data'], resolve),
         name: '字典数据',
+        meta: { title: '字典数据', icon: 'dict', activeMenu: '/system/dict' }
       }
     ]
   },
@@ -108,11 +111,14 @@ export const constantRoutes = [
     path: '/code',
     component: Layout,
     hidden: true,
+    redirect: 'noRedirect',
+    meta: { title: '代码生成' },
     children: [
       {
         path: 'edit/:id(\\d+)',
         component: (resolve) => require(['@/views/dp/code/editMeta'], resolve),
-        name: '编辑生成配置',
+        name: '编辑配置',
+        meta: { title: '编辑配置', icon: 'code', activeMenu: '/dp/code' }
       }
     ]
   },
@@ -120,14 +126,17 @@ export const constantRoutes = [
     path: '/form',
     component: Layout,
     hidden: true,
+    redirect: 'noRedirect',
+    meta: { title: '表单管理' },
     children: [
       {
         path: 'design/:id(\\d+)',
         component: (resolve) => require(['@/views/dp/form/design'], resolve),
         name: '表单设计',
+        meta: { title: '表单设计', icon: 'form', activeMenu: '/dp/form' }
       }
     ]
-  }
+  },
 ]
 
 export default new Router({
