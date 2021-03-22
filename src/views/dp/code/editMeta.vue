@@ -187,12 +187,6 @@ export default {
         if (validateResult) {
           const genTable = Object.assign({}, basicForm.model, genForm.model);
           genTable.codeMetaList = this.codeMetas;
-          genTable.params = {
-            treeCode: genTable.treeCode,
-            treeName: genTable.treeName,
-            treeParentCode: genTable.treeParentCode,
-            parentMenuId: genTable.parentMenuId
-          };
           addOrUpdateCode(genTable).then(res => {
             this.msgSuccess(res.message);
             if (res.code === 0) {

@@ -27,6 +27,11 @@ export function getCode(id) {
   return request(`/dp/code/${id}`);
 }
 
+// 查询代码元数据表详细信息
+export function listCodeMeta(id) {
+  return request(`/dp/code/meta?codeId=${id}`);
+}
+
 // 查询生成元数据列表
 export function listCodeMetaPage(query) {
   return request({

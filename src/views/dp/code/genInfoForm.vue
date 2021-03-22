@@ -7,7 +7,7 @@
           <el-select v-model="info.template" @change="tplSelectChange">
             <el-option label="单表（增删改查）" value="crud" />
             <el-option label="树表（增删改查）" value="tree" />
-            <el-option label="主子表（增删改查）" value="sub" />
+            <el-option label="一对多表（增删改查）" value="onetomany" />
           </el-select>
         </el-form-item>
       </el-col>
@@ -15,8 +15,8 @@
       <el-col :span="12">
         <el-form-item prop="packageName">
           <span slot="label">
-            生成包路径
-            <el-tooltip content="生成在哪个java包下，例如 me.batizhao.system" placement="top">
+            生成包前缀
+            <el-tooltip content="生成在哪个java包下，例如 me.batizhao，最后包名会加上模块名" placement="top">
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
@@ -103,13 +103,13 @@
       </el-col>
     </el-row>
 
-    <el-row v-show="info.template == 'sub'">
+    <el-row v-show="info.template == 'onetomany'">
       <h4 class="form-header">关联信息</h4>
       <el-col :span="12">
         <el-form-item>
           <span slot="label">
-            关联子表的表名
-            <el-tooltip content="关联子表的表名， 如：sys_user" placement="top">
+            关联表名
+            <el-tooltip content="关联子表的表名" placement="top">
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
@@ -126,8 +126,8 @@
       <el-col :span="12">
         <el-form-item>
           <span slot="label">
-            子表关联的外键名
-            <el-tooltip content="子表关联的外键名， 如：user_id" placement="top">
+            关联属性名
+            <el-tooltip content="子表关联的属性名" placement="top">
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
@@ -145,6 +145,7 @@
   </el-form>
 </template>
 <script>
+import { listCodeMeta } from "@/api/dp/code";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -181,9 +182,6 @@ export default {
         mappingPath: [
           { required: true, message: "请输入后端 API 路径", trigger: "blur" }
         ],
-        // functionName: [
-        //   { required: true, message: "请输入生成功能名", trigger: "blur" }
-        // ],
       }
     };
   },
@@ -211,7 +209,7 @@ export default {
     },
     /** 选择生成模板触发 */
     tplSelectChange(value) {
-      if(value !== 'sub') {
+      if(value !== 'onetomany') {
         this.info.subTableName = '';
         this.info.subTableFkName = '';
       }
@@ -221,7 +219,10 @@ export default {
       for (var item in this.tables) {
         const name = this.tables[item].tableName;
         if (value === name) {
-          this.subColumns = this.tables[item].columns;
+          listCodeMeta(this.tables[item].id).then(response => {
+              this.subColumns = response.data;
+            }
+          );
           break;
         }
       }
