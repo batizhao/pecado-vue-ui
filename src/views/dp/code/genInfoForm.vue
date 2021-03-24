@@ -104,7 +104,7 @@
     </el-row>
 
     <el-row v-show="info.template == 'onetomany'">
-      <h4 class="form-header">关联信息</h4>
+      <el-divider content-position="left">关联信息</el-divider>
       <el-col :span="12">
         <el-form-item>
           <span slot="label">
@@ -113,12 +113,12 @@
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-select v-model="info.subTableName" placeholder="请选择" @change="subSelectChange">
+          <el-select v-model="info.subTableId" placeholder="请选择" @change="subSelectChange">
             <el-option
               v-for="(table, index) in tables"
               :key="index"
               :label="table.tableName + '：' + table.tableComment"
-              :value="table.tableName"
+              :value="table.id"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -187,7 +187,7 @@ export default {
   },
   created() {},
   watch: {
-    'info.subTableName': function(val) {
+    'info.subTableId': function(val) {
       this.setSubTableColumns(val);
     }
   },
@@ -210,16 +210,16 @@ export default {
     /** 选择生成模板触发 */
     tplSelectChange(value) {
       if(value !== 'onetomany') {
-        this.info.subTableName = '';
+        this.info.subTableId = '';
         this.info.subTableFkName = '';
       }
     },
     /** 设置关联外键 */
     setSubTableColumns(value) {
       for (var item in this.tables) {
-        const name = this.tables[item].tableName;
-        if (value === name) {
-          listCodeMeta(this.tables[item].id).then(response => {
+        const id = this.tables[item].id;
+        if (value === id) {
+          listCodeMeta(id).then(response => {
               this.subColumns = response.data;
             }
           );

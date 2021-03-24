@@ -128,8 +128,8 @@
       <el-tabs v-model="preview.activeName">
         <el-tab-pane
           v-for="(value, key) in preview.data"
-          :label="key.substring(key.lastIndexOf('/')+1,key.indexOf('.vm'))"
-          :name="key.substring(key.lastIndexOf('/')+1,key.indexOf('.vm'))"
+          :label="key"
+          :name="key"
           :key="key"
         >
           <pre><code class="hljs" v-html="highlightedCode(value, key)"></code></pre>
@@ -264,8 +264,7 @@ export default {
     },
     /** 高亮显示 */
     highlightedCode(code, key) {
-      const vmName = key.substring(key.lastIndexOf("/") + 1, key.indexOf(".vm"));
-      var language = vmName.substring(vmName.indexOf(".") + 1, vmName.length);
+      var language = key.substring(key.lastIndexOf(".") + 1, key.length);
       const result = hljs.highlight(language, code || "", true);
       return result.value || '&nbsp;';
     },
