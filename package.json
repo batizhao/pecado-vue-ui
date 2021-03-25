@@ -2,7 +2,7 @@
   "name": "pecado-vue-ui",
   "version": "3.3.0",
   "description": "低代码系统",
-  "author": "若依",
+  "author": "batizhao",
   "license": "MIT",
   "scripts": {
     "dev": "vue-cli-service serve",
