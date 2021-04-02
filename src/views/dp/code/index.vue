@@ -107,6 +107,7 @@
                更多 <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item icon="el-icon-notebook-2" @click.native="handleFormDesign(scope.row)">设计表单</el-dropdown-item>
               <el-dropdown-item icon="el-icon-view" @click.native="handlePreview(scope.row)" v-hasPermi="['dp:code:preview']">预览</el-dropdown-item>
               <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['dp:code:delete']">删除</el-dropdown-item>
               <el-dropdown-item icon="el-icon-refresh" @click.native="handleSynchMeta(scope.row)" v-hasPermi="['dp:code:sync']">同步</el-dropdown-item>
@@ -279,6 +280,11 @@ export default {
     handleUpdate(row) {
       const id = row.id || this.ids[0];
       this.$router.push("/code/edit/" + id);
+    },
+    /** 设计表单操作 */
+    handleFormDesign(row) {
+      const id = row.id || this.ids[0];
+      this.$router.push("/code/form/" + id);
     },
     /** 删除按钮操作 */
     handleDelete(row) {

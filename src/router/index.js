@@ -119,6 +119,12 @@ export const constantRoutes = [
         component: (resolve) => require(['@/views/dp/code/editMeta'], resolve),
         name: '编辑配置',
         meta: { title: '编辑配置', icon: 'code', activeMenu: '/dp/code' }
+      },
+      {
+        path: 'form/:id(\\d+)',
+        component: (resolve) => require(['@/views/dp/code/form'], resolve),
+        name: '设计表单',
+        meta: { title: '设计表单', icon: 'code', activeMenu: '/dp/code' }
       }
     ]
   },

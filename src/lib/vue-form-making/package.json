@@ -1,7 +1,7 @@
 {
   "name": "form-making-advanced",
   "description": "A designer and generator of form base on Vue.js, make form development simple and efficient.",
-  "version": "1.2.20",
+  "version": "1.2.21",
   "author": "GavinZhulei",
   "keywords": [
     "component",
