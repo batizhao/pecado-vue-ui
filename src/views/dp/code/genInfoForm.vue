@@ -49,15 +49,15 @@
       </el-col>
 
       <el-col :span="12">
-        <el-form-item prop="type">
+        <el-form-item prop="form">
           <span slot="label">
-            生成代码方式
-            <el-tooltip content="默认为zip压缩包下载，也可以自定义生成路径" placement="top">
+            生成表单方式
+            <el-tooltip content="默认为根据字段信息生成，如果可视化，需要自己设计表单" placement="top">
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-radio v-model="info.type" label="zip">zip压缩包</el-radio>
-          <el-radio v-model="info.type" label="path">自定义路径</el-radio>
+          <el-radio v-model="info.form" label="meta">元数据</el-radio>
+          <el-radio v-model="info.form" label="visual">可视化</el-radio>
         </el-form-item>
       </el-col>
 
@@ -80,7 +80,20 @@
         </el-form-item>
       </el-col>
 
-      <el-col :span="24" v-if="info.type == 'path'">
+      <el-col :span="12">
+        <el-form-item prop="type">
+          <span slot="label">
+            生成代码方式
+            <el-tooltip content="默认为zip压缩包下载，也可以自定义生成路径" placement="top">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </span>
+          <el-radio v-model="info.type" label="zip">zip下载</el-radio>
+          <el-radio v-model="info.type" label="path">自定义路径</el-radio>
+        </el-form-item>
+      </el-col>
+
+      <el-col :span="12" v-if="info.type == 'path'">
         <el-form-item prop="path">
           <span slot="label">
             自定义路径
