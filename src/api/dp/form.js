@@ -40,7 +40,7 @@ export function deleteForm(ids) {
   return request.delete(`/dp/form?ids=${ids}`);
 }
 
-// 角色状态编辑
+// 表单状态编辑
 export function changeFormStatus(id, status) {
   const data = {
     id,

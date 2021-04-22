@@ -54,7 +54,7 @@ export function deleteUser(ids) {
   return request.delete(`/ims/user?ids=${ids}`);
 }
 
-// 角色状态编辑
+// 用户状态编辑
 export function changeUserStatus(id, status) {
   const data = {
     id,
@@ -73,6 +73,15 @@ export function changeUserRoles(roles) {
     url: '/ims/user/role',
     method: 'post',
     data: roles
+  })
+}
+
+// 分配用户岗位
+export function changeUserPosts(posts) {
+  return request({
+    url: '/ims/user/post',
+    method: 'post',
+    data: posts
   })
 }
 

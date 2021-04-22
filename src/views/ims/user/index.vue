@@ -105,7 +105,8 @@
                更多 <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleRole(scope.row)" v-hasPermi="['ims:user:edit']">分配角色</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleRole(scope.row)" v-hasPermi="['ims:user:admin']">分配角色</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-check" @click.native="handlePost(scope.row)" v-hasPermi="['ims:user:admin']">分配岗位</el-dropdown-item>
               <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['ims:user:delete']">删除</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -159,12 +160,33 @@
         <el-button @click="cancelRoleForm">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 添加或编辑用户岗位对话框 -->
+    <el-dialog :title="title" :visible.sync="openPost" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="岗位" prop="postIds">
+          <el-select v-model="form.postIds" multiple placeholder="请选择" @change="change()">
+            <el-option
+              v-for="item in postList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitPostForm">确 定</el-button>
+        <el-button @click="cancelPostForm">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { listUser, getUser, deleteUser, addOrUpdateUser, changeUserStatus, changeUserRoles, exportUser } from "@/api/ims/user";
+import { listUser, getUser, deleteUser, addOrUpdateUser, changeUserStatus, changeUserRoles, changeUserPosts, exportUser } from "@/api/ims/user";
 import { listAllRole, listRoleByUserId } from "@/api/ims/role";
+import { listAllPost, listPostByUserId } from "@/api/ims/post";
 
 export default {
   name: "User",
@@ -174,6 +196,13 @@ export default {
     const roleNotBlank = (rule, value, callback) => {
       if (this.form.roleIds.length === 0) {
         callback(new Error("角色不能为空"));
+      } else {
+        callback();
+      }
+    };
+    const postNotBlank = (rule, value, callback) => {
+      if (this.form.postIds.length === 0) {
+        callback(new Error("岗位不能为空"));
       } else {
         callback();
       }
@@ -197,12 +226,16 @@ export default {
       userList: [],
       // 用户角色数据
       roleList: [],
+      // 用户岗位数据
+      postList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
       // 是否显示弹出层（角色）
       openRole: false,
+      // 是否显示弹出层（岗位）
+      openPost: false,
       // 查询参数
       queryParams: {
         current: 1,
@@ -225,6 +258,9 @@ export default {
         ],
         roleIds: [
           { required: true, validator: roleNotBlank, trigger: "blur" }
+        ],
+        postIds: [
+          { required: true, validator: postNotBlank, trigger: "blur" }
         ],
       },
     };
@@ -269,6 +305,11 @@ export default {
     // 取消按钮（角色）
     cancelRoleForm() {
       this.openRole = false;
+      this.reset();
+    },
+    // 取消按钮（岗位）
+    cancelPostForm() {
+      this.openPost = false;
       this.reset();
     },
     // 表单重置
@@ -323,6 +364,20 @@ export default {
         this.title = "分配角色";
       });
     },
+    /** 分配岗位操作 */
+    handlePost(row) {
+      this.reset();
+      const id = row.id || this.ids;
+      listAllPost().then(response => {
+        this.postList = response.data;
+      });
+      listPostByUserId(id).then(response => {
+        this.form.id = id;
+        this.form.postIds = response.data.map(item => item.id);
+        this.openPost = true;
+        this.title = "分配岗位";
+      });
+    },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -351,6 +406,26 @@ export default {
           changeUserRoles(optionArray).then(response => {
             this.msgSuccess("保存成功");
             this.openRole = false;
+          });
+        }
+      });
+    },
+    /** 提交岗位按钮 */
+    submitPostForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          const posts = this.form.postIds;
+          const optionArray = [];
+          Object.keys(posts).forEach((key) =>
+            optionArray.push({
+              userId: this.form.id,
+              postId: posts[key],
+            }),
+          );
+
+          changeUserPosts(optionArray).then(response => {
+            this.msgSuccess("保存成功");
+            this.openPost = false;
           });
         }
       });
