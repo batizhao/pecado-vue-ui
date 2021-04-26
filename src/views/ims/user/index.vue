@@ -107,6 +107,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item icon="el-icon-circle-check" @click.native="handleRole(scope.row)" v-hasPermi="['ims:user:admin']">分配角色</el-dropdown-item>
               <el-dropdown-item icon="el-icon-circle-check" @click.native="handlePost(scope.row)" v-hasPermi="['ims:user:admin']">分配岗位</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleDepartment(scope.row)" v-hasPermi="['ims:user:admin']">分配部门</el-dropdown-item>
               <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['ims:user:delete']">删除</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -180,17 +181,42 @@
         <el-button @click="cancelPostForm">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 添加或编辑用户部门对话框 -->
+    <el-dialog :title="title" :visible.sync="openDepartment" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="部门" prop="departmentIds">
+          <treeselect
+            v-model="form.departmentIds"
+            :options="departmentOptions"
+            :normalizer="normalizer"
+            :multiple="multiple"
+            :show-count="true"
+            :flat="true"
+            placeholder="选择部门"
+          />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitDepartmentForm">确 定</el-button>
+        <el-button @click="cancelDepartmentForm">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { listUser, getUser, deleteUser, addOrUpdateUser, changeUserStatus, changeUserRoles, changeUserPosts, exportUser } from "@/api/ims/user";
+import { listUser, getUser, deleteUser, addOrUpdateUser, changeUserStatus, changeUserRoles, changeUserPosts, changeUserDepartments, exportUser } from "@/api/ims/user";
 import { listAllRole, listRoleByUserId } from "@/api/ims/role";
 import { listAllPost, listPostByUserId } from "@/api/ims/post";
+import { listAllDepartment, listDepartmentByUserId } from "@/api/ims/department";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "User",
   components: {
+    Treeselect
   },
   data() {
     const roleNotBlank = (rule, value, callback) => {
@@ -203,6 +229,13 @@ export default {
     const postNotBlank = (rule, value, callback) => {
       if (this.form.postIds.length === 0) {
         callback(new Error("岗位不能为空"));
+      } else {
+        callback();
+      }
+    };
+    const departmentNotBlank = (rule, value, callback) => {
+      if (this.form.departmentIds.length === 0) {
+        callback(new Error("部门不能为空"));
       } else {
         callback();
       }
@@ -228,6 +261,8 @@ export default {
       roleList: [],
       // 用户岗位数据
       postList: [],
+      // 用户部门数据
+      departmentOptions: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -236,6 +271,8 @@ export default {
       openRole: false,
       // 是否显示弹出层（岗位）
       openPost: false,
+      // 是否显示弹出层（部门）
+      openDepartment: false,
       // 查询参数
       queryParams: {
         current: 1,
@@ -261,6 +298,9 @@ export default {
         ],
         postIds: [
           { required: true, validator: postNotBlank, trigger: "blur" }
+        ],
+        departmentIds: [
+          { required: true, validator: departmentNotBlank, trigger: "blur" }
         ],
       },
     };
@@ -297,6 +337,17 @@ export default {
           row.status = row.status === "open" ? "close" : "open";
         });
     },
+    /** 转换菜单数据结构 */
+    normalizer(node) {
+      if (node.children && !node.children.length) {
+        delete node.children;
+      }
+      return {
+        id: node.id,
+        label: node.name,
+        children: node.children
+      };
+    },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -310,6 +361,11 @@ export default {
     // 取消按钮（岗位）
     cancelPostForm() {
       this.openPost = false;
+      this.reset();
+    },
+    // 取消按钮（部门）
+    cancelDepartmentForm() {
+      this.openDepartment = false;
       this.reset();
     },
     // 表单重置
@@ -378,6 +434,20 @@ export default {
         this.title = "分配岗位";
       });
     },
+    /** 分配部门操作 */
+    handleDepartment(row) {
+      this.reset();
+      const id = row.id || this.ids;
+      listAllDepartment().then(response => {
+        this.departmentOptions = this.handleTree(response.data, "id");
+      });
+      listDepartmentByUserId(id).then(response => {
+        this.form.id = id;
+        this.form.departmentIds = response.data.map(item => item.id);
+        this.openDepartment = true;
+        this.title = "分配部门";
+      });
+    },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -426,6 +496,26 @@ export default {
           changeUserPosts(optionArray).then(response => {
             this.msgSuccess("保存成功");
             this.openPost = false;
+          });
+        }
+      });
+    },
+    /** 提交部门按钮 */
+    submitDepartmentForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          const departments = this.form.departmentIds;
+          const optionArray = [];
+          Object.keys(departments).forEach((key) =>
+            optionArray.push({
+              userId: this.form.id,
+              departmentId: departments[key],
+            }),
+          );
+
+          changeUserDepartments(optionArray).then(response => {
+            this.msgSuccess("保存成功");
+            this.openDepartment = false;
           });
         }
       });

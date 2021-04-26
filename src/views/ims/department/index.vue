@@ -45,6 +45,7 @@
     >
       <el-table-column label="名称" align="center" prop="name" />
       <el-table-column label="全名" align="center" prop="fullName" />
+      <el-table-column label="编码" align="center" prop="code" />
       <el-table-column label="排序" align="center" prop="sort" />
       <el-table-column label="状态" align="center">
         <template slot-scope="scope">
@@ -69,18 +70,17 @@
             @click="handleAdd(scope.row)"
             v-hasPermi="['ims:department:add']"
           >添加</el-button>
-          <el-button
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['ims:department:edit']"
-          >编辑</el-button>
-          <el-button
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['ims:department:delete']"
-          >删除</el-button>
+          <el-divider direction="vertical"></el-divider>
+          <el-dropdown>
+            <span class="el-dropdown-link">
+               更多 <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item icon="el-icon-edit" @click.native="handleUpdate(scope.row)" v-hasPermi="['ims:department:edit']">编辑</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['ims:department:delete']">删除</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleDepartmentLeader(scope.row)" v-hasPermi="['ims:department:admin']">分配领导</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -101,6 +101,9 @@
         <el-form-item label="全名" prop="fullName">
           <el-input v-model="form.fullName" placeholder="请输入全名" />
         </el-form-item>
+        <el-form-item label="编码" prop="code">
+          <el-input v-model="form.code" placeholder="请输入编码" />
+        </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input v-model="form.sort" placeholder="请输入排序" />
         </el-form-item>
@@ -110,11 +113,36 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 分配领导对话框 -->
+    <el-dialog :title="title" :visible.sync="openLeader" width="500px" v-if='openLeader' append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="领导" prop="leaderIds">
+          <el-select v-model="form.leaderIds" 
+            multiple
+            filterable
+            placeholder="请输入关键词"
+            @change="change()">
+            <el-option
+              v-for="item in userList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitLeaderForm">确 定</el-button>
+        <el-button @click="cancelLeaderForm">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { listAllDepartment, getDepartment, deleteDepartment, addOrUpdateDepartment, changeDepartmentStatus, exportDepartment } from "@/api/ims/department";
+import { listAllDepartment, getDepartment, deleteDepartment, addOrUpdateDepartment, changeDepartmentStatus, changeDepartmentLeaders, exportDepartment } from "@/api/ims/department";
+import { listUser, listLeaderByDepartmentId } from "@/api/ims/user";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -124,6 +152,13 @@ export default {
     Treeselect,
   },
   data() {
+    const leaderNotBlank = (rule, value, callback) => {
+      if (this.form.leaderIds.length === 0) {
+        callback(new Error("领导不能为空"));
+      } else {
+        callback();
+      }
+    };
     return {
       // 遮罩层
       loading: true,
@@ -133,10 +168,16 @@ export default {
       departmentList: [],
       // 部门树选项
       departmentOptions: [],
+      // 领导数据
+      leaderList: [],
+      // 领导数据
+      userList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否显示领导弹出层
+      openLeader: false,
       // 查询参数
       queryParams: {
         name: null,
@@ -155,6 +196,12 @@ export default {
         fullName: [
           { required: true, message: "全名不能为空", trigger: "blur" }
         ],
+        code: [
+          { required: true, message: "编码不能为空", trigger: "blur" }
+        ],
+        leaderIds: [
+          { required: true, validator: leaderNotBlank, trigger: "blur" }
+        ],
       }
     };
   },
@@ -169,6 +216,10 @@ export default {
         this.departmentList = response.data;
         this.loading = false;
       });
+    },
+    // 强制更新
+    change() { 
+      this.$forceUpdate(); 
     },
     // 部门状态编辑
     handleStatusChange(row) {
@@ -207,6 +258,11 @@ export default {
       this.open = false;
       this.reset();
     },
+    // 取消按钮
+    cancelLeaderForm() {
+      this.openLeader = false;
+      this.reset();
+    },
     // 表单重置
     reset() {
       this.form = {};
@@ -241,6 +297,31 @@ export default {
         this.title = "编辑部门";
       });
     },
+    // filterUser(query) {
+    //   if (query !== '') {
+    //     this.loading = true;
+    //     setTimeout(() => {
+    //       this.loading = false;
+    //       this.leaderList = this.userList.filter(item => {
+    //         return item.name.indexOf(query) > -1;
+    //       });
+    //     }, 200);
+    //   }
+    // },
+    /** 分配领导操作 */
+    handleDepartmentLeader(row) {
+      this.reset();
+      const id = row.id;
+      listUser().then(response => {
+        this.userList = response.data.records;
+      });
+      listLeaderByDepartmentId(row.id).then(response => {
+        this.form.id = id;
+        this.form.leaderIds = response.data.map(item => item.id);
+        this.openLeader = true;
+        this.title = "分配领导";
+      });
+    },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
@@ -249,6 +330,26 @@ export default {
             this.msgSuccess("保存成功");
             this.open = false;
             this.getList();
+          });
+        }
+      });
+    },
+    /** 提交按钮 */
+    submitLeaderForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          const leaders = this.form.leaderIds;
+          const optionArray = [];
+          Object.keys(leaders).forEach((key) =>
+            optionArray.push({
+              departmentId: this.form.id,
+              leaderUserId: leaders[key],
+            }),
+          );
+
+          changeDepartmentLeaders(optionArray).then(response => {
+            this.msgSuccess("保存成功");
+            this.openLeader = false;
           });
         }
       });

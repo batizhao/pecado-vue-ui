@@ -62,7 +62,6 @@
     </el-row>
     <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="" align="center" prop="id" />
       <el-table-column label="名称" align="center" prop="name" />
       <el-table-column label="编码" align="center" prop="code" />
       <el-table-column label="排序" align="center" prop="sort" />
@@ -128,7 +127,7 @@
 </template>
 
 <script>
-import { listPost, listAllPost, getPost, deletePost, addOrUpdatePost, changePostStatus, exportPost } from "@/api/ims/post";
+import { listPost, getPost, deletePost, addOrUpdatePost, changePostStatus, exportPost } from "@/api/ims/post";
 
 export default {
   name: "Post",
@@ -140,6 +139,8 @@ export default {
       loading: true,
       // 选中数组
       ids: [],
+      // 选中数组
+      names: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -224,6 +225,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
+      this.names = selection.map(item => item.name);
       this.single = selection.length!==1
       this.multiple = !selection.length
     },    
@@ -258,7 +260,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$confirm('是否确认删除岗位编号为"' + ids + '"的数据项?', "警告", {
+      const names = row.name || this.names;
+      this.$confirm('确认删除"' + names + '"吗?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"

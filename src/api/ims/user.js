@@ -85,6 +85,20 @@ export function changeUserPosts(posts) {
   })
 }
 
+// 分配用户部门
+export function changeUserDepartments(departments) {
+  return request({
+    url: '/ims/user/department',
+    method: 'post',
+    data: departments
+  })
+}
+
+// 根据部门ID查询领导
+export function listLeaderByDepartmentId(departmentId) {
+  return request(`/ims/user/leader?departmentId=${departmentId}`);
+}
+
 // 导出用户
 export function exportUser(query) {
   return request({
