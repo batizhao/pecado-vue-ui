@@ -41,6 +41,7 @@
       v-loading="loading"
       :data="departmentList"
       row-key="id"
+      default-expand-all
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
       <el-table-column label="名称" align="center" prop="name" />
@@ -78,7 +79,8 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item icon="el-icon-edit" @click.native="handleUpdate(scope.row)" v-hasPermi="['ims:department:edit']">编辑</el-dropdown-item>
               <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['ims:department:delete']">删除</el-dropdown-item>
-              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleDepartmentLeader(scope.row)" v-hasPermi="['ims:department:admin']">分配领导</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleDepartmentLeader(scope.row, 'Z')" v-hasPermi="['ims:department:admin']">分配正职领导</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleDepartmentLeader(scope.row, 'F')" v-hasPermi="['ims:department:admin']">分配副职领导</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -309,14 +311,15 @@ export default {
       }
     },
     /** 分配领导操作 */
-    handleDepartmentLeader(row) {
+    handleDepartmentLeader(row, type) {
       this.reset();
       const id = row.id;
       listUser().then(response => {
         this.leaderList = response.data;
       });
-      listLeaderByDepartmentId(row.id).then(response => {
+      listLeaderByDepartmentId(row.id, type).then(response => {
         this.form.id = id;
+        this.form.type = type;
         this.form.leaderIds = response.data.map(item => item.id);
         this.openLeader = true;
         this.title = "分配领导";
@@ -343,7 +346,9 @@ export default {
           Object.keys(leaders).forEach((key) =>
             optionArray.push({
               departmentId: this.form.id,
+              type: this.form.type,
               leaderUserId: leaders[key],
+              sort: key
             }),
           );
 

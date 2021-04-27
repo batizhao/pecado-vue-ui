@@ -103,8 +103,8 @@ export function changeUserDepartments(departments) {
 }
 
 // 根据部门ID查询领导
-export function listLeaderByDepartmentId(departmentId) {
-  return request(`/ims/user/leader?departmentId=${departmentId}`);
+export function listLeaderByDepartmentId(departmentId, type) {
+  return request(`/ims/user/leader?departmentId=${departmentId}&type=${type}`);
 }
 
 // 导出用户
