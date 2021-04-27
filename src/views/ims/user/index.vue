@@ -206,7 +206,7 @@
 </template>
 
 <script>
-import { listUser, getUser, deleteUser, addOrUpdateUser, changeUserStatus, changeUserRoles, changeUserPosts, changeUserDepartments, exportUser } from "@/api/ims/user";
+import { listUsers, getUser, deleteUser, addOrUpdateUser, changeUserStatus, changeUserRoles, changeUserPosts, changeUserDepartments, exportUser } from "@/api/ims/user";
 import { listAllRole, listRoleByUserId } from "@/api/ims/role";
 import { listAllPost, listPostByUserId } from "@/api/ims/post";
 import { listAllDepartment, listDepartmentByUserId } from "@/api/ims/department";
@@ -312,7 +312,7 @@ export default {
     /** 查询用户列表 */
     getList() {
       this.loading = true;
-      listUser(this.queryParams).then(response => {
+      listUsers(this.queryParams).then(response => {
         this.userList = response.data.records;
         this.total = response.data.total;
         this.loading = false;

@@ -121,10 +121,12 @@
           <el-select v-model="form.leaderIds" 
             multiple
             filterable
+            remote
             placeholder="请输入关键词"
+            :remote-method="filterUser"
             @change="change()">
             <el-option
-              v-for="item in userList"
+              v-for="item in leaderList"
               :key="item.id"
               :label="item.name"
               :value="item.id"
@@ -170,8 +172,6 @@ export default {
       departmentOptions: [],
       // 领导数据
       leaderList: [],
-      // 领导数据
-      userList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -297,23 +297,23 @@ export default {
         this.title = "编辑部门";
       });
     },
-    // filterUser(query) {
-    //   if (query !== '') {
-    //     this.loading = true;
-    //     setTimeout(() => {
-    //       this.loading = false;
-    //       this.leaderList = this.userList.filter(item => {
-    //         return item.name.indexOf(query) > -1;
-    //       });
-    //     }, 200);
-    //   }
-    // },
+    filterUser(query) {
+      if (query !== '') {
+        this.loading = true;
+        setTimeout(() => {
+          listUser({name: query}).then(response => {
+            this.leaderList = response.data;
+            this.loading = false;
+          });
+        }, 200);
+      }
+    },
     /** 分配领导操作 */
     handleDepartmentLeader(row) {
       this.reset();
       const id = row.id;
       listUser().then(response => {
-        this.userList = response.data.records;
+        this.leaderList = response.data;
       });
       listLeaderByDepartmentId(row.id).then(response => {
         this.form.id = id;

@@ -1,9 +1,17 @@
 import request from '@/utils/request'
 
 // 查询用户列表
-export function listUser(query) {
+export function listUsers(query) {
   return request({
     url: '/ims/users',
+    params: query
+  })
+}
+
+// 查询用户
+export function listUser(query) {
+  return request({
+    url: '/ims/user',
     params: query
   })
 }
