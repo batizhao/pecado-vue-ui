@@ -1,127 +1,155 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch">
-      <el-form-item label="用户名" prop="username">
-        <el-input
-          v-model="queryParams.username"
-          placeholder="请输入用户名"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="用户姓名" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          placeholder="请输入用户姓名"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <el-row :gutter="20">
+      <el-col :span="4" :xs="24">
+        <div class="head-container">
+          <el-input
+            v-model="deptName"
+            placeholder="请输入部门名称"
+            clearable
+            size="small"
+            prefix-icon="el-icon-search"
+            style="margin-bottom: 20px"
+          />
+        </div>
+        <div class="head-container">
+          <el-tree
+            :data="departmentOptions"
+            :props="defaultProps"
+            :expand-on-click-node="false"
+            :filter-node-method="filterNode"
+            ref="tree"
+            node-key="id"
+            default-expand-all
+            @node-click="handleNodeClick"
+          />
+        </div>
+      </el-col>
+      <el-col :span="20" :xs="24">
+        <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch">
+          <el-form-item label="用户名" prop="username">
+            <el-input
+              v-model="queryParams.username"
+              placeholder="请输入用户名"
+              clearable
+              size="small"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="用户姓名" prop="name">
+            <el-input
+              v-model="queryParams.name"
+              placeholder="请输入用户姓名"
+              clearable
+              size="small"
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+          </el-form-item>
+        </el-form>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['ims:user:add']"
-        >添加</el-button>
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-plus"
+              size="mini"
+              @click="handleAdd"
+              v-hasPermi="['ims:user:add']"
+            >添加</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="success"
+              plain
+              icon="el-icon-edit"
+              size="mini"
+              :disabled="single"
+              @click="handleUpdate"
+              v-hasPermi="['ims:user:edit']"
+            >编辑</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="danger"
+              plain
+              icon="el-icon-delete"
+              size="mini"
+              :disabled="multiple"
+              @click="handleDelete"
+              v-hasPermi="['ims:user:delete']"
+            >删除</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="warning"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleExport"
+              v-hasPermi="['ims:user:export']"
+            >导出</el-button>
+          </el-col>
+          <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+        </el-row>
+
+        <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column label="用户名" align="center" prop="username" />
+          <el-table-column label="用户邮箱" align="center" prop="email" />
+          <el-table-column label="用户姓名" align="center" prop="name" />
+          <el-table-column label="状态" align="center">
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.status"
+                @change="handleStatusChange(scope.row)"
+                active-value="open"
+                inactive-value="close"
+              ></el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.createTime) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+            <template slot-scope="scope">
+              <el-button
+                type="text"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['ims:user:edit']"
+              >编辑</el-button>
+              <el-divider direction="vertical"></el-divider>
+              <el-dropdown>
+                <span class="el-dropdown-link">
+                  更多 <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item icon="el-icon-circle-check" @click.native="handleRole(scope.row)" v-hasPermi="['ims:user:admin']">分配角色</el-dropdown-item>
+                  <el-dropdown-item icon="el-icon-circle-check" @click.native="handlePost(scope.row)" v-hasPermi="['ims:user:admin']">分配岗位</el-dropdown-item>
+                  <el-dropdown-item icon="el-icon-circle-check" @click.native="handleDepartment(scope.row)" v-hasPermi="['ims:user:admin']">分配部门</el-dropdown-item>
+                  <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['ims:user:delete']">删除</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </template>
+          </el-table-column>
+        </el-table>
+        
+        <pagination
+          v-show="total>0"
+          :total="total"
+          :page.sync="queryParams.current"
+          :limit.sync="queryParams.size"
+          @pagination="getList"
+        />
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['ims:user:edit']"
-        >编辑</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['ims:user:delete']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['ims:user:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
-
-    <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="用户名" align="center" prop="username" />
-      <el-table-column label="用户邮箱" align="center" prop="email" />
-      <el-table-column label="用户姓名" align="center" prop="name" />
-      <el-table-column label="状态" align="center">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.status"
-            @change="handleStatusChange(scope.row)"
-            active-value="open"
-            inactive-value="close"
-          ></el-switch>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['ims:user:edit']"
-          >编辑</el-button>
-          <el-divider direction="vertical"></el-divider>
-          <el-dropdown>
-            <span class="el-dropdown-link">
-               更多 <i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleRole(scope.row)" v-hasPermi="['ims:user:admin']">分配角色</el-dropdown-item>
-              <el-dropdown-item icon="el-icon-circle-check" @click.native="handlePost(scope.row)" v-hasPermi="['ims:user:admin']">分配岗位</el-dropdown-item>
-              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleDepartment(scope.row)" v-hasPermi="['ims:user:admin']">分配部门</el-dropdown-item>
-              <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['ims:user:delete']">删除</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </template>
-      </el-table-column>
-    </el-table>
-    
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.current"
-      :limit.sync="queryParams.size"
-      @pagination="getList"
-    />
 
     <!-- 添加或编辑用户对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -267,6 +295,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 部门名称
+      deptName: undefined,
       // 是否显示弹出层（角色）
       openRole: false,
       // 是否显示弹出层（岗位）
@@ -282,6 +312,10 @@ export default {
       },
       // 表单参数
       form: {},
+      defaultProps: {
+        children: "children",
+        label: "name"
+      },
       // 表单校验
       rules: {
         username: [
@@ -305,8 +339,17 @@ export default {
       },
     };
   },
+  watch: {
+    // 根据名称筛选部门树
+    deptName(val) {
+      this.$refs.tree.filter(val);
+    }
+  },
   created() {
-    this.getList();    
+    this.getList();  
+    listAllDepartment().then(response => {
+      this.departmentOptions = response.data;
+    });
   },
   methods: {
     /** 查询用户列表 */
@@ -347,6 +390,16 @@ export default {
         label: node.name,
         children: node.children
       };
+    },
+    // 筛选节点
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.name.indexOf(value) !== -1;
+    },
+    // 节点单击事件
+    handleNodeClick(data) {
+      this.queryParams.departmentId = data.id;
+      this.getList();
     },
     // 取消按钮
     cancel() {

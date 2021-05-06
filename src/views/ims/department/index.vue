@@ -43,12 +43,13 @@
       row-key="id"
       default-expand-all
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      border
     >
-      <el-table-column label="名称" align="center" prop="name" />
-      <el-table-column label="全名" align="center" prop="fullName" />
-      <el-table-column label="编码" align="center" prop="code" />
-      <el-table-column label="排序" align="center" prop="sort" />
-      <el-table-column label="状态" align="center">
+      <el-table-column label="名称" prop="name" :show-overflow-tooltip="true" min-width="15%"/>
+      <el-table-column label="全名" align="center" prop="fullName" :show-overflow-tooltip="true" min-width="15%"/>
+      <el-table-column label="编码" align="center" prop="code" min-width="5%"/>
+      <el-table-column label="排序" align="center" prop="sort" min-width="5%"/>
+      <el-table-column label="状态" align="center" min-width="5%">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.status"
@@ -58,12 +59,12 @@
           ></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column label="创建时间" align="center" prop="createTime" min-width="10%">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" min-width="10%">
         <template slot-scope="scope">
           <el-button
             type="text"
