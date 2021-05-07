@@ -23,8 +23,8 @@ export function addOrUpdateDictType(data) {
 }
 
 // 删除字典类型
-export function deleteDictType(ids) {
-  return request.delete(`/system/dict/type?ids=${ids}`);
+export function deleteDictType(codes) {
+  return request.delete(`/system/dict/type?codes=${codes}`);
 }
 
 // 导出字典类型

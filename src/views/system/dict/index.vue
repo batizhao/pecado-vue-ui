@@ -120,7 +120,7 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入名称" />
         </el-form-item>
-        <el-form-item label="代码" prop="code">
+        <el-form-item label="代码" prop="code" v-show="form.code == undefined">
           <el-input v-model="form.code" placeholder="请输入代码" />
         </el-form-item>
         <el-form-item label="描述" prop="description">
@@ -150,6 +150,8 @@ export default {
       ids: [],
       // 选中数组
       names: [],
+      // 选中数组
+      codes: [],
       // 非单个禁用
       single: true,
       // 非多个禁用
@@ -236,6 +238,7 @@ export default {
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
       this.names = selection.map(item => item.name);
+      this.codes = selection.map(item => item.code);
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
@@ -245,6 +248,7 @@ export default {
       this.open = true;
       this.title = "添加字典类型";
     },
+
     /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
@@ -274,14 +278,14 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids;
+      const codes = row.code || this.codes;
       const names = row.name || this.names;
       this.$confirm('确认删除"' + names + '"吗?', "警告", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
         }).then(function() {
-          return deleteDictType(ids);
+          return deleteDictType(codes);
         }).then(() => {
           this.getList();
           this.msgSuccess("删除成功");
