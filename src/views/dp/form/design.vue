@@ -32,6 +32,7 @@ export default {
       // 获取表单详细信息
       getForm(id).then(res => {
         this.metadata = res.data.metadata;
+        this.handleFormReady();
       });
     }
   },
