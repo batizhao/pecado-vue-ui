@@ -41,12 +41,22 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+
+      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+        <div class="avatar-wrapper translate-font-size">
+          <svg-icon class-name="size-icon" icon-class="translate" />
+        </div>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item :class="{'bule-color':lang == 'zh'}" @click.native="changeLanguage('zh')">中文</el-dropdown-item>
+          <el-dropdown-item :class="{'bule-color':lang == 'en'}" @click.native="changeLanguage('en')">英文</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters,mapState } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
@@ -84,6 +94,11 @@ export default {
     }
   },
   methods: {
+    changeLanguage(val){
+      this.$i18n.locale = val;
+      localStorage.setItem('lang', val) //此处val为 zh 或者 en
+      console.log('lang:',this.$store.state.lang);
+    },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
@@ -104,84 +119,77 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
-  height: 50px;
-  overflow: hidden;
-  position: relative;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0,21,41,.08);
-
-  .hamburger-container {
-    line-height: 46px;
-    height: 100%;
-    float: left;
-    cursor: pointer;
-    transition: background .3s;
-    -webkit-tap-highlight-color:transparent;
-
-    &:hover {
-      background: rgba(0, 0, 0, .025)
-    }
-  }
-
-  .breadcrumb-container {
-    float: left;
-  }
-
-  .errLog-container {
-    display: inline-block;
-    vertical-align: top;
-  }
-
-  .right-menu {
-    float: right;
-    height: 100%;
-    line-height: 50px;
-
-    &:focus {
-      outline: none;
-    }
-
-    .right-menu-item {
-      display: inline-block;
-      padding: 0 8px;
-      height: 100%;
-      font-size: 18px;
-      color: #5a5e66;
-      vertical-align: text-bottom;
-
-      &.hover-effect {
-        cursor: pointer;
-        transition: background .3s;
-
-        &:hover {
-          background: rgba(0, 0, 0, .025)
-        }
-      }
-    }
-
-    .avatar-container {
-      margin-right: 30px;
-
-      .avatar-wrapper {
-        margin-top: 5px;
-        position: relative;
-
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-        }
-
-        .el-icon-caret-bottom {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
-        }
-      }
-    }
-  }
+	overflow: hidden;
+	position: relative;
+	height: 50px;
+	background: #fff;
+	box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+	.hamburger-container {
+		float: left;
+		height: 100%;
+		cursor: pointer;
+		line-height: 46px;
+		transition: background .3s;
+		-webkit-tap-highlight-color: transparent;
+		&:hover {
+			background: rgba(0, 0, 0, .025);
+		}
+	}
+	.breadcrumb-container {
+		float: left;
+	}
+	.errLog-container {
+		display: inline-block;
+		vertical-align: top;
+	}
+	.right-menu {
+		float: right;
+		height: 100%;
+		line-height: 50px;
+		&:focus {
+			outline: none;
+		}
+		.right-menu-item {
+			display: inline-block;
+			padding: 0 8px;
+			height: 100%;
+			vertical-align: text-bottom;
+			font-size: 18px;
+			color: #5a5e66;
+			&.hover-effect {
+				cursor: pointer;
+				transition: background .3s;
+				&:hover {
+					background: rgba(0, 0, 0, .025);
+				}
+			}
+		}
+		.avatar-container {
+			margin-right: 30px;
+			.avatar-wrapper {
+				position: relative;
+				margin-top: 5px;
+				.user-avatar {
+					border-radius: 10px;
+					width: 40px;
+					height: 40px;
+					cursor: pointer;
+				}
+				.el-icon-caret-bottom {
+					position: absolute;
+					right: -20px;
+					top: 25px;
+					cursor: pointer;
+					font-size: 12px;
+				}
+			}
+			.translate-font-size {
+				font-size: 30px;
+			}
+		}
+	}
+}
+.bule-color {
+	color: #46a6ff;
 }
 </style>

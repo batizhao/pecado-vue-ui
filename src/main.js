@@ -23,6 +23,12 @@ import RightToolbar from "@/components/RightToolbar"
 import FormMaking from '@/lib/vue-form-making'
 import '@/lib/vue-form-making/dist/FormMaking.css'
 
+import VueI18n from 'vue-i18n'
+import enLocale from 'element-ui/lib/locale/lang/en'
+import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
+import zh from './assets/languages/zh'
+import en from './assets/languages/en'
+
 // 全局方法挂载
 Vue.prototype.listDictDataByCode = listDictDataByCode
 // Vue.prototype.getConfigKey = getConfigKey
@@ -53,6 +59,27 @@ Vue.component('RightToolbar', RightToolbar)
 Vue.use(permission)
 Vue.use(FormMaking)
 
+Vue.use(VueI18n)
+const messages = {
+  en: {
+    ...en,
+    ...enLocale // 或者用 Object.assign({ message: 'hello' }, enLocale)
+  },
+  zh: {
+    ...zh,
+    ...zhLocale // 或者用 Object.assign({ message: '你好' }, zhLocale)
+  }
+}
+// Create VueI18n instance with options
+const i18n = new VueI18n({
+  locale: localStorage.getItem('lang') || 'zh', // set locale
+  messages, // set locale messages
+})
+
+Vue.use(Element, {
+  i18n: (key, value) => i18n.t(key, value)
+})
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -70,6 +97,7 @@ Vue.config.productionTip = false
 
 new Vue({
   el: '#app',
+  i18n,
   router,
   store,
   render: h => h(App)
