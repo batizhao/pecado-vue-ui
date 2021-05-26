@@ -1,18 +1,18 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch">
-      <el-form-item label="角色名称" prop="name">
+      <el-form-item :label="$t('roleManage.roleName')" prop="name">
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入角色名称"
+          :placeholder="$t('roleManage.roleNamePlaceholder')"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{$t('roleManage.search')}}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{$t('roleManage.reset')}}</el-button>
       </el-form-item>
     </el-form>
 
@@ -25,7 +25,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['ims:role:add']"
-        >添加</el-button>
+        >{{$t('roleManage.add')}}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -36,7 +36,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['ims:role:edit']"
-        >编辑</el-button>
+        >{{$t('roleManage.edit')}}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -47,7 +47,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['ims:role:delete']"
-        >删除</el-button>
+        >{{$t('roleManage.delete')}}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -57,17 +57,17 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['ims:role:export']"
-        >导出</el-button>
+        >{{$t('roleManage.export')}}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="角色名称" align="center" prop="name" />
-      <el-table-column label="角色编码" align="center" prop="code" />
-      <el-table-column label="角色描述" align="center" prop="description" />
-      <el-table-column label="状态" align="center">
+      <el-table-column :label="$t('roleManage.roleName')" align="center" prop="name" />
+      <el-table-column :label="$t('roleManage.roleCode')" align="center" prop="code" />
+      <el-table-column :label="$t('roleManage.roleDescription')" align="center" prop="description" />
+      <el-table-column :label="$t('roleManage.state')" align="center">
         <template slot-scope="scope">
           <el-switch
             v-model="scope.row.status"
@@ -77,27 +77,27 @@
           ></el-switch>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column :label="$t('roleManage.createTime')" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('option')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['ims:role:edit']"
-          >编辑</el-button>
+          >{{$t('roleManage.edit')}}</el-button>
           <el-divider direction="vertical"></el-divider>
           <el-dropdown>
             <span class="el-dropdown-link">
-               更多 <i class="el-icon-arrow-down el-icon--right"></i>
+               {{$t('roleManage.more')}} <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleMenu(scope.row)" v-hasPermi="['ims:role:edit']">分配菜单</el-dropdown-item>
-              <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['ims:role:delete']">删除</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleMenu(scope.row)" v-hasPermi="['ims:role:edit']">{{$t('roleManage.distributeMenu')}}</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['ims:role:delete']">{{$t('roleManage.delete')}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -113,28 +113,28 @@
     />
 
     <!-- 添加或编辑角色对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="角色名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入角色名称" />
+    <el-dialog :title="title" :visible.sync="open" width="550px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="150px">
+        <el-form-item :label="$t('roleManage.roleName')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('roleManage.roleNamePlaceholder')" />
         </el-form-item>
-        <el-form-item label="角色编码" prop="code">
-          <el-input v-model="form.code" placeholder="请输入角色编码" />
+        <el-form-item :label="$t('roleManage.roleCode')" prop="code">
+          <el-input v-model="form.code" :placeholder="$t('roleManage.roleCodePlaceholder')" />
         </el-form-item>
-        <el-form-item label="角色描述" prop="description">
-          <el-input v-model="form.description" placeholder="请输入角色描述" />
+        <el-form-item :label="$t('roleManage.roleDescription')" prop="description">
+          <el-input v-model="form.description" :placeholder="$t('roleManage.roleDescriptionPlaceholder')" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="submitForm">{{$t('confirm')}}</el-button>
+        <el-button @click="cancel">{{$t('cancel')}}</el-button>
       </div>
     </el-dialog>
 
     <!-- 添加或编辑角色菜单对话框 -->
-    <el-dialog :title="title" :visible.sync="openMenu" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="菜单" prop="menuIds">
+    <el-dialog :title="title" :visible.sync="openMenu" width="520px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-form-item :label="$t('menu')" prop="menuIds">
           <el-tree
             class="tree-border"
             :data="menuList"
@@ -147,8 +147,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitMenuForm">确 定</el-button>
-        <el-button @click="cancelMenuForm">取 消</el-button>
+        <el-button type="primary" @click="submitMenuForm">{{$t('confirm')}}</el-button>
+        <el-button @click="cancelMenuForm">{{$t('cancel')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -284,7 +284,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加角色";
+      this.title = this.$t('roleManage.addRole');
     },
     /** 编辑按钮操作 */
     handleUpdate(row) {
@@ -293,7 +293,7 @@ export default {
       getRole(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "编辑角色";
+        this.title = this.$t('roleManage.eidtRole');
       });
     },
     /** 分配菜单操作 */
@@ -311,7 +311,7 @@ export default {
       });
       this.form.id = id;
       this.openMenu = true;
-      this.title = "分配菜单";
+      this.title = this.$t('roleManage.distributeMenu');
     },
     /** 提交按钮 */
     submitForm() {
