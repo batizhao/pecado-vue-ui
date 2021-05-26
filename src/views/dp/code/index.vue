@@ -144,7 +144,7 @@
 <script>
 import { listCodePage, previewCode, deleteCode, genCode, syncCodeMeta } from "@/api/dp/code";
 import importMeta from "./importMeta";
-import { downLoadZip } from "@/utils/zipdownload";
+import { downLoadZip } from "@/utils/download";
 import hljs from "highlight.js/lib/core";
 import "highlight.js/styles/github-gist.css";
 hljs.registerLanguage("java", require("highlight.js/lib/languages/java"));
@@ -231,7 +231,7 @@ export default {
           this.msgSuccess("成功生成到自定义路径：" + row.path);
         });
       } else {
-        downLoadZip("/dp/code/zip?ids=" + ids, "ruoyi");
+        downLoadZip("/dp/code/zip?ids=" + ids);
       }
     },
     /** 同步数据库操作 */

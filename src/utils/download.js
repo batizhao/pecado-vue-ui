@@ -2,12 +2,12 @@ import axios from 'axios'
 import { getToken } from '@/utils/auth'
 
 const mimeMap = {
-  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8',
   zip: 'application/zip'
 }
 
 const baseUrl = process.env.VUE_APP_BASE_API
-export function downLoadZip(str, filename) {
+export function downLoadZip(str) {
   var url = baseUrl + str
   axios({
     method: 'post',
@@ -16,6 +16,18 @@ export function downLoadZip(str, filename) {
     headers: { 'Authorization': 'Bearer ' + getToken() }
   }).then(res => {
     resolveBlob(res, mimeMap.zip)
+  })
+}
+export function downLoadExcel(str, queryParams) {
+  var url = baseUrl + str
+  axios({
+    method: 'post',
+    url: url,
+    params: queryParams,
+    responseType: 'blob',
+    headers: { 'Authorization': 'Bearer ' + getToken() }
+  }).then(res => {
+    resolveBlob(res, mimeMap.xlsx)
   })
 }
 /**
