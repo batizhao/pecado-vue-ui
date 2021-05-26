@@ -41,11 +41,3 @@ export function changeDictDataStatus(id, status) {
     data: data
   })
 }
-
-// 导出字典
-export function exportDictData(query) {
-  return request({
-    url: '/system/dict/data/export',
-    params: query
-  })
-}

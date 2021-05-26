@@ -58,11 +58,3 @@ export function changeRoleMenus(menus) {
     data: menus
   })
 }
-
-// 导出角色
-export function exportRole(query) {
-  return request({
-    url: '/ims/role/export',
-    params: query
-  })
-}

@@ -127,7 +127,8 @@
 </template>
 
 <script>
-import { listPost, getPost, deletePost, addOrUpdatePost, changePostStatus, exportPost } from "@/api/ims/post";
+import { listPost, getPost, deletePost, addOrUpdatePost, changePostStatus } from "@/api/ims/post";
+import { downLoadExcel } from "@/utils/download";
 
 export default {
   name: "Post",
@@ -262,28 +263,26 @@ export default {
       const ids = row.id || this.ids;
       const names = row.name || this.names;
       this.$confirm('确认删除"' + names + '"吗?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return deletePost(ids);
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        })
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        return deletePost(ids);
+      }).then(() => {
+        this.getList();
+        this.msgSuccess("删除成功");
+      })
     },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
       this.$confirm('是否确认导出所有岗位数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportPost(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        })
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        downLoadExcel("/ims/post/export", queryParams);
+      })
     }
   }
 };

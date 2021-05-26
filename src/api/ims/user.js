@@ -106,11 +106,3 @@ export function changeUserDepartments(departments) {
 export function listLeaderByDepartmentId(departmentId, type) {
   return request(`/ims/user/leader?departmentId=${departmentId}&type=${type}`);
 }
-
-// 导出用户
-export function exportUser(query) {
-  return request({
-    url: '/ims/user/export',
-    params: query
-  })
-}

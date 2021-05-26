@@ -116,7 +116,8 @@
 </template>
 
 <script>
-import { getDictData, deleteDictData, addOrUpdateDictData, changeDictDataStatus, exportDictData } from "@/api/system/dict/data";
+import { getDictData, deleteDictData, addOrUpdateDictData, changeDictDataStatus } from "@/api/system/dict/data";
+import { downLoadExcel } from "@/utils/download";
 
 export default {
   name: "DictData",
@@ -253,28 +254,26 @@ export default {
       const ids = row.id || this.ids;
       const names = row.label || this.names;
       this.$confirm('确认删除"' + names + '"吗?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return deleteDictData(ids);
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        })
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        return deleteDictData(ids);
+      }).then(() => {
+        this.getList();
+        this.msgSuccess("删除成功");
+      })
     },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
       this.$confirm('是否确认导出所有字典数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportDictData(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        })
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        downLoadExcel("/system/dict/data/export", queryParams);
+      })
     }
   }
 };

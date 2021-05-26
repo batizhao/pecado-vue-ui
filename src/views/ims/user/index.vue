@@ -275,7 +275,7 @@
 </template>
 
 <script>
-import { listUsers, getUser, deleteUser, addOrUpdateUser, changeUserStatus, changeUserRoles, changeUserPosts, changeUserDepartments, exportUser } from "@/api/ims/user";
+import { listUsers, getUser, deleteUser, addOrUpdateUser, changeUserStatus, changeUserRoles, changeUserPosts, changeUserDepartments } from "@/api/ims/user";
 import { listAllRole, listRoleByUserId } from "@/api/ims/role";
 import { listAllPost, listPostByUserId } from "@/api/ims/post";
 import { listAllDepartment, listDepartmentByUserId } from "@/api/ims/department";
@@ -650,12 +650,12 @@ export default {
     handleExport() {
       const queryParams = this.queryParams;
       this.$confirm('是否确认导出?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(() => {
-          downLoadExcel("/ims/user/export", queryParams);
-        })
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        downLoadExcel("/ims/user/export", queryParams);
+      })
     },
     /** 导入按钮操作 */
     handleImport() {

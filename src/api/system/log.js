@@ -20,13 +20,5 @@ export function deleteLog(ids) {
 
 // 删除日志
 export function cleanLog() {
-    return request.delete(`/system/log`);
-  }
-
-// 导出日志
-export function exportLog(query) {
-  return request({
-    url: '/system/log/export',
-    params: query
-  })
+  return request.delete(`/system/log`);
 }

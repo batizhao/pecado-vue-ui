@@ -52,11 +52,3 @@ export function changeFormStatus(id, status) {
     data: data
   })
 }
-
-// 导出表单
-export function exportForm(query) {
-  return request({
-    url: '/dp/form/export',
-    params: query
-  })
-}

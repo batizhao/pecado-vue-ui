@@ -54,11 +54,3 @@ export function changeDepartmentLeaders(departments) {
     data: departments
   })
 }
-
-// 导出部门
-export function exportDepartment(query) {
-  return request({
-    url: '/ims/department/export',
-    params: query
-  })
-}

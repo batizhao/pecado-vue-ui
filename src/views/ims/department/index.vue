@@ -146,8 +146,9 @@
 </template>
 
 <script>
-import { listAllDepartment, getDepartment, deleteDepartment, addOrUpdateDepartment, changeDepartmentStatus, changeDepartmentLeaders, exportDepartment } from "@/api/ims/department";
+import { listAllDepartment, getDepartment, deleteDepartment, addOrUpdateDepartment, changeDepartmentStatus, changeDepartmentLeaders } from "@/api/ims/department";
 import { listUser, listLeaderByDepartmentId } from "@/api/ims/user";
+import { downLoadExcel } from "@/utils/download";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -363,28 +364,26 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       this.$confirm('确认删除"' + row.name + '"吗?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return deleteDepartment(row.id);
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        })
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        return deleteDepartment(row.id);
+      }).then(() => {
+        this.getList();
+        this.msgSuccess("删除成功");
+      })
     },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
       this.$confirm('是否确认导出所有部门数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportDepartment(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        })
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        downLoadExcel("/ims/department/export", queryParams);
+      })
     }
   }
 };

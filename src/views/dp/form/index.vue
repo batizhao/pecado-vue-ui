@@ -133,7 +133,8 @@
 </template>
 
 <script>
-import { listForm, getForm, deleteForm, addOrUpdateForm, changeFormStatus, exportForm } from "@/api/dp/form";
+import { listForm, getForm, deleteForm, addOrUpdateForm, changeFormStatus } from "@/api/dp/form";
+import { downLoadExcel } from "@/utils/download";
 
 export default {
   name: "Form",
@@ -266,28 +267,26 @@ export default {
     handleDelete(row) {
       const ids = row.id || this.ids;
       this.$confirm('是否确认删除表单编号为"' + ids + '"的数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return deleteForm(ids);
-        }).then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        })
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        return deleteForm(ids);
+      }).then(() => {
+        this.getList();
+        this.msgSuccess("删除成功");
+      })
     },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
       this.$confirm('是否确认导出所有表单数据项?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return exportForm(queryParams);
-        }).then(response => {
-          this.download(response.msg);
-        })
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        downLoadExcel("/dp/form/export", queryParams);
+      })
     }
   }
 };

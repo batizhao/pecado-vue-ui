@@ -27,14 +27,6 @@ export function deleteDictType(codes) {
   return request.delete(`/system/dict/type?codes=${codes}`);
 }
 
-// 导出字典类型
-export function exportDictType(query) {
-  return request({
-    url: '/system/dict/type/export',
-    params: query
-  })
-}
-
 // 获取字典选择框列表
 export function optionSelect() {
   return request('/system/dict/type')

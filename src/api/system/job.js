@@ -60,11 +60,3 @@ export function runJob(id, jobGroup) {
     data: data
   })
 }
-
-// 导出任务调度
-export function exportJob(query) {
-  return request({
-    url: '/system/job/export',
-    params: query
-  })
-}
