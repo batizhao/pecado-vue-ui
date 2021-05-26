@@ -22,7 +22,17 @@
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
 
+        <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
+          <div class="avatar-wrapper translate-font-size">
+            <svg-icon class-name="size-icon" icon-class="translate" />
+          </div>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item :class="{'bule-color':lang == 'zh-CN'}" @click.native="changeLanguage('zh-CN')">中文</el-dropdown-item>
+            <el-dropdown-item :class="{'bule-color':lang == 'en-US'}" @click.native="changeLanguage('en-US')">英文</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </template>
+
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper">
@@ -42,15 +52,7 @@
         </el-dropdown-menu>
       </el-dropdown>
 
-      <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
-        <div class="avatar-wrapper translate-font-size">
-          <svg-icon class-name="size-icon" icon-class="translate" />
-        </div>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item :class="{'bule-color':lang == 'zh'}" @click.native="changeLanguage('zh')">中文</el-dropdown-item>
-          <el-dropdown-item :class="{'bule-color':lang == 'en'}" @click.native="changeLanguage('en')">英文</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      
     </div>
   </div>
 </template>
@@ -93,11 +95,21 @@ export default {
       }
     }
   },
+  data(){
+    return{
+      lang:'zh-CN'
+    }
+  },
+  created(){
+    this.lang = localStorage.getItem('lang') || 'zh-CN'
+  },
   methods: {
     changeLanguage(val){
       this.$i18n.locale = val;
+      this.lang = val;
       localStorage.setItem('lang', val) //此处val为 zh 或者 en
-      console.log('lang:',this.$store.state.lang);
+      this.$forceUpdate();
+      // console.log('lang:',this.$store.state.lang);
     },
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -184,6 +196,8 @@ export default {
 				}
 			}
 			.translate-font-size {
+				margin-left: -10px;
+				margin-top: 0;
 				font-size: 30px;
 			}
 		}
