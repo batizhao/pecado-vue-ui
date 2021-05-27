@@ -102,6 +102,7 @@ export default {
   },
   created(){
     this.lang = localStorage.getItem('lang') || 'zh-CN'
+    this.$i18n.locale = localStorage.getItem('lang') || 'zh-CN';
   },
   methods: {
     changeLanguage(val){
