@@ -203,10 +203,10 @@ export default {
       // 表单校验
       rules: {
         name: [
-          { required: true, message: "角色名称不能为空", trigger: "blur" }
+          { required: true, message: this.$t('roleManage.formRulesRoleName'), trigger: "blur" }
         ],
         code: [
-          { required: true, message: "角色编码不能为空", trigger: "blur" }
+          { required: true, message: this.$t('roleManage.formRulesRoleCode'), trigger: "blur" }
         ],
       }
     };
