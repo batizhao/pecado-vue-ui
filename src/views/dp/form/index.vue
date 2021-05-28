@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch">
-      <el-form-item :label="$t('formName')" prop="name">
+      <el-form-item :label="表单名称" prop="name">
         <el-input
           v-model="queryParams.name"
           placeholder="请输入表单名称"
