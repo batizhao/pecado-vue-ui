@@ -359,7 +359,7 @@ export default {
       }).then(() => {
         this.getList();
         this.msgSuccess(this.$t('deleteMessage'));
-      })
+      }).catch( err => {  })
     },
     /** 导出按钮操作 */
     handleExport() {
