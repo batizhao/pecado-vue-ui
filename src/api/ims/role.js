@@ -58,3 +58,12 @@ export function changeRoleMenus(menus) {
     data: menus
   })
 }
+
+// 分配角色数据权限
+export function changeDataScope(role) {
+  return request({
+    url: '/ims/role/department',
+    method: 'post',
+    data: role
+  })
+}

@@ -96,7 +96,8 @@
                {{$t('more')}} <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleMenu(scope.row)" v-hasPermi="['ims:role:edit']">{{$t('role.menu')}}</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleMenu(scope.row)" v-hasPermi="['ims:role:admin']">{{$t('role.menu')}}</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleDataScope(scope.row)" v-hasPermi="['ims:role:admin']">{{$t('role.dataScope')}}</el-dropdown-item>
               <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['ims:role:delete']">{{$t('delete')}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -132,8 +133,11 @@
     </el-dialog>
 
     <!-- 添加或编辑角色菜单对话框 -->
-    <el-dialog :title="title" :visible.sync="openMenu" width="520px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+    <el-dialog :title="title" :visible.sync="openMenu" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item :label="$t('role.name')">
+          <el-input v-model="form.name" :disabled="true" />
+        </el-form-item>
         <el-form-item :label="$t('menu')" prop="menuIds">
           <el-tree
             class="tree-border"
@@ -151,12 +155,49 @@
         <el-button @click="cancelMenuForm">{{$t('cancel')}}</el-button>
       </div>
     </el-dialog>
+
+    <!-- 分配角色数据权限对话框 -->
+    <el-dialog :title="title" :visible.sync="openDataScope" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-form-item :label="$t('role.name')">
+          <el-input v-model="form.name" :disabled="true" />
+        </el-form-item>
+        <el-form-item :label="$t('role.dataScope')">
+          <el-select v-model="form.dataScope">
+            <el-option
+              v-for="item in dataScopeOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('role.dept')" v-show="form.dataScope === 'custom'">
+          <el-tree
+            class="tree-border"
+            :data="deptOptions"
+            show-checkbox
+            default-expand-all
+            ref="dept"
+            node-key="id"
+            :check-strictly="true"
+            empty-text="loading..."
+            :props="defaultProps"
+          ></el-tree>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitDataScope">{{$t('confirm')}}</el-button>
+        <el-button @click="cancelDataScope">{{$t('cancel')}}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { listRole, getRole, deleteRole, addOrUpdateRole, changeRoleStatus, changeRoleMenus } from "@/api/ims/role";
+import { listRole, getRole, deleteRole, addOrUpdateRole, changeRoleStatus, changeRoleMenus, changeDataScope } from "@/api/ims/role";
 import { listMenusByRoleId, listMenu } from "@/api/ims/menu";
+import { listAllDepartment, listDepartmentByRoleId } from "@/api/ims/department";
 import { downLoadExcel } from "@/utils/download";
 
 export default {
@@ -183,12 +224,39 @@ export default {
       roleList: [],
       // 角色菜单数据
       menuList: [],
+      // 部门列表
+      deptOptions: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
       // 是否显示弹出层（菜单）
       openMenu: false,
+      // 是否显示弹出层（数据权限）
+      openDataScope: false,
+      // 数据范围选项
+      dataScopeOptions: [
+        {
+          value: "all",
+          label: "全部数据权限"
+        },
+        {
+          value: "custom",
+          label: "自定数据权限"
+        },
+        {
+          value: "dept",
+          label: "本部门数据权限"
+        },
+        {
+          value: "sub",
+          label: "本部门及以下数据权限"
+        },
+        {
+          value: "oneself",
+          label: "仅本人数据权限"
+        }
+      ],
       // 查询参数
       queryParams: {
         current: 1,
@@ -228,11 +296,12 @@ export default {
     // 所有菜单节点数据
     getMenuAllCheckedKeys() {
       // 目前被选中的菜单节点
-      let checkedKeys = this.$refs.menu.getCheckedKeys();
-      // 半选中的菜单节点
-      // let halfCheckedKeys = this.$refs.menu.getHalfCheckedKeys();
-      // checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys);
-      return checkedKeys;
+      return this.$refs.menu.getCheckedKeys();
+    },
+    // 所有部门节点数据
+    getDeptAllCheckedKeys() {
+      // 目前被选中的部门节点
+      return this.$refs.dept.getCheckedKeys();
     },
     // 数据源状态编辑
     handleStatusChange(row) {
@@ -257,6 +326,11 @@ export default {
     // 取消按钮（角色）
     cancelMenuForm() {
       this.openMenu = false;
+      this.reset();
+    },
+    // 取消按钮（数据权限）
+    cancelDataScope() {
+      this.openDataScope = false;
       this.reset();
     },
     // 表单重置
@@ -300,7 +374,7 @@ export default {
     /** 分配菜单操作 */
     handleMenu(row) {
       this.reset();
-      const id = row.id || this.ids;
+      const id = row.id;
       listMenu().then(response => {
         this.menuList = response.data;
       });
@@ -310,9 +384,26 @@ export default {
           this.$refs.menu.setCheckedKeys(res.data.map(item => item.id));
         });
       });
-      this.form.id = id;
+      this.form = row;
       this.openMenu = true;
       this.title = this.$t('role.menu');
+    },
+    /** 分配数据权限操作 */
+    handleDataScope(row) {
+      this.reset();
+      const id = row.id;
+      listAllDepartment().then(response => {
+        this.deptOptions = response.data;
+      });
+      const departments = listDepartmentByRoleId(id);
+      this.$nextTick(() => {
+        departments.then(res => {
+          this.$refs.dept.setCheckedKeys(res.data.map(item => item.id));
+        });
+      });
+      this.form = row;
+      this.openDataScope = true;
+      this.title = this.$t('role.dataScope');
     },
     /** 提交按钮 */
     submitForm() {
@@ -342,6 +433,27 @@ export default {
           changeRoleMenus(optionArray).then(response => {
             this.msgSuccess(this.$t('submitMessage'));
             this.openMenu = false;
+          });
+        }
+      });
+    },
+    /** 提交按钮（数据权限） */
+    submitDataScope: function() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          const depts = this.getDeptAllCheckedKeys();
+          const optionArray = [];
+          Object.keys(depts).forEach((key) =>
+            optionArray.push({
+              roleId: this.form.id,
+              departmentId: depts[key],
+            }),
+          );
+
+          this.form.roleDepartments = optionArray;
+          changeDataScope(this.form).then(response => {
+            this.msgSuccess(this.$t('submitMessage'));
+            this.openDataScope = false;
           });
         }
       });

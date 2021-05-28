@@ -31,6 +31,7 @@ var en = {
     createTime: "createTime",
     menu: "Assignments Menu",
     dataScope: "Data Scope",
+    dept: "department",
     addRole: "Add Role",
     eidtRole: "Eidt Role",
   }

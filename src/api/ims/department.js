@@ -54,3 +54,8 @@ export function changeDepartmentLeaders(departments) {
     data: departments
   })
 }
+
+// 根据用户ID查询部门
+export function listDepartmentByRoleId(roleId) {
+  return request(`/ims/department?roleId=${roleId}`);
+}

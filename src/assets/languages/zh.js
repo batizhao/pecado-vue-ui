@@ -31,6 +31,7 @@ var zh = {
     createTime: "创建时间",
     menu: "分配菜单",
     dataScope: "数据权限",
+    dept: "部门",
     addRole: "添加角色",
     eidtRole: "编辑角色",
   }
