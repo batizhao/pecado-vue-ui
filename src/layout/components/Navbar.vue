@@ -77,6 +77,7 @@ export default {
     RuoYiGit,
     RuoYiDoc
   },
+  inject: ['reload'],
   computed: {
     ...mapGetters([
       'sidebar',
@@ -107,9 +108,11 @@ export default {
   methods: {
     changeLanguage(val){
       this.$i18n.locale = val;
+      console.log(this.$i18n);
       this.lang = val;
       localStorage.setItem('lang', val) //此处val为 zh 或者 en
       this.$forceUpdate();
+      this.reload();
       // console.log('lang:',this.$store.state.lang);
     },
     toggleSideBar() {

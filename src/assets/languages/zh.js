@@ -23,6 +23,8 @@ var zh = {
     distributeMenu:'分配菜单',
     addRole:'添加角色',
     eidtRole:'编辑角色',
+    formRulesRoleName:"角色名称不能为空",
+    formRulesRoleCode:'角色编码不能为空'
   }
 }
 

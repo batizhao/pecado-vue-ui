@@ -23,6 +23,8 @@ var en = {
     distributeMenu:'distributeMenu',
     addRole:'addRole',
     eidtRole:'eidtRole',
+    formRulesRoleName:"you should input roleName",
+    formRulesRoleCode:'you should input roleCode'
   }
 }
 
