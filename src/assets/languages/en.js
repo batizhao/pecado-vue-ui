@@ -29,7 +29,8 @@ var en = {
     descriptionPlaceholder: "Please input description",
     status: "status",
     createTime: "createTime",
-    distributeMenu: "Assignments Menu",
+    menu: "Assignments Menu",
+    dataScope: "Data Scope",
     addRole: "Add Role",
     eidtRole: "Eidt Role",
   }

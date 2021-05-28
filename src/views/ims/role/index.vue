@@ -96,7 +96,7 @@
                {{$t('more')}} <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleMenu(scope.row)" v-hasPermi="['ims:role:edit']">{{$t('role.distributeMenu')}}</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleMenu(scope.row)" v-hasPermi="['ims:role:edit']">{{$t('role.menu')}}</el-dropdown-item>
               <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['ims:role:delete']">{{$t('delete')}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -132,7 +132,7 @@
     </el-dialog>
 
     <!-- 添加或编辑角色菜单对话框 -->
-    <el-dialog :title="title" :visible.sync="openMenu" width="520px" v-if='open' append-to-body>
+    <el-dialog :title="title" :visible.sync="openMenu" width="520px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item :label="$t('menu')" prop="menuIds">
           <el-tree
@@ -312,7 +312,7 @@ export default {
       });
       this.form.id = id;
       this.openMenu = true;
-      this.title = this.$t('role.distributeMenu');
+      this.title = this.$t('role.menu');
     },
     /** 提交按钮 */
     submitForm() {
