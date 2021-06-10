@@ -26,19 +26,21 @@ export default {
     }
   },
   created() {
-    const id = this.$route.params && this.$route.params.id;
-    if (id) {
-      this.id = id
-      // 获取表单详细信息
-      getForm(id).then(res => {
-        this.metadata = res.data.metadata;
-        this.handleFormReady();
-      });
-    }
+    
   },
   methods: {
     handleFormReady () {
-      this.$refs.makingform.setJSON(JSON.parse(this.metadata))
+      const id = this.$route.params && this.$route.params.id;
+      if (id) {
+        this.id = id
+        // 获取表单详细信息
+        getForm(id).then(res => {
+          this.metadata = res.data.metadata;
+          this.$refs.makingform.setJSON(JSON.parse(this.metadata))
+        }).catch( err => {
+          console.log(err);
+        });
+      }
     },
     handleSave () {
       const json = this.$refs.makingform.getJSON()
