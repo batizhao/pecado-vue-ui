@@ -25,9 +25,6 @@ export default {
       metadata: "{}"
     }
   },
-  created() {
-    
-  },
   methods: {
     handleFormReady () {
       const id = this.$route.params && this.$route.params.id;
@@ -36,7 +33,9 @@ export default {
         // 获取表单详细信息
         getForm(id).then(res => {
           this.metadata = res.data.metadata;
-          this.$refs.makingform.setJSON(JSON.parse(this.metadata))
+          if (this.metadata) {
+            this.$refs.makingform.setJSON(JSON.parse(this.metadata))
+          }
         }).catch( err => {
           console.log(err);
         });

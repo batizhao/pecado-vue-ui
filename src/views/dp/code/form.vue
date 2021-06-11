@@ -19,33 +19,27 @@
 
 <script>
 import { addOrUpdateCode, getCode } from "@/api/dp/code";
-// import FormMaking from "@/lib/vue-form-making";
-// import "@/lib/vue-form-making/dist/FormMaking.css";
 
 export default {
-  // name: "CodeFormDesign",
-  // components: {
-  //   FormMaking
-  // },
   data() {
     return {
       id: 0,
       metadata: "{}"
     };
   },
-  created() {
-    const id = this.$route.params && this.$route.params.id;
-    if (id) {
-      this.id = id;
-      // 获取表单详细信息
-      getCode(id).then(res => {
-        this.metadata = res.data.code.options;
-      });
-    }
-  },
   methods: {
     handleFormReady() {
-      this.$refs.makingform.setJSON(JSON.parse(this.metadata));
+      const id = this.$route.params && this.$route.params.id;
+      if (id) {
+        this.id = id
+        // 获取表单详细信息
+        getCode(id).then(res => {
+          this.metadata = res.data.code.options;
+          this.$refs.makingform.setJSON(JSON.parse(this.metadata))
+        }).catch( err => {
+          console.log(err);
+        });
+      }
     },
     handleSave() {
       const json = this.$refs.makingform.getJSON();
