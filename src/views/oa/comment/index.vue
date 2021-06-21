@@ -87,7 +87,7 @@
       @pagination="getList"
     />
     <!-- 添加或编辑审批对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" v-if='open' append-to-body>   
+    <el-dialog :title="title" :visible.sync="open" width="500px">   
       <fm-generate-form
         :data="jsonData"
         :remote-option="dynamicData"
@@ -106,6 +106,7 @@
 
 <script>
 import { listComments, listComment, getComment, deleteComment, addOrUpdateComment, changeCommentStatus } from "@/api/oa/comment";
+import { getForm } from "@/api/dp/form";
 import { downLoadExcel } from "@/utils/download";
 
 
@@ -116,111 +117,111 @@ export default {
   data() {
     return {
       jsonData: {
-  "list" : [ {
-    "type" : "input",
-    "icon" : "icon-input",
-    "options" : {
-      "width" : "100%",
-      "defaultValue" : "",
-      "required" : false,
-      "requiredMessage" : "",
-      "dataType" : "",
-      "dataTypeCheck" : false,
-      "dataTypeMessage" : "",
-      "pattern" : "",
-      "patternCheck" : false,
-      "patternMessage" : "",
-      "placeholder" : "",
-      "customClass" : "",
-      "disabled" : false,
-      "labelWidth" : 100,
-      "hidden" : true,
-      "dataBind" : true,
-      "showPassword" : false,
-      "remoteFunc" : "",
-      "remoteOption" : ""
-    },
-    "name" : "",
-    "key" : "60c1b5e36454f3c2a8163f13",
-    "model" : "id",
-    "rules" : [ ]
-  }, {
-    "type" : "input",
-    "icon" : "icon-input",
-    "options" : {
-      "width" : "100%",
-      "defaultValue" : "",
-      "required" : true,
-      "requiredMessage" : "",
-      "dataType" : "",
-      "dataTypeCheck" : false,
-      "dataTypeMessage" : "",
-      "pattern" : "",
-      "patternCheck" : false,
-      "patternMessage" : "",
-      "placeholder" : "",
-      "customClass" : "",
-      "disabled" : false,
-      "labelWidth" : 100,
-      "hidden" : false,
-      "dataBind" : true,
-      "showPassword" : false,
-      "remoteFunc" : "",
-      "remoteOption" : ""
-    },
-    "name" : "标题",
-    "key" : "60c1b5e36454f3c2a8163f14",
-    "model" : "title",
-    "rules" : [ {
-      "required" : true,
-      "message" : "Required"
-    } ]
-  }, {
-    "type" : "input",
-    "icon" : "icon-input",
-    "options" : {
-      "width" : "100%",
-      "defaultValue" : "",
-      "required" : true,
-      "requiredMessage" : "",
-      "dataType" : "",
-      "dataTypeCheck" : false,
-      "dataTypeMessage" : "",
-      "pattern" : "",
-      "patternCheck" : false,
-      "patternMessage" : "",
-      "placeholder" : "",
-      "customClass" : "",
-      "disabled" : false,
-      "labelWidth" : 100,
-      "hidden" : false,
-      "dataBind" : true,
-      "showPassword" : false,
-      "remoteFunc" : "",
-      "remoteOption" : ""
-    },
-    "name" : "意见",
-    "key" : "60c1b5e36454f3c2a8163f15",
-    "model" : "comment",
-    "rules" : [ {
-      "required" : true,
-      "message" : "Required"
-    } ]
-  } ],
-  "config" : {
-    "labelWidth" : 100,
-    "labelPosition" : "right",
-    "size" : "small",
-    "customClass" : "",
-    "ui" : "element",
-    "layout" : "horizontal",
-    "labelCol" : 3,
-    "width" : "100%",
-    "hideLabel" : false,
-    "hideErrorMessage" : false,
-    "dataSource" : null
-  }
-},
+        "list" : [ {
+          "type" : "input",
+          "icon" : "icon-input",
+          "options" : {
+            "width" : "100%",
+            "defaultValue" : "",
+            "required" : false,
+            "requiredMessage" : "",
+            "dataType" : "",
+            "dataTypeCheck" : false,
+            "dataTypeMessage" : "",
+            "pattern" : "",
+            "patternCheck" : false,
+            "patternMessage" : "",
+            "placeholder" : "",
+            "customClass" : "",
+            "disabled" : false,
+            "labelWidth" : 100,
+            "hidden" : true,
+            "dataBind" : true,
+            "showPassword" : false,
+            "remoteFunc" : "",
+            "remoteOption" : ""
+          },
+          "name" : "",
+          "key" : "60c1b5e36454f3c2a8163f13",
+          "model" : "id",
+          "rules" : [ ]
+        }, {
+          "type" : "input",
+          "icon" : "icon-input",
+          "options" : {
+            "width" : "100%",
+            "defaultValue" : "",
+            "required" : true,
+            "requiredMessage" : "",
+            "dataType" : "",
+            "dataTypeCheck" : false,
+            "dataTypeMessage" : "",
+            "pattern" : "",
+            "patternCheck" : false,
+            "patternMessage" : "",
+            "placeholder" : "",
+            "customClass" : "",
+            "disabled" : false,
+            "labelWidth" : 100,
+            "hidden" : false,
+            "dataBind" : true,
+            "showPassword" : false,
+            "remoteFunc" : "",
+            "remoteOption" : ""
+          },
+          "name" : "标题",
+          "key" : "60c1b5e36454f3c2a8163f14",
+          "model" : "title",
+          "rules" : [ {
+            "required" : true,
+            "message" : "Required"
+          } ]
+        }, {
+          "type" : "input",
+          "icon" : "icon-input",
+          "options" : {
+            "width" : "100%",
+            "defaultValue" : "",
+            "required" : true,
+            "requiredMessage" : "",
+            "dataType" : "",
+            "dataTypeCheck" : false,
+            "dataTypeMessage" : "",
+            "pattern" : "",
+            "patternCheck" : false,
+            "patternMessage" : "",
+            "placeholder" : "",
+            "customClass" : "",
+            "disabled" : false,
+            "labelWidth" : 100,
+            "hidden" : false,
+            "dataBind" : true,
+            "showPassword" : false,
+            "remoteFunc" : "",
+            "remoteOption" : ""
+          },
+          "name" : "意见",
+          "key" : "60c1b5e36454f3c2a8163f15",
+          "model" : "comment",
+          "rules" : [ {
+            "required" : true,
+            "message" : "Required"
+          } ]
+        } ],
+        "config" : {
+          "labelWidth" : 100,
+          "labelPosition" : "right",
+          "size" : "small",
+          "customClass" : "",
+          "ui" : "element",
+          "layout" : "horizontal",
+          "labelCol" : 3,
+          "width" : "100%",
+          "hideLabel" : false,
+          "hideErrorMessage" : false,
+          "dataSource" : null
+        }
+      },
       dynamicData: {
       },
       remoteFuncs: {
@@ -317,8 +318,12 @@ export default {
     /** 添加按钮操作 */
     handleAdd() {
       this.reset();
-      this.open = true;
       this.title = "添加审批";
+      getForm(1).then( response => {
+        console.log(response);
+        this.jsonData = JSON.parse(response.data.metadata);
+        this.open = true;
+      });
     },
     /** 编辑按钮操作 */
     handleUpdate(row) {
