@@ -108,7 +108,7 @@
       @pagination="getList"
     />
     <!-- 添加或编辑任务调度对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="700px" v-if='open' append-to-body>   
+    <el-dialog :title="title" :visible.sync="open" width="700px" v-if="open" append-to-body>   
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-row>
           <el-col :span="12">

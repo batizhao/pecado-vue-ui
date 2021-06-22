@@ -88,7 +88,7 @@
       </el-table-column>
     </el-table>
     <!-- 添加或编辑部门对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" v-if='open' append-to-body>   
+    <el-dialog :title="title" :visible.sync="open" width="500px" v-if="open" append-to-body>   
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="上级部门" prop="pid" v-if="form.pid !== 0">
           <treeselect

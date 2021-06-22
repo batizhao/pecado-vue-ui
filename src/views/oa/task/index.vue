@@ -51,29 +51,20 @@
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
-    <el-table v-loading="loading" :data="commentList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="taskList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
-      <el-table-column label="标题" align="center" prop="title" />
-      <el-table-column label="意见" align="center" prop="comment" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="任务ID" align="center" prop="taskId" />
+      <el-table-column label="procInstId" align="center" prop="procInstId" />
+      <el-table-column label="任务名" align="center" prop="taskName" />
+      <el-table-column label="公文标题" align="center" prop="title" />
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-          >编辑</el-button>
-          <el-button
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['oa:comment:delete']"
-          >删除</el-button>
+          >审核</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -104,11 +95,11 @@
 </template>
 
 <script>
-import { listComments, getComment, deleteComment, addOrUpdateComment, changeCommentStatus } from "@/api/oa/comment";
+import { listTasks, getTask, submitTask } from "@/api/oa/task";
 import { getForm } from "@/api/dp/form";
 
 export default {
-  name: "Comment",
+  name: "Task",
   components: {
   },
   data() {
@@ -132,7 +123,7 @@ export default {
       // 显示搜索条件
       showSearch: true,
       // 审批表格数据
-      commentList: [],
+      taskList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -157,7 +148,7 @@ export default {
   },
   created() {
     this.getList();
-    getForm(1).then( response => {
+    getForm(2).then( response => {
       this.jsonData = JSON.parse(response.data.metadata);
     });
   },
@@ -165,8 +156,8 @@ export default {
     /** 查询审批列表 */
     getList() {
       this.loading = true;
-      listComments(this.queryParams).then(response => {
-        this.commentList = response.data.records;
+      listTasks(this.queryParams).then(response => {
+        this.taskList = response.data.records;
         this.total = response.data.total;
         this.loading = false;
       });
@@ -207,22 +198,22 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
+      this.ids = selection.map(item => item.taskId)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },    
     /** 添加按钮操作 */
     handleAdd() {
       this.reset();
-      this.title = "添加审批";
       this.open = true;
+      this.title = "添加审批";
     },
     /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const id = row.id || this.ids
-      getComment(id).then(response => {
-        this.form = response.data;
+      const id = row.taskId || this.ids
+      getTask(id).then(response => {
+        this.form = response.data.checkUserList[0];
         this.open = true;
         this.title = "编辑审批";
       });
@@ -230,7 +221,7 @@ export default {
     /** 提交按钮 */
     submitForm() {
       this.$refs.form.getData().then(data => {
-        addOrUpdateComment(data).then(response => {
+        submitTask(data).then(response => {
           this.msgSuccess("保存成功");
           this.open = false;
           this.getList();

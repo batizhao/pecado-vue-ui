@@ -106,7 +106,7 @@
       @pagination="getList"
     />
     <!-- 添加或编辑岗位对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" v-if='open' append-to-body>   
+    <el-dialog :title="title" :visible.sync="open" width="500px" v-if="open" append-to-body>   
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入名称" />

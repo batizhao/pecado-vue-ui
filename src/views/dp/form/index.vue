@@ -64,7 +64,7 @@
 
     <el-table v-loading="loading" :data="formList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
+      <el-table-column label="表单Key" align="center" prop="formKey" />
       <el-table-column label="表单名称" align="center" prop="name" />
       <el-table-column label="表单描述" align="center" prop="description" />
       <el-table-column label="状态" align="center">
