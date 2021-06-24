@@ -96,7 +96,7 @@
 
 <script>
 import { listTasks, getTask, submitTask } from "@/api/oa/task";
-import { getForm } from "@/api/dp/form";
+import { getFormByKey } from "@/api/dp/form";
 
 export default {
   name: "Task",
@@ -148,9 +148,6 @@ export default {
   },
   created() {
     this.getList();
-    getForm(2).then( response => {
-      this.jsonData = JSON.parse(response.data.metadata);
-    });
   },
   methods: {
     /** 查询审批列表 */
@@ -213,7 +210,19 @@ export default {
       this.reset();
       const id = row.taskId || this.ids
       getTask(id).then(response => {
-        this.form = response.data.checkUserList[0];
+        const formKey = response.data.config.config.form.pcPath;
+        getFormByKey(formKey).then( res => {
+          this.jsonData = JSON.parse(res.data.metadata);
+        });
+        /**
+         * TODO: 
+         * 1、jsonData 第一次加载表单出不来，要关闭再打开一次。
+         * 2、拼接 row.url(/oa/comment/) + row.appId 发起一次后端调用
+         * 3、因为这里的 url 和 appId 是动态的（会有不同模块的 url 和 id 拼接），所以没办法预先 import 函数
+         * 4、返回的数据和 jsonData 绑定回显在表单，替换下边的 response.data.checkUserList[0];
+         * 5、点击“审核”，表单能成功回显数据就表示成功
+         */
+        this.form = response.data.checkUserList[0]; //现在这个赋值是不对的
         this.open = true;
         this.title = "编辑审批";
       });

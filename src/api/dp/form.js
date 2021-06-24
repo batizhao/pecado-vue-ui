@@ -13,6 +13,11 @@ export function getForm(id) {
   return request(`/dp/form/${id}`);
 }
 
+// 通过key查询表单
+export function getFormByKey(key) {
+  return request(`/dp/form?key=${key}`);
+}
+
 // 添加或者编辑表单
 export function addOrUpdateForm(data) {
   return request({

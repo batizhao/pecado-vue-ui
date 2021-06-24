@@ -105,7 +105,8 @@
 
 <script>
 import { listComments, getComment, deleteComment, addOrUpdateComment, changeCommentStatus } from "@/api/oa/comment";
-import { getForm } from "@/api/dp/form";
+import { getFormByKey } from "@/api/dp/form";
+import { getProcessDefinition } from "@/api/oa/task";
 
 export default {
   name: "Comment",
@@ -157,8 +158,11 @@ export default {
   },
   created() {
     this.getList();
-    getForm(1).then( response => {
-      this.jsonData = JSON.parse(response.data.metadata);
+    getProcessDefinition('jsoa_njfw').then( response => {
+      const formKey = response.data.view.config.config.form.pcPath;
+      getFormByKey(formKey).then( res => {
+        this.jsonData = JSON.parse(res.data.metadata);
+      });
     });
   },
   methods: {
