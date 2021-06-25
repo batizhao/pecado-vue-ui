@@ -217,9 +217,11 @@ export default {
     },    
     /** 添加按钮操作 */
     handleAdd() {
-      this.reset();
-      this.title = "添加审批";
-      this.open = true;
+      // this.reset();
+      // this.title = "添加审批";
+      // this.open = true;
+      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
+      this.$router.push({ name:"examineForm", params:{id:1}, query:{type:'comment'} });
     },
     /** 编辑按钮操作 */
     handleUpdate(row) {

@@ -97,6 +97,7 @@
 <script>
 import { listTasks, getTask, submitTask } from "@/api/oa/task";
 import { getFormByKey } from "@/api/dp/form";
+import { getFromUrl }  from "@/api/common";
 
 export default {
   name: "Task",
@@ -207,25 +208,22 @@ export default {
     },
     /** 编辑按钮操作 */
     handleUpdate(row) {
-      this.reset();
-      const id = row.taskId || this.ids
-      getTask(id).then(response => {
-        const formKey = response.data.config.config.form.pcPath;
-        getFormByKey(formKey).then( res => {
-          this.jsonData = JSON.parse(res.data.metadata);
-        });
-        /**
-         * TODO: 
-         * 1、jsonData 第一次加载表单出不来，要关闭再打开一次。
-         * 2、拼接 row.url(/oa/comment/) + row.appId 发起一次后端调用
-         * 3、因为这里的 url 和 appId 是动态的（会有不同模块的 url 和 id 拼接），所以没办法预先 import 函数
-         * 4、返回的数据和 jsonData 绑定回显在表单，替换下边的 response.data.checkUserList[0];
-         * 5、点击“审核”，表单能成功回显数据就表示成功
-         */
-        this.form = response.data.checkUserList[0]; //现在这个赋值是不对的
-        this.open = true;
-        this.title = "编辑审批";
+      // let url = row.url + row.appId;
+      // this.form.taskId = row.taskId;
+      // this.form.procInstId = row.procInstId
+      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
+      this.$router.push({
+        name:"examineForm",
+        params:{id: row.taskId || this.ids },
+        query:{
+          type:'task',
+          appId:row.appId,
+          url: row.url + row.appId,
+          taskId:row.taskId,
+          procInstId:row.procInstId
+        }
       });
+      
     },
     /** 提交按钮 */
     submitForm() {

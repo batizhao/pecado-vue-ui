@@ -143,6 +143,20 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/examing-form',
+    component: Layout,
+    redirect: 'noRedirect',
+    hidden: true,
+    children: [
+      {
+        path: '/examing-form/:id?',
+        component: (resolve) => require(['@/views/oa/comment/examine-form/index.vue'], resolve),
+        name: 'examineForm',
+        meta: { title: '表单审核', icon: 'form'}
+      }
+    ]
+  },
 ]
 
 export default new Router({
