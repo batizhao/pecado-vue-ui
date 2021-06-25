@@ -213,19 +213,23 @@ export default {
     },    
     /** 添加按钮操作 */
     handleAdd() {
-      this.reset();
-      this.title = "添加审批";
-      this.open = true;
+      // this.reset();
+      // this.title = "添加审批";
+      // this.open = true;
+      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
+      this.$router.push({name:"examineForm",params:{id:1}});
     },
     /** 编辑按钮操作 */
     handleUpdate(row) {
-      this.reset();
-      const id = row.id || this.ids
-      getComment(id).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "编辑审批";
-      });
+      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
+      this.$router.push({name:"examineForm",params:{id: row.id || this.ids}});
+      // this.reset();
+      // const id = row.id || this.ids
+      // getComment(id).then(response => {
+      //   this.form = response.data;
+      //   this.open = true;
+      //   this.title = "编辑审批";
+      // });
     },
     /** 提交按钮 */
     submitForm() {
