@@ -53,8 +53,7 @@
   </div>
 </template>
 <script>
-import { addOrUpdateComment } from "@/api/oa/comment";
-import { listTasks, getTask, submitTask } from "@/api/oa/task";
+import { getTask, submitTask } from "@/api/oa/task";
 import { getFormByKey,getForm } from "@/api/dp/form";
 import { getFromUrl }  from "@/api/common";
 
@@ -119,7 +118,7 @@ export default {
     submitForm(){//表单数据提交
       this.submitLoading = true;
       this.$refs.form.getData().then(data => {
-        addOrUpdateComment(data).then(response => {
+        submitTask(data).then(response => {
           this.msgSuccess("保存成功");
           this.submitLoading = false;
         }).catch( err => {
