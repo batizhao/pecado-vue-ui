@@ -15,39 +15,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['oa:comment:add']"
-        >添加</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['oa:comment:edit']"
-        >编辑</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['oa:comment:delete']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['oa:comment:export']"
-        >导出</el-button>
+        >拟稿</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -61,7 +29,7 @@
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             type="text"
@@ -75,7 +43,7 @@
             v-hasPermi="['oa:comment:delete']"
           >删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     
     <pagination
@@ -217,11 +185,11 @@ export default {
     },    
     /** 添加按钮操作 */
     handleAdd() {
-      // this.reset();
-      // this.title = "添加审批";
-      // this.open = true;
-      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-      this.$router.push({ name:"examineForm", params:{id:1}, query:{type:'comment'} });
+      this.reset();
+      this.title = "添加审批";
+      this.open = true;
+      // this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
+      // this.$router.push({ name:"examineForm", params:{id:1}, query:{type:'comment'} });
     },
     /** 编辑按钮操作 */
     handleUpdate(row) {

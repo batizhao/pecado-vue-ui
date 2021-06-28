@@ -6,7 +6,7 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-row :gutter="10" class="mb8">
+    <!-- <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
           type="primary"
@@ -48,7 +48,7 @@
           @click="handleExport"
           v-hasPermi="['oa:comment:export']"
         >导出</el-button>
-      </el-col>
+      </el-col> -->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
     <el-table v-loading="loading" :data="taskList" @selection-change="handleSelectionChange">
