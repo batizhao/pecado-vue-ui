@@ -283,8 +283,12 @@ export default {
     },
     /** 设计表单操作 */
     handleFormDesign(row) {
-      const id = row.id || this.ids[0];
-      this.$router.push("/code/form/" + id);
+      this.$router.push({
+        name: "FormDesign", 
+        params: {
+          formKey: row.formKey
+        } 
+      });
     },
     /** 删除按钮操作 */
     handleDelete(row) {

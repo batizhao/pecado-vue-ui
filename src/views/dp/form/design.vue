@@ -16,23 +16,26 @@
 </template>
 
 <script>
-import { addFormMetaData, getForm } from "@/api/dp/form";
+import { addFormMetaData, getFormByKey } from "@/api/dp/form";
 
 export default {
+  name: "FormDesign",
   data() {
     return {
       id: 0,
+      formKey: "",
       metadata: "{}"
     }
   },
   methods: {
     handleFormReady () {
-      const id = this.$route.params && this.$route.params.id;
-      if (id) {
-        this.id = id
+      const formKey = this.$route.params && this.$route.params.formKey;
+      if (formKey) {
+        this.formKey = formKey
         // 获取表单详细信息
-        getForm(id).then(res => {
+        getFormByKey(formKey).then(res => {
           this.metadata = res.data.metadata;
+          this.id = res.data.id;
           if (this.metadata) {
             this.$refs.makingform.setJSON(JSON.parse(this.metadata))
           }
