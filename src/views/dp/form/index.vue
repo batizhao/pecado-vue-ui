@@ -248,8 +248,7 @@ export default {
     },
     /** 设计按钮操作 */
     handleDesign(row) {
-      const id = row.id || this.ids[0];
-      this.$router.push("/form/design/" + id);
+      this.$router.push("/form/design/" + row.formKey);
     },
     /** 提交按钮 */
     submitForm() {
