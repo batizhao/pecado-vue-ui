@@ -106,3 +106,8 @@ export function changeUserDepartments(departments) {
 export function listLeaderByDepartmentId(departmentId, type) {
   return request(`/ims/user/leader?departmentId=${departmentId}&type=${type}`);
 }
+
+// 查询登录用户的部门领导
+export function listLeader() {
+  return request('/ims/user/dept/leader');
+}
