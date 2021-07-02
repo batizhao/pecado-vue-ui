@@ -145,7 +145,7 @@ export const constantRoutes = [
     children: [
       {
         path: '/examing-form/:id?',
-        component: (resolve) => require(['@/views/oa/comment/examine-form/index.vue'], resolve),
+        component: (resolve) => require(['@/views/oa/task/examine-form/index.vue'], resolve),
         name: 'examineForm',
         meta: { title: '表单审核', icon: 'form'}
       }

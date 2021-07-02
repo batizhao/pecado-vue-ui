@@ -96,8 +96,6 @@
 
 <script>
 import { listTasks, getTask, submitTask } from "@/api/oa/task";
-import { getFormByKey } from "@/api/dp/form";
-import { getFromUrl }  from "@/api/common";
 
 export default {
   name: "Task",
@@ -220,7 +218,9 @@ export default {
           appId:row.appId,
           url: row.url + row.appId,
           taskId:row.taskId,
-          procInstId:row.procInstId
+          procInstId:row.procInstId,
+          taskDefKey:row.taskDefKey,
+          procDefId:row.procDefId,
         }
       });
       
