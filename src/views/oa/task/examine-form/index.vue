@@ -65,18 +65,20 @@ export default {
     getTask(id).then(response => {
       this.processDefinitionData = response.data || {};
       const formKey = response.data.config.config.form.pcPath;
+      console.log("formKey:",formKey);
       getFormByKey(formKey).then( res => {
-
         this.jsonData = JSON.parse(res.data.metadata);
-        let url = this.routerQuery.url;
-        getFromUrl(url).then( formUlrRes => {
-
-          this.form = JSON.parse(JSON.stringify(formUlrRes.data || {}));
-          this.form.taskId = this.routerQuery.taskId;
-          this.form.procInstId = this.routerQuery.procInstId
-
+        this.form.taskId = this.routerQuery.taskId;
+        this.form.procInstId = this.routerQuery.procInstId
+        if (this.routerQuery.url && this.routerQuery.appId !== null) {
+          let url = this.routerQuery.url + this.routerQuery.appId;
+          getFromUrl(url).then( formUlrRes => {
+            this.form = JSON.parse(JSON.stringify(formUlrRes.data || {}));
+            this.dataLoad = true;
+          })
+        }else{
           this.dataLoad = true;
-        })
+        }
       });
     })
   },

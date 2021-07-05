@@ -216,7 +216,8 @@ export default {
         query:{
           type:'task',
           appId:row.appId,
-          url: row.url + row.appId,
+          url:row.url,
+          appId:row.appId,
           taskId:row.taskId,
           procInstId:row.procInstId,
           taskDefKey:row.taskDefKey,

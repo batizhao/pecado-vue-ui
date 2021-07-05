@@ -14,6 +14,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
+          :loading="handleAddLoading"
           v-hasPermi="['oa:comment:add']"
         >拟稿</el-button>
       </el-col>
@@ -54,7 +55,7 @@
       @pagination="getList"
     />
     <!-- 添加或编辑审批对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="800px" v-if="open" append-to-body :close-on-click-modal="false">  
+    <el-dialog :title="title" :visible.sync="open" width="80%" v-if="open" append-to-body :close-on-click-modal="false">  
       <el-steps :active="active" finish-status="success">
         <el-step title="步骤1"></el-step>
         <el-step title="步骤2"></el-step>
@@ -143,16 +144,21 @@ export default {
       active: 0,
       //拟稿提交按钮loading
       submitLoading:false,
-
+      //拟稿按钮loading
+      handleAddLoading:false
     };
   },
   created() {
     this.getList();
+    this.handleAddLoading = true;
     getProcessDefinition('jsoa_njfw').then( response => {
       this.processDefinitionData = response.data || {};
       const formKey = response.data.view.config.config.form.pcPath;
       getFormByKey(formKey).then( res => {
         this.jsonData = JSON.parse(res.data.metadata);
+        this.handleAddLoading = false;
+      }).catch( err => {
+        this.handleAddLoading = false;
       });
     });
   },
@@ -211,7 +217,10 @@ export default {
       this.reset();
       this.title = "拟稿";
       this.active = 0;
-      this.open = true;
+      this.$forceUpdate();
+      this.$nextTick( () => {
+        this.open = true;
+      })
     },
     /** 编辑按钮操作 */
     handleUpdate(row) {
