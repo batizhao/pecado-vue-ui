@@ -55,7 +55,7 @@
       @pagination="getList"
     />
     <!-- 添加或编辑审批对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="80%" v-if="open" append-to-body :close-on-click-modal="false">  
+    <el-dialog :title="title" :visible.sync="open" width="800px" v-if="open" append-to-body :close-on-click-modal="false">  
       <el-steps :active="active" finish-status="success">
         <el-step title="步骤1"></el-step>
         <el-step title="步骤2"></el-step>
@@ -158,8 +158,12 @@ export default {
         this.jsonData = JSON.parse(res.data.metadata);
         this.handleAddLoading = false;
       }).catch( err => {
+        console.log(err);
         this.handleAddLoading = false;
       });
+    }).catch( err => {
+      console.log(err);
+      this.handleAddLoading = false;
     });
   },
   methods: {

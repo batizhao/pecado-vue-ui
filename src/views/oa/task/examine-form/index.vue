@@ -105,6 +105,8 @@ export default {
         submitData.processDefinitionId = config.processDefId;
         submitData.procInstId = this.routerQuery.procInstId;
         submitData.taskId = this.routerQuery.taskId;
+        submitData.id = this.form.id;
+        submitData.title = this.form.title;
         submitTask(submitData).then(response => {
           this.msgSuccess("保存成功");
           this.submitLoading = false;
