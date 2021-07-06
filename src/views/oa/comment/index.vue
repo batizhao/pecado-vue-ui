@@ -14,6 +14,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
+          :loading="handleAddLoading"
           v-hasPermi="['oa:comment:add']"
         >拟稿</el-button>
       </el-col>
@@ -54,20 +55,31 @@
       @pagination="getList"
     />
     <!-- 添加或编辑审批对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" v-if="open" append-to-body>   
-      <fm-generate-form
-        :data="jsonData"
-        :remote-option="dynamicData"
-        :remote="remoteFuncs"
-        :value="form"
-        ref="form"
-      >
-      </fm-generate-form>
+    <el-dialog :title="title" :visible.sync="open" width="800px" v-if="open" append-to-body :close-on-click-modal="false">  
+      <el-steps :active="active" finish-status="success">
+        <el-step title="步骤1"></el-step>
+        <el-step title="步骤2"></el-step>
+      </el-steps>
+      <el-row class="step-body">
+        <fm-generate-form
+          v-show="active == 0"
+          :data="jsonData"
+          :remote-option="dynamicData"
+          :remote="remoteFuncs"
+          :value="form"
+          ref="form"
+        >
+        </fm-generate-form>
+        <ExamineDialog v-show="active == 1" ref="examineDialog"/>
+      </el-row>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button v-if="active == 1" @click="preStep()">上一步</el-button>
+        <el-button v-if="active == 0" @click="nextStep()">下一步</el-button>
+        <el-button v-if="active == 1" type="primary" :loading="submitLoading" @click="submitForm()">确定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
   </div>
 </template>
 
@@ -75,10 +87,12 @@
 import { listComments, getComment, deleteComment, addOrUpdateComment, changeCommentStatus } from "@/api/oa/comment";
 import { getFormByKey } from "@/api/dp/form";
 import { getProcessDefinition } from "@/api/oa/task";
+import ExamineDialog from '@/views/oa/task/examine-dialog/index.vue'
 
 export default {
   name: "Comment",
   components: {
+    ExamineDialog
   },
   data() {
     return {
@@ -121,16 +135,35 @@ export default {
         comment: [
           { required: true, message: "意见不能为空", trigger: "blur" }
         ],
-      }
+      },
+      //流程数据
+      processDefinitionData:{},
+      //表单接口提交数据
+      submitFormData:{},
+      //步骤数
+      active: 0,
+      //拟稿提交按钮loading
+      submitLoading:false,
+      //拟稿按钮loading
+      handleAddLoading:false
     };
   },
   created() {
     this.getList();
+    this.handleAddLoading = true;
     getProcessDefinition('jsoa_njfw').then( response => {
+      this.processDefinitionData = response.data || {};
       const formKey = response.data.view.config.config.form.pcPath;
       getFormByKey(formKey).then( res => {
         this.jsonData = JSON.parse(res.data.metadata);
+        this.handleAddLoading = false;
+      }).catch( err => {
+        console.log(err);
+        this.handleAddLoading = false;
       });
+    }).catch( err => {
+      console.log(err);
+      this.handleAddLoading = false;
     });
   },
   methods: {
@@ -186,10 +219,12 @@ export default {
     /** 添加按钮操作 */
     handleAdd() {
       this.reset();
-      this.title = "添加审批";
-      this.open = true;
-      // this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-      // this.$router.push({ name:"examineForm", params:{id:1}, query:{type:'comment'} });
+      this.title = "拟稿";
+      this.active = 0;
+      this.$forceUpdate();
+      this.$nextTick( () => {
+        this.open = true;
+      })
     },
     /** 编辑按钮操作 */
     handleUpdate(row) {
@@ -201,16 +236,53 @@ export default {
         this.title = "编辑审批";
       });
     },
-    /** 提交按钮 */
+    /** 拟稿提交按钮 */
     submitForm() {
-      this.$refs.form.getData().then(data => {
-        addOrUpdateComment(data).then(response => {
+      this.submitLoading = true;
+      console.log(this.submitFormData);
+      this.$refs.examineDialog.getExamineData().then( flowData =>{
+        console.log(flowData);
+        const submitData = { task:{processNodeDTO:flowData},comment:{} };
+        let { dto,view } = this.processDefinitionData;
+        submitData.task.current = view.dto.id;
+        submitData.task.processDefinitionId = dto.id;
+        Object.assign(submitData.comment, this.submitFormData);
+        // submitData.comment.id = 1;
+        submitData.comment.id = undefined;
+        console.log("submitData:",submitData);
+        
+        addOrUpdateComment(submitData).then(response => {
           this.msgSuccess("保存成功");
-          this.open = false;
           this.getList();
+          this.open = false;
+          this.submitLoading = false;
+        }).catch( err => {
+          this.submitLoading = false;
+          console.log(err);
         });
+      }).catch( err => {
+        console.log(err);
       })
     },
+    /**拟稿弹框下一步 */
+    nextStep(){
+      this.$refs.form.getData().then(data => {
+        this.active = 1;
+        this.submitFormData = data;
+        const examineData = {
+          processDefinitionId:this.processDefinitionData.dto.id,
+          taskDefKey:this.processDefinitionData.view.dto.id
+        }
+        this.$nextTick( () => {
+          this.$refs.examineDialog.show(examineData);
+        })
+      })
+    },
+    /**拟稿弹框上一步 */
+    preStep(){
+      this.active = 0;
+    },
+
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
@@ -243,3 +315,8 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.step-body {
+	padding: 50px;
+}
+</style>
