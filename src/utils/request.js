@@ -9,7 +9,6 @@ axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 axios.defaults.validateStatus = function (status) {
   return status >= 200 && status <= 500 // 默认的
 }
-
 // 创建axios实例
 const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
@@ -54,6 +53,7 @@ service.interceptors.request.use(config => {
 //响应拦截器
 service.interceptors.response.use(res => {
   // 未设置状态码则默认成功状态
+
   const status = Number(res.status) || 200
   const message = res.data.message || errorCode[status] || errorCode['default']
   // token 过期

@@ -1,7 +1,8 @@
 'use strict'
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
-
+const cdnDependencies = require('./dependencies-cdn')
+const { chain, set, each } = require('lodash')
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
@@ -9,6 +10,34 @@ function resolve(dir) {
 const name = defaultSettings.title || '低代码系统' // 标题
 
 const port = process.env.port || process.env.npm_config_port || 80 // 端口
+
+// 设置不参与构建的库
+const externals = {}
+cdnDependencies.forEach(pkg => { externals[pkg.name] = pkg.library })
+
+// 引入文件的 cdn 链接
+const cdnJsKey = process.env.NODE_ENV === 'production' ? 'prodJs' : 'devJs'
+const cdn = {
+	css: cdnDependencies.map(e => e.css).filter(e => e),
+	js: cdnDependencies.map(e => e[cdnJsKey]).filter(e => e)
+}
+
+// 多页配置，默认未开启，如需要请参考 https://cli.vuejs.org/zh/config/#pages
+// const pages = undefined
+const pages = {
+	index: {
+		entry: 'src/main.js',
+		template: 'public/index.html',
+		filename: 'index.html',
+		chunks: ['chunk-vendors', 'chunk-common', 'index']
+	},
+	preview: {
+		entry: 'src/components/CodeEditor/views/preview/main.js',
+		template: 'public/preview.html',
+		filename: 'preview.html',
+		chunks: ['chunk-vendors', 'chunk-common', 'preview']
+	}
+}
 
 // vue.config.js 配置说明
 //官方vue.config.js 参考文档 https://cli.vuejs.org/zh/config/#css-loaderoptions
@@ -24,6 +53,7 @@ module.exports = {
   assetsDir: 'static',
   // 是否开启eslint保存检测，有效值：ture | false | 'error'
   lintOnSave: process.env.NODE_ENV === 'development',
+  pages,
   // 如果你不需要生产环境的 source map，可以将其设置为 false 以加速生产环境构建。
   productionSourceMap: false,
   // webpack-dev-server 相关配置
@@ -49,9 +79,19 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
-    }
+    },
+    externals
   },
   chainWebpack(config) {
+    const htmlPluginNames = chain(pages).keys().map(page => 'html-' + page).value()
+		const targetHtmlPluginNames = htmlPluginNames.length ? htmlPluginNames : ['html']
+		each(targetHtmlPluginNames, name => {
+			config.plugin(name).tap(options => {
+				set(options, '[0].cdn', process.env.NODE_ENV === 'production' ? cdn : cdn)
+				return options
+			})
+		})
+
     config.plugins.delete('preload') // TODO: need test
     config.plugins.delete('prefetch') // TODO: need test
 
@@ -65,7 +105,7 @@ module.exports = {
     config.module
       .rule('icons')
       .test(/\.svg$/)
-      .include.add(resolve('src/assets/icons'))
+      .include.add([resolve('src/assets/icons'),resolve('src/components/CodeEditor/icons')])
       .end()
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')
@@ -73,6 +113,14 @@ module.exports = {
         symbolId: 'icon-[name]'
       })
       .end()
+    // image exclude
+		const imagesRule = config.module.rule('images')
+		imagesRule
+			.test(/\.(png|jpe?g|gif|webp|svg)(\?.*)?$/)
+			.exclude
+			.add(resolve('src/assets/svg-icons/icons'))
+			.add(resolve('src/components/CodeEditor/icons'))
+			.end()
 
     config
       .when(process.env.NODE_ENV !== 'development',

@@ -11,6 +11,7 @@ import App from './App'
 import store from './store'
 import router from './router'
 import permission from './directive/permission'
+import D2Crud from '@d2-projects/d2-crud'
 
 import './assets/icons' // icon
 import './permission' // permission control
@@ -60,7 +61,7 @@ Vue.use(permission)
 // Vue.use(FormMaking)
 
 Vue.use(VueI18n)
-
+Vue.use(D2Crud)
 
 const messages = {
   'en': {

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title>form-generator-preview</title>
+    <link href="https://lib.baomitu.com/element-ui/2.13.2/theme-chalk/index.css" rel="stylesheet">
+    <script src="https://lib.baomitu.com/vue/2.6.11/vue.min.js"></script>
+    <script src="https://lib.baomitu.com/vue-router/3.1.3/vue-router.min.js"></script>
+    <script src="https://lib.baomitu.com/element-ui/2.13.2/index.js"></script>
+
+    <!-- 使用 CDN 加速的 CSS 文件，配置在 vue.config.js 下 -->
+    <% for (var i in htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.css) { %>
+    <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="preload" as="style">
+    <link href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" rel="stylesheet">
+    <% } %>
+    <!-- 使用 CDN 加速的 JS 文件，配置在 vue.config.js 下 -->
+    <% for (var i in htmlWebpackPlugin.options.cdn&&htmlWebpackPlugin.options.cdn.js) { %>
+    <script src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>
+    <% } %>
+
+    <style>
+			body {
+				overflow-x: hidden;
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+				padding: 12px;
+				height: calc(100vh - 33px);
+				font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+				-moz-osx-font-smoothing: grayscale;
+				-webkit-font-smoothing: antialiased;
+				text-rendering: optimizeLegibility;
+			}
+			input,
+			textarea {
+				font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+			}
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <strong>抱歉，javascript被禁用，请开启后重试。</strong>
+    </noscript>
+    <div id="previewApp"></div>
+  </body>
+</html>

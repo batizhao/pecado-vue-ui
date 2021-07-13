@@ -54,6 +54,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/editor',
+    component: (resolve) => require(['@/views/page1/index.vue'], resolve),
+    hidden: true
+  },
+  {
     path: '',
     component: Layout,
     redirect: 'dashboard',
