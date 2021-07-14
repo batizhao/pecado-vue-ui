@@ -64,7 +64,7 @@ module.exports = {
     proxy: {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
-        target: `http://localhost:8888`,
+        target: `http://172.168.0.191:8888`,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
@@ -100,7 +100,7 @@ module.exports = {
     // set svg-sprite-loader
     config.module
       .rule('svg')
-      .exclude.add(resolve('src/assets/icons'))
+      .exclude.add([resolve('src/assets/icons'),resolve('src/components/CodeEditor/icons')])
       .end()
     config.module
       .rule('icons')
@@ -113,14 +113,6 @@ module.exports = {
         symbolId: 'icon-[name]'
       })
       .end()
-    // image exclude
-		const imagesRule = config.module.rule('images')
-		imagesRule
-			.test(/\.(png|jpe?g|gif|webp|svg)(\?.*)?$/)
-			.exclude
-			.add(resolve('src/assets/svg-icons/icons'))
-			.add(resolve('src/components/CodeEditor/icons'))
-			.end()
 
     config
       .when(process.env.NODE_ENV !== 'development',
