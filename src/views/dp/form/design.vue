@@ -1,30 +1,26 @@
 <template>
   <div class="app-container">
-    <fm-making-form
-      ref="makingform"
-      style="height: 820px;"
-      preview
-      generate-code
-      generate-json
-      @ready="handleFormReady"
-    >
-      <template slot="action">
-        <el-button type="text" icon="el-icon-upload" @click="handleSave">保存</el-button>
-      </template>
-    </fm-making-form>    
+    <codeEditor
+    :list="list"
+    @save="handleSave"
+     />
   </div>
 </template>
 
 <script>
-import { addFormMetaData, getFormByKey } from "@/api/dp/form";
+import codeEditor from '@/components/CodeEditor/views/index/Home.vue'
 
 export default {
   name: "FormDesign",
+  components: {
+		codeEditor
+	},
   data() {
     return {
       id: 0,
       formKey: "",
-      metadata: "{}"
+      metadata: "{}",
+      list:[]
     }
   },
   methods: {
@@ -44,14 +40,15 @@ export default {
         });
       }
     },
-    handleSave () {
-      const json = this.$refs.makingform.getJSON()
-      addFormMetaData(this.id, JSON.stringify(json)).then(res => {
-        this.msgSuccess(res.message);
-        if (res.code === 0) {
-          this.close();
-        }
-      });
+    handleSave (args) {
+      console.log(args)
+      // const json = this.$refs.makingform.getJSON()
+      // addFormMetaData(this.id, JSON.stringify(json)).then(res => {
+      //   this.msgSuccess(res.message);
+      //   if (res.code === 0) {
+      //     this.close();
+      //   }
+      // });
     },
     /** 关闭按钮 */
     close() {

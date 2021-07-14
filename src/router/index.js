@@ -53,11 +53,7 @@ export const constantRoutes = [
     component: (resolve) => require(['@/views/error/401'], resolve),
     hidden: true
   },
-  {
-    path: '/editor',
-    component: (resolve) => require(['@/views/page1/index.vue'], resolve),
-    hidden: true
-  },
+
   {
     path: '',
     component: Layout,

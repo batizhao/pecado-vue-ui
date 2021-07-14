@@ -21,8 +21,6 @@ import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, 
 import Pagination from "@/components/Pagination";
 // 自定义表格工具扩展
 import RightToolbar from "@/components/RightToolbar"
-import FormMaking from '@/lib/vue-form-making'
-import '@/lib/vue-form-making/dist/FormMaking.css'
 
 import VueI18n from 'vue-i18n'
 import enLocale from 'element-ui/lib/locale/lang/en'
@@ -58,7 +56,6 @@ Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
 
 Vue.use(permission)
-// Vue.use(FormMaking)
 
 Vue.use(VueI18n)
 Vue.use(D2Crud)
@@ -99,7 +96,7 @@ Vue.use(Element, {
  * please remove it before going online! ! !
  */
 
- Vue.use(FormMaking, {lang: 'zh-CN', i18n})
+
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size

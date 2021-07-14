@@ -42,7 +42,7 @@
 
 		<div class="center-board">
 			<div class="action-bar">
-				<el-button icon="el-icon-video-play" type="text" @click="save">
+				<el-button icon="el-icon-circle-check" type="text" @click="save">
 					保存
 				</el-button>
 				<el-button icon="el-icon-video-play" type="text" @click="run">
@@ -170,6 +170,12 @@ export default {
 		CodeTypeDialog,
 		DraggableItem
 	},
+  props:{
+    list:{
+      type:Array,
+      default:()=>[]
+    }
+  },
 	data() {
 		return {
 			logo,
@@ -179,9 +185,9 @@ export default {
 			selectComponents,
 			layoutComponents,
 			labelWidth: 100,
-			drawingList: drawingDefalut,
+			drawingList: deepClone(this.list),
 			drawingData: {},
-			activeId: drawingDefalut[0].formId,
+			activeId: null,
 			drawerVisible: false,
 			formData: {},
 			dialogVisible: false,
@@ -242,12 +248,19 @@ export default {
 		}
 	},
 	mounted() {
-		if (Array.isArray(drawingListInDB) && drawingListInDB.length > 0) {
-			this.drawingList = drawingListInDB
+    if (Array.isArray(this.list) && this.list.length > 0) {
+			this.drawingList = deepClone(this.list)
 		} else {
 			this.drawingList = drawingDefalut
 		}
 		this.activeFormItem(this.drawingList[0])
+
+		// if (Array.isArray(drawingListInDB) && drawingListInDB.length > 0) {
+		// 	this.drawingList = drawingListInDB
+		// } else {
+		// 	this.drawingList = drawingDefalut
+		// }
+		// this.activeFormItem(this.drawingList[0])
 		if (formConfInDB) {
 			this.formConf = formConfInDB
 		}
@@ -414,12 +427,12 @@ export default {
 			this.jsonDrawerVisible = true
 		},
 		save() {
-			console.log('save')
 			this.AssembleFormData()
 			// 提交数据
 			// JS,CSS,HTML,JSON
-			console.log(this.formData)
-			this.$emit('save', this.formData)
+			this.$emit('save', {
+        formData:this.formData
+      })
 		},
 		// 清空所有组件
 		clearAll () {
