@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <codeEditor
-    :list="list"
+    :pageData="pageData"
     @save="handleSave"
      />
   </div>
@@ -20,7 +20,7 @@ export default {
       id: 0,
       formKey: "",
       metadata: "{}",
-      list:[]
+      pageData:{}
     }
   },
   methods: {

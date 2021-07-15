@@ -171,9 +171,11 @@ export default {
 		DraggableItem
 	},
   props:{
-    list:{
-      type:Array,
-      default:()=>[]
+    pageData:{
+      type:Object,
+      default:_=>{
+        return {}
+      }
     }
   },
 	data() {
@@ -185,7 +187,7 @@ export default {
 			selectComponents,
 			layoutComponents,
 			labelWidth: 100,
-			drawingList: deepClone(this.list),
+			drawingList: [],
 			drawingData: {},
 			activeId: null,
 			drawerVisible: false,
@@ -248,12 +250,21 @@ export default {
 		}
 	},
 	mounted() {
-    if (Array.isArray(this.list) && this.list.length > 0) {
-			this.drawingList = deepClone(this.list)
+    if (Array.isArray(this.pageData.fields) && this.pageData.fields.length > 0) {
+			this.drawingList = deepClone(this.pageData.fields)
+      this.formConf = deepClone(this.pageData)
+      delete this.formConf.fields
 		} else {
 			this.drawingList = drawingDefalut
 		}
 		this.activeFormItem(this.drawingList[0])
+
+    // if (Array.isArray(this.list) && this.list.length > 0) {
+		// 	this.drawingList = deepClone(this.list)
+		// } else {
+			// this.drawingList = drawingDefalut
+		// }
+		// this.activeFormItem(this.drawingList[0])
 
 		// if (Array.isArray(drawingListInDB) && drawingListInDB.length > 0) {
 		// 	this.drawingList = drawingListInDB
@@ -261,9 +272,9 @@ export default {
 		// 	this.drawingList = drawingDefalut
 		// }
 		// this.activeFormItem(this.drawingList[0])
-		if (formConfInDB) {
-			this.formConf = formConfInDB
-		}
+		// if (formConfInDB) {
+		// 	this.formConf = formConfInDB
+		// }
 		loadBeautifier(btf => {
 			beautifier = btf
 		})
