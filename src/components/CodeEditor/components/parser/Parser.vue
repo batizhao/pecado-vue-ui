@@ -22,7 +22,7 @@ const layouts = {
 		let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
 		if (config.showLabel === false) labelWidth = '0'
 		return (
-			<el-col span={config.span}>
+			<el-col v-show={config.show} span={config.span}>
 				<el-form-item label-width={labelWidth} prop={scheme.__vModel__}
 					label={config.showLabel ? config.label : ''}>
 					<render conf={scheme} on={listeners} />
@@ -38,7 +38,7 @@ const layouts = {
 			</el-row>
 		}
 		return (
-			<el-col span={scheme.span}>
+			<el-col v-show={config.show} span={scheme.span}>
 				<el-row gutter={scheme.gutter}>
 					{child}
 				</el-row>
@@ -52,7 +52,7 @@ const layouts = {
 		const child = renderChildren.apply(this, arguments)
 
 		return (
-			<el-col span={config.span}>
+			<el-col v-show={config.show} span={config.span}>
 				<render conf={scheme} on={listeners} />
 			</el-col>
 		)

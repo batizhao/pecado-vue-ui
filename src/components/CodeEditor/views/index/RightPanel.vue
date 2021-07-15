@@ -108,7 +108,7 @@
 						</el-form-item>
 					</template>
 					<el-form-item v-if="activeData.__vModel__!==undefined" label="字段名">
-						<el-input disabled v-model="activeData.__vModel__" placeholder="请输入字段名（v-model）" />
+						<el-input v-model="activeData.__vModel__" placeholder="请输入字段名（v-model）" />
 					</el-form-item>
 					<el-form-item v-if="activeData.__config__.componentName!==undefined" label="组件名">
 						{{activeData.__config__.componentName}}
@@ -611,6 +611,9 @@
 					<el-form-item v-if="activeData.disabled !== undefined" label="是否禁用">
 						<el-switch v-model="activeData.disabled" />
 					</el-form-item>
+          <el-form-item v-if="activeData.__config__.show !== undefined" label="是否显示">
+							<el-switch v-model="activeData.__config__.show"/>
+						</el-form-item>
 					<el-form-item v-if="activeData.__config__.tag === 'el-select'" label="能否搜索">
 						<el-switch v-model="activeData.filterable" />
 					</el-form-item>

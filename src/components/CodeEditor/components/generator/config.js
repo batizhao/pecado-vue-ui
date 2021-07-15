@@ -27,6 +27,7 @@ export const inputComponents = [
 			required: true,
 			layout: 'colFormItem',
 			span: 24,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/input',
 			// 正则校验规则
 			regList: []
@@ -60,6 +61,7 @@ export const inputComponents = [
 			span: 24,
 			regList: [],
 			changeTag: true,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/input'
 		},
 		type: 'textarea',
@@ -87,6 +89,7 @@ export const inputComponents = [
 			span: 24,
 			required: true,
 			regList: [],
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/input'
 		},
 		__slot__: {
@@ -117,6 +120,7 @@ export const inputComponents = [
 			layout: 'colFormItem',
 			required: true,
 			regList: [],
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/input-number'
 		},
 		placeholder: '',
@@ -141,6 +145,7 @@ export const inputComponents = [
 			layout: 'colFormItem',
 			required: true,
 			regList: [],
+      show:true,
 			document: 'http://tinymce.ax-z.cn'
 		},
 		placeholder: '请输入',
@@ -163,6 +168,7 @@ export const selectComponents = [
 			required: true,
 			regList: [],
 			changeTag: true,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/select'
 		},
 		__slot__: {
@@ -199,6 +205,7 @@ export const selectComponents = [
 			required: true,
 			regList: [],
 			changeTag: true,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/cascader'
 		},
 		options: [{
@@ -242,6 +249,7 @@ export const selectComponents = [
 			regList: [],
 			required: true,
 			border: false,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/radio'
 		},
 		__slot__: {
@@ -272,6 +280,7 @@ export const selectComponents = [
 			regList: [],
 			changeTag: true,
 			border: false,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/checkbox'
 		},
 		__slot__: {
@@ -302,6 +311,7 @@ export const selectComponents = [
 			required: true,
 			regList: [],
 			changeTag: true,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/switch'
 		},
 		style: {},
@@ -326,6 +336,7 @@ export const selectComponents = [
 			required: true,
 			regList: [],
 			changeTag: true,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/slider'
 		},
 		disabled: false,
@@ -348,6 +359,7 @@ export const selectComponents = [
 			required: true,
 			regList: [],
 			changeTag: true,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/time-picker'
 		},
 		placeholder: '请选择',
@@ -373,6 +385,7 @@ export const selectComponents = [
 			required: true,
 			regList: [],
 			changeTag: true,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/time-picker'
 		},
 		style: { width: '100%' },
@@ -398,6 +411,7 @@ export const selectComponents = [
 			required: true,
 			regList: [],
 			changeTag: true,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/date-picker'
 		},
 		placeholder: '请选择',
@@ -422,6 +436,7 @@ export const selectComponents = [
 			layout: 'colFormItem',
 			regList: [],
 			changeTag: true,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/date-picker'
 		},
 		style: { width: '100%' },
@@ -448,6 +463,7 @@ export const selectComponents = [
 			required: true,
 			regList: [],
 			changeTag: true,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/rate'
 		},
 		style: {},
@@ -470,6 +486,7 @@ export const selectComponents = [
 			required: true,
 			regList: [],
 			changeTag: true,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/color-picker'
 		},
 		'show-alpha': false,
@@ -494,6 +511,7 @@ export const selectComponents = [
 			changeTag: true,
 			fileSize: 2,
 			sizeUnit: 'MB',
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/upload'
 		},
 		__slot__: {
@@ -517,6 +535,7 @@ export const layoutComponents = [
 			tagIcon: 'row',
 			label: '行容器',
 			layoutTree: true,
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/layout#row-attributes'
 		},
 		type: 'default',
@@ -533,6 +552,7 @@ export const layoutComponents = [
 			tagIcon: 'button',
 			span: 24,
 			layout: 'colFormItem',
+      show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/button'
 		},
 		__slot__: {
@@ -564,6 +584,7 @@ export const layoutComponents = [
 			method: 'get',
 			dataPath: 'list',
 			dataConsumer: 'data',
+      show:true,
 			url: 'https://www.fastmock.site/mock/f8d7a54fb1e60561e2f720d5a810009d/fg/tableData',
 			pagination: false
 		},

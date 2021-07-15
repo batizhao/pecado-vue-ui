@@ -65,7 +65,7 @@ function buildDataObject(confClone, dataObject) {
 			dataObject.attrs[key] = val
 		}
 	})
-
+  // dataObject.style={display:confClone.__config__.show?undefined:'none'}
 	// 清理属性
 	clearAttrs(dataObject)
 }

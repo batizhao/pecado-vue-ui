@@ -29,7 +29,7 @@ const layouts = {
 		let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
 		if (config.showLabel === false) labelWidth = '0'
 		return (
-			<el-col span={config.span} class={className}
+			<el-col v-show={config.show} span={config.span} class={className}
 				nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
 				<el-form-item label-width={labelWidth}
 					label={config.showLabel ? config.label : ''} required={config.required}>
@@ -56,7 +56,7 @@ const layouts = {
 			</el-row>
 		}
 		return (
-			<el-col span={config.span}>
+			<el-col v-show={config.show} span={config.span}>
 				<el-row gutter={config.gutter} class={className}
 					nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
 					<span class="component-name">{config.componentName}</span>
@@ -72,7 +72,7 @@ const layouts = {
 	raw(h, currentItem, index, list) {
 		const config = currentItem.__config__
 		const child = renderChildren.apply(this, arguments)
-		return <render key={config.renderKey} conf={currentItem} onInput={ event => {
+		return <render v-show={config.show} key={config.renderKey} conf={currentItem} onInput={ event => {
 			this.$set(config, 'defaultValue', event)
 		}}>
 			{child}
@@ -87,7 +87,7 @@ const layouts = {
 		if (this.formConf.unFocusedComponentBorder) className += ' unfocus-bordered'
 
 		return (
-			<el-col span={config.span} class={className}
+			<el-col v-show={config.show} span={config.span} class={className}
 				nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
 				<render key={config.renderKey} conf={currentItem} onInput={ event => {
 					this.$set(config, 'defaultValue', event)
