@@ -580,7 +580,6 @@ export const layoutComponents = [
 			changeTag: true,
 			labelWidth: undefined,
 			label: '表格',
-			dataType: 'dynamic',
 			method: 'get',
 			dataPath: 'list',
 			dataConsumer: 'data',

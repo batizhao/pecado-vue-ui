@@ -2,11 +2,12 @@ import Vue from 'vue'
 import { loadScriptQueue } from '../../utils/loadScript'
 import axios from 'axios'
 import Tinymce from '../../components/tinymce/index.vue'
-
+import D2Crud from '@d2-projects/d2-crud'
 Vue.component('tinymce', Tinymce)
 Vue.prototype.$axios = axios
-
+Vue.use(D2Crud)
 const $previewApp = document.getElementById('previewApp')
+
 const childAttrs = {
 	file: '',
 	dialog: ' width="600px" class="dialog-width" v-if="visible" :visible.sync="visible" :modal-append-to-body="false" '

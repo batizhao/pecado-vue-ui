@@ -110,7 +110,21 @@ const layouts = {
     </el-row>`
 		str = colWrapper(scheme, str)
 		return str
-	}
+	},
+  rowTable(scheme){
+    const config = scheme.__config__
+    const type = scheme.type === 'default' ? '' : `type="${scheme.type}"`
+    const justify = scheme.type === 'default' ? '' : `justify="${scheme.justify}"`
+    const align = scheme.type === 'default' ? '' : `align="${scheme.align}"`
+    const gutter = scheme.gutter ? `:gutter="${scheme.gutter}"` : ''
+    console.log(config.tag)
+    const tagDom = tags[config.tag] ? tags[config.tag](scheme) : null
+    let str = `<el-row>
+      ${tagDom}
+    </el-row>`
+		str = colWrapper(scheme, str)
+    return str
+  }
 }
 
 const tags = {
@@ -290,7 +304,14 @@ const tags = {
 		const height = el.height ? `:height="${el.height}"` : ''
 		const branding = el.branding ? `:branding="${el.branding}"` : ''
 		return `<${tag} ${vModel} ${placeholder} ${height} ${branding}></${tag}>`
-	}
+	},
+  'd2-crud':el=>{
+    const { tag,formId } = el.__config__
+    const tableName = `crud${formId}`
+    const columns = `:columns="${tableName}.columns"`
+    const data = `:data="${tableName}.data"`
+    return `<${tag} ${columns} ${data}></${tag}>`
+  }
 }
 
 function attrBuilder(el) {

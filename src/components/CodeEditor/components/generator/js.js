@@ -27,15 +27,15 @@ export function makeUpJs(formConfig, type) {
 	const methodList = mixinMethod(type)
 	const uploadVarList = []
 	const created = []
-
+  const tableOptions = []
 	formConfig.fields.forEach(el => {
-		buildAttributes(el, dataList, ruleList, optionsList, methodList, propsList, uploadVarList, created)
+		buildAttributes(el, dataList,tableOptions, ruleList, optionsList, methodList, propsList, uploadVarList, created)
 	})
-
 	const script = buildexport(
 		formConfig,
 		type,
 		dataList.join('\n'),
+    tableOptions.join('\n'),
 		ruleList.join('\n'),
 		optionsList.join('\n'),
 		uploadVarList.join('\n'),
@@ -48,10 +48,11 @@ export function makeUpJs(formConfig, type) {
 }
 
 // 构建组件属性
-function buildAttributes(scheme, dataList, ruleList, optionsList, methodList, propsList, uploadVarList, created) {
+function buildAttributes(scheme, dataList,tableOptions, ruleList, optionsList, methodList, propsList, uploadVarList, created) {
 	const config = scheme.__config__
 	const slot = scheme.__slot__
 	buildData(scheme, dataList)
+  buildTableOptions(scheme,tableOptions)
 	buildRules(scheme, ruleList)
 
 	// 特殊处理options属性
@@ -142,11 +143,21 @@ function mixinMethod(type) {
 // 构建data
 function buildData(scheme, dataList) {
 	const config = scheme.__config__
+
 	if (scheme.__vModel__ === undefined) return
 	const defaultValue = JSON.stringify(config.defaultValue)
 	dataList.push(`${scheme.__vModel__}: ${defaultValue},`)
-}
 
+}
+function buildTableOptions(scheme,tableOptions){
+  if(scheme.__config__.tag !== 'd2-crud') return
+  const  tableOptionsArr = []
+  tableOptionsArr.push(`columns:${JSON.stringify(scheme.columns)},`)
+  tableOptionsArr.push(`data:${JSON.stringify(scheme.data)},`)
+  tableOptionsArr.push(`rowHandle:${JSON.stringify(scheme.rowHandle)},`)
+  tableOptionsArr.push(`pagination:${JSON.stringify(scheme.pagination)},`)
+  tableOptions.push(`crud${scheme.__config__.formId}:{${tableOptionsArr.join('\n')}},`)
+}
 // 构建校验规则
 function buildRules(scheme, ruleList) {
 	const config = scheme.__config__
@@ -239,8 +250,8 @@ function buildOptionMethod(methodName, model, methodList, scheme) {
 }
 
 // js整体拼接
-function buildexport(conf, type, data, rules, selectOptions, uploadVar, props, methods, created) {
-	const str = `${exportDefault}{
+function buildexport(conf, type, data,tableOptions, rules, selectOptions, uploadVar, props, methods, created) {
+  const str = `${exportDefault}{
   ${inheritAttrs[type]}
   components: {},
   props: [],
@@ -249,9 +260,11 @@ function buildexport(conf, type, data, rules, selectOptions, uploadVar, props, m
       ${conf.formModel}: {
         ${data}
       },
+
       ${conf.formRules}: {
         ${rules}
       },
+      ${tableOptions}
       ${uploadVar}
       ${selectOptions}
       ${props}
