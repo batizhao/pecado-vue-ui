@@ -418,3 +418,46 @@ export function makeUpHtml(formConfig, type) {
 	confGlobal = null
 	return temp
 }
+
+export function makeHtmlFile(formConfig,type){
+  const htmlStr = `<!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    </head>
+
+    <body>
+      <div id="app">
+        <parser :form-conf="formConf" @submit="sumbitForm" />
+      </div>
+      <script src="https://unpkg.com/vue/dist/vue.js"></script>
+      <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+      <script src="parser.js"></script>
+      <script>
+      <br/>
+      </script>
+    </body>
+  </html>`
+  return htmlStr
+}
+
+export function makeHtmlFileJs(formConfig,type){
+  return `
+      new Vue({
+        el: '#app',
+
+        data: {
+          formConf:${JSON.stringify(formConfig)},
+          editData: {},
+        },
+        mounted(){
+        },
+        methods: {
+          sumbitForm(data) {
+            console.log('sumbitForm1提交数据：', data)
+          }
+        }
+      })
+  `
+}

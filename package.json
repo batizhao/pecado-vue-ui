@@ -10,7 +10,8 @@
     "build:stage": "vue-cli-service build --mode staging",
     "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue src",
-    "inspect": "vue-cli-service inspect>inspect.js"
+    "inspect": "vue-cli-service inspect>inspect.js",
+    "build:parser":"vue-cli-service build  --target lib --name parser src/components/CodeEditor/mark/index.js --mode parser"
   },
   "husky": {
     "hooks": {

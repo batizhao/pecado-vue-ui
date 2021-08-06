@@ -31,10 +31,18 @@
 									css
 								</span>
 							</el-tab-pane>
+              <el-tab-pane name="htmlfile">
+								<span slot="label">
+									<i v-if="activeTab==='htmlfile'" class="el-icon-edit" />
+									<i v-else class="el-icon-document" />
+									html
+								</span>
+							</el-tab-pane>
 						</el-tabs>
 						<div v-show="activeTab==='html'" id="editorHtml" class="tab-editor" />
 						<div v-show="activeTab==='js'" id="editorJs" class="tab-editor" />
 						<div v-show="activeTab==='css'" id="editorCss" class="tab-editor" />
+            <div v-show="activeTab==='htmlfile'" id="editorHtmlFile" class="tab-editor" />
 					</el-col>
 					<el-col :md="24" :lg="12" class="right-preview">
 						<div class="action-bar" :style="{'text-align': 'left'}">
@@ -80,7 +88,7 @@ import { parse } from '@babel/parser'
 import ClipboardJS from 'clipboard'
 import { saveAs } from 'file-saver'
 import {
-	makeUpHtml, vueTemplate, vueScript, cssStyle
+	makeUpHtml, vueTemplate, vueScript, cssStyle, makeHtmlFile,makeHtmlFileJs
 } from '../../components/generator/html'
 import { makeUpJs } from '../../components/generator/js'
 import { makeUpCss } from '../../components/generator/css'
@@ -92,12 +100,14 @@ import loadBeautifier from '../../utils/loadBeautifier'
 const editorObj = {
 	html: null,
 	js: null,
-	css: null
+	css: null,
+  htmlfile:null
 }
 const mode = {
 	html: 'html',
 	js: 'javascript',
-	css: 'css'
+	css: 'css',
+  htmlfile:'html'
 }
 let beautifier
 let monaco
@@ -111,6 +121,8 @@ export default {
 			htmlCode: '',
 			jsCode: '',
 			cssCode: '',
+      htmlfileCode:'',
+      htmljsCode:'',
 			codeFrame: '',
 			isIframeLoaded: false,
 			isInitcode: false, // 保证open后两个异步只执行一次runcode
@@ -160,18 +172,23 @@ export default {
 			this.htmlCode = makeUpHtml(this.formData, type)
 			this.jsCode = makeUpJs(this.formData, type)
 			this.cssCode = makeUpCss(this.formData)
-
+      this.htmlfileCode = makeHtmlFile(this.formData,type)
+      this.htmljsCode = makeHtmlFileJs(this.formData,type)
 			loadBeautifier(btf => {
 				beautifier = btf
 				this.htmlCode = beautifier.html(this.htmlCode, beautifierConf.html)
 				this.jsCode = beautifier.js(this.jsCode, beautifierConf.js)
 				this.cssCode = beautifier.css(this.cssCode, beautifierConf.html)
+        this.htmljsCode = beautifier.js(this.htmljsCode,beautifierConf.js)
+        this.htmlfileCode = beautifier.html(this.htmlfileCode, beautifierConf.html)
+        this.htmlfileCode= beautifier.html(this.htmlfileCode.replace('<br/>',this.htmljsCode),beautifierConf.js)
 
 				loadMonaco(val => {
 					monaco = val
 					this.setEditorValue('editorHtml', 'html', this.htmlCode)
 					this.setEditorValue('editorJs', 'js', this.jsCode)
 					this.setEditorValue('editorCss', 'css', this.cssCode)
+          this.setEditorValue('editorHtmlFile', 'htmlfile', this.htmlfileCode)
 					if (!this.isInitcode) {
 						this.isRefreshCode = true
 						this.isIframeLoaded && (this.isInitcode = true) && this.runCode()

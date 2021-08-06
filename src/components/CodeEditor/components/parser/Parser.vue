@@ -136,24 +136,41 @@ export default {
 		formConf: {
 			type: Object,
 			required: true
-		}
+		},
+    editData:{
+      type:Object,
+      default:null
+    }
 	},
+
 	data() {
 		const data = {
 			formConfCopy: deepClone(this.formConf),
 			[this.formConf.formModel]: {},
 			[this.formConf.formRules]: {}
 		}
-		this.initFormData(data.formConfCopy.fields, data[this.formConf.formModel])
+
 		this.buildRules(data.formConfCopy.fields, data[this.formConf.formRules])
+    this.initFormData(data.formConfCopy.fields, data[this.formConf.formModel])
 		return data
 	},
+  mounted(){
+
+  },
 	methods: {
 		initFormData(componentList, formData) {
+
 			componentList.forEach(cur => {
 				const config = cur.__config__
-				if (cur.__vModel__) formData[cur.__vModel__] = config.defaultValue
-				if (config.children) this.initFormData(config.children, formData)
+          if (cur.__vModel__){
+            if(this.editData){
+              config.defaultValue = this.editData[cur.__vModel__]
+            }
+            formData[cur.__vModel__] = config.defaultValue
+          }
+				  if (config.children) this.initFormData(config.children, formData)
+
+
 			})
 		},
 		buildRules(componentList, rules) {

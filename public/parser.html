@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  </head>
+
+  <body>
+    <div id="app">
+      <parser :form-conf="formConf" :edit-data="editData" @submit="sumbitForm" />
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+  </body>
+
+</html>
+<script>
+
+  new Vue({
+    el: '#app',
+
+    data: {
+      formConf: {
+				fields: [{
+					__config__: {
+						label: '单行文本',
+						labelWidth: null,
+						showLabel: true,
+						changeTag: true,
+						tag: 'el-input',
+						tagIcon: 'input',
+						required: true,
+						layout: 'colFormItem',
+            show:true,
+            defaultValue:'17301725868',
+						span: 24,
+						document: 'https://element.eleme.cn/#/zh-CN/component/input',
+						regList: [{
+							pattern: '/^1(3|4|5|7|8|9)\\d{9}$/',
+							message: '手机号格式错误'
+						}]
+					},
+					__slot__: {
+						prepend: '',
+						append: ''
+					},
+					__vModel__: 'mobile',
+					placeholder: '请输入手机号',
+					style: {
+						width: '100%'
+					},
+					clearable: true,
+					'prefix-icon': 'el-icon-mobile',
+					'suffix-icon': '',
+					maxlength: 11,
+					'show-word-limit': true,
+					readonly: false,
+					disabled: false
+				}, {
+					__config__: {
+						layout: 'rowTable',
+						tagIcon: 'table',
+						tag: 'd2-crud',
+						document: 'https://d2.pub/zh/doc/d2-crud-v2/',
+						span: 24,
+						formId: 1480,
+						renderKey: '14801627267221465',
+						changeTag: true,
+						label: '表格',
+						method: 'get',
+						dataPath: 'list',
+						dataConsumer: 'data',
+            show:true,
+						url: 'https://www.fastmock.site/mock/f8d7a54fb1e60561e2f720d5a810009d/fg/tableData',
+						pagination: false
+					},
+					data: [],
+					directives: [{
+						name: 'loading',
+						value: true
+					}],
+					border: true,
+					type: 'default',
+					justify: 'start',
+					align: 'top',
+					columns: [{
+						title: '日期',
+						key: 'date',
+						width: '180'
+					}, {
+						title: '姓名',
+						key: 'name',
+						width: '180'
+					}, {
+						title: '地址',
+						key: 'address'
+					}, {
+						title: '状态',
+						key: 'check'
+					}],
+					rowHandle: {
+						custom: [{
+							icon: 'el-icon-edit',
+							text: '编辑',
+							type: 'success',
+							size: 'small',
+							emit: 'custom-emit-1'
+						}]
+					},
+					showPagination: false,
+					pagination: null
+				}],
+				formRef: 'elForm',
+				formModel: 'formData',
+				size: 'medium',
+				labelPosition: 'right',
+				labelWidth: 100,
+				formRules: 'rules',
+				gutter: 15,
+				disabled: false,
+				span: 24,
+				formBtns: true
+			},
+      editData: {
+        mobile:'13786101106'
+      },
+    },
+    mounted(){
+    },
+    methods: {
+      sumbitForm(data) {
+        console.log('sumbitForm1提交数据：', data)
+      }
+    }
+  })
+
+</script>
