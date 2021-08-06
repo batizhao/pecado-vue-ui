@@ -23,93 +23,106 @@ export default {
 		return {
 			key2: +new Date(),
 			formConf: {
-				fields: [{
-					__config__: {
-						layout: 'rowTable',
-						tagIcon: 'table',
-						tag: 'd2-crud',
-						document: 'https://d2.pub/zh/doc/d2-crud-v2/',
-						span: 24,
-						formId: 101,
-						renderKey: '1011626077249006',
-						changeTag: true,
-						label: '表格',
-						dataType: 'dynamic',
-						method: 'get',
-						dataPath: 'list',
-						dataConsumer: 'data',
-						url: 'https://www.fastmock.site/mock/f8d7a54fb1e60561e2f720d5a810009d/fg/tableData',
-						pagination: false
-					},
-					data: [{
-						date: '2020-09-09',
-						name: 'JakHuang',
-						address: '上海市普陀区金沙江路 2020 弄'
-					}],
-					directives: [{
-						name: 'loading',
-						value: false
-					}],
-					border: true,
-					type: 'default',
-					justify: 'start',
-					align: 'top',
-					columns: [{
-						title: '日期',
-						key: 'date',
-						width: '180'
-					}, {
-						title: '姓名',
-						key: 'name',
-						width: '180'
-					}, {
-						title: '地址',
-						key: 'address'
-					}, {
-						title: '状态',
-						key: 'check'
-					}],
-					rowHandle: {
-						custom: [{
-							icon: 'el-icon-edit',
-							text: '编辑',
-							type: 'success',
-							size: 'small',
-							emit: 'custom-emit-1'
-						}]
-					},
-					showPagination: true,
-					pagination: {
-						currentPage: 1,
-						pageSize: 10,
-						total: 0,
-						layout: 'sizes,prev, pager, next, jumper, ->, total'
-					}
-				}],
-				__methods__: {
-					clickTestButton1() {
-						console.log(
-							`%c【测试按钮1】点击事件里可以访问当前表单：
-                1) formModel='formData', 所以this.formData可以拿到当前表单的model
-                2) formRef='elForm', 所以this.$refs.elForm可以拿到当前表单的ref(vue组件)
-              `,
-							'color:#409EFF;font-size: 15px'
-						)
-						console.log('表单的Model：', this.formData)
-						console.log('表单的ref：', this.$refs.elForm)
-					}
-				},
-				formRef: 'elForm',
-				formModel: 'formData',
-				size: 'small',
-				labelPosition: 'right',
-				labelWidth: 100,
-				formRules: 'rules',
-				gutter: 15,
-				disabled: false,
-				span: 24,
-				formBtns: true,
-				unFocusedComponentBorder: false
+				"fields": [
+            {
+                "__config__": {
+                    "label": "滑块",
+                    "tag": "el-slider",
+                    "tagIcon": "slider",
+                    "defaultValue": 0,
+                    "span": 24,
+                    "showLabel": true,
+                    "layout": "colFormItem",
+                    "labelWidth": null,
+                    "required": true,
+                    "regList": [],
+                    "changeTag": true,
+                    "show": true,
+                    "document": "https://element.eleme.cn/#/zh-CN/component/slider",
+                    "formId": 8754,
+                    "renderKey": "87541626338443409"
+                },
+                "disabled": false,
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "show-stops": false,
+                "range": false,
+                "__vModel__": "field8754"
+            },
+            {
+                "__config__": {
+                    "label": "时间范围",
+                    "tag": "el-time-picker",
+                    "tagIcon": "time-range",
+                    "span": 24,
+                    "showLabel": true,
+                    "labelWidth": null,
+                    "layout": "colFormItem",
+                    "defaultValue": null,
+                    "required": true,
+                    "regList": [],
+                    "changeTag": true,
+                    "show": true,
+                    "document": "https://element.eleme.cn/#/zh-CN/component/time-picker",
+                    "formId": 8755,
+                    "renderKey": "87551626338444273"
+                },
+                "style": {
+                    "width": "100%"
+                },
+                "disabled": false,
+                "clearable": true,
+                "is-range": true,
+                "range-separator": "至",
+                "start-placeholder": "开始时间",
+                "end-placeholder": "结束时间",
+                "format": "HH:mm:ss",
+                "value-format": "HH:mm:ss",
+                "__vModel__": "field8755"
+            },
+            {
+                "__config__": {
+                    "label": "时间选择",
+                    "tag": "el-time-picker",
+                    "tagIcon": "time",
+                    "defaultValue": null,
+                    "span": 24,
+                    "showLabel": true,
+                    "layout": "colFormItem",
+                    "labelWidth": null,
+                    "required": true,
+                    "regList": [],
+                    "changeTag": true,
+                    "show": true,
+                    "document": "https://element.eleme.cn/#/zh-CN/component/time-picker",
+                    "formId": 8756,
+                    "renderKey": "87561626338445106"
+                },
+                "placeholder": "请选择时间选择",
+                "style": {
+                    "width": "100%"
+                },
+                "disabled": false,
+                "clearable": true,
+                "picker-options": {
+                    "selectableRange": "00:00:00-23:59:59"
+                },
+                "format": "HH:mm:ss",
+                "value-format": "HH:mm:ss",
+                "__vModel__": "field8756"
+            }
+        ],
+        "formRef": "elForm",
+        "formModel": "formData123",
+        "size": "medium",
+        "labelPosition": "right",
+        "labelWidth": 100,
+        "formRules": "rules",
+        "gutter": 15,
+        "disabled": false,
+        "span": 24,
+        "formBtns": true
 			},
 			formConf2: {
 				fields: [
