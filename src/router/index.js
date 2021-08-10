@@ -152,6 +152,20 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/parse',
+    component: Layout,
+    redirect: 'noRedirect',
+    hidden: true,
+    children: [
+      {
+        path: '/parse',
+        component: (resolve) => require(['@/components/CodeEditor/components/parser/example/Index.vue'], resolve),
+        name: 'parse',
+        meta: { title: '解析', icon: 'form'}
+      }
+    ]
+  },
 ]
 
 export default new Router({

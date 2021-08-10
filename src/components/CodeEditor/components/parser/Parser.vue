@@ -82,7 +82,9 @@ function renderFrom(h) {
 }
 
 function formBtns(h) {
-	return <el-col>
+	const { showSubmit } = this
+
+	return <el-col v-show={showSubmit}>
 		<el-form-item size="large">
 			<el-button type="primary" onClick={this.submitForm}>提交</el-button>
 			<el-button onClick={this.resetForm}>重置</el-button>
@@ -140,7 +142,11 @@ export default {
     editData:{
       type:Object,
       default:null
-    }
+    },
+		showSubmit:{
+			type: Boolean,
+			required: true
+		}
 	},
 
 	data() {
@@ -200,11 +206,15 @@ export default {
 			this.$refs[this.formConf.formRef].resetFields()
 		},
 		submitForm() {
-			this.$refs[this.formConf.formRef].validate(valid => {
-				if (!valid) return false
-				// 触发sumit事件
-				this.$emit('submit', this[this.formConf.formModel])
-				return true
+			return new Promise( (resolve,reject) => {
+
+				this.$refs[this.formConf.formRef].validate(valid => {
+					if (valid){//return false
+						this.$emit('submit', this[this.formConf.formModel])// 触发sumit事件
+						resolve(this[this.formConf.formModel])
+					}
+					//return true
+				})
 			})
 		}
 	},

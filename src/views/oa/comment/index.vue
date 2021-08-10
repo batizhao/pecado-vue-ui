@@ -61,15 +61,12 @@
         <el-step title="步骤2"></el-step>
       </el-steps>
       <el-row class="step-body">
-        <fm-generate-form
+        <Parse
           v-show="active == 0"
-          :data="jsonData"
-          :remote-option="dynamicData"
-          :remote="remoteFuncs"
-          :value="form"
+          :form-conf="jsonData" @submit="sumbitFormParse" :showSubmit="false"
           ref="form"
         >
-        </fm-generate-form>
+        </Parse>
         <ExamineDialog v-show="active == 1" ref="examineDialog"/>
       </el-row>
       <div slot="footer" class="dialog-footer">
@@ -88,15 +85,117 @@ import { listComments, getComment, deleteComment, addOrUpdateComment, changeComm
 import { getFormByKey } from "@/api/dp/form";
 import { getProcessDefinition } from "@/api/oa/task";
 import ExamineDialog from '@/views/oa/task/examine-dialog/index.vue'
+import Parse from '@/components/CodeEditor/components/parser/Parser.vue'
 
 export default {
   name: "Comment",
   components: {
-    ExamineDialog
+    ExamineDialog,
+    Parse
   },
   data() {
     return {
       jsonData: {
+				// "fields": [
+        //     {
+        //         "__config__": {
+        //             "label": "滑块",
+        //             "tag": "el-slider",
+        //             "tagIcon": "slider",
+        //             "defaultValue": 0,
+        //             "span": 24,
+        //             "showLabel": true,
+        //             "layout": "colFormItem",
+        //             "labelWidth": null,
+        //             "required": true,
+        //             "regList": [],
+        //             "changeTag": true,
+        //             "show": true,
+        //             "document": "https://element.eleme.cn/#/zh-CN/component/slider",
+        //             "formId": 8754,
+        //             "renderKey": "87541626338443409"
+        //         },
+        //         "disabled": false,
+        //         "min": 0,
+        //         "max": 100,
+        //         "step": 1,
+        //         "show-stops": false,
+        //         "range": false,
+        //         "__vModel__": "field8754"
+        //     },
+        //     {
+        //         "__config__": {
+        //             "label": "时间范围",
+        //             "tag": "el-time-picker",
+        //             "tagIcon": "time-range",
+        //             "span": 24,
+        //             "showLabel": true,
+        //             "labelWidth": null,
+        //             "layout": "colFormItem",
+        //             "defaultValue": null,
+        //             "required": true,
+        //             "regList": [],
+        //             "changeTag": true,
+        //             "show": true,
+        //             "document": "https://element.eleme.cn/#/zh-CN/component/time-picker",
+        //             "formId": 8755,
+        //             "renderKey": "87551626338444273"
+        //         },
+        //         "style": {
+        //             "width": "100%"
+        //         },
+        //         "disabled": false,
+        //         "clearable": true,
+        //         "is-range": true,
+        //         "range-separator": "至",
+        //         "start-placeholder": "开始时间",
+        //         "end-placeholder": "结束时间",
+        //         "format": "HH:mm:ss",
+        //         "value-format": "HH:mm:ss",
+        //         "__vModel__": "field8755"
+        //     },
+        //     {
+        //         "__config__": {
+        //             "label": "时间选择",
+        //             "tag": "el-time-picker",
+        //             "tagIcon": "time",
+        //             "defaultValue": null,
+        //             "span": 24,
+        //             "showLabel": true,
+        //             "layout": "colFormItem",
+        //             "labelWidth": null,
+        //             "required": true,
+        //             "regList": [],
+        //             "changeTag": true,
+        //             "show": true,
+        //             "document": "https://element.eleme.cn/#/zh-CN/component/time-picker",
+        //             "formId": 8756,
+        //             "renderKey": "87561626338445106"
+        //         },
+        //         "placeholder": "请选择时间选择",
+        //         "style": {
+        //             "width": "100%"
+        //         },
+        //         "disabled": false,
+        //         "clearable": true,
+        //         "picker-options": {
+        //             "selectableRange": "00:00:00-23:59:59"
+        //         },
+        //         "format": "HH:mm:ss",
+        //         "value-format": "HH:mm:ss",
+        //         "__vModel__": "field8756"
+        //     }
+        // ],
+        // "formRef": "elForm",
+        // "formModel": "formData123",
+        // "size": "medium",
+        // "labelPosition": "right",
+        // "labelWidth": 100,
+        // "formRules": "rules",
+        // "gutter": 15,
+        // "disabled": false,
+        // "span": 24,
+        // "formBtns": true
       },
       dynamicData: {
       },
@@ -155,7 +254,9 @@ export default {
       this.processDefinitionData = response.data || {};
       const formKey = response.data.view.config.config.form.pcPath;
       getFormByKey(formKey).then( res => {
-        this.jsonData = JSON.parse(res.data.metadata);
+        const formObj = JSON.parse(res.data.metadata || '{}');
+        console.log("formObj:",formObj);
+        this.jsonData = formObj.formData || {};
         this.handleAddLoading = false;
       }).catch( err => {
         console.log(err);
@@ -247,7 +348,6 @@ export default {
         submitData.task.current = view.dto.id;
         submitData.task.processDefinitionId = dto.id;
         Object.assign(submitData.comment, this.submitFormData);
-        // submitData.comment.id = 1;
         submitData.comment.id = undefined;
         console.log("submitData:",submitData);
         
@@ -264,9 +364,16 @@ export default {
         console.log(err);
       })
     },
+    sumbitFormParse(data){
+      return new Promise( (resolve,reject) => {
+        console.log("sumbitFormParse:",data);
+        resolve(data)
+      });
+    },
     /**拟稿弹框下一步 */
     nextStep(){
-      this.$refs.form.getData().then(data => {
+      this.$refs.form.submitForm().then( data => {
+        console.log("nextStep:",data);
         this.active = 1;
         this.submitFormData = data;
         const examineData = {
@@ -276,6 +383,8 @@ export default {
         this.$nextTick( () => {
           this.$refs.examineDialog.show(examineData);
         })
+      }).catch( err => {
+        console.log(err);
       })
     },
     /**拟稿弹框上一步 */
