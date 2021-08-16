@@ -135,6 +135,12 @@ export const constantRoutes = [
         component: (resolve) => require(['@/views/dp/form/design'], resolve),
         name: 'FormDesign',
         meta: { title: '表单设计', icon: 'form', activeMenu: '/dp/form' }
+      },
+      {
+        path: 'history/:formKey?',
+        component: (resolve) => require(['@/views/dp/form/history'], resolve),
+        name: 'FormVersion',
+        meta: { title: '表单版本', icon: 'form', activeMenu: '/dp/form' }
       }
     ]
   },

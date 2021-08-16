@@ -90,18 +90,17 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['dp:form:edit']"
           >编辑</el-button>
-          <el-button
-            type="text"
-            icon="el-icon-edit-outline"
-            @click="handleDesign(scope.row)"
-            v-hasPermi="['dp:form:edit']"
-          >设计</el-button>
-          <el-button
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['dp:form:delete']"
-          >删除</el-button>
+          <el-divider direction="vertical"></el-divider>
+          <el-dropdown>
+            <span class="el-dropdown-link">
+               更多 <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item icon="el-icon-edit-outline" @click.native="handleDesign(scope.row)">设计</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-view" @click.native="handleVersion(scope.row)" v-hasPermi="['dp:form:admin']">版本</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['dp:form:delete']">删除</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </template>
       </el-table-column>
     </el-table>
@@ -249,6 +248,10 @@ export default {
     /** 设计按钮操作 */
     handleDesign(row) {
       this.$router.push("/form/design/" + row.formKey);
+    },
+    /** 设计按钮操作 */
+    handleVersion(row) {
+      this.$router.push("/form/history/" + row.formKey);
     },
     /** 提交按钮 */
     submitForm() {

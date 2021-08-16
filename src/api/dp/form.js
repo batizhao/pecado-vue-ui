@@ -28,9 +28,10 @@ export function addOrUpdateForm(data) {
 }
 
 // 添加表单元数据
-export function addFormMetaData(id, metadata) {
+export function addFormMetaData(id, formKey, metadata) {
   const data = {
     id,
+    formKey,
     metadata,
   }
   return request({
@@ -56,4 +57,9 @@ export function changeFormStatus(id, status) {
     method: 'post',
     data: data
   })
+}
+
+// 查询历史记录详细
+export function listFormHistory(formKey) {
+  return request(`/dp/form/history/${formKey}`);
 }

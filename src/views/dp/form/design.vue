@@ -1,17 +1,17 @@
 <template>
   <div class="app-container">
     <codeEditor
-    v-loading="codeEditorLoading"
-    :key="id"
-    :pageData="pageData"
-    @save="handleSave"
-     />
+      v-loading="codeEditorLoading"
+      :key="id"
+      :pageData="pageData"
+      @save="handleSave"
+    />
   </div>
 </template>
 
 <script>
 import codeEditor from '@/components/CodeEditor/views/index/Home.vue'
-import { getFormByKey,addFormMetaData } from "@/api/dp/form";
+import { getFormByKey, addFormMetaData } from "@/api/dp/form";
 export default {
   name: "FormDesign",
   components: {
@@ -39,9 +39,7 @@ export default {
         getFormByKey(formKey).then(res => {
           this.id = res.data.id;
           const formObj = JSON.parse(res.data.metadata || '{}');
-          console.log("formObj:",formObj);
           this.pageData = formObj.formData || {};
-          console.log(this.pageData);
           this.codeEditorLoading = false;
           this.$forceUpdate();
         }).catch( err => {
@@ -53,10 +51,8 @@ export default {
       }
     },
     handleSave (args) {
-      console.log(args)
-      console.log(args)
       this.codeEditorLoading = true;
-      addFormMetaData(this.id, JSON.stringify(args)).then(res => {
+      addFormMetaData(this.id, this.formKey, JSON.stringify(args)).then(res => {
         this.msgSuccess(res.message);
         this.codeEditorLoading = false;
         if (res.code === 0) {
