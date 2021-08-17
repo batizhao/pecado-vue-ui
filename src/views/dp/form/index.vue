@@ -249,7 +249,7 @@ export default {
     handleDesign(row) {
       this.$router.push("/form/design/" + row.formKey);
     },
-    /** 设计按钮操作 */
+    /** 版本按钮操作 */
     handleVersion(row) {
       this.$router.push("/form/history/" + row.formKey);
     },
