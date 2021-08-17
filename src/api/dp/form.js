@@ -63,3 +63,8 @@ export function changeFormStatus(id, status) {
 export function listFormHistory(formKey) {
   return request(`/dp/form/history/${formKey}`);
 }
+
+// 恢复表单
+export function revertForm(id) {
+  return request.post(`/dp/form/history/${id}`);
+}

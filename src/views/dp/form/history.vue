@@ -1,6 +1,7 @@
 <template>
   <div class="app-container">
     <el-table v-loading="loading" :data="formHistoryList">
+      <el-table-column label="id" align="center" prop="id" />
       <el-table-column label="表单key" align="center" prop="formKey" />
       <el-table-column label="表单元数据" align="center" prop="metadata" :show-overflow-tooltip="true"/>
       <el-table-column label="版本" align="center" prop="version" />
@@ -11,17 +12,16 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
+          <!-- <el-button
+            type="text"
+            icon="el-icon-view"
+            @click="handleView(scope.row)"
+          >查看</el-button> -->
           <el-button
             type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['dp:formHistory:edit']"
-          >查看</el-button>
-          <el-button
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['dp:formHistory:delete']"
+            icon="el-icon-check"
+            @click="handleRevert(scope.row)"
+            v-hasPermi="['dp:form:admin']"
           >恢复</el-button>
         </template>
       </el-table-column>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { listFormHistory } from "@/api/dp/form";
+import { listFormHistory, revertForm } from "@/api/dp/form";
 
 export default {
   name: "FormHistory",
@@ -58,6 +58,24 @@ export default {
         this.loading = false;
       });
     },
+    /** 查看按钮操作 */
+    // handleView(row) {
+    //   this.$router.push("/form/design/" + row.formKey);
+    // },
+    /** 恢复按钮操作 */
+    handleRevert(row) {
+      const id = row.id;
+      this.$confirm('是否确认恢复表单编号为"' + id + '"的数据项?', "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(function() {
+        return revertForm(id);
+      }).then(() => {
+        this.getList();
+        this.msgSuccess("恢复成功");
+      })
+    }
   }
 };
 </script>
