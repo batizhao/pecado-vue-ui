@@ -145,6 +145,7 @@ export default {
 		window.addEventListener('keydown', this.preventDefaultSave)
 		const clipboard = new ClipboardJS('.copy-btn', {
 			text: trigger => {
+
 				const codeStr = this.generateCode()
 				this.$notify({
 					title: '成功',
@@ -174,6 +175,7 @@ export default {
 			this.cssCode = makeUpCss(this.formData)
       this.htmlfileCode = makeHtmlFile(this.formData,type)
       this.htmljsCode = makeHtmlFileJs(this.formData,type)
+      console.log(type,this.htmlCode)
 			loadBeautifier(btf => {
 				beautifier = btf
 				this.htmlCode = beautifier.html(this.htmlCode, beautifierConf.html)

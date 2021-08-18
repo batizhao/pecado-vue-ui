@@ -12,11 +12,11 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <!-- <el-button
+          <el-button
             type="text"
             icon="el-icon-view"
             @click="handleView(scope.row)"
-          >查看</el-button> -->
+          >查看</el-button>
           <el-button
             type="text"
             icon="el-icon-check"
@@ -26,21 +26,30 @@
         </template>
       </el-table-column>
     </el-table>
-    
+    <form-drawer
+			:visible.sync="drawerVisible"
+			:form-data="formData"
+			size="100%"
+			:generate-conf="generateConf"
+		/>
   </div>
 </template>
 
 <script>
 import { listFormHistory, revertForm } from "@/api/dp/form";
-
+import FormDrawer from '@/components/CodeEditor/views/index/FormDrawer'
 export default {
   name: "FormHistory",
   components: {
+    FormDrawer
   },
   data() {
     return {
       // 遮罩层
       loading: true,
+      formData:{},
+      drawerVisible:false,
+      generateConf: {fileName: undefined, type: "file"},
       // 单历史记录表格数据
       formHistoryList: [],
     };
@@ -59,9 +68,11 @@ export default {
       });
     },
     /** 查看按钮操作 */
-    // handleView(row) {
-    //   this.$router.push("/form/design/" + row.formKey);
-    // },
+    handleView(row) {
+      const metadata = JSON.parse(row.metadata)
+      this.formData = metadata.formData
+      this.drawerVisible = true
+    },
     /** 恢复按钮操作 */
     handleRevert(row) {
       const id = row.id;
