@@ -9,10 +9,9 @@ export function login(username, password, code, uuid) {
     uuid
   }
   return request({
-    url: '/oauth/token?username='+username+'&password='+password+'&grant_type=password',
+    url: '/token?username='+username+'&password='+password+'&code=1234',
     method: 'post',
     data: data,
-    headers: {'Authorization': 'Basic Y2xpZW50X2FwcDoxMjM0NTY='}
   })
 }
 
