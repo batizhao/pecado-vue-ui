@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-table v-loading="loading" :data="formHistoryList">
-      <el-table-column label="id" align="center" prop="id" />
+      <el-table-column label="id" width="55" align="center" prop="id" />
       <el-table-column label="表单key" align="center" prop="formKey" />
       <el-table-column label="表单元数据" align="center" prop="metadata" :show-overflow-tooltip="true"/>
       <el-table-column label="版本" align="center" prop="version" />
