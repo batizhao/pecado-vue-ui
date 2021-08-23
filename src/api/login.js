@@ -9,7 +9,7 @@ export function login(username, password, code, uuid) {
     uuid
   }
   return request({
-    url: '/token?username='+username+'&password='+password+'&code=1234',
+    url: '/uaa/token?username='+username+'&password='+password+'&code=1234',
     method: 'post',
     data: data,
   })
