@@ -26,7 +26,7 @@ export function logout() {
 // 获取验证码
 export function getCaptcha() {
   return request({
-    url: '/captcha',
+    url: '/uaa/captcha',
     method: 'get'
   })
 }
