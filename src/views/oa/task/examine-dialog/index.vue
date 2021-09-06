@@ -1,12 +1,14 @@
 <template>
   <div>
     <div class="panel-title">下一处理节点</div>
-    <el-checkbox-group v-model="nodeCheckList">
+    <i class="el-icon-loading" v-if="nodeListLoading"></i>
+    <el-checkbox-group v-model="nodeCheckList" v-else>
       <el-checkbox v-for="(item) in nodeList" :key="item.id" :label="item.id">{{item.name}}</el-checkbox>
     </el-checkbox-group>
     <el-divider></el-divider>
     <div class="panel-title">下一处理人</div>
-    <el-checkbox-group v-model="peopelCheckList" @change="peopleChange">
+    <i class="el-icon-loading" v-if="peopelListLoading"></i>
+    <el-checkbox-group v-model="peopelCheckList" @change="peopleChange" v-else>
       <el-checkbox v-for="(item) in peopelList" :key="item.id" :label="item.id">{{item.name}}</el-checkbox>
     </el-checkbox-group>
     <el-divider></el-divider>
@@ -33,6 +35,8 @@ export default {
       nodeList:[],
       peopelList:[],
       postData:{},
+      peopelListLoading:false,
+      nodeListLoading:false,
     };
   },
   created() {
@@ -42,21 +46,31 @@ export default {
     peopleChange(val){
       console.log(val);
       this.recieveName = "";
-      val.forEach( valItem => {
+      val.forEach( (valItem,index) => {
         const peopleObj = this.peopelList.find( item => { return item.id == valItem})
         if (peopleObj) {
-          this.recieveName += peopleObj.name;
+          if (index == 0) {
+            this.recieveName = peopleObj.name;
+          }else{
+            this.recieveName += "，" + peopleObj.name;
+          }
         }
       });
     },
     show(postData){
+      this.nodeListLoading = true;
+      this.peopelListLoading = true;
       getProcessRouter(postData.processDefinitionId,postData.taskDefKey).then( res => {
         this.nodeList = res.data || [];
+        this.nodeListLoading = false;
         listLeader().then( leaderRes => {
           this.peopelList = leaderRes.data || [];
+          this.peopelListLoading = false;
         })
       }).catch( err => {
         console.log(err);
+        this.nodeListLoading = false;
+        this.peopelListLoading = false;
       })
     },
     getExamineData(){
@@ -66,6 +80,10 @@ export default {
       return new Promise((resolve,reject) => {
         if (this.nodeCheckList.length == 0) {
           reject("请勾选下一处理节点");
+          return
+        }
+        if (this.peopelCheckList.length == 0) {
+          reject("下一处理人");
           return
         }
         let processNodeDTO = [];

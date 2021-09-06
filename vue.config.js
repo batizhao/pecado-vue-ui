@@ -78,6 +78,7 @@ const WebpackConf = {
     disableHostCheck: true
   },
   configureWebpack: {
+    devtool: process.env.NODE_ENV === 'dev' ? 'source-map' : undefined,
     name: name,
     resolve: {
       alias: {

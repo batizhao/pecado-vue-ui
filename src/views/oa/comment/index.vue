@@ -362,6 +362,8 @@ export default {
         });
       }).catch( err => {
         console.log(err);
+        this.msgError(err);
+        this.submitLoading = false;
       })
     },
     sumbitFormParse(data){

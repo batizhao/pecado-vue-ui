@@ -3,7 +3,7 @@ node {
   def registry_addr = "harbor.pecado.com:8888"
   def maintainer_name = "pecado"
   def image
-  def version = "1.3"
+  def version = "1.0.0"
 
   stage('Git Clone') {
     git branch: 'main', credentialsId: 'github', url: 'git@github.com:batizhao/pecado-vue-ui.git'

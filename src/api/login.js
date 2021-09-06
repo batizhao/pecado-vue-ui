@@ -3,13 +3,13 @@ import request from '@/utils/request'
 // 登录方法
 export function login(username, password, code, uuid) {
   const data = {
-    // username,
-    // password,
+    username,
+    password,
     code,
     uuid
   }
   return request({
-    url: '/uaa/token?username='+username+'&password='+password+'&code=1234',
+    url: '/uaa/token',
     method: 'post',
     data: data,
   })
@@ -24,9 +24,9 @@ export function logout() {
 }
 
 // 获取验证码
-export function getCodeImg() {
+export function getCaptcha() {
   return request({
-    url: '/captchaImage',
+    url: '/uaa/captcha',
     method: 'get'
   })
 }
