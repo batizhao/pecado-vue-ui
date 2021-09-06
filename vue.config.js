@@ -68,10 +68,10 @@ const WebpackConf = {
     proxy: {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
-        target: `http://gateway.stalber.com`,//172.168.0.191
+        target: `http://localhost:8888`,
         changeOrigin: true,
         pathRewrite: {
-          // ['^' + process.env.VUE_APP_BASE_API]: ''
+          ['^' + process.env.VUE_APP_BASE_API]: ''
         }
       }
     },
