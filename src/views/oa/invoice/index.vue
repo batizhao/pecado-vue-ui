@@ -109,13 +109,23 @@
     />
     <!-- 添加或编辑手工开票对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="800px" v-if="open" append-to-body :close-on-click-modal="false">
-      <Parse
-        :form-conf="jsonData" :showSubmit="false"
-        ref="form"
-      >
-      </Parse>
+      <el-steps :active="active" finish-status="success">
+        <el-step title="步骤1"></el-step>
+        <el-step title="步骤2"></el-step>
+      </el-steps>
+      <el-row class="step-body">
+        <Parse
+          v-show="active == 0"
+          :form-conf="jsonData" @submit="sumbitFormParse" :showSubmit="false"
+          ref="form"
+        >
+        </Parse>
+        <ExamineDialog v-show="active == 1" ref="examineDialog"/>
+      </el-row>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button v-if="active == 1" @click="preStep()">上一步</el-button>
+        <el-button v-if="active == 0" @click="nextStep()">下一步</el-button>
+        <el-button v-if="active == 1" type="primary" :loading="submitLoading" @click="submitForm()">确定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -125,11 +135,14 @@
 <script>
 import { listInvoices, getInvoice, deleteInvoice, addOrUpdateInvoice } from "@/api/oa/invoice";
 import { getFormByKey } from "@/api/dp/form";
+import { getProcessDefinition } from "@/api/oa/task";
+import ExamineDialog from '@/views/oa/task/examine-dialog/index.vue'
 import Parse from '@/components/CodeEditor/components/parser/Parser.vue'
 
 export default {
   name: "Invoice",
   components: {
+    ExamineDialog,
     Parse
   },
   data() {
@@ -168,22 +181,42 @@ export default {
         title: [
           { required: true, message: "标题不能为空", trigger: "blur" }
         ],
-
         company: [
           { required: true, message: "单位名称不能为空", trigger: "blur" }
         ],
-
         companyNumber: [
           { required: true, message: "纳税人识别号不能为空", trigger: "blur" }
         ],
-
-      }
+      },
+      //流程数据
+      processDefinitionData:{},
+      //表单接口提交数据
+      submitFormData:{},
+      //步骤数
+      active: 0,
+      //拟稿提交按钮loading
+      submitLoading:false,
+      //拟稿按钮loading
+      handleAddLoading:false
     };
   },
   created() {
     this.getList();
-    getFormByKey('6135bd76df5244611e50a1bb').then( response => {
-      this.jsonData = JSON.parse(response.data.metadata).formData;
+    this.handleAddLoading = true;
+    getProcessDefinition('jsoa_sgkjfpsp').then( response => {
+      this.processDefinitionData = response.data || {};
+      const formKey = response.data.view.config.config.form.pcPath || '6135bd76df5244611e50a1bb';
+      getFormByKey(formKey).then( res => {
+        const formObj = JSON.parse(res.data.metadata || '{}');
+        this.jsonData = formObj.formData || {};
+        this.handleAddLoading = false;
+      }).catch( err => {
+        console.log(err);
+        this.handleAddLoading = false;
+      });
+    }).catch( err => {
+      console.log(err);
+      this.handleAddLoading = false;
     });
   },
   methods: {
@@ -225,6 +258,7 @@ export default {
     handleAdd() {
       this.reset();
       this.title = "添加手工开票";
+      this.active = 0;
       this.$forceUpdate();
       this.$nextTick( () => {
         this.open = true;
@@ -242,13 +276,59 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs.form.getData().then(data => {
-        addOrUpdateInvoice(data).then(response => {
+      this.submitLoading = true;
+      console.log(this.submitFormData);
+      this.$refs.examineDialog.getExamineData().then( flowData =>{
+        console.log(flowData);
+        const submitData = { task:{processNodeDTO:flowData},comment:{} };
+        let { dto,view } = this.processDefinitionData;
+        submitData.task.current = view.dto.id;
+        submitData.task.processDefinitionId = dto.id;
+        Object.assign(submitData.comment, this.submitFormData);
+        submitData.comment.id = undefined;
+        console.log("submitData:",submitData);
+        
+        addOrUpdateInvoice(submitData).then(response => {
           this.msgSuccess("保存成功");
-          this.open = false;
           this.getList();
+          this.open = false;
+          this.submitLoading = false;
+        }).catch( err => {
+          this.submitLoading = false;
+          console.log(err);
         });
+      }).catch( err => {
+        console.log(err);
+        this.msgError(err);
+        this.submitLoading = false;
       })
+    },
+    sumbitFormParse(data){
+      return new Promise( (resolve,reject) => {
+        console.log("sumbitFormParse:", data);
+        resolve(data)
+      });
+    },
+    /**拟稿弹框下一步 */
+    nextStep(){
+      this.$refs.form.submitForm().then( data => {
+        console.log("nextStep:",data);
+        this.active = 1;
+        this.submitFormData = data;
+        const examineData = {
+          processDefinitionId: this.processDefinitionData.dto.id,
+          taskDefKey: this.processDefinitionData.view.dto.id
+        }
+        this.$nextTick( () => {
+          this.$refs.examineDialog.show(examineData);
+        })
+      }).catch( err => {
+        console.log(err);
+      })
+    },
+    /**拟稿弹框上一步 */
+    preStep(){
+      this.active = 0;
     },
     /** 删除按钮操作 */
     handleDelete(row) {
@@ -282,3 +362,8 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.step-body {
+	padding: 50px;
+}
+</style>
