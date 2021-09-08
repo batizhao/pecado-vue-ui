@@ -37,17 +37,6 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['oa:invoice:edit']"
-        >编辑</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
           type="danger"
           plain
           icon="el-icon-delete"
@@ -86,12 +75,6 @@
         <template slot-scope="scope">
           <el-button
             type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['oa:invoice:edit']"
-          >编辑</el-button>
-          <el-button
-            type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['oa:invoice:delete']"
@@ -116,7 +99,7 @@
       <el-row class="step-body">
         <Parse
           v-show="active == 0"
-          :form-conf="jsonData" @submit="sumbitFormParse" :showSubmit="false"
+          :form-conf="jsonData" :edit-data="editData" @submit="sumbitFormParse" :showSubmit="false"
           ref="form"
         >
         </Parse>
@@ -173,6 +156,11 @@ export default {
         size: 10,
         deptName: null,
         username: null,
+      },
+      editData: {
+        username: "aaa",
+        deptName: "bbb",
+        // createTime: "2021-09-07",
       },
       // 表单参数
       form: {},
@@ -264,28 +252,18 @@ export default {
         this.open = true;
       })
     },
-    /** 编辑按钮操作 */
-    handleUpdate(row) {
-      this.reset();
-      const id = row.id || this.ids
-      getInvoice(id).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "编辑手工开票";
-      });
-    },
     /** 提交按钮 */
     submitForm() {
       this.submitLoading = true;
       console.log(this.submitFormData);
       this.$refs.examineDialog.getExamineData().then( flowData =>{
         console.log(flowData);
-        const submitData = { task:{processNodeDTO:flowData},comment:{} };
+        const submitData = { task:{processNodeDTO:flowData.processNodeDTO},invoice:{} };
         let { dto,view } = this.processDefinitionData;
         submitData.task.current = view.dto.id;
         submitData.task.processDefinitionId = dto.id;
-        Object.assign(submitData.comment, this.submitFormData);
-        submitData.comment.id = undefined;
+        Object.assign(submitData.invoice, this.submitFormData);
+        submitData.invoice.id = undefined;
         console.log("submitData:",submitData);
         
         addOrUpdateInvoice(submitData).then(response => {

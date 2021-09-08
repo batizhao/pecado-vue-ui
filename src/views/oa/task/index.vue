@@ -76,10 +76,6 @@ export default {
     return {
       jsonData: {
       },
-      dynamicData: {
-      },
-      remoteFuncs: {
-      },
       // 遮罩层
       loading: true,
       // 选中数组
@@ -118,8 +114,6 @@ export default {
       active: 0,
       //表单接口提交数据
       submitFormData:{},
-      //表单参数
-      jsonData:{},
       currentForm:{},
       //审核提交 loading
       submitLoading:false,
@@ -204,7 +198,7 @@ export default {
           const formObj = JSON.parse(res.data.metadata || '{}');
           console.log("formObj:",formObj);
           this.jsonData = formObj.formData || {};
-
+          
           if (row.url && row.appId !== null) {
             let url = row.url + row.appId;
             getFromUrl(url).then( formUlrRes => {
