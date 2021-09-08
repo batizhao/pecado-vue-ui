@@ -6,53 +6,11 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-    <!-- <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['oa:comment:add']"
-        >添加</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['oa:comment:edit']"
-        >编辑</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['oa:comment:delete']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['oa:comment:export']"
-        >导出</el-button>
-      </el-col> -->
+    <el-row>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
-    <el-table v-loading="loading" :data="taskList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
+    <el-table v-loading="loading" :data="taskList" >
+      <!-- <el-table-column type="selection" width="55" align="center" /> -->
       <el-table-column label="任务ID" align="center" prop="taskId" />
       <el-table-column label="procInstId" align="center" prop="procInstId" />
       <el-table-column label="任务名" align="center" prop="taskName" />
@@ -76,18 +34,25 @@
       :limit.sync="queryParams.size"
       @pagination="getList"
     />
-    <!-- 添加或编辑审批对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" v-if="open" append-to-body>   
-      <fm-generate-form
-        :data="jsonData"
-        :remote-option="dynamicData"
-        :remote="remoteFuncs"
-        :value="form"
-        ref="form"
-      >
-      </fm-generate-form>
+     <!-- 添加或编辑审批对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="800px" v-if="open" :close-on-click-modal="false">  
+      <el-steps :active="active" finish-status="success">
+        <el-step title="步骤1"></el-step>
+        <el-step title="步骤2"></el-step>
+      </el-steps>
+      <el-row class="step-body">
+        <Parse
+          v-show="active == 0"
+          :form-conf="jsonData" :showSubmit="false"
+          ref="form"
+        >
+        </Parse>
+        <ExamineDialog v-show="active == 1" ref="examineDialog"/>
+      </el-row>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button v-if="active == 1" @click="preStep()">上一步</el-button>
+        <el-button v-if="active == 0" @click="nextStep()">下一步</el-button>
+        <el-button v-if="active == 1" type="primary" :loading="submitLoading" @click="submitForm()">确定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -96,10 +61,16 @@
 
 <script>
 import { listTasks, getTask, submitTask } from "@/api/oa/task";
+import { getFormByKey } from "@/api/dp/form";
+import { getFromUrl }  from "@/api/common";
+import ExamineDialog from '@/views/oa/task/examine-dialog/index.vue'
+import Parse from '@/components/CodeEditor/components/parser/Parser.vue'
 
 export default {
   name: "Task",
   components: {
+    Parse,
+    ExamineDialog
   },
   data() {
     return {
@@ -142,7 +113,18 @@ export default {
         comment: [
           { required: true, message: "意见不能为空", trigger: "blur" }
         ],
-      }
+      },
+     //步骤数
+      active: 0,
+      //表单接口提交数据
+      submitFormData:{},
+      //表单参数
+      jsonData:{},
+      currentForm:{},
+      //审核提交 loading
+      submitLoading:false,
+      //当前列表选中的数据
+      currentRow:null,
     };
   },
   created() {
@@ -156,6 +138,9 @@ export default {
         this.taskList = response.data.records;
         this.total = response.data.total;
         this.loading = false;
+      }).catch( err => {
+        this.loading = false;
+        console.log(err);
       });
     },
     // 审批状态编辑
@@ -206,34 +191,95 @@ export default {
     },
     /** 编辑按钮操作 */
     handleUpdate(row) {
-      // let url = row.url + row.appId;
-      // this.form.taskId = row.taskId;
-      // this.form.procInstId = row.procInstId
-      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-      this.$router.push({
-        name:"examineForm",
-        params:{id: row.taskId || this.ids },
-        query:{
-          type:'task',
-          appId:row.appId,
-          url:row.url,
-          appId:row.appId,
-          taskId:row.taskId,
-          procInstId:row.procInstId,
-          taskDefKey:row.taskDefKey,
-          procDefId:row.procDefId,
-        }
-      });
-      
+      this.active = 0;
+      this.currentRow = row;
+      this.loading = true;
+      //表单从待办任务跳过来
+      getTask(row.taskId).then(response => {
+        this.processDefinitionData = response.data || {};
+        const formKey = response.data.config.config.form.pcPath;
+        console.log("formKey:",formKey);
+        getFormByKey(formKey).then( res => {
+          this.currentForm = res.data || {};
+          const formObj = JSON.parse(res.data.metadata || '{}');
+          console.log("formObj:",formObj);
+          this.jsonData = formObj.formData || {};
+
+          if (row.url && row.appId !== null) {
+            let url = row.url + row.appId;
+            getFromUrl(url).then( formUlrRes => {
+
+              const formUlrData = formUlrRes.data || {};
+
+              this.jsonData.fields.forEach(item => {
+                const val = formUlrData[item.__vModel__]
+                if (val) {
+                  item.__config__.defaultValue = val
+                }
+              })
+              this.open = true;
+              this.loading = false;
+            }).catch( err => {
+              this.loading = false;
+              console.log(err);
+            })
+          }else{
+            this.loading = false;
+          }
+        }).catch( err => {
+          console.log(err);
+          this.loading = false;
+        });
+      }).catch( err => {
+        console.log(err);
+        this.loading = false;
+      })
+    },
+
+    /**审批弹框上一步 */
+    preStep(){
+      this.active = 0;
+    },
+    /**审批弹框下一步 */
+    nextStep(){
+      this.active = 1;
+      const processDefinitionId = this.currentRow.procDefId;
+      const taskDefKey = this.currentRow.taskDefKey;
+      const examineData = {
+          processDefinitionId,
+          taskDefKey
+      }
+      this.$nextTick( () => {
+        this.$refs.examineDialog.show(examineData);
+      })
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs.form.getData().then(data => {
-        submitTask(data).then(response => {
+      this.submitLoading = true;
+      this.$refs.examineDialog.getExamineData().then( (examineResponse) =>{
+        console.log(examineResponse.processNodeDTO,examineResponse.suggestion);
+        const submitData = { processNodeDTO:examineResponse.processNodeDTO};
+        let { dto,config } = this.processDefinitionData;
+        submitData.current = dto.id;
+        submitData.processDefinitionId = config.processDefId;
+        submitData.procInstId = this.currentRow.procInstId;
+        submitData.taskId = this.currentRow.taskId;
+        submitData.id = this.currentForm.id;
+        submitData.title = this.currentRow.title;
+        submitData.suggestion = examineResponse.suggestion;
+        submitTask(submitData).then(response => {
           this.msgSuccess("保存成功");
+          this.submitLoading = false;
           this.open = false;
           this.getList();
+        }).catch( err => {
+            console.log(err);
+            this.submitLoading = false;
         });
+      }).catch( err => {
+        this.$message.error(err);
+        this.submitLoading = false;
+        console.log(err);
       })
     },
     /** 删除按钮操作 */

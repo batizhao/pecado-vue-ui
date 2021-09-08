@@ -30,21 +30,6 @@
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-          >编辑</el-button>
-          <el-button
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['oa:comment:delete']"
-          >删除</el-button>
-        </template>
-      </el-table-column> -->
     </el-table>
     
     <pagination
@@ -95,108 +80,7 @@ export default {
   },
   data() {
     return {
-      jsonData: {
-				// "fields": [
-        //     {
-        //         "__config__": {
-        //             "label": "滑块",
-        //             "tag": "el-slider",
-        //             "tagIcon": "slider",
-        //             "defaultValue": 0,
-        //             "span": 24,
-        //             "showLabel": true,
-        //             "layout": "colFormItem",
-        //             "labelWidth": null,
-        //             "required": true,
-        //             "regList": [],
-        //             "changeTag": true,
-        //             "show": true,
-        //             "document": "https://element.eleme.cn/#/zh-CN/component/slider",
-        //             "formId": 8754,
-        //             "renderKey": "87541626338443409"
-        //         },
-        //         "disabled": false,
-        //         "min": 0,
-        //         "max": 100,
-        //         "step": 1,
-        //         "show-stops": false,
-        //         "range": false,
-        //         "__vModel__": "field8754"
-        //     },
-        //     {
-        //         "__config__": {
-        //             "label": "时间范围",
-        //             "tag": "el-time-picker",
-        //             "tagIcon": "time-range",
-        //             "span": 24,
-        //             "showLabel": true,
-        //             "labelWidth": null,
-        //             "layout": "colFormItem",
-        //             "defaultValue": null,
-        //             "required": true,
-        //             "regList": [],
-        //             "changeTag": true,
-        //             "show": true,
-        //             "document": "https://element.eleme.cn/#/zh-CN/component/time-picker",
-        //             "formId": 8755,
-        //             "renderKey": "87551626338444273"
-        //         },
-        //         "style": {
-        //             "width": "100%"
-        //         },
-        //         "disabled": false,
-        //         "clearable": true,
-        //         "is-range": true,
-        //         "range-separator": "至",
-        //         "start-placeholder": "开始时间",
-        //         "end-placeholder": "结束时间",
-        //         "format": "HH:mm:ss",
-        //         "value-format": "HH:mm:ss",
-        //         "__vModel__": "field8755"
-        //     },
-        //     {
-        //         "__config__": {
-        //             "label": "时间选择",
-        //             "tag": "el-time-picker",
-        //             "tagIcon": "time",
-        //             "defaultValue": null,
-        //             "span": 24,
-        //             "showLabel": true,
-        //             "layout": "colFormItem",
-        //             "labelWidth": null,
-        //             "required": true,
-        //             "regList": [],
-        //             "changeTag": true,
-        //             "show": true,
-        //             "document": "https://element.eleme.cn/#/zh-CN/component/time-picker",
-        //             "formId": 8756,
-        //             "renderKey": "87561626338445106"
-        //         },
-        //         "placeholder": "请选择时间选择",
-        //         "style": {
-        //             "width": "100%"
-        //         },
-        //         "disabled": false,
-        //         "clearable": true,
-        //         "picker-options": {
-        //             "selectableRange": "00:00:00-23:59:59"
-        //         },
-        //         "format": "HH:mm:ss",
-        //         "value-format": "HH:mm:ss",
-        //         "__vModel__": "field8756"
-        //     }
-        // ],
-        // "formRef": "elForm",
-        // "formModel": "formData123",
-        // "size": "medium",
-        // "labelPosition": "right",
-        // "labelWidth": 100,
-        // "formRules": "rules",
-        // "gutter": 15,
-        // "disabled": false,
-        // "span": 24,
-        // "formBtns": true
-      },
+      jsonData: {},
       dynamicData: {
       },
       remoteFuncs: {
@@ -341,12 +225,13 @@ export default {
     submitForm() {
       this.submitLoading = true;
       console.log(this.submitFormData);
-      this.$refs.examineDialog.getExamineData().then( flowData =>{
-        console.log(flowData);
-        const submitData = { task:{processNodeDTO:flowData},comment:{} };
+      this.$refs.examineDialog.getExamineData().then( (examineResponse) =>{
+        console.log(examineResponse.processNodeDTO,examineResponse.suggestion);
+        const submitData = { task:{processNodeDTO:examineResponse.processNodeDTO},comment:{} };
         let { dto,view } = this.processDefinitionData;
         submitData.task.current = view.dto.id;
         submitData.task.processDefinitionId = dto.id;
+        submitData.task.suggestion = examineResponse.suggestion;
         Object.assign(submitData.comment, this.submitFormData);
         submitData.comment.id = undefined;
         console.log("submitData:",submitData);

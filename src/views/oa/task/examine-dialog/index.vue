@@ -1,5 +1,7 @@
 <template>
   <div>
+    <div class="panel-title">意见</div>
+    <el-input class="suggestion" type="textarea" v-model="suggestion"></el-input>
     <div class="panel-title">下一处理节点</div>
     <i class="el-icon-loading" v-if="nodeListLoading"></i>
     <el-checkbox-group v-model="nodeCheckList" v-else>
@@ -28,6 +30,7 @@ export default {
   name: "examine-dialog",
   data () {
     return {
+      suggestion:"",
       sendMsgRadioVal:null,
       nodeCheckList:[],
       peopelCheckList:[],
@@ -112,7 +115,12 @@ export default {
             processNodeDTO.push(processNode);
           }
         })
-        resolve(processNodeDTO);
+        resolve(
+          {
+            processNodeDTO,
+            suggestion:this.suggestion
+          }
+        );
       })
     }
   },
@@ -124,6 +132,12 @@ export default {
 	height: 50px;
 	background-color: #d6eafc;
 	text-align: center;
+}
+.suggestion {
+	padding-left: 10px;
+	padding-top: 5px;
+	padding-bottom: 10px;
+	width: 100%;
 }
 .form {
 	margin-top: 20px;

@@ -1,24 +1,23 @@
 <template>
   <div>
-    <div class="top-panel">
+    <!-- <div class="top-panel">
       <el-button type="text" class="">查看流程图</el-button>
       <el-button type="text" class="pl20">暂存</el-button>
       <el-button type="text" class="pl20">删除</el-button>
       <el-button type="text" :loading="compeleteLoading" class="pl20" @click="compelete">完成</el-button>
       <el-button type="text" class="pl20" >关闭</el-button>
-    </div>
+    </div> -->
     <div class="app-container" v-loading="!dataLoad">
-      <fm-generate-form
-          class="form"
+      <Parse
           v-if="dataLoad"
-          :data="jsonData"
-          :remote-option="dynamicData"
-          :remote="remoteFuncs"
-          :value="form"
+          :form-conf="jsonData" @submit="sumbitFormParse" :showSubmit="false"
           ref="form"
         >
-      </fm-generate-form>
+      </Parse>
     </div>
+    <el-row style="text-align: center;">
+      <el-button type="primary" :loading="compeleteLoading" @click="compelete">审批</el-button>
+    </el-row>
     <el-dialog title="流程审批" :visible.sync="open" width="500px">
       <ExamineDialog ref="examineDialog"/>
       <div slot="footer" class="dialog-footer">
@@ -33,16 +32,17 @@ import { getTask, submitTask } from "@/api/oa/task";
 import { getFormByKey } from "@/api/dp/form";
 import { getFromUrl }  from "@/api/common";
 import ExamineDialog from '@/views/oa/task/examine-dialog/index.vue'
+import Parse from '@/components/CodeEditor/components/parser/Parser.vue'
 
 export default {
   name: "examingForm",
   components: {
-    ExamineDialog
+    ExamineDialog,
+    Parse
   },
   data () {
     return {
-      jsonData: {
-      },
+      jsonData: null,
       dynamicData: {
       },
       remoteFuncs: {
@@ -54,10 +54,10 @@ export default {
       open:false,
       routerQuery:{},
       processDefinitionData:{}
-    };
+    }
   },
-  created() {
-    this.dataLoad = false;
+  mounted(){
+
     this.routerQuery = this.$route.params && this.$route.query;
     console.log('routerQuery:',this.routerQuery);
     const id = this.$route.params.id;
@@ -67,20 +67,41 @@ export default {
       const formKey = response.data.config.config.form.pcPath;
       console.log("formKey:",formKey);
       getFormByKey(formKey).then( res => {
-        this.jsonData = JSON.parse(res.data.metadata);
-        this.form.taskId = this.routerQuery.taskId;
-        this.form.procInstId = this.routerQuery.procInstId
+
+        const formObj = JSON.parse(res.data.metadata || '{}');
+        console.log("formObj:",formObj);
+        this.jsonData = formObj.formData || {};
+
+        // this.form.taskId = this.routerQuery.taskId;
+        // this.form.procInstId = this.routerQuery.procInstId
+        
         if (this.routerQuery.url && this.routerQuery.appId !== null) {
-          let url = this.routerQuery.url + this.routerQuery.appId;
+            let url = this.routerQuery.url + this.routerQuery.appId;
           getFromUrl(url).then( formUlrRes => {
-            this.form = JSON.parse(JSON.stringify(formUlrRes.data || {}));
+            // this.form = JSON.parse(JSON.stringify(formUlrRes.data || {}));
+
+            const formUlrData = formUlrRes.data || {};
+
+            this.jsonData.fields.forEach(item => {
+              const val = formUlrData[item.__vModel__]
+              if (val) {
+                item.__config__.defaultValue = val
+              }
+            })
+            this.$forceUpdate();
             this.dataLoad = true;
+          }).catch( err => {
+            this.dataLoad = true;
+            console.log(err);
           })
         }else{
-          this.dataLoad = true;
+            this.dataLoad = true;
         }
       });
     })
+  },
+  created() {
+  
   },
   methods: {
     compelete(){
@@ -123,6 +144,9 @@ export default {
     },
     dialogCancel(){
       this.open = false;
+    },
+    sumbitFormParse(data){
+      console.log("sumbitFormParse:",data);
     }
   },
 }
