@@ -1,20 +1,26 @@
 <template>
   <div>
     <div class="panel-title">意见</div>
-    <el-input class="suggestion" type="textarea" v-model="suggestion"></el-input>
+    <el-input
+      class="suggestion"
+      type="textarea"
+      v-model="suggestion"
+    ></el-input>
     <div class="panel-title">下一处理节点</div>
     <i class="el-icon-loading" v-if="nodeListLoading"></i>
     <el-checkbox-group v-model="nodeCheckList" v-else>
-      <el-checkbox v-for="(item) in nodeList" :key="item.id" :label="item.id">{{item.name}}</el-checkbox>
+      <el-checkbox v-for="item in nodeList" :key="item.id" :label="item.id">{{ item.name }}</el-checkbox>
     </el-checkbox-group>
     <el-divider></el-divider>
     <div class="panel-title">下一处理人</div>
     <i class="el-icon-loading" v-if="peopelListLoading"></i>
     <el-checkbox-group v-model="peopelCheckList" @change="peopleChange" v-else>
-      <el-checkbox v-for="(item) in peopelList" :key="item.id" :label="item.id">{{item.name}}</el-checkbox>
+      <el-checkbox v-for="item in peopelList" :key="item.id" :label="item.id">{{ item.name }}</el-checkbox>
     </el-checkbox-group>
     <el-divider></el-divider>
-    <div class="panel-title">送相关部门对接人会签环节接收人:<span class="people-name">{{recieveName}}</span></div> 
+    <div class="panel-title">
+      送相关部门对接人会签环节接收人:<span class="people-name">{{ recieveName }}</span>
+    </div>
     <el-divider></el-divider>
     <div class="panel-title">发送短信通知</div>
     <el-radio-group v-model="sendMsgRadioVal">
@@ -28,81 +34,87 @@ import { getProcessRouter } from "@/api/oa/task";
 import { listLeader } from "@/api/ims/user";
 export default {
   name: "examine-dialog",
-  data () {
+  data() {
     return {
-      suggestion:"",
-      sendMsgRadioVal:null,
-      nodeCheckList:[],
-      peopelCheckList:[],
-      recieveName:"",//送相关部门对接人会签环节接收人
-      nodeList:[],
-      peopelList:[],
-      postData:{},
-      peopelListLoading:false,
-      nodeListLoading:false,
+      suggestion: "",
+      sendMsgRadioVal: null,
+      nodeCheckList: [],
+      peopelCheckList: [],
+      recieveName: "", //送相关部门对接人会签环节接收人
+      nodeList: [],
+      peopelList: [],
+      postData: {},
+      peopelListLoading: false,
+      nodeListLoading: false
     };
   },
-  created() {
-    
-  },
+  created() {},
   methods: {
-    peopleChange(val){
+    peopleChange(val) {
       console.log(val);
       this.recieveName = "";
-      val.forEach( (valItem,index) => {
-        const peopleObj = this.peopelList.find( item => { return item.id == valItem})
+      val.forEach((valItem, index) => {
+        const peopleObj = this.peopelList.find(item => {
+          return item.id == valItem;
+        });
         if (peopleObj) {
           if (index == 0) {
             this.recieveName = peopleObj.name;
-          }else{
+          } else {
             this.recieveName += "，" + peopleObj.name;
           }
         }
       });
     },
-    show(postData){
+    show(postData) {
       this.nodeListLoading = true;
       this.peopelListLoading = true;
-      getProcessRouter(postData.processDefinitionId,postData.taskDefKey).then( res => {
-        this.nodeList = res.data || [];
-        this.nodeListLoading = false;
-        listLeader().then( leaderRes => {
-          this.peopelList = leaderRes.data || [];
-          this.peopelListLoading = false;
+      getProcessRouter(postData.processDefinitionId, postData.taskDefKey)
+        .then(res => {
+          this.nodeList = res.data || [];
+          this.nodeListLoading = false;
+          listLeader().then(leaderRes => {
+            this.peopelList = leaderRes.data || [];
+            this.peopelListLoading = false;
+          });
         })
-      }).catch( err => {
-        console.log(err);
-        this.nodeListLoading = false;
-        this.peopelListLoading = false;
-      })
+        .catch(err => {
+          console.log(err);
+          this.nodeListLoading = false;
+          this.peopelListLoading = false;
+        });
     },
-    getExamineData(){
-      console.log('getExamineData');
+    getExamineData() {
+      console.log("getExamineData");
       console.log(this.nodeCheckList);
       console.log(this.peopelCheckList);
-      return new Promise((resolve,reject) => {
+      return new Promise((resolve, reject) => {
         if (this.nodeCheckList.length == 0) {
           reject("请勾选下一处理节点");
-          return
+          return;
         }
-        if (this.peopelCheckList.length == 0) {
-          reject("下一处理人");
-          return
-        }
+        // if (this.peopelCheckList.length == 0) {
+        //   reject("下一处理人");
+        //   return
+        // }
         let processNodeDTO = [];
-        this.nodeCheckList.forEach( nodeCheckItem => {
-          const nodeObj = this.nodeList.find( nodeItem => { return nodeItem.id == nodeCheckItem});
+        this.nodeCheckList.forEach(nodeCheckItem => {
+          const nodeObj = this.nodeList.find(nodeItem => {
+            return nodeItem.id == nodeCheckItem;
+          });
           if (nodeObj) {
             const processNode = {};
-            let { name,node } = nodeObj;
+            let { name, node } = nodeObj;
             processNode.flowName = name;
             processNode.operType = 0;
             processNode.paramType = 0;
             processNode.target = node.id;
             processNode.targetName = node.name;
             let candidate = [];
-            this.peopelCheckList.forEach( peopelCheckItem => { 
-              const peopleObj = this.peopelList.find( peopelItem => { return peopelItem.id == peopelCheckItem});
+            this.peopelCheckList.forEach(peopelCheckItem => {
+              const peopleObj = this.peopelList.find(peopelItem => {
+                return peopelItem.id == peopelCheckItem;
+              });
               if (peopleObj) {
                 const candidateObj = {};
                 candidateObj.orgId = 0;
@@ -110,55 +122,53 @@ export default {
                 candidateObj.userName = peopleObj.name;
                 candidate.push(candidateObj);
               }
-            })
+            });
             processNode.candidate = candidate;
             processNodeDTO.push(processNode);
           }
-        })
-        resolve(
-          {
-            processNodeDTO,
-            suggestion:this.suggestion
-          }
-        );
-      })
+        });
+        resolve({
+          processNodeDTO,
+          suggestion: this.suggestion
+        });
+      });
     }
-  },
-}
+  }
+};
 </script>
 <style lang="scss" scoped>
 .top-panel {
-	width: 100%;
-	height: 50px;
-	background-color: #d6eafc;
-	text-align: center;
+  width: 100%;
+  height: 50px;
+  background-color: #d6eafc;
+  text-align: center;
 }
 .suggestion {
-	padding-left: 10px;
-	padding-top: 5px;
-	padding-bottom: 10px;
-	width: 100%;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  width: 100%;
 }
 .form {
-	margin-top: 20px;
-	padding-left: 50px;
-	padding-right: 50px;
+  margin-top: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
 }
 .form-bottom {
-	text-align: center;
+  text-align: center;
 }
 .pl20 {
-	padding-left: 20px;
+  padding-left: 20px;
 }
 .panel-title {
-	padding-left: 10px;
-	padding-bottom: 10px;
-	font-weight: bold;
-	font-size: 15px;
-	.people-name {
-		padding-left: 10px;
-		font-weight: normal;
-		color: red;
-	}
+  padding-left: 10px;
+  padding-bottom: 10px;
+  font-weight: bold;
+  font-size: 15px;
+  .people-name {
+    padding-left: 10px;
+    font-weight: normal;
+    color: red;
+  }
 }
 </style>

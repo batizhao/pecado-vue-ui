@@ -1,41 +1,64 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch">
+    <el-form
+      :model="queryParams"
+      ref="queryForm"
+      :inline="true"
+      v-show="showSearch">
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          size="mini"
+          @click="handleQuery"
+          >搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
     <el-row>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar
+        :showSearch.sync="showSearch"
+        @queryTable="getList"></right-toolbar>
     </el-row>
-    <el-table v-loading="loading" :data="taskList" >
+    <el-table v-loading="loading" :data="taskList">
       <!-- <el-table-column type="selection" width="55" align="center" /> -->
       <el-table-column label="任务ID" align="center" prop="taskId" />
       <el-table-column label="procInstId" align="center" prop="procInstId" />
       <el-table-column label="任务名" align="center" prop="taskName" />
       <el-table-column label="公文标题" align="center" prop="title" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column
+        label="创建时间"
+        align="center"
+        prop="createTime"
+        width="180"
+      />
+      <el-table-column
+        label="操作"
+        align="center"
+        class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-          >审核</el-button>
+            @click="handleUpdate(scope.row)">审核</el-button>
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
-      v-show="total>0"
+      v-show="total > 0"
       :total="total"
       :page.sync="queryParams.current"
       :limit.sync="queryParams.size"
       @pagination="getList"
     />
-     <!-- 添加或编辑审批对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="800px" v-if="open" :close-on-click-modal="false">  
+    <!-- 添加或编辑审批对话框 -->
+    <el-dialog
+      :title="title"
+      :visible.sync="open"
+      width="800px"
+      v-if="open"
+      :close-on-click-modal="false">
       <el-steps :active="active" finish-status="success">
         <el-step title="步骤1"></el-step>
         <el-step title="步骤2"></el-step>
@@ -43,16 +66,20 @@
       <el-row class="step-body">
         <Parse
           v-show="active == 0"
-          :form-conf="jsonData" :showSubmit="false"
-          ref="form"
-        >
+          :form-conf="jsonData"
+          :showSubmit="false"
+          ref="form">
         </Parse>
-        <ExamineDialog v-show="active == 1" ref="examineDialog"/>
+        <ExamineDialog v-show="active == 1" ref="examineDialog" />
       </el-row>
       <div slot="footer" class="dialog-footer">
         <el-button v-if="active == 1" @click="preStep()">上一步</el-button>
         <el-button v-if="active == 0" @click="nextStep()">下一步</el-button>
-        <el-button v-if="active == 1" type="primary" :loading="submitLoading" @click="submitForm()">确定</el-button>
+        <el-button
+          v-if="active == 1"
+          type="primary"
+          :loading="submitLoading"
+          @click="submitForm()">确定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -62,9 +89,9 @@
 <script>
 import { listTasks, getTask, submitTask } from "@/api/oa/task";
 import { getFormByKey } from "@/api/dp/form";
-import { getFromUrl }  from "@/api/common";
-import ExamineDialog from '@/views/oa/task/examine-dialog/index.vue'
-import Parse from '@/components/CodeEditor/components/parser/Parser.vue'
+import { getFromUrl } from "@/api/common";
+import ExamineDialog from "@/views/oa/task/examine-dialog/index.vue";
+import Parse from "@/components/CodeEditor/components/parser/Parser.vue";
 
 export default {
   name: "Task",
@@ -74,8 +101,7 @@ export default {
   },
   data() {
     return {
-      jsonData: {
-      },
+      jsonData: {},
       // 遮罩层
       loading: true,
       // 选中数组
@@ -97,28 +123,24 @@ export default {
       // 查询参数
       queryParams: {
         current: 1,
-        size: 10,
+        size: 10
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        title: [
-          { required: true, message: "标题不能为空", trigger: "blur" }
-        ],
-        comment: [
-          { required: true, message: "意见不能为空", trigger: "blur" }
-        ],
+        title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
+        comment: [{ required: true, message: "意见不能为空", trigger: "blur" }]
       },
-     //步骤数
+      //步骤数
       active: 0,
       //表单接口提交数据
-      submitFormData:{},
-      currentForm:{},
+      submitFormData: {},
+      currentForm: {},
       //审核提交 loading
-      submitLoading:false,
+      submitLoading: false,
       //当前列表选中的数据
-      currentRow:null,
+      currentRow: null
     };
   },
   created() {
@@ -128,27 +150,32 @@ export default {
     /** 查询审批列表 */
     getList() {
       this.loading = true;
-      listTasks(this.queryParams).then(response => {
-        this.taskList = response.data.records;
-        this.total = response.data.total;
-        this.loading = false;
-      }).catch( err => {
-        this.loading = false;
-        console.log(err);
-      });
+      listTasks(this.queryParams)
+        .then(response => {
+          this.taskList = response.data.records;
+          this.total = response.data.total;
+          this.loading = false;
+        })
+        .catch(err => {
+          this.loading = false;
+          console.log(err);
+        });
     },
     // 审批状态编辑
     handleStatusChange(row) {
       let text = row.status === "open" ? "启用" : "停用";
       this.$confirm('确认要"' + text + '""' + row.name + '"吗?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(function() {
           return changeCommentStatus(row.id, row.status);
-        }).then(() => {
+        })
+        .then(() => {
           this.msgSuccess(text + "成功");
-        }).catch(function() {
+        })
+        .catch(function() {
           row.status = row.status === "open" ? "close" : "open";
         });
     },
@@ -173,10 +200,10 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.taskId)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
-    },    
+      this.ids = selection.map(item => item.taskId);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
+    },
     /** 添加按钮操作 */
     handleAdd() {
       this.reset();
@@ -189,92 +216,105 @@ export default {
       this.currentRow = row;
       this.loading = true;
       //表单从待办任务跳过来
-      getTask(row.taskId).then(response => {
-        this.processDefinitionData = response.data || {};
-        const formKey = response.data.config.config.form.pcPath;
-        console.log("formKey:",formKey);
-        getFormByKey(formKey).then( res => {
-          this.currentForm = res.data || {};
-          const formObj = JSON.parse(res.data.metadata || '{}');
-          console.log("formObj:",formObj);
-          this.jsonData = formObj.formData || {};
-          
-          if (row.url && row.appId !== null) {
-            let url = row.url + row.appId;
-            getFromUrl(url).then( formUlrRes => {
+      getTask(row.taskId)
+        .then(response => {
+          this.processDefinitionData = response.data || {};
+          const formKey = response.data.config.config.form.pcPath;
+          console.log("formKey:", formKey);
+          getFormByKey(formKey)
+            .then(res => {
+              this.currentForm = res.data || {};
+              const formObj = JSON.parse(res.data.metadata || "{}");
+              console.log("formObj:", formObj);
+              this.jsonData = formObj.formData || {};
 
-              const formUlrData = formUlrRes.data || {};
+              if (row.url && row.appId !== null) {
+                let url = row.url + row.appId;
+                getFromUrl(url)
+                  .then(formUlrRes => {
+                    const formUlrData = formUlrRes.data || {};
 
-              this.jsonData.fields.forEach(item => {
-                const val = formUlrData[item.__vModel__]
-                if (val) {
-                  item.__config__.defaultValue = val
-                }
-              })
-              this.open = true;
-              this.loading = false;
-            }).catch( err => {
-              this.loading = false;
-              console.log(err);
+                    this.jsonData.fields.forEach(item => {
+                      const val = formUlrData[item.__vModel__];
+                      if (val) {
+                        item.__config__.defaultValue = val;
+                      }
+                    });
+                    this.open = true;
+                    this.loading = false;
+                  })
+                  .catch(err => {
+                    this.loading = false;
+                    console.log(err);
+                  });
+              } else {
+                this.loading = false;
+              }
             })
-          }else{
-            this.loading = false;
-          }
-        }).catch( err => {
+            .catch(err => {
+              console.log(err);
+              this.loading = false;
+            });
+        })
+        .catch(err => {
           console.log(err);
           this.loading = false;
         });
-      }).catch( err => {
-        console.log(err);
-        this.loading = false;
-      })
     },
 
     /**审批弹框上一步 */
-    preStep(){
+    preStep() {
       this.active = 0;
     },
     /**审批弹框下一步 */
-    nextStep(){
+    nextStep() {
       this.active = 1;
       const processDefinitionId = this.currentRow.procDefId;
       const taskDefKey = this.currentRow.taskDefKey;
       const examineData = {
-          processDefinitionId,
-          taskDefKey
-      }
-      this.$nextTick( () => {
+        processDefinitionId,
+        taskDefKey
+      };
+      this.$nextTick(() => {
         this.$refs.examineDialog.show(examineData);
-      })
+      });
     },
     /** 提交按钮 */
     submitForm() {
       this.submitLoading = true;
-      this.$refs.examineDialog.getExamineData().then( (examineResponse) =>{
-        console.log(examineResponse.processNodeDTO,examineResponse.suggestion);
-        const submitData = { processNodeDTO:examineResponse.processNodeDTO};
-        let { dto,config } = this.processDefinitionData;
-        submitData.current = dto.id;
-        submitData.processDefinitionId = config.processDefId;
-        submitData.procInstId = this.currentRow.procInstId;
-        submitData.taskId = this.currentRow.taskId;
-        submitData.id = this.currentForm.id;
-        submitData.title = this.currentRow.title;
-        submitData.suggestion = examineResponse.suggestion;
-        submitTask(submitData).then(response => {
-          this.msgSuccess("保存成功");
+      this.$refs.examineDialog
+        .getExamineData()
+        .then(examineResponse => {
+          console.log(
+            examineResponse.processNodeDTO,
+            examineResponse.suggestion
+          );
+          const submitData = { processNodeDTO: examineResponse.processNodeDTO };
+          let { dto, config } = this.processDefinitionData;
+          submitData.current = dto.id;
+          submitData.processDefinitionId = config.processDefId;
+          submitData.procInstId = this.currentRow.procInstId;
+          submitData.taskId = this.currentRow.taskId;
+          submitData.id = this.currentForm.id;
+          submitData.title = this.currentRow.title;
+          submitData.suggestion = examineResponse.suggestion;
+          submitTask(submitData)
+            .then(response => {
+              this.msgSuccess("保存成功");
+              this.submitLoading = false;
+              this.open = false;
+              this.getList();
+            })
+            .catch(err => {
+              console.log(err);
+              this.submitLoading = false;
+            });
+        })
+        .catch(err => {
+          this.$message.error(err);
           this.submitLoading = false;
-          this.open = false;
-          this.getList();
-        }).catch( err => {
-            console.log(err);
-            this.submitLoading = false;
+          console.log(err);
         });
-      }).catch( err => {
-        this.$message.error(err);
-        this.submitLoading = false;
-        console.log(err);
-      })
     },
     /** 删除按钮操作 */
     handleDelete(row) {
@@ -283,27 +323,32 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(function() {
-        return deleteComment(ids);
-      }).then(() => {
-        this.getList();
-        this.msgSuccess("删除成功");
-      }).catch(error => {
-        reject(error)
       })
+        .then(function() {
+          return deleteComment(ids);
+        })
+        .then(() => {
+          this.getList();
+          this.msgSuccess("删除成功");
+        })
+        .catch(error => {
+          reject(error);
+        });
     },
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有审批数据项?', "警告", {
+      this.$confirm("是否确认导出所有审批数据项?", "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      }).then(function() {
-        return exportComment(queryParams);
-      }).then(response => {
-        this.download(response.msg);
       })
+        .then(function() {
+          return exportComment(queryParams);
+        })
+        .then(response => {
+          this.download(response.msg);
+        });
     }
   }
 };

@@ -158,8 +158,8 @@ export default {
         username: null,
       },
       editData: {
-        username: "aaa",
-        deptName: "bbb",
+        username: "管理员",
+        deptName: "江苏省",
         // createTime: "2021-09-07",
       },
       // 表单参数

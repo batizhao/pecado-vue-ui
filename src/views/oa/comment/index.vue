@@ -81,10 +81,6 @@ export default {
   data() {
     return {
       jsonData: {},
-      dynamicData: {
-      },
-      remoteFuncs: {
-      },
       // 遮罩层
       loading: true,
       // 选中数组
@@ -161,21 +157,6 @@ export default {
         this.loading = false;
       });
     },
-    // 审批状态编辑
-    handleStatusChange(row) {
-      let text = row.status === "open" ? "启用" : "停用";
-      this.$confirm('确认要"' + text + '""' + row.name + '"吗?', "警告", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        }).then(function() {
-          return changeCommentStatus(row.id, row.status);
-        }).then(() => {
-          this.msgSuccess(text + "成功");
-        }).catch(function() {
-          row.status = row.status === "open" ? "close" : "open";
-        });
-    },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -210,16 +191,6 @@ export default {
       this.$nextTick( () => {
         this.open = true;
       })
-    },
-    /** 编辑按钮操作 */
-    handleUpdate(row) {
-      this.reset();
-      const id = row.id || this.ids
-      getComment(id).then(response => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "编辑审批";
-      });
     },
     /** 拟稿提交按钮 */
     submitForm() {
