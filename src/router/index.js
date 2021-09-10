@@ -145,20 +145,6 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/examing-form',
-    component: Layout,
-    redirect: 'noRedirect',
-    hidden: true,
-    children: [
-      {
-        path: '/examing-form/:id?',
-        component: (resolve) => require(['@/views/oa/task/examine-form/index.vue'], resolve),
-        name: 'examineForm',
-        meta: { title: '表单审核', icon: 'form'}
-      }
-    ]
-  },
-  {
     path: '/parse',
     component: Layout,
     redirect: 'noRedirect',

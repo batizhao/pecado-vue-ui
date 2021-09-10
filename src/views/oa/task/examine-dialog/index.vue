@@ -1,32 +1,36 @@
 <template>
   <div>
-    <div class="panel-title">意见</div>
-    <el-input
-      class="suggestion"
-      type="textarea"
-      v-model="suggestion"
-    ></el-input>
-    <div class="panel-title">下一处理节点</div>
-    <i class="el-icon-loading" v-if="nodeListLoading"></i>
-    <el-checkbox-group v-model="nodeCheckList" v-else>
-      <el-checkbox v-for="item in nodeList" :key="item.id" :label="item.id">{{ item.name }}</el-checkbox>
-    </el-checkbox-group>
-    <el-divider></el-divider>
-    <div class="panel-title">下一处理人</div>
-    <i class="el-icon-loading" v-if="peopelListLoading"></i>
-    <el-checkbox-group v-model="peopelCheckList" @change="peopleChange" v-else>
-      <el-checkbox v-for="item in peopelList" :key="item.id" :label="item.id">{{ item.name }}</el-checkbox>
-    </el-checkbox-group>
-    <el-divider></el-divider>
-    <div class="panel-title">
-      送相关部门对接人会签环节接收人:<span class="people-name">{{ recieveName }}</span>
-    </div>
-    <el-divider></el-divider>
-    <div class="panel-title">发送短信通知</div>
-    <el-radio-group v-model="sendMsgRadioVal">
-      <el-radio :label="1">是</el-radio>
-      <el-radio :label="0">否</el-radio>
-    </el-radio-group>
+    <el-row>
+
+      <e-col :span="22" >
+        <el-form label-width="130px" style=" width: 90%;">
+          <el-form-item label="意见:">
+            <el-input type="textarea" v-model="suggestion" ></el-input>
+          </el-form-item>
+          <el-form-item label="下一处理节点:">
+            <i class="el-icon-loading" v-if="nodeListLoading"></i>
+            <el-checkbox-group v-model="nodeCheckList" v-else>
+              <el-checkbox v-for="item in nodeList" :key="item.id" :label="item.id">{{ item.name }}</el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="下一处理人:">
+            <i class="el-icon-loading" v-if="peopelListLoading"></i>
+            <el-checkbox-group v-model="peopelCheckList" @change="peopleChange" v-else>
+              <el-checkbox v-for="item in peopelList" :key="item.id" :label="item.id">{{ item.name }}</el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="送相关部门对接人会签环节接收人:">
+            <span class="people-name">{{ recieveName }}</span>
+          </el-form-item>
+          <el-form-item label="发送短信通知:">
+            <el-radio-group v-model="sendMsgRadioVal">
+              <el-radio :label="1">是</el-radio>
+              <el-radio :label="0">否</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-form>
+      </e-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -138,37 +142,37 @@ export default {
 </script>
 <style lang="scss" scoped>
 .top-panel {
-  width: 100%;
-  height: 50px;
-  background-color: #d6eafc;
-  text-align: center;
+	width: 100%;
+	height: 50px;
+	background-color: #d6eafc;
+	text-align: center;
 }
 .suggestion {
-  padding-left: 10px;
-  padding-top: 5px;
-  padding-bottom: 10px;
-  width: 100%;
+	padding-left: 10px;
+	padding-top: 5px;
+	padding-bottom: 10px;
+	width: 100%;
 }
 .form {
-  margin-top: 20px;
-  padding-left: 50px;
-  padding-right: 50px;
+	margin-top: 20px;
+	padding-left: 50px;
+	padding-right: 50px;
 }
 .form-bottom {
-  text-align: center;
+	text-align: center;
 }
 .pl20 {
-  padding-left: 20px;
+	padding-left: 20px;
 }
 .panel-title {
-  padding-left: 10px;
-  padding-bottom: 10px;
-  font-weight: bold;
-  font-size: 15px;
-  .people-name {
-    padding-left: 10px;
-    font-weight: normal;
-    color: red;
-  }
+	padding-left: 10px;
+	padding-bottom: 10px;
+	font-weight: bold;
+	font-size: 15px;
+	.people-name {
+		padding-left: 10px;
+		font-weight: normal;
+		color: red;
+	}
 }
 </style>
