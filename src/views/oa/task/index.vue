@@ -40,7 +40,7 @@
           <el-button
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)">审核</el-button>
+            @click="handleUpdate(scope.row)">审批</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -162,24 +162,6 @@ export default {
           console.log(err);
         });
     },
-    // 审批状态编辑
-    handleStatusChange(row) {
-      let text = row.status === "open" ? "启用" : "停用";
-      this.$confirm('确认要"' + text + '""' + row.name + '"吗?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(function() {
-          return changeCommentStatus(row.id, row.status);
-        })
-        .then(() => {
-          this.msgSuccess(text + "成功");
-        })
-        .catch(function() {
-          row.status = row.status === "open" ? "close" : "open";
-        });
-    },
     // 取消按钮
     cancel() {
       this.open = false;
@@ -198,18 +180,6 @@ export default {
     resetQuery() {
       this.resetForm("queryForm");
       this.handleQuery();
-    },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.taskId);
-      this.single = selection.length !== 1;
-      this.multiple = !selection.length;
-    },
-    /** 添加按钮操作 */
-    handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加审批";
     },
     /** 编辑按钮操作 */
     handleUpdate(row) {
@@ -328,40 +298,6 @@ export default {
           this.$message.error(err);
           this.submitLoading = false;
           console.log(err);
-        });
-    },
-    /** 删除按钮操作 */
-    handleDelete(row) {
-      const ids = row.id || this.ids;
-      this.$confirm('是否确认删除审批编号为"' + ids + '"的数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(function() {
-          return deleteComment(ids);
-        })
-        .then(() => {
-          this.getList();
-          this.msgSuccess("删除成功");
-        })
-        .catch(error => {
-          reject(error);
-        });
-    },
-    /** 导出按钮操作 */
-    handleExport() {
-      const queryParams = this.queryParams;
-      this.$confirm("是否确认导出所有审批数据项?", "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(function() {
-          return exportComment(queryParams);
-        })
-        .then(response => {
-          this.download(response.msg);
         });
     }
   }
