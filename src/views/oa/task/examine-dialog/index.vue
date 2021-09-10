@@ -2,7 +2,7 @@
   <div>
     <el-row>
 
-      <e-col :span="22" >
+      <el-col :span="22" >
         <el-form label-width="130px" style=" width: 90%;">
           <el-form-item label="意见:">
             <el-input type="textarea" v-model="suggestion" ></el-input>
@@ -29,7 +29,7 @@
             </el-radio-group>
           </el-form-item>
         </el-form>
-      </e-col>
+      </el-col>
     </el-row>
   </div>
 </template>

@@ -8,6 +8,16 @@ export function listComments(query) {
   })
 }
 
+//获取流程指定环节意见
+export function getFlowNodeComments(query) {
+  return request({
+    url: '/oa/comments',
+    params:query,
+    data: {},
+    method: 'post',
+  })
+}
+
 // 查询审批
 export function listComment(query) {
   return request({

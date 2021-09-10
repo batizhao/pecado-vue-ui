@@ -88,6 +88,7 @@
 
 <script>
 import { listTasks, getTask, submitTask } from "@/api/oa/task";
+import { getFlowNodeComments } from "@/api/oa/comment";
 import { getFormByKey } from "@/api/dp/form";
 import { getFromUrl } from "@/api/common";
 import ExamineDialog from "@/views/oa/task/examine-dialog/index.vue";
@@ -215,48 +216,61 @@ export default {
       this.active = 0;
       this.currentRow = row;
       this.loading = true;
-      //表单从待办任务跳过来
-      getTask(row.taskId)
-        .then(response => {
+      getTask(row.taskId).then(response => {
           this.processDefinitionData = response.data || {};
           const formKey = response.data.config.config.form.pcPath;
           console.log("formKey:", formKey);
-          getFormByKey(formKey)
-            .then(res => {
+          getFormByKey(formKey).then(res => {
               this.currentForm = res.data || {};
               const formObj = JSON.parse(res.data.metadata || "{}");
               console.log("formObj:", formObj);
               this.jsonData = formObj.formData || {};
-
               if (row.url && row.appId !== null) {
                 let url = row.url + row.appId;
-                getFromUrl(url)
-                  .then(formUlrRes => {
+                getFromUrl(url).then(formUlrRes => {
                     const formUlrData = formUlrRes.data || {};
-
                     this.jsonData.fields.forEach(item => {
                       const val = formUlrData[item.__vModel__];
                       if (val) {
                         item.__config__.defaultValue = val;
                       }
                     });
-                    this.open = true;
-                    this.loading = false;
-                  })
-                  .catch(err => {
-                    this.loading = false;
-                    console.log(err);
-                  });
+                    //本部门主任审签
+                    const deptCommentOBj = (this.jsonData.fields || []).find( item => { return item.__vModel__ == 'deptComment'});
+                    if (deptCommentOBj) {
+                      const postData = {};
+                      postData.orderRule = 1;
+                      postData.procInstId = row.procInstId;
+                      postData.taskDefKeyList = row.taskDefKey;
+                      getFlowNodeComments(postData).then( res => {
+                        console.log(res);
+                        if (res.data) {
+                          
+                        }else{
+                          deptCommentOBj.__config__.defaultValue = "无意见";
+                        }
+                        this.open = true;
+                        this.loading = false;
+                      }).catch( err => {
+                        console.log(err);
+                        this.loading = false;
+                      })
+                    }else{
+                      this.open = true;
+                      this.loading = false;
+                    }
+                }).catch(err => {
+                  this.loading = false;
+                  console.log(err);
+                });
               } else {
                 this.loading = false;
               }
-            })
-            .catch(err => {
+            }).catch(err => {
               console.log(err);
               this.loading = false;
             });
-        })
-        .catch(err => {
+        }).catch(err => {
           console.log(err);
           this.loading = false;
         });
