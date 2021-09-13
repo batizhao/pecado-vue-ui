@@ -87,8 +87,7 @@
 </template>
 
 <script>
-import { listTasks, getTask, submitTask } from "@/api/oa/task";
-import { getFlowNodeComments } from "@/api/oa/comment";
+import { listTasks, getTask, submitTask, getFlowNodeComments } from "@/api/oa/task";
 import { getFormByKey } from "@/api/dp/form";
 import { getFromUrl } from "@/api/common";
 import ExamineDialog from "@/views/oa/task/examine-dialog/index.vue";
@@ -209,14 +208,14 @@ export default {
                     const deptCommentOBj = (this.jsonData.fields || []).find( item => { return item.__vModel__ == 'deptComment'});
                     if (deptCommentOBj) {
                       const postData = {};
-                      postData.orderRule = 1;
+                      postData.orderRule = 0;
                       postData.procInstId = row.procInstId;
-                      postData.taskDefKeyList = row.taskDefKey;
+                      postData.taskDefKeyList = response.data.config.config.form.controlCode.taskList;
                       getFlowNodeComments(postData).then( res => {
                         console.log(res);
                         if (res.data) {
-                          
-                        }else{
+                          deptCommentOBj.__config__.defaultValue = res.data[0].message;
+                        } else {
                           deptCommentOBj.__config__.defaultValue = "无意见";
                         }
                         this.open = true;
@@ -225,7 +224,7 @@ export default {
                         console.log(err);
                         this.loading = false;
                       })
-                    }else{
+                    } else {
                       this.open = true;
                       this.loading = false;
                     }
@@ -245,7 +244,6 @@ export default {
           this.loading = false;
         });
     },
-
     /**审批弹框上一步 */
     preStep() {
       this.active = 0;

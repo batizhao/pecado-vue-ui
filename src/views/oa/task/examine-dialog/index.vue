@@ -1,7 +1,6 @@
 <template>
   <div>
     <el-row>
-
       <el-col :span="22" >
         <el-form label-width="130px" style=" width: 90%;">
           <el-form-item label="意见:">

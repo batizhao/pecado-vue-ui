@@ -31,3 +31,11 @@ export function submitTask(data) {
     data: data
   })
 }
+
+//获取流程指定环节意见
+export function getFlowNodeComments(query) {
+  return request({
+    url: '/oa/comments',
+    params:query,
+  })
+}
