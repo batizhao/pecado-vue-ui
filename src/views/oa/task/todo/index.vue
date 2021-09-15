@@ -87,7 +87,7 @@
 </template>
 
 <script>
-import { listTasks, getTask, submitTask, getFlowNodeComments } from "@/api/oa/task";
+import { listTodoTasks, getTask, submitTask, getFlowNodeComments } from "@/api/oa/task";
 import { getFormByKey } from "@/api/dp/form";
 import { getFromUrl } from "@/api/common";
 import ExamineDialog from "@/views/oa/task/examine-dialog/index.vue";
@@ -150,7 +150,7 @@ export default {
     /** 查询审批列表 */
     getList() {
       this.loading = true;
-      listTasks(this.queryParams)
+      listTodoTasks(this.queryParams)
         .then(response => {
           this.taskList = response.data.records;
           this.total = response.data.total;

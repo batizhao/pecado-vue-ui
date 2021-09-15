@@ -10,10 +10,18 @@ export function getProcessRouter(processDefinitionId, taskDefKey) {
   return request(`/oa/process/${processDefinitionId}/${taskDefKey}`);
 }
 
-// 分页查询任务
-export function listTasks(query) {
+// 待办任务
+export function listTodoTasks(query) {
   return request({
-    url: '/oa/tasks',
+    url: '/oa/task/todo',
+    params: query
+  })
+}
+
+// 已办任务
+export function listDoneTasks(query) {
+  return request({
+    url: '/oa/task/done',
     params: query
   })
 }
