@@ -5,6 +5,15 @@
       ref="queryForm"
       :inline="true"
       v-show="showSearch">
+      <el-form-item label="公文标题" prop="title">
+        <el-input
+          v-model="queryParams.title"
+          placeholder="请输入公文标题"
+          clearable
+          size="small"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button
           type="primary"
@@ -21,7 +30,6 @@
         @queryTable="getList"></right-toolbar>
     </el-row>
     <el-table v-loading="loading" :data="taskList">
-      <!-- <el-table-column type="selection" width="55" align="center" /> -->
       <el-table-column label="任务ID" align="center" prop="taskId" />
       <el-table-column label="procInstId" align="center" prop="procInstId" />
       <el-table-column label="任务名" align="center" prop="taskName" />
@@ -128,10 +136,7 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {
-        title: [{ required: true, message: "标题不能为空", trigger: "blur" }],
-        comment: [{ required: true, message: "意见不能为空", trigger: "blur" }]
-      },
+      rules: {},
       //步骤数
       active: 0,
       //表单接口提交数据
