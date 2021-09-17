@@ -25,6 +25,9 @@ npm run build:prod
 ```
 
 # 连接后端设置
+
+登录账号 admin
+登录密码 123456
  
 vue.config.js:本地代理配置
 
@@ -36,5 +39,5 @@ vue.config.js:本地代理配置
   }
 }
 
-windows 添加 host 配置 :172.31.21.180 gateway.stalber.com
+windows 添加 host 配置：172.31.21.180 gateway.stalber.com
 需要连接办公室代理机
