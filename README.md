@@ -23,3 +23,18 @@ npm run build:stage
 # 构建生产环境
 npm run build:prod
 ```
+
+# 连接后端设置
+ 
+vue.config.js:本地代理配置
+
+[process.env.VUE_APP_BASE_API]: {
+  target: `http://gateway.stalber.com/api`,
+  changeOrigin: true,
+  pathRewrite: {
+    ['^' + process.env.VUE_APP_BASE_API]: ''
+  }
+}
+
+windows 添加 host 配置 :172.31.21.180 gateway.stalber.com
+需要连接办公室代理机
