@@ -233,7 +233,7 @@ export default {
         this.taskResponse = await getTask(row.taskId);
         console.log("taskResponse:",this.taskResponse);
         const autosign = this.taskResponse.data.config.config.global.controlCode.autosign;//判断是否自动签收
-        if (autosign) {
+        if (autosign == "true") {
           await signTask({ taskId:this.currentRow.taskId, type:0 });
           this.examineForm();
         }else{
@@ -254,6 +254,12 @@ export default {
 
         const formByKeyResponse = await getFormByKey(formKey);
         this.currentForm = formByKeyResponse.data || {};
+        if (!formByKeyResponse.data) {
+          this.loading = false;
+          this.signTaskLoading = false;
+          this.$message
+          return;
+        }
         const formObj = JSON.parse(formByKeyResponse.data.metadata || "{}");
         console.log("formObj:", formObj);
         this.jsonData = formObj.formData || {};
@@ -283,7 +289,7 @@ export default {
         }
         const postData = {};
         postData.orderRule = 0;
-        postData.procInstId = row.procInstId;
+        postData.procInstId = this.currentRow.procInstId;
         postData.taskDefKeyList = this.taskResponse.data.config.config.form.controlCode.taskList;
         if (!postData.taskDefKeyList) {
           this.open = true;
