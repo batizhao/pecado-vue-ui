@@ -257,7 +257,7 @@ export default {
         if (!formByKeyResponse.data) {
           this.loading = false;
           this.signTaskLoading = false;
-          this.$message
+          this.$message.error("表单数据不存在！")
           return;
         }
         const formObj = JSON.parse(formByKeyResponse.data.metadata || "{}");
