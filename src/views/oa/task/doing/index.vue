@@ -66,7 +66,6 @@
       :visible.sync="open"
       width="800px"
       v-if="open"
-      :show-close="false"
       :close-on-click-modal="false">
       <el-steps :active="active" finish-status="success">
         <el-step title="步骤1"></el-step>
@@ -89,43 +88,14 @@
           type="primary"
           :loading="submitLoading"
           @click="submitForm()">确定</el-button>
-        <el-button :loading="submitLoading" @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog
-      title="任务签收提示"
-      :visible.sync="taskSignTipsOpen"
-      width="800px"
-      :show-close="false"
-      :close-on-click-modal="false"
-    > 
-      <el-form label-width="180px">
-        <el-form-item label="待办人：">
-          <span></span>
-        </el-form-item>
-        <el-form-item label="在办人：">
-          <span></span>
-        </el-form-item>
-        <el-form-item label="发件人：">
-          <span></span>
-        </el-form-item>
-        <el-form-item label="发件时间：">
-          <span></span>
-        </el-form-item>
-        <el-form-item label="主题：">
-          <span></span>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button :loading="signTaskLoading" @click="signTaskCancel()">关闭</el-button>
-        <el-button type="primary" :loading="signTaskLoading" @click="signTaskComfirm()">确定</el-button>
+        <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { listTodoTasks, getTask, submitTask, getFlowNodeComments,signTask } from "@/api/oa/task";
+import { listTodoTasks, getTask, submitTask, getFlowNodeComments } from "@/api/oa/task";
 import { getFormByKey } from "@/api/dp/form";
 import { getFromUrl } from "@/api/common";
 import ExamineDialog from "@/views/oa/task/examine-dialog/index.vue";
@@ -160,7 +130,7 @@ export default {
       open: false,
       // 查询参数
       queryParams: {
-        status: 1,
+        status: 2,
         type: "1",
         current: 1,
         size: 10
@@ -177,13 +147,7 @@ export default {
       //审核提交 loading
       submitLoading: false,
       //当前列表选中的数据
-      currentRow: null,
-      //任务签收提示弹框是否显示
-      taskSignTipsOpen:false,
-      //签收loading
-      signTaskLoading:false,
-      //签收信息
-      signTaskForm:{},
+      currentRow: null
     };
   },
   created() {
@@ -208,7 +172,6 @@ export default {
     cancel() {
       this.open = false;
       this.reset();
-      this.getList();
     },
     // 表单重置
     reset() {
@@ -230,26 +193,10 @@ export default {
       this.currentRow = row;
       this.loading = true;
       try {
-        this.taskResponse = await getTask(row.taskId);
-        console.log("taskResponse:",this.taskResponse);
-        const autosign = this.taskResponse.data.config.config.global.controlCode.autosign;//判断是否自动签收
-        if (autosign) {
-          await signTask({ taskId:this.currentRow.taskId, type:0 });
-          this.examineForm();
-        }else{
-          this.taskSignTipsOpen = true;
-          this.loading = false;
-        }
-      } catch (error) {
-        console.log(error);
-        this.loading = false;
-      }
-    },
-    // 表单审批
-    async examineForm(){
-      try {
-        this.processDefinitionData = this.taskResponse.data || {};
-        const formKey = this.taskResponse.data.config.config.form.pcPath;
+        const taskResponse = await getTask(row.taskId);
+        console.log("taskResponse:",taskResponse);
+        this.processDefinitionData = taskResponse.data || {};
+        const formKey = taskResponse.data.config.config.form.pcPath;
         console.log("formKey:", formKey);
 
         const formByKeyResponse = await getFormByKey(formKey);
@@ -257,12 +204,11 @@ export default {
         const formObj = JSON.parse(formByKeyResponse.data.metadata || "{}");
         console.log("formObj:", formObj);
         this.jsonData = formObj.formData || {};
-        if (!(this.currentRow.url && this.currentRow.appId !== null)) {
+        if (!(row.url && row.appId !== null)) {
           this.loading = false;
-          this.signTaskLoading = false;
           return;
         }
-        let url = this.currentRow.url + this.currentRow.appId;
+        let url = row.url + row.appId;
 
         const formUrlResponse = await getFromUrl(url);
         const formUlrData = formUrlResponse.data || {};
@@ -277,22 +223,18 @@ export default {
         if (!deptCommentOBj) {
           this.open = true;
           this.loading = false;
-          this.signTaskLoading = false;
-          this.taskSignTipsOpen = false;
           return
         }
         const postData = {};
         postData.orderRule = 0;
         postData.procInstId = row.procInstId;
-        postData.taskDefKeyList = this.taskResponse.data.config.config.form.controlCode.taskList;
+        postData.taskDefKeyList = taskResponse.data.config.config.form.controlCode.taskList;
         if (!postData.taskDefKeyList) {
           this.open = true;
           this.loading = false;
-          this.signTaskLoading = false;
-          this.taskSignTipsOpen = false;
           return
         }
-
+        
         const flowNodeCommentsResponse = await getFlowNodeComments(postData);
         console.log("flowNodeCommentsResponse:",flowNodeCommentsResponse);
         if (flowNodeCommentsResponse.data && flowNodeCommentsResponse.data[0]) {
@@ -300,8 +242,6 @@ export default {
         } else {
           deptCommentOBj.__config__.defaultValue = "无意见";
         }
-        this.signTaskLoading = false;
-        this.taskSignTipsOpen = false;
         this.loading = false;
         this.open = true;
       } catch (error) {
@@ -362,24 +302,7 @@ export default {
           this.submitLoading = false;
           console.log(err);
         });
-    },
-    //取消签收
-    signTaskCancel(){
-      this.taskSignTipsOpen = false;
-      this.getList();
-    },
-    //签收
-    async signTaskComfirm(){
-      try {
-        this.signTaskLoading = true;
-        const signTaskResponse = await signTask({ taskId:this.currentRow.taskId, type:0 });
-        console.log("signTaskResponse:",signTaskResponse);
-        this.examineForm();
-      } catch (error) {
-        this.signTaskLoading = false;
-        console.log(error);
-      }
-    },
+    }
   }
 };
 </script>

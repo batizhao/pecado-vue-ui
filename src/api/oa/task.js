@@ -47,3 +47,12 @@ export function getFlowNodeComments(query) {
     params:query,
   })
 }
+
+//签收
+export function signTask(query) {
+  return request({
+    url: '/oa/task/sign',
+    method: 'post',
+    params:query
+  })
+}

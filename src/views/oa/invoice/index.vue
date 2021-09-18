@@ -33,6 +33,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['oa:invoice:add']"
+          :loading="handleAddLoading"
         >添加</el-button>
       </el-col>
       <el-col :span="1.5">
