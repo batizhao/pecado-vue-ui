@@ -139,8 +139,6 @@ export default {
       rules: {},
       //步骤数
       active: 0,
-      //表单接口提交数据
-      submitFormData: {},
       currentForm: {},
       //审核提交 loading
       submitLoading: false,

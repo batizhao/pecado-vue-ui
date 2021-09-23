@@ -141,8 +141,6 @@ export default {
       rules: {},
       //步骤数
       active: 0,
-      //表单接口提交数据
-      submitFormData: {},
       currentForm: {},
       //审核提交 loading
       submitLoading: false,
@@ -236,7 +234,7 @@ export default {
         }
         
         const flowNodeCommentsResponse = await getFlowNodeComments(postData);
-        console.log("flowNodeCommentsResponse:",flowNodeCommentsResponse);
+        console.log("flowNodeCommentsResponse:", flowNodeCommentsResponse);
         if (flowNodeCommentsResponse.data && flowNodeCommentsResponse.data[0]) {
           deptCommentOBj.__config__.defaultValue = flowNodeCommentsResponse.data[0].message;
         } else {

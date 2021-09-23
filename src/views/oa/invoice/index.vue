@@ -178,8 +178,8 @@ export default {
       },
       //流程数据
       processDefinitionData: {},
-      //表单接口提交数据
-      submitFormData: {},
+      //业务数据
+      invoiceData: {},
       //步骤数
       active: 0,
       //拟稿提交按钮loading
@@ -254,13 +254,13 @@ export default {
     submitForm() {
       this.submitLoading = true;
       this.$refs.examineDialog.getExamineData().then( flowData =>{
-        const submitData = { task:{ processNodeDTO: flowData.processNodeDTO }, invoice:{} };
+        const submitData = { task: { processNodeDTO: flowData.processNodeDTO } };
         let { dto,view } = this.processDefinitionData;
         submitData.task.current = view.dto.id;
         submitData.task.processDefinitionId = dto.id;
-        Object.assign(submitData.invoice, this.submitFormData);
-        submitData.invoice.id = undefined;
-        console.log("submitData:",submitData);
+        Object.assign(submitData, this.invoiceData);
+        submitData.task.id = undefined;
+        console.log("submitData:", submitData);
 
         addOrUpdateInvoice(submitData).then(response => {
           this.msgSuccess("保存成功");
@@ -284,7 +284,7 @@ export default {
     nextStep(){
       this.$refs.form.submitForm().then(data => {
         this.active = 1;
-        this.submitFormData = data;
+        this.invoiceData = data;
         const examineData = {
           processDefinitionId: this.processDefinitionData.dto.id,
           taskDefKey: this.processDefinitionData.view.dto.id
