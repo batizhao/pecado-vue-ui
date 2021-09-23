@@ -131,8 +131,7 @@ export default {
   },
   data() {
     return {
-      jsonData: {
-      },
+      jsonData: {},
       // 遮罩层
       loading: true,
       // 选中数组
@@ -178,15 +177,15 @@ export default {
         ],
       },
       //流程数据
-      processDefinitionData:{},
+      processDefinitionData: {},
       //表单接口提交数据
-      submitFormData:{},
+      submitFormData: {},
       //步骤数
       active: 0,
       //拟稿提交按钮loading
-      submitLoading:false,
+      submitLoading: false,
       //拟稿按钮loading
-      handleAddLoading:false
+      handleAddLoading: false
     };
   },
   created() {
@@ -200,11 +199,9 @@ export default {
         this.jsonData = formObj.formData || {};
         this.handleAddLoading = false;
       }).catch( err => {
-        console.log(err);
         this.handleAddLoading = false;
       });
     }).catch( err => {
-      console.log(err);
       this.handleAddLoading = false;
     });
   },
@@ -256,17 +253,15 @@ export default {
     /** 提交按钮 */
     submitForm() {
       this.submitLoading = true;
-      console.log(this.submitFormData);
       this.$refs.examineDialog.getExamineData().then( flowData =>{
-        console.log(flowData);
-        const submitData = { task:{processNodeDTO:flowData.processNodeDTO},invoice:{} };
+        const submitData = { task:{ processNodeDTO: flowData.processNodeDTO }, invoice:{} };
         let { dto,view } = this.processDefinitionData;
         submitData.task.current = view.dto.id;
         submitData.task.processDefinitionId = dto.id;
         Object.assign(submitData.invoice, this.submitFormData);
         submitData.invoice.id = undefined;
         console.log("submitData:",submitData);
-        
+
         addOrUpdateInvoice(submitData).then(response => {
           this.msgSuccess("保存成功");
           this.getList();
@@ -274,24 +269,20 @@ export default {
           this.submitLoading = false;
         }).catch( err => {
           this.submitLoading = false;
-          console.log(err);
         });
       }).catch( err => {
-        console.log(err);
         this.msgError(err);
         this.submitLoading = false;
       })
     },
     sumbitFormParse(data){
-      return new Promise( (resolve,reject) => {
-        console.log("sumbitFormParse:", data);
+      return new Promise( (resolve, reject) => {
         resolve(data)
       });
     },
     /**拟稿弹框下一步 */
     nextStep(){
-      this.$refs.form.submitForm().then( data => {
-        console.log("nextStep:",data);
+      this.$refs.form.submitForm().then(data => {
         this.active = 1;
         this.submitFormData = data;
         const examineData = {
