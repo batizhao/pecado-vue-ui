@@ -46,6 +46,19 @@
           </span>
           <el-input v-model="info.mappingPath" />
         </el-form-item>
+      </el-col>      
+
+      <el-col :span="12">
+        <el-form-item prop="workflow">
+          <span slot="label">
+            整合工作流引擎
+            <el-tooltip content="需要部署流程引擎平台" placement="top">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </span>
+          <el-radio v-model="info.workflow" label="yes">是</el-radio>
+          <el-radio v-model="info.workflow" label="no">否</el-radio>
+        </el-form-item>
       </el-col>
 
       <el-col :span="12">
@@ -58,6 +71,19 @@
           </span>
           <el-radio v-model="info.form" label="meta">元数据</el-radio>
           <el-radio v-model="info.form" label="visual">可视化</el-radio>
+        </el-form-item>
+      </el-col>
+
+      <el-col :span="12">
+        <el-form-item prop="testcase">
+          <span slot="label">
+            生成测试用例
+            <el-tooltip content="1、已经引入依赖；2、测试基类已经存在；3、可能部分用例需要手动调整" placement="top">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </span>
+          <el-radio v-model="info.testcase" label="yes">是</el-radio>
+          <el-radio v-model="info.testcase" label="no">否</el-radio>
         </el-form-item>
       </el-col>
 
@@ -97,7 +123,7 @@
         <el-form-item prop="path">
           <span slot="label">
             自定义路径
-            <el-tooltip content="填写磁盘绝对路径，若不填写，则生成到当前Web项目下" placement="top">
+            <el-tooltip content="需要填写磁盘绝对路径，可以直接指向你的项目或者模块路径。若不填写，则生成到当前Web项目下。" placement="top">
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
@@ -114,7 +140,7 @@
           </el-input>
         </el-form-item>
       </el-col>
-    </el-row>
+    </el-row>    
 
     <el-row v-show="info.template == 'onetomany'">
       <el-divider content-position="left">关联信息</el-divider>
