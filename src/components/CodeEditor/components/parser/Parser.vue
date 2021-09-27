@@ -210,7 +210,9 @@ export default {
 
 				this.$refs[this.formConf.formRef].validate(valid => {
 					if (valid){//return false
-						this.$emit('submit', this[this.formConf.formModel])// 触发sumit事件
+						if(this.showSubmit){
+              this.$emit('submit', this[this.formConf.formModel])// 触发sumit事件
+            }
 						resolve(this[this.formConf.formModel])
 					}
 					//return true
