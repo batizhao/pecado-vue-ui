@@ -98,12 +98,15 @@
         <el-step title="步骤2"></el-step>
       </el-steps>
       <el-row class="step-body">
-        <Parse
+        <parse
           v-show="active == 0"
-          :form-conf="jsonData" :edit-data="editData" @submit="sumbitFormParse" :showSubmit="false"
+          :form-conf="jsonData"
+          :edit-data="editData" 
+          @submit="sumbitFormParse" 
+          :showSubmit="false"
           ref="form"
         >
-        </Parse>
+        </parse>
         <ExamineDialog v-show="active == 1" ref="examineDialog"/>
       </el-row>
       <div slot="footer" class="dialog-footer">

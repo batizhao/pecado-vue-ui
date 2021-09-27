@@ -118,12 +118,14 @@
           <el-radio v-model="info.type" label="path">自定义路径</el-radio>
         </el-form-item>
       </el-col>
+    </el-row>
 
+    <el-row>
       <el-col :span="12" v-if="info.type == 'path'">
         <el-form-item prop="path">
           <span slot="label">
-            自定义路径
-            <el-tooltip content="需要填写磁盘绝对路径，可以直接指向你的项目或者模块路径。若不填写，则生成到当前Web项目下。" placement="top">
+            后端项目路径
+            <el-tooltip content="需要填写磁盘绝对路径，可以直接指向你的项目或者模块根路径。若不填写，则生成到当前Web项目下。" placement="top">
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
@@ -135,6 +137,28 @@
               </el-button>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item @click.native="info.path = '/'">恢复默认的生成基础路径</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </el-input>
+        </el-form-item>
+      </el-col>
+
+      <el-col :span="12" v-if="info.type == 'path'">
+        <el-form-item prop="frontPath">
+          <span slot="label">
+            前端项目路径
+            <el-tooltip content="需要填写磁盘绝对路径，可以直接指向你的项目或者模块路径。若不填写，则生成到当前Web项目下。" placement="top">
+              <i class="el-icon-question"></i>
+            </el-tooltip>
+          </span>
+          <el-input v-model="info.frontPath">
+            <el-dropdown slot="append">
+              <el-button type="primary">
+                最近路径快速选择
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item @click.native="info.frontPath = '/'">恢复默认的生成基础路径</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-input>
