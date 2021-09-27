@@ -33,7 +33,6 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['oa:invoice:add']"
-          :loading="handleAddLoading"
         >添加</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -102,7 +101,6 @@
           v-show="active == 0"
           :form-conf="jsonData"
           :edit-data="editData" 
-          @submit="sumbitFormParse" 
           :showSubmit="false"
           ref="form"
         >
@@ -110,9 +108,9 @@
         <ExamineDialog v-show="active == 1" ref="examineDialog"/>
       </el-row>
       <div slot="footer" class="dialog-footer">
-        <el-button v-if="active == 1" @click="preStep()">上一步</el-button>
-        <el-button v-if="active == 0" @click="nextStep()">下一步</el-button>
-        <el-button v-if="active == 1" type="primary" :loading="submitLoading" @click="submitForm()">确定</el-button>
+        <el-button v-if="active == 1" @click="preStep">上一步</el-button>
+        <el-button v-if="active == 0" @click="nextStep">下一步</el-button>
+        <el-button v-if="active == 1" type="primary" @click="submitForm">确定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -121,6 +119,7 @@
 
 <script>
 import { listInvoices, getInvoice, deleteInvoice, addOrUpdateInvoice } from "@/api/oa/invoice";
+import { downLoadExcel } from "@/utils/download";
 import { getFormByKey } from "@/api/dp/form";
 import { getProcessDefinition } from "@/api/oa/task";
 import ExamineDialog from '@/views/oa/task/examine-dialog/index.vue'
@@ -135,6 +134,11 @@ export default {
   data() {
     return {
       jsonData: {},
+      editData: {
+        username: "管理员",
+        deptName: "江苏省",
+        // createTime: "2021-09-07",
+      },
       // 遮罩层
       loading: true,
       // 选中数组
@@ -160,52 +164,25 @@ export default {
         deptName: null,
         username: null,
       },
-      editData: {
-        username: "管理员",
-        deptName: "江苏省",
-        // createTime: "2021-09-07",
-      },
       // 表单参数
       form: {},
-      // 表单校验
-      rules: {
-        title: [
-          { required: true, message: "标题不能为空", trigger: "blur" }
-        ],
-        company: [
-          { required: true, message: "单位名称不能为空", trigger: "blur" }
-        ],
-        companyNumber: [
-          { required: true, message: "纳税人识别号不能为空", trigger: "blur" }
-        ],
-      },
       //流程数据
       processDefinitionData: {},
       //业务数据
       invoiceData: {},
       //步骤数
       active: 0,
-      //拟稿提交按钮loading
-      submitLoading: false,
-      //拟稿按钮loading
-      handleAddLoading: false
     };
   },
   created() {
     this.getList();
-    this.handleAddLoading = true;
     getProcessDefinition('jsoa_sgkjfpsp').then( response => {
       this.processDefinitionData = response.data || {};
-      const formKey = response.data.view.config.config.form.pcPath || '6135bd76df5244611e50a1bb';
+      const formKey = this.processDefinitionData.view.config.config.form.pcPath || '6135bd76df5244611e50a1bb';
       getFormByKey(formKey).then( res => {
         const formObj = JSON.parse(res.data.metadata || '{}');
         this.jsonData = formObj.formData || {};
-        this.handleAddLoading = false;
-      }).catch( err => {
-        this.handleAddLoading = false;
       });
-    }).catch( err => {
-      this.handleAddLoading = false;
     });
   },
   methods: {
@@ -255,10 +232,13 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
-      this.submitLoading = true;
-      this.$refs.examineDialog.getExamineData().then( flowData =>{
-        const submitData = { task: { processNodeDTO: flowData.processNodeDTO } };
-        let { dto,view } = this.processDefinitionData;
+      this.$refs.examineDialog.getExamineData().then( flowData => {
+        const submitData = { 
+          task: { 
+            processNodeDTO: flowData.processNodeDTO
+          } 
+        };
+        let { dto, view } = this.processDefinitionData;
         submitData.task.current = view.dto.id;
         submitData.task.processDefinitionId = dto.id;
         Object.assign(submitData, this.invoiceData);
@@ -269,18 +249,7 @@ export default {
           this.msgSuccess("保存成功");
           this.getList();
           this.open = false;
-          this.submitLoading = false;
-        }).catch( err => {
-          this.submitLoading = false;
         });
-      }).catch( err => {
-        this.msgError(err);
-        this.submitLoading = false;
-      })
-    },
-    sumbitFormParse(data){
-      return new Promise( (resolve, reject) => {
-        resolve(data)
       });
     },
     /**拟稿弹框下一步 */
@@ -327,9 +296,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(function() {
-        return exportInvoice(queryParams);
-      }).then(response => {
-        this.download(response.msg);
+        downLoadExcel("/oa/invoice/export", queryParams);
       })
     }
   }
