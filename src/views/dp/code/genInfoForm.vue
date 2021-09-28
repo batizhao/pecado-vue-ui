@@ -56,13 +56,13 @@
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-radio v-model="info.workflow" label="yes">是</el-radio>
-          <el-radio v-model="info.workflow" label="no">否</el-radio>
+          <el-radio v-model="info.workflow" @change="workflowRadioChange" label="yes">是</el-radio>
+          <el-radio v-model="info.workflow" @change="workflowRadioChange" label="no">否</el-radio>
         </el-form-item>
       </el-col>
 
       <el-col :span="12" v-if="info.workflow == 'yes'">
-        <el-form-item prop="workflowKey">
+        <el-form-item prop="workflowKey" :required="info.workflow == 'yes'" error="请输入流程Key">
           <span slot="label">
             流程Key
             <el-tooltip content="和流程平台绑定流程关键字" placement="top">
@@ -81,8 +81,8 @@
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-radio v-model="info.form" label="meta">元数据</el-radio>
-          <el-radio v-model="info.form" label="visual">可视化</el-radio>
+          <el-radio v-model="info.form" :disabled="info.workflow == 'yes'" label="meta">元数据</el-radio>
+          <el-radio v-model="info.form" :disabled="info.workflow == 'yes'" label="visual">可视化</el-radio>
         </el-form-item>
       </el-col>
 
@@ -257,6 +257,9 @@ export default {
         mappingPath: [
           { required: true, message: "请输入后端 API 路径", trigger: "blur" }
         ],
+        workflowKey: [
+          { required: true, message: "请输入流程Key", trigger: "blur" }
+        ],
       }
     };
   },
@@ -277,6 +280,12 @@ export default {
         label: node.name,
         children: node.children
       };
+    },
+    /** 整合工作流引擎RadioChange */
+    workflowRadioChange(val){
+      if (val == "yes") {
+        this.info.form = "visual"
+      }
     },
     /** 选择子表名触发 */
     subSelectChange(value) {
