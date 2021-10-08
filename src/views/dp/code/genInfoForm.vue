@@ -56,8 +56,12 @@
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-radio v-model="info.workflow" @change="workflowRadioChange" label="yes">是</el-radio>
-          <el-radio v-model="info.workflow" @change="workflowRadioChange" label="no">否</el-radio>
+          <el-switch
+            v-model="info.workflow"
+            @change="workflowRadioChange"
+            active-value="yes"
+            inactive-value="no">
+          </el-switch>
         </el-form-item>
       </el-col>
 
@@ -81,8 +85,10 @@
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-radio v-model="info.form" :disabled="info.workflow == 'yes'" label="meta">元数据</el-radio>
-          <el-radio v-model="info.form" :disabled="info.workflow == 'yes'" label="visual">可视化</el-radio>
+          <el-radio-group v-model="info.form" :disabled="info.workflow == 'yes'" size="medium">
+            <el-radio-button label="meta">元数据</el-radio-button>
+            <el-radio-button label="visual">可视化</el-radio-button>
+          </el-radio-group>
         </el-form-item>
       </el-col>
 
@@ -94,8 +100,11 @@
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-radio v-model="info.testcase" label="yes">是</el-radio>
-          <el-radio v-model="info.testcase" label="no">否</el-radio>
+          <el-switch
+            v-model="info.testcase"
+            active-value="yes"
+            inactive-value="no">
+          </el-switch>
         </el-form-item>
       </el-col>
 
@@ -126,8 +135,10 @@
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-radio v-model="info.type" label="zip">zip下载</el-radio>
-          <el-radio v-model="info.type" label="path">自定义路径</el-radio>
+          <el-radio-group v-model="info.type" size="medium">
+            <el-radio-button label="zip">zip下载</el-radio-button>
+            <el-radio-button label="path">自定义路径</el-radio-button>
+          </el-radio-group>
         </el-form-item>
       </el-col>
     </el-row>
