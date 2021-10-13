@@ -106,7 +106,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -124,7 +124,7 @@
           <el-input v-model="form.name" placeholder="请输入模板名称" />
         </el-form-item>
         <el-form-item label="模板内容">
-          <editor v-model="form.content" :min-height="192"/>
+          <code-editor v-model="form.content" language="Velocity"/>
         </el-form-item>
         <el-form-item label="模板描述" prop="description">
           <el-input v-model="form.description" placeholder="请输入模板描述" />
@@ -141,12 +141,12 @@
 <script>
 import { listCodeTemplates, getCodeTemplate, deleteCodeTemplate, addOrUpdateCodeTemplate, changeCodeTemplateStatus } from "@/api/dp/template";
 import { downLoadExcel } from "@/utils/download";
-import Editor from '@/components/Editor';
+import CodeEditor from "@/components/CodeEditor/components/CodeEditor";
 
 export default {
   name: "CodeTemplate",
   components: {
-    Editor,
+    CodeEditor,
   },
   data() {
     return {
@@ -252,13 +252,13 @@ export default {
       this.ids = selection.map(item => item.id)
       this.single = selection.length!==1
       this.multiple = !selection.length
-    },    
+    },
     /** 添加按钮操作 */
     handleAdd() {
       this.reset();
       this.open = true;
       this.title = "添加模板配置";
-    },    
+    },
     /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
