@@ -1,9 +1,10 @@
 <template>
   <div class="in-coder-panel">
     <textarea ref="textarea"></textarea>
-    <el-select class="code-mode-select" v-model="mode" @change="changeMode">
+    <el-select :class="['code-mode-select',fullScreen?'code-mode-select-close':'']" v-model="mode" @change="changeMode">
       <el-option v-for="(mode,index) in modes" :key="index" :label="mode.label" :value="mode.value"></el-option>
     </el-select>
+    <el-button @click="fullscreen" :class="['fullscreenBtn',fullScreen?'fullscreen-close':'']">全屏切换</el-button>
   </div>
 </template>
 
@@ -15,6 +16,10 @@
   import 'codemirror/lib/codemirror.css'
   // 引入主题后还需要在 options 中指定主题才会生效
   import 'codemirror/theme/cobalt.css'
+
+  // 引入全屏样式
+  import 'codemirror/addon/display/fullscreen.css'
+  import 'codemirror/addon/display/fullscreen.js'
 
   // 需要引入具体的语法高亮库才会有对应的语法高亮效果
   // codemirror 官方其实支持通过 /addon/mode/loadmode.js 和 /mode/meta.js 来实现动态加载对应语法高亮库
@@ -57,6 +62,8 @@
         mode: 'javascript',
         // 编辑器实例
         coder: null,
+        // 全屏显示状态
+        fullScreen:false,
         // 默认配置
         options: {
           // 缩进格式
@@ -168,6 +175,11 @@
 
         // 允许父容器通过以下函数监听当前的语法值
         this.$emit('language-change', label)
+      },
+      // 全屏切换
+      fullscreen () {
+        this.fullScreen = !this.fullScreen
+        this.coder.setOption('fullScreen', this.fullScreen)
       }
     }
   }
@@ -191,6 +203,16 @@
       right: 10px;
       top: 10px;
       max-width: 130px;
+    }
+    .fullscreenBtn{
+      position: absolute;
+      z-index: 2;
+      right: 150px;
+      top: 10px;
+      max-width: 130px;
+    }
+    .code-mode-select-close,.fullscreen-close{
+      position: fixed;
     }
   }
 </style>
