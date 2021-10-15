@@ -52,6 +52,10 @@
       language: {
         type: String,
         default: null
+      },
+      editorHeight:{
+        type: String,
+        default: ''
       }
     },
     data () {
@@ -132,6 +136,9 @@
         // 编辑器赋值
         this.coder.setValue(this.value || this.code)
 
+        // 编辑器调整大小
+        this.coder.setSize('auto',this.editorHeight)
+
         // 支持双向绑定
         this.coder.on('change', (coder) => {
           this.code = coder.getValue()
@@ -192,21 +199,21 @@
     position: relative;
     .CodeMirror{
       flex-grow: 1;
-      z-index: 1;
+      z-index: 1002;
       .CodeMirror-code{
         line-height: 19px;
       }
     }
     .code-mode-select{
       position: absolute;
-      z-index: 2;
+      z-index: 1003;
       right: 10px;
       top: 10px;
       max-width: 130px;
     }
     .fullscreenBtn{
       position: absolute;
-      z-index: 2;
+      z-index: 1003;
       right: 150px;
       top: 10px;
       max-width: 130px;
