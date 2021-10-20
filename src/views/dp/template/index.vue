@@ -19,7 +19,6 @@
             :expand-on-click-node="false"
             :filter-node-method="filterNode"
             ref="tree"
-            node-key="id"
             default-expand-all
             @node-click="handleNodeClick"
           />
@@ -33,6 +32,7 @@
 </template>
 
 <script>
+import { listCodeTemplates, getCodeTemplate } from "@/api/dp/template";
 import CodeEditor from "@/components/CodeEditor/components/CodeEditor";
 export default {
   name: "CodeTemplate",
@@ -45,10 +45,10 @@ export default {
       // 搜索框
       templateName: '',
       // 树结构数据
-      templateOptions:[],
+      templateOptions: [],
       defaultProps: {
         children: "children",
-        label: "name"
+        label: "label"
       },
       // 配置代码
       codeContent: ''
@@ -60,10 +60,22 @@ export default {
       this.$refs.tree.filter(val);
     }
   },
-  created(){
-    // 查询树结构
+  created() {
+    this.getList();
   },
   methods:{
+    /** 查询模板配置列表 */
+    getList() {
+      this.loading = true;
+      listCodeTemplates(this.queryParams).then(response => {
+        this.templateOptions = response.data;
+        this.loading = false;
+      });
+      // getCodeTemplate("/Users/batizhao/Documents/templates/pecado/test/ControllerUnitTest.java.vm").then(response => {
+      //   this.codeContent = response.data;
+      //   this.loading = false;
+      // });
+    },
     // 查询模板配置参数
     getTemplate() {
       this.loading = true;

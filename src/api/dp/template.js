@@ -17,8 +17,8 @@ export function listCodeTemplate(query) {
 }
 
 // 查询模板配置详细
-export function getCodeTemplate(id) {
-  return request(`/dp/code/template/${id}`);
+export function getCodeTemplate(path) {
+  return request(`/dp/code/template?path=${path}`);
 }
 
 // 添加或者编辑模板配置
