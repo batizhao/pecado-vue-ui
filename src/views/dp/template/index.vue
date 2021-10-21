@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" v-loading="pageLoading">
     <el-row :gutter="20">
       <el-col :span="4" :xs="24">
         <div class="head-container">
@@ -16,7 +16,7 @@
           <el-tree
             :data="templateOptions"
             :props="defaultProps"
-            :expand-on-click-node="false"
+            :expand-on-click-node="true"
             :filter-node-method="filterNode"
             ref="tree"
             default-expand-all
@@ -24,8 +24,13 @@
           />
         </div>
       </el-col>
-      <el-col :span="20" :xs="24" v-loading="loading">
-        <code-editor v-model="codeContent" language="Velocity" editorHeight="calc(100vh - 120px)"/>
+      <el-col :span="20" :xs="24" v-loading="loading" class="editor_container">
+        <code-editor
+          v-if="codeEditorShow"
+          v-model="codeContent"
+          language="Velocity"
+          editorHeight="calc(100vh - 120px)"
+        />
       </el-col>
     </el-row>
   </div>
@@ -41,6 +46,7 @@ export default {
   },
   data(){
     return {
+      pageLoading:true,
       loading:false,
       // 搜索框
       templateName: '',
@@ -51,7 +57,9 @@ export default {
         label: "label"
       },
       // 配置代码
-      codeContent: ''
+      codeContent: '',
+      // 编辑器显示状态 强制刷新重新渲染数据
+      codeEditorShow: true,
     }
   },
   watch: {
@@ -66,35 +74,82 @@ export default {
   methods:{
     /** 查询模板配置列表 */
     getList() {
-      this.loading = true;
       listCodeTemplates(this.queryParams).then(response => {
         this.templateOptions = response.data;
-        this.loading = false;
+        this.pageLoading = false;
       });
-      // getCodeTemplate("/Users/batizhao/Documents/templates/pecado/test/ControllerUnitTest.java.vm").then(response => {
-      //   this.codeContent = response.data;
-      //   this.loading = false;
-      // });
     },
     // 查询模板配置参数
-    getTemplate() {
+    getTemplate(path) {
       this.loading = true;
-
+      this.codeEditorShow = false;
+      getCodeTemplate(path).then(response => {
+        this.codeContent = response.data;
+        this.codeEditorShow = true
+        this.loading = false;
+      });
     },
     // 筛选节点
     filterNode(value, data) {
       if (!value) return true;
-      return data.name.indexOf(value) !== -1;
+      return data.label.indexOf(value) !== -1;
     },
     // 节点单击事件
     handleNodeClick(data) {
-      // this.queryParams.departmentId = data.id;
-      this.getTemplate();
+      // 有子节点不调接口
+      data.leaf ? this.getTemplate(data.path) : '';
     },
   }
 }
 </script>
 
-<style>
+<style scoped  lang="scss">
+.editor_container{
+  height: calc(100vh - 120px);
+}
+::v-deep .el-tree{
+  .el-tree-node__expand-icon.expanded {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  .el-tree-node__expand-icon.expanded {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  /* 有子节点 且未展开 */
+  .el-icon-caret-right:before {
+    background: url('~@/assets/images/closeFile.svg') no-repeat 0 3px;
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    background-size: 16px;
+  }
+
+  /* 有子节点 且已展开 */
+  .el-tree-node__expand-icon.expanded.el-icon-caret-right:before {
+    background: url('~@/assets/images/openFile.svg') no-repeat 0 3px;
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    background-size: 16px;
+  }
+
+  /* 没有子节点 */
+  .el-tree-node__expand-icon.is-leaf::before {
+    background: #fff;
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    background-size: 16px;
+  }
+}
 
 </style>
