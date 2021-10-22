@@ -1,7 +1,7 @@
 <template>
   <div class="app-container" v-loading="pageLoading">
     <el-row :gutter="20">
-      <el-col :span="4" :xs="24">
+      <el-col :span="4" :xs="24" class="tree_container">
         <div class="head-container">
           <el-input
             v-model="templateName"
@@ -23,6 +23,7 @@
             @node-click="handleNodeClick"
           />
         </div>
+        <el-button type="primary" size="small" class="confirm" @click="confirm">提交</el-button>
       </el-col>
       <el-col :span="20" :xs="24" v-loading="loading" class="editor_container">
         <code-editor
@@ -37,7 +38,7 @@
 </template>
 
 <script>
-import { listCodeTemplates, getCodeTemplate } from "@/api/dp/template";
+import { listCodeTemplates, getCodeTemplate, addOrUpdateCodeTemplate } from "@/api/dp/template";
 import CodeEditor from "@/components/CodeEditor/components/CodeEditor";
 export default {
   name: "CodeTemplate",
@@ -60,6 +61,8 @@ export default {
       codeContent: '',
       // 编辑器显示状态 强制刷新重新渲染数据
       codeEditorShow: true,
+      // 当前节点的Path属性
+      currentPath: ''
     }
   },
   watch: {
@@ -96,14 +99,34 @@ export default {
     },
     // 节点单击事件
     handleNodeClick(data) {
+      this.currentPath = data.path
       // 有子节点不调接口
       data.leaf ? this.getTemplate(data.path) : '';
     },
+    // 提交更改
+    confirm(){
+      let params = {
+        path: this.currentPath,
+        codeContent: this.codeContent
+      }
+      addOrUpdateCodeTemplate(params).then(res =>{
+        this.msgSuccess("保存成功");
+      })
+    }
   }
 }
 </script>
 
 <style scoped  lang="scss">
+.tree_container{
+  height: calc(100vh - 120px);
+  position: relative;
+  .confirm{
+    width: calc(100% - 20px);
+    position: absolute;
+    bottom: 0;
+  }
+}
 .editor_container{
   height: calc(100vh - 120px);
 }

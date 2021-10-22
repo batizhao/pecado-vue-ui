@@ -1,10 +1,10 @@
 <template>
   <div class="in-coder-panel">
     <textarea ref="textarea"></textarea>
-    <el-select :class="['code-mode-select',fullScreen?'code-mode-select-close':'']" v-model="mode" @change="changeMode">
+    <el-select :class="['code-mode-select',fullScreen?'code-mode-select-close':'']" v-model="mode" @change="changeMode" size="small">
       <el-option v-for="(mode,index) in modes" :key="index" :label="mode.label" :value="mode.value"></el-option>
     </el-select>
-    <el-button @click="fullscreen" :class="['fullscreenBtn',fullScreen?'fullscreen-close':'']">全屏切换</el-button>
+    <el-button @click="fullscreen" :class="['fullscreenBtn',fullScreen?'fullscreen-close':'']" size="small">全屏切换</el-button>
   </div>
 </template>
 
