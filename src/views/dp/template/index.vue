@@ -129,8 +129,11 @@ export default {
 </script>
 
 <style scoped  lang="scss">
+.app-container{
+  padding-top: 0;
+}
 ::v-deep .action-bar{
-  text-align: center;
+  text-align: right;
   .el-popover{
     max-height: 200px;
     overflow-y: scroll;
