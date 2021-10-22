@@ -127,6 +127,7 @@
       this._initialize()
       let currentLanguage = this.modes.find(item => { return item.label === this.language })
       this.changeMode(currentLanguage.value)
+      this.$emit('modes', this.modes)
     },
     methods: {
       // 初始化
@@ -210,6 +211,7 @@
       right: 10px;
       top: 10px;
       max-width: 130px;
+      display: none;
     }
     .fullscreenBtn{
       position: absolute;
@@ -217,9 +219,11 @@
       right: 150px;
       top: 10px;
       max-width: 130px;
+      display: none;
     }
     .code-mode-select-close,.fullscreen-close{
       position: fixed;
+      display: block;
     }
   }
 </style>

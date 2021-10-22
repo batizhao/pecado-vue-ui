@@ -1,36 +1,41 @@
 <template>
   <div class="app-container" v-loading="pageLoading">
+    <div class="action-bar">
+      <el-button icon="el-icon-circle-check" type="text" @click="confirm">
+        保存
+      </el-button>
+      <el-button icon="el-icon-view" type="text" @click="fullScreen">
+        全屏
+      </el-button>
+      <el-button icon="el-icon-edit-outline" type="text" @click="visible = true">
+        语言切换
+        <el-popover
+          placement="bottom"
+          width="160"
+          v-model="visible">
+          <el-col v-for="item in modes" :key="item.value" class="modeItem" @click.native.stop="chooseMode(item)">{{item.label}}</el-col>
+        </el-popover>
+      </el-button>
+    </div>
     <el-row :gutter="20">
       <el-col :span="4" :xs="24" class="tree_container">
-        <div class="head-container">
-          <el-input
-            v-model="templateName"
-            placeholder="请输入模板配置名称"
-            clearable
-            size="small"
-            prefix-icon="el-icon-search"
-            style="margin-bottom: 20px"
-          />
-        </div>
-        <div class="head-container">
-          <el-tree
-            :data="templateOptions"
-            :props="defaultProps"
-            :expand-on-click-node="true"
-            :filter-node-method="filterNode"
-            ref="tree"
-            default-expand-all
-            @node-click="handleNodeClick"
-          />
-        </div>
-        <el-button type="primary" size="small" class="confirm" @click="confirm">提交</el-button>
+        <el-tree
+          :data="templateOptions"
+          :props="defaultProps"
+          :expand-on-click-node="true"
+          ref="tree"
+          default-expand-all
+          @node-click="handleNodeClick"
+        />
       </el-col>
       <el-col :span="20" :xs="24" v-loading="loading" class="editor_container">
         <code-editor
+          ref="codeEditor"
           v-if="codeEditorShow"
           v-model="codeContent"
           language="Velocity"
           editorHeight="calc(100vh - 120px)"
+          @modes="setModes"
         />
       </el-col>
     </el-row>
@@ -49,8 +54,6 @@ export default {
     return {
       pageLoading:true,
       loading:false,
-      // 搜索框
-      templateName: '',
       // 树结构数据
       templateOptions: [],
       defaultProps: {
@@ -62,13 +65,11 @@ export default {
       // 编辑器显示状态 强制刷新重新渲染数据
       codeEditorShow: true,
       // 当前节点的Path属性
-      currentPath: ''
-    }
-  },
-  watch: {
-    // 根据名称筛选模板树
-    templateName(val) {
-      this.$refs.tree.filter(val);
+      currentPath: '',
+      // 选择语言提示框
+      visible: false,
+      // 语言数组
+      modes: []
     }
   },
   created() {
@@ -92,11 +93,6 @@ export default {
         this.loading = false;
       });
     },
-    // 筛选节点
-    filterNode(value, data) {
-      if (!value) return true;
-      return data.label.indexOf(value) !== -1;
-    },
     // 节点单击事件
     handleNodeClick(data) {
       this.currentPath = data.path
@@ -112,12 +108,37 @@ export default {
       addOrUpdateCodeTemplate(params).then(res =>{
         this.msgSuccess("保存成功");
       })
+    },
+    // 全屏
+    fullScreen(){
+      this.visible = false
+      this.$refs.codeEditor.fullscreen()
+    },
+    // 子组件传来的语言数组
+    setModes(val){
+      this.modes = val
+    },
+    // 切换语言
+    chooseMode(val){
+      this.visible = false
+      this.$refs.codeEditor.changeMode(val.value)
+      this.$refs.codeEditor.mode = val.value
     }
   }
 }
 </script>
 
 <style scoped  lang="scss">
+::v-deep .action-bar{
+  text-align: center;
+  .el-popover{
+    max-height: 200px;
+    overflow-y: scroll;
+    .modeItem{
+      margin: 4px 0;
+    }
+  }
+}
 .tree_container{
   height: calc(100vh - 120px);
   position: relative;
