@@ -26,6 +26,7 @@
           ref="tree"
           default-expand-all
           @node-click="handleNodeClick"
+          :highlight-current="true"
         />
       </el-col>
       <el-col :span="20" :xs="24" v-loading="loading" class="editor_container">
@@ -142,13 +143,16 @@ export default {
     }
   }
 }
-.tree_container{
+::v-deep .tree_container{
   height: calc(100vh - 120px);
   position: relative;
   .confirm{
     width: calc(100% - 20px);
     position: absolute;
     bottom: 0;
+  }
+  .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+    background-color: #d6e6f7;
   }
 }
 .editor_container{
