@@ -7,13 +7,13 @@
       <el-button icon="el-icon-view" type="text" @click="fullScreen">
         全屏
       </el-button>
-      <el-button icon="el-icon-edit-outline" type="text" @click="visible = true">
+      <el-button icon="el-icon-edit-outline" type="text" @click="visible = !visible">
         语言切换
         <el-popover
           placement="bottom"
           width="160"
           v-model="visible">
-          <el-col v-for="item in modes" :key="item.value" class="modeItem" @click.native.stop="chooseMode(item)">{{item.label}}</el-col>
+          <el-col v-for="item in modes" :key="item.value" class="modeItem" @click.native.stop="chooseMode(item)" :class="{'selectedLanguage':language===item.label?true:false}">{{item.label}}</el-col>
         </el-popover>
       </el-button>
     </div>
@@ -34,9 +34,10 @@
           ref="codeEditor"
           v-if="codeEditorShow"
           v-model="codeContent"
-          language="Velocity"
+          :language="language"
           editorHeight="calc(100vh - 120px)"
           @modes="setModes"
+          @language-change="languageChange"
         />
       </el-col>
     </el-row>
@@ -70,7 +71,9 @@ export default {
       // 选择语言提示框
       visible: false,
       // 语言数组
-      modes: []
+      modes: [],
+      // 当前语言
+      language:'Velocity'
     }
   },
   created() {
@@ -122,8 +125,14 @@ export default {
     // 切换语言
     chooseMode(val){
       this.visible = false
+      this.language = val.label
+      console.log(this.language);
       this.$refs.codeEditor.changeMode(val.value)
       this.$refs.codeEditor.mode = val.value
+    },
+    // 全屏切换语言
+    languageChange(val){
+      this.language = val
     }
   }
 }
@@ -140,6 +149,9 @@ export default {
     overflow-y: scroll;
     .modeItem{
       margin: 4px 0;
+    }
+    .selectedLanguage{
+      background-color: #d6e6f7;
     }
   }
 }

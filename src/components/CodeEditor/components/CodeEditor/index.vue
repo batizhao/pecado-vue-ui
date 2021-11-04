@@ -179,7 +179,7 @@
         this.coder.setOption('mode', `text/${val}`)
 
         // 获取修改后的语法
-        let label = this._getLanguage(val).label.toLowerCase()
+        let label = this._getLanguage(val).label
 
         // 允许父容器通过以下函数监听当前的语法值
         this.$emit('language-change', label)
