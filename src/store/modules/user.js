@@ -8,12 +8,24 @@ const user = {
     name: '',
     avatar: '',
     roles: [],
-    permissions: []
+    permissions: [],
+    timestamp: '',
+    user: {},
+    loginFlag: false,
   },
 
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
+    },
+    SET_TIMESTAMP: (state, timestamp) => {
+      state.timestamp = timestamp
+    },
+    SET_USER: (state, user) => {
+      state.user = user
+    },
+    SET_LOGINFLAG: (state, loginFlag) => {
+      state.loginFlag = loginFlag
     },
     SET_NAME: (state, name) => {
       state.name = name
@@ -31,22 +43,31 @@ const user = {
 
   actions: {
     // 登录
-    Login({ commit }, userInfo) {
+    async Login({ commit }, userInfo) {
       const username = userInfo.username.trim()
       const password = userInfo.password
       const code = userInfo.code
       const uuid = userInfo.uuid
       return new Promise((resolve, reject) => {
         login(username, password, code, uuid).then(res => {
-          setToken(res.data)
-          commit('SET_TOKEN', res.data)
+          setToken(res.data.token)
+          commit('SET_TOKEN', res.data.token)
+          let time = (new Date()).getTime()
+          commit('SET_TIMESTAMP', time + res.data.expire*1000)
+          commit('SET_LOGINFLAG', false)
           resolve()
         }).catch(error => {
           reject(error)
         })
       })
     },
-
+    // 保存用户账号密码
+    SaveUser({ commit }, userInfo) {
+      commit('SET_USER', userInfo)
+    },
+    SetLoginFlag({ commit }, loginFlag) {
+      commit('SET_LOGINFLAG', loginFlag)
+    },
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
@@ -67,7 +88,7 @@ const user = {
         })
       })
     },
-    
+
     // 退出系统
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
