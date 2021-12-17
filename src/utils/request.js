@@ -17,48 +17,34 @@ const service = axios.create({
   timeout: 10000
 })
 // request拦截器
-service.interceptors.request.use(async config => {
-  const request = () => {
-    // 是否需要设置 token
-    const isToken = (config.headers || {}).isToken === false
-    if (getToken() && !isToken) {
-      config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行编辑
-    }
-    // get请求映射params参数
-    if (config.method === 'get' && config.params) {
-      let url = config.url + '?';
-      for (const propName of Object.keys(config.params)) {
-        const value = config.params[propName];
-        var part = encodeURIComponent(propName) + "=";
-        if (value !== null && typeof(value) !== "undefined") {
-          if (typeof value === 'object') {
-            for (const key of Object.keys(value)) {
-              let params = propName + '[' + key + ']';
-              var subPart = encodeURIComponent(params) + "=";
-              url += subPart + encodeURIComponent(value[key]) + "&";
-            }
-          } else {
-            url += part + encodeURIComponent(value) + "&";
+service.interceptors.request.use(config => {
+  // 是否需要设置 token
+  const isToken = (config.headers || {}).isToken === false
+  if (getToken() && !isToken) {
+    config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行编辑
+  }
+  // get请求映射params参数
+  if (config.method === 'get' && config.params) {
+    let url = config.url + '?';
+    for (const propName of Object.keys(config.params)) {
+      const value = config.params[propName];
+      var part = encodeURIComponent(propName) + "=";
+      if (value !== null && typeof(value) !== "undefined") {
+        if (typeof value === 'object') {
+          for (const key of Object.keys(value)) {
+            let params = propName + '[' + key + ']';
+            var subPart = encodeURIComponent(params) + "=";
+            url += subPart + encodeURIComponent(value[key]) + "&";
           }
+        } else {
+          url += part + encodeURIComponent(value) + "&";
         }
       }
-      url = url.slice(0, -1);
-      config.params = {};
-      config.url = url;
     }
+    url = url.slice(0, -1);
+    config.params = {};
+    config.url = url;
   }
-  if (store.state.user.token && !store.state.user.loginFlag) {
-    let time = (new Date()).getTime()
-    if (time > store.state.user.timestamp) {
-      store.dispatch('SetLoginFlag', true)
-      await store.dispatch('Login', store.state.user.user).then(() => {
-        request()
-      })
-      return config
-    }
-    store.dispatch('SetLoginFlag', false)
-  }
-  request()
   return config
 }, error => {
     Promise.reject(error)
