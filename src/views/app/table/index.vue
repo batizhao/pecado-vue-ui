@@ -1,30 +1,6 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch">
-      <el-form-item label="名称" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          placeholder="请输入名称"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="分类" prop="typeId">
-        <el-select
-          v-model="queryParams.typeId"
-          placeholder="请选择应用分类"
-          clearable
-          size="small"
-        >
-          <el-option
-            v-for="type in appTypeList"
-            :key="type.id"
-            :label="type.name"
-            :value="type.id"
-          />
-        </el-select>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -75,25 +51,20 @@
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
-    <el-table v-loading="loading" :data="appList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="appTableList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="名称" align="center" prop="name" />
-      <el-table-column label="编码" align="center" prop="code" />
-      <el-table-column label="状态" align="center">
-        <template slot-scope="scope">
-          <el-switch
-            v-model="scope.row.status"
-            @change="handleStatusChange(scope.row)"
-            active-value="open"
-            inactive-value="close"
-          ></el-switch>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="id" align="center" prop="id" />
+      <el-table-column label="数据源" align="center" prop="dsName" />
+      <el-table-column label="表名" align="center" prop="tableName" />
+      <el-table-column label="表注释" align="center" prop="tableComment" />
+      <el-table-column label="列名" align="center" prop="columnName" />
+      <el-table-column label="列注释" align="center" prop="columnComment" />
+      <el-table-column label="列类型" align="center" prop="columnType" />
+      <el-table-column label="长度" align="center" prop="length" />
+      <el-table-column label="小数点位数" align="center" prop="decimal" />
+      <el-table-column label="是否主键" align="center" prop="primaryKey" />
+      <el-table-column label="是否自增" align="center" prop="increment" />
+      <el-table-column label="是否必须" align="center" prop="required" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -102,12 +73,6 @@
             @click="handleUpdate(scope.row)"
             v-hasPermi="['app:dev:edit']"
           >编辑</el-button>
-          <el-button
-            type="text"
-            icon="el-icon-edit-outline"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['app:dev:edit']"
-          >配置</el-button>
           <el-button
             type="text"
             icon="el-icon-delete"
@@ -125,33 +90,35 @@
       :limit.sync="queryParams.size"
       @pagination="getList"
     />
-    <!-- 添加或编辑应用对话框 -->
+    <!-- 添加或编辑应用表对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" v-if="open" :close-on-click-modal="false" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入名称" />
+        <el-form-item label="表名" prop="tableName">
+          <el-input v-model="form.tableName" placeholder="请输入表名" />
         </el-form-item>
-        <el-form-item label="编码" prop="code">
-          <el-input v-model="form.code" placeholder="请输入编码" />
+        <el-form-item label="表注释" prop="tableComment">
+          <el-input v-model="form.tableComment" placeholder="请输入表注释" />
         </el-form-item>
-        <el-form-item label="分类" prop="typeId">
-          <el-select v-model="form.typeId" placeholder="请选择" @change="change()">
-            <el-option
-              v-for="item in appTypeList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+        <el-form-item label="列名" prop="columnName">
+          <el-input v-model="form.columnName" placeholder="请输入列名" />
         </el-form-item>
-        <el-form-item label="描述" prop="description">
-          <el-input v-model="form.description" placeholder="请输入描述" />
+        <el-form-item label="列注释" prop="columnComment">
+          <el-input v-model="form.columnComment" placeholder="请输入列注释" />
         </el-form-item>
-        <el-form-item label="图标" prop="icon">
-          <el-input v-model="form.icon" placeholder="请输入图标" />
+        <el-form-item label="长度" prop="length">
+          <el-input v-model="form.length" placeholder="请输入长度" />
         </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input v-model="form.sort" placeholder="请输入排序" />
+        <el-form-item label="小数点位数" prop="decimal">
+          <el-input v-model="form.decimal" placeholder="请输入小数点位数" />
+        </el-form-item>
+        <el-form-item label="是否主键" prop="primaryKey">
+          <el-input v-model="form.primaryKey" placeholder="请输入是否主键" />
+        </el-form-item>
+        <el-form-item label="是否自增" prop="increment">
+          <el-input v-model="form.increment" placeholder="请输入是否自增" />
+        </el-form-item>
+        <el-form-item label="是否必须" prop="required">
+          <el-input v-model="form.required" placeholder="请输入是否必须" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -163,12 +130,11 @@
 </template>
 
 <script>
-import { listApps, getApp, deleteApp, addOrUpdateApp, changeAppStatus } from "@/api/app/dev";
-import { listAppType } from "@/api/app/type";
+import { listAppTables, listAppTable, getAppTable, deleteAppTable, addOrUpdateAppTable, changeAppTableStatus } from "@/api/app/table";
 import { downLoadExcel } from "@/utils/download";
 
 export default {
-  name: "App",
+  name: "AppTable",
   components: {
   },
   data() {
@@ -187,12 +153,10 @@ export default {
       multiple: true,
       // 总条数
       total: 0,
-      // 应用数据
-      appList: [],
-      // 应用分类数据
-      appTypeList: [],
       // 显示搜索条件
       showSearch: true,
+      // 应用表表格数据
+      appTableList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -201,20 +165,40 @@ export default {
       queryParams: {
         current: 1,
         size: 10,
-        name: null,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        name: [
-          { required: true, message: "名称不能为空", trigger: "blur" }
+        dsName: [
+          { required: true, message: "数据源不能为空", trigger: "change" }
         ],
-        code: [
-          { required: true, message: "编码不能为空", trigger: "blur" }
+        tableName: [
+          { required: true, message: "表名不能为空", trigger: "blur" }
         ],
-        typeId: [
-          { required: true, message: "分类不能为空", trigger: "change" }
+        tableComment: [
+          { required: true, message: "表注释不能为空", trigger: "blur" }
+        ],
+        columnName: [
+          { required: true, message: "列名不能为空", trigger: "blur" }
+        ],
+        columnComment: [
+          { required: true, message: "列注释不能为空", trigger: "blur" }
+        ],
+        columnType: [
+          { required: true, message: "列类型不能为空", trigger: "change" }
+        ],
+        length: [
+          { required: true, message: "长度不能为空", trigger: "blur" }
+        ],
+        primaryKey: [
+          { required: true, message: "是否主键不能为空", trigger: "blur" }
+        ],
+        increment: [
+          { required: true, message: "是否自增不能为空", trigger: "blur" }
+        ],
+        required: [
+          { required: true, message: "是否必须不能为空", trigger: "blur" }
         ],
       }
     };
@@ -223,19 +207,16 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询应用列表 */
+    /** 查询应用表列表 */
     getList() {
       this.loading = true;
-      listApps(this.queryParams).then(response => {
-        this.appList = response.data.records;
+      listAppTables(this.queryParams).then(response => {
+        this.appTableList = response.data.records;
         this.total = response.data.total;
         this.loading = false;
       });
-      listAppType().then(response => {
-        this.appTypeList = response.data;
-      });
     },
-    // 应用状态编辑
+    // 应用表状态编辑
     handleStatusChange(row) {
       let text = row.status === "open" ? "启用" : "停用";
       this.$confirm('确认要"' + text + '""' + row.name + '"吗?', "警告", {
@@ -243,7 +224,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(function() {
-        return changeAppStatus(row.id, row.status);
+        return changeAppTableStatus(row.id, row.status);
       }).then(() => {
         this.msgSuccess(text + "成功");
       }).catch(function() {
@@ -281,23 +262,23 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加应用";
+      this.title = "添加应用表";
     },    
     /** 编辑按钮操作 */
     handleUpdate(row) {
       this.reset();
       this.id = row.id || this.ids
-      getApp(this.id).then(response => {
+      getAppTable(this.id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "编辑应用";
+        this.title = "编辑应用表";
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          addOrUpdateApp(this.form).then(response => {
+          addOrUpdateAppTable(this.form).then(response => {
             this.msgSuccess("保存成功");
             this.open = false;
             this.getList();
@@ -314,7 +295,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(function() {
-        return deleteApp(ids);
+        return deleteAppTable(ids);
       }).then(() => {
         this.getList();
         this.msgSuccess("删除成功");
@@ -325,12 +306,12 @@ export default {
     /** 导出按钮操作 */
     handleExport() {
       const queryParams = this.queryParams;
-      this.$confirm('是否确认导出所有应用数据项?', "警告", {
+      this.$confirm('是否确认导出所有应用表数据项?', "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(function() {
-        downLoadExcel("/app/dev/export", queryParams);
+        downLoadExcel("/app/table/export", queryParams);
       })
     }
   }
