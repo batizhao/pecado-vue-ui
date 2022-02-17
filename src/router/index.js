@@ -53,7 +53,11 @@ export const constantRoutes = [
     component: (resolve) => require(['@/views/error/401'], resolve),
     hidden: true
   },
-
+  {
+    path: '/portal',//门户
+    component: (resolve) => require(['@/views/portal'], resolve),
+    hidden: true
+  },
   {
     path: '',
     component: Layout,
