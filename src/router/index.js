@@ -54,9 +54,22 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/portal',//门户
-    component: (resolve) => require(['@/views/portal'], resolve),
+    path: '/home',//门户
+    component: (resolve) => require(['@/views/home'], resolve),
     hidden: true
+  },
+  {
+    path: '/portal',// 门户配置
+    component: Layout,
+    redirect: 'index',
+    children: [
+      {
+        path: 'index',
+        component: (resolve) => require(['@/views/dashboard'], resolve),
+        name: '门户配置',
+        meta: { title: '门户配置', icon: 'dashboard', affix: true }
+      }
+    ]
   },
   {
     path: '',
