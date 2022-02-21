@@ -162,6 +162,17 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/app/settings',
+    component: Layout,
+    children: [
+      {
+        path: '/app/settings',
+        component: () => import('@/views/app/settings/index.vue'),
+        meta: { title: '应用配置', activeMenu: '/app/dev' }
+      }
+    ]
+  }
 ]
 
 export default new Router({

@@ -22,6 +22,14 @@ import Pagination from "@/components/Pagination";
 // 自定义表格工具扩展
 import RightToolbar from "@/components/RightToolbar"
 
+// 全局二次封装elmenment组件
+import ActionButton from '@/components/GlobalElementComponent/actionButton.vue'
+import ActionDialog from '@/components/GlobalElementComponent/actionDialog.vue'
+import ActionForm from '@/components/GlobalElementComponent/actionForm.vue'
+
+// font-awesome图标库
+import './assets/styles/font-awesome-4.7.0/css/font-awesome.min.css'
+
 import VueI18n from 'vue-i18n'
 import enLocale from 'element-ui/lib/locale/lang/en'
 import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
@@ -54,6 +62,9 @@ Vue.prototype.msgInfo = function (msg) {
 // 全局组件挂载
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)
+Vue.component('ActionButton', ActionButton)
+Vue.component('ActionDialog', ActionDialog)
+Vue.component('ActionForm', ActionForm)
 
 Vue.use(permission)
 
