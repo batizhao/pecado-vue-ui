@@ -47,3 +47,12 @@ export function changeAppStatus(id, status) {
     data: data
   })
 }
+
+// 获取表格查询接口数据
+export function getTableData(url, params) {
+  return request({
+    url,
+    method: 'get',
+    params
+  })
+}

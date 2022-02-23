@@ -176,12 +176,16 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/app/settings',
+    path: '/app',
     component: Layout,
+    hidden: true,
+    redirect: 'noRedirect',
+    meta: { title: '应用开发' },
     children: [
       {
-        path: '/app/settings',
+        path: 'settings/:appId',
         component: () => import('@/views/app/settings/index.vue'),
+        name: 'appSettings',
         meta: { title: '应用配置', activeMenu: '/app/dev' }
       }
     ]

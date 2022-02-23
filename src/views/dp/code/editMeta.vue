@@ -1,10 +1,10 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" :style="isDialog ? { padding: 0 } : ''">
     <el-tabs v-model="activeName">
       <el-tab-pane label="基本信息" name="basic">
         <basic-info-form ref="basicInfo" :info="code" />
       </el-tab-pane>
-      <el-tab-pane label="字段信息" name="cloum">
+      <el-tab-pane label="字段信息" name="cloum" v-if="!isDialog">
         <el-table ref="dragTable" :data="codeMetas" row-key="id" :max-height="tableHeight">
           <el-table-column label="序号" type="index" min-width="5%" class-name="allowDrag" />
           <el-table-column
@@ -118,7 +118,7 @@
         <gen-info-form ref="genInfo" :info="code" :tables="codes" :menus="menus"/>
       </el-tab-pane>
     </el-tabs>
-    <el-form label-width="100px">
+    <el-form label-width="100px" v-if="!isDialog">
       <el-form-item style="text-align: center;margin-left:-100px;margin-top:10px;">
         <el-button type="primary" @click="submitForm()">提交</el-button>
         <el-button @click="close()">返回</el-button>
@@ -130,6 +130,7 @@
 import { getCode, addOrUpdateCode } from "@/api/dp/code";
 import { optionSelect as getDictOptionSelect } from "@/api/system/dict/type";
 import { listMenu as getMenuTreeSelect } from "@/api/ims/menu";
+import { entityModelDetail } from '@/api/app/dataModel.js'
 import basicInfoForm from "./basicInfoForm";
 import genInfoForm from "./genInfoForm";
 import Sortable from 'sortablejs'
@@ -140,10 +141,14 @@ export default {
     basicInfoForm,
     genInfoForm
   },
+  props: {
+    isDialog: Boolean,
+    entityModelId: Number
+  },
   data() {
     return {
       // 选中选项卡的 name
-      activeName: "cloum",
+      activeName: this.isDialog ? 'basic' : 'cloum',
       // 表格的高度
       tableHeight: document.documentElement.scrollHeight - 245 + "px",
       // 表信息
@@ -159,23 +164,31 @@ export default {
     };
   },
   created() {
-    const id = this.$route.params && this.$route.params.id;
-    if (id) {
-      // 获取表详细信息
-      getCode(id).then(res => {
-        this.codeMetas = res.data.codeMetas;
-        this.code = res.data.code;
-        this.codes = res.data.codes;
-      });
-      /** 查询字典下拉列表 */
-      getDictOptionSelect().then(response => {
-        this.dictOptions = response.data;
-      });
-      /** 查询菜单下拉列表 */
-      getMenuTreeSelect().then(response => {
-        this.menus = response.data;
-      });
+    if (this.isDialog) {
+      entityModelDetail(this.entityModelId).then(res => {
+        console.log("🚀 ~ file: editMeta.vue ~ line 171 ~ entityModelDetail ~ res", res)
+        this.code = {}
+        this.codes = {}
+      })
+    } else {
+      const id = this.$route.params && this.$route.params.id
+      if (id) {
+        // 获取表详细信息
+        getCode(id).then(res => {
+          this.codeMetas = res.data.codeMetas;
+          this.code = res.data.code;
+          this.codes = res.data.codes;
+        });
+        /** 查询字典下拉列表 */
+        getDictOptionSelect().then(response => {
+          this.dictOptions = response.data;
+        });
+      }
     }
+    /** 查询菜单下拉列表 */
+    getMenuTreeSelect().then(response => {
+      this.menus = response.data;
+    });
   },
   methods: {
     /** 提交按钮 */
@@ -212,17 +225,19 @@ export default {
     }
   },
   mounted() {
-    const el = this.$refs.dragTable.$el.querySelectorAll(".el-table__body-wrapper > table > tbody")[0];
-    const sortable = Sortable.create(el, {
-      handle: ".allowDrag",
-      onEnd: evt => {
-        const targetRow = this.codeMetas.splice(evt.oldIndex, 1)[0];
-        this.codeMetas.splice(evt.newIndex, 0, targetRow);
-        for (let index in this.codeMetas) {
-          this.codeMetas[index].sort = parseInt(index) + 1;
+    if (this.$refs.dragTable) {
+      const el = this.$refs.dragTable.$el.querySelectorAll(".el-table__body-wrapper > table > tbody")[0];
+      const sortable = Sortable.create(el, {
+        handle: ".allowDrag",
+        onEnd: evt => {
+          const targetRow = this.codeMetas.splice(evt.oldIndex, 1)[0];
+          this.codeMetas.splice(evt.newIndex, 0, targetRow);
+          for (let index in this.codeMetas) {
+            this.codeMetas[index].sort = parseInt(index) + 1;
+          }
         }
-      }
-    });
+      });
+    }
   }
 };
 </script>

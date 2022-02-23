@@ -4,6 +4,7 @@
     :visible.sync="visible"
     :width="width"
     :close-on-click-modal="false"
+    :fullscreen="fullscreen"
     append-to-body
   >
     <slot></slot>
@@ -26,7 +27,8 @@ export default {
       type: String,
       default: '50%'
     },
-    loading: Boolean
+    loading: Boolean,
+    fullscreen: Boolean
   },
   data () {
     return {

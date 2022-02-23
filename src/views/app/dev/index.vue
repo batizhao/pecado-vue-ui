@@ -2,7 +2,7 @@
   <div class="app-dev">
     <div class="app-dev-main">
       <div class="app-dev-buttons mb8">
-        <action-button @click="handleAdd">创建应用</action-button>
+        <action-button @click="handleAdd" actionType="1">创建应用</action-button>
       </div>
       <div class="app-dev-tabs">
         <el-tabs v-model="activeName">
@@ -239,7 +239,7 @@ export default {
     // 配置应用
     toAppSettings (appId) {
       this.$router.push({
-        path: '/app/settings'
+        path: '/app/settings/' + appId
       })
     }
   }
@@ -256,6 +256,7 @@ $iconSize: 80px;
     background: #fff;
     height: 100%;
     padding: 20px;
+    overflow: auto;
   }
   .app-dev-list {
     display: flex;

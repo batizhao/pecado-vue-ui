@@ -1,20 +1,29 @@
 <template>
   <div>
-    <table-filter @query="tableQuery" :conditions="conditions" :loading="loading"></table-filter>
     <el-table
       :data="data"
-      class="d2-table"
-      highlight-current-row
       v-loading="loading"
+      border
+      @selection-change="selectionChange"
     >
+      <el-table-column type="selection" width="55">
+      </el-table-column>
+      <el-table-column
+        type="index"
+        label="序号"
+        width="55"
+        :index="indexMethod">
+      </el-table-column>
       <el-table-column
         v-for="(item, index) in columns"
         :key="index"
         v-bind="item"
         show-overflow-tooltip
       >
-        <template slot-scope="scope">
-          <div v-if="item.template" v-html="item.template(scope.row)"></div>
+        <template slot-scope="scope"> 
+          <div v-if="item.slotName">
+            <slot :name="item.slotName" :row="scope.row"></slot>
+          </div>
           <span v-else>{{ scope.row[item.prop] }}</span>
         </template>
       </el-table-column>
@@ -25,6 +34,7 @@
       </el-table-column>
     </el-table>
     <el-pagination
+      background
       @size-change="paginationSizeChange"
       @current-change="paginationCurrentChange"
       v-bind="pagination"
@@ -34,16 +44,11 @@
 </template>
 
 <script>
-import tableFilter from './table-filter.vue'
-import api from '@/api'
+import { getTableData } from '@/api/app/dev.js'
 export default {
-  components: {
-    tableFilter
-  },
   props: {
     url: String, // 请求接口路径
     columns: Array, // 表格列
-    conditions: Array, // 条件筛选
     otherParams: Object // 其他参数
   },
   data () {
@@ -52,14 +57,17 @@ export default {
         currentPage: 1,
         pageSize: 10,
         total: 0,
-        layout: 'prev, pager, next, sizes, jumper'
+        layout: 'total, sizes, prev, pager, next, jumper'
       },
-      tableFilterParams: {},
       data: [],
-      loading: false
+      loading: false,
+      selectedIds: []
     }
   },
   methods: {
+    indexMethod (index) {
+      return index + 1 + (this.pagination.currentPage - 1 ) * this.pagination.pageSize
+    },
     paginationCurrentChange (currentPage) {
       this.pagination.currentPage = currentPage
       this.getTableData()
@@ -69,33 +77,32 @@ export default {
       this.pagination.pageSize = pageSize
       this.getTableData()
     },
-    cellLinkClick (prop, row) {
-      console.log(prop, row)
-    },
     getTableData () {
       const { currentPage, pageSize } = this.pagination
       const params = {
-        pageSize: pageSize,
-        pageNum: currentPage,
-        ...this.tableFilterParams,
+        size: pageSize,
+        current: currentPage,
         ...this.otherParams
       }
-      console.log('🚀 ~ file: index.vue ~ line 91 ~ getTableData ~ params', params)
       this.loading = true
-      api.getTableData(this.url, params).then(res => {
-        setTimeout(() => {
-          this.pagination.total = res.total
-          this.data = res.records
-          this.loading = false
-        }, 1000)
+      getTableData(this.url, params).then(res => {
+        this.pagination.total = res.data.total
+        this.data = res.data.records
+        this.loading = false
+        this.selectedIds = []
       }).catch(() => {
         this.loading = false
       })
     },
-    tableQuery (params) {
-      this.pagination.currentPage = 1
-      this.tableFilterParams = params
-      this.getTableData()
+    selectionChange (data) {
+      this.selectedIds = data.map(item => item.id)
+    },
+    getSelectedIds () {
+      if (this.selectedIds.length) {
+        return this.selectedIds.toString()
+      } else {
+        this.msgInfo('无选中数据')
+      }
     }
   },
   mounted () {
@@ -105,15 +112,8 @@ export default {
 </script>
 
 <style lang="scss">
-.el-table thead {
-  color: #333;
-}
-.el-pagination__jump {
-  margin-left: 0;
-}
 .el-pagination {
-  display: flex;
-  justify-content: center;
+  float: right;
   margin: 15px 0;
 }
 </style>

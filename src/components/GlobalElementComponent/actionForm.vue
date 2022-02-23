@@ -5,12 +5,12 @@
         <el-form-item :label="item.label" :prop="item.prop">
           <!-- 下拉框 -->
           <template v-if="item.type === 'select'">
-            <el-select v-model="model[item.prop]" style="width: 100%;">
+            <el-select v-model="model[item.prop]" style="width: 100%;" clearable>
               <el-option
                 v-for="option in item.options"
-                :key="option[item.optionsProps.value || 'value']"
-                :label="option[item.optionsProps.label || 'label']"
-                :value="option[item.optionsProps.value || 'value']"
+                :key="option[item.optionsProps ? item.optionsProps.value : 'value']"
+                :label="option[item.optionsProps ? item.optionsProps.label : 'label']"
+                :value="option[item.optionsProps ? item.optionsProps.value : 'value']"
               ></el-option>
             </el-select>
           </template>
