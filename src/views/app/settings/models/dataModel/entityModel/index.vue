@@ -12,6 +12,7 @@
         <action-button actionType="3" @click="handleEdit(scope.row)">编辑</action-button>
         <action-button actionType="3" @click="generateCode(scope.row)" v-if="scope.row.status === 'synced'">生成代码</action-button>
         <action-button actionType="3" @click="syncEntityModel(scope.row.id)" v-if="['created', 'nosync'].includes(scope.row.status)">同步实体表</action-button>
+        <action-button actionType="3" @click="previewCode(scope.row.id)">预览代码</action-button>
         <action-button actionType="3" @click="handleDel(scope.row.id)">删除</action-button>
       </template>
     </action-table>
@@ -32,8 +33,17 @@
       :loading="submitLoading"
       @confirm="generateCodeSubmit"
     >
-      <generate-code ref="generateCodeRef" isDialog :entityModelId="currentId"></generate-code>
+      <generate-code
+        v-if="generateCodeVisible"
+        ref="generateCodeRef"
+        isDialog
+        :entityModelId="currentId"
+        @success="generaCodeSuccess"
+      >
+      </generate-code>
     </action-dialog>
+    <!-- 预览代码弹窗 -->
+    <preview-code-dialog ref="previewCodeDialogRef"></preview-code-dialog>
   </div>
 </template>
 
@@ -41,10 +51,12 @@
 import addModel from './add.vue'
 import { addOrEditEntityModel, deleteEntityModel, syncEntityModel } from '@/api/app/dataModel.js'
 import generateCode from '@/views/dp/code/editMeta.vue'
+import PreviewCodeDialog from '@/views/dp/code/previewCodeDialog.vue'
 export default {
   components: {
     addModel,
-    generateCode
+    generateCode,
+    PreviewCodeDialog
   },
   data () {
     return {
@@ -64,7 +76,8 @@ export default {
         {
           prop: 'status',
           label: '实体表状态',
-          slotName: 'status'
+          slotName: 'status',
+          width: 120
         }
       ],
       dialogVisible: false,
@@ -77,22 +90,7 @@ export default {
   },
   created () {
     this.listDictDataByCode('table_sync_status').then(res => {
-      console.log("🚀 ~ file: index.vue ~ line 80 ~ this.listDictDataByCode ~ res", res)
-      // this.modelStatusOptions = res.data
-        this.modelStatusOptions = [
-          {
-            value: 'nosync',
-            label: '未同步'
-          },
-          {
-            value: 'created',
-            label: '已创建'
-          },
-          {
-            value: 'synced',
-            label: '已同步'
-          }
-        ]
+      this.modelStatusOptions = res.data
     })
   },
   methods: {
@@ -152,6 +150,9 @@ export default {
       const res = this.modelStatusOptions.find(item => item.value === value)
       return  res ? res.label : value
     },
+    generaCodeSuccess () {
+      this.generateCodeVisible = false
+    },
     syncEntityModel (id) {
       this.$confirm('确认同步实体表?', '提示', {
         type: 'warning'
@@ -161,6 +162,9 @@ export default {
           this.getTableData()
         })
       }).catch(() => {})
+    },
+    previewCode (id) {
+      this.$refs.previewCodeDialogRef.open(id)
     }
   }
 

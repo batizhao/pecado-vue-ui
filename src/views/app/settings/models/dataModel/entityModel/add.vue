@@ -24,24 +24,36 @@
         width="55"
         :index="indexMethod">
       </el-table-column>
-      <el-table-column label="字段名称" :render-header="renderHeader" align="center">
+      <el-table-column align="center">
+        <template slot="header">
+          <div class="red-star">字段名称</div>
+        </template>
         <template slot-scope="scope">
           <span v-if="isReadonly(scope.row.name)">{{scope.row.name}}</span>
           <el-input v-else size="mini" v-model="scope.row.name"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="字段描述" :render-header="renderHeader" align="center">
+      <el-table-column align="center">
+        <template slot="header">
+          <div class="red-star">字段描述</div>
+        </template>
         <template slot-scope="scope">
           <span v-if="isReadonly(scope.row.name)">{{scope.row.comment}}</span>
           <el-input v-else size="mini" v-model="scope.row.comment"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="字段类型" :render-header="renderHeader" align="center">
+      <el-table-column align="center">
+        <template slot="header">
+          <div class="red-star">字段类型</div>
+        </template>
         <template slot-scope="scope">
           <el-select v-model="scope.row.type" size="mini" :disabled="isReadonly(scope.row.name)">
-            <el-option label="字符串" value="VARCHAR"></el-option>
-            <el-option label="数字型" value="INT"></el-option>
-            <el-option label="日期" value="DATETIME"></el-option>
+            <el-option
+              v-for="item in typeOptions"
+              :key="item.id"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </template>
       </el-table-column>
@@ -132,7 +144,8 @@ export default {
       ],
       globalId: 0,
       typeOptions: [],
-      defaultFields: ['id'] // 默认字段
+      defaultFields: ['id'], // 默认字段
+      selectedItems: []
     }
   },
   created () {
@@ -160,16 +173,23 @@ export default {
       this.globalId ++
     },
     selectionChange (data) {
-      this.deleteIds = data.map(item => item.id)
+      this.selectedItems = data
     },
     handleDel () {
+      // 判断勾选的数据中是否有默认字段，有就不能删除
+      const hasDefaultFields = this.selectedItems.some(item => this.defaultFields.includes(item.name))
+      if (hasDefaultFields) {
+        this.msgError('默认字段不能删除')
+        return
+      }
+      const deleteIds = this.selectedItems.map(item => item.id)
       for (let i = this.form.columnMetadata.length - 1; i >= 0; i-- ) {
         const item = this.form.columnMetadata[i]
-        if (this.deleteIds.includes(item.id)) {
+        if (deleteIds.includes(item.id)) {
           this.form.columnMetadata.splice(i, 1)
         }
       }
-      this.deleteIds = []
+      this.selectedItems = []
     },
     submit () {
       let data = null
@@ -228,13 +248,15 @@ export default {
         this.formOptions[index].options = res.data.records || []
       })
     },
-    renderHeader (h, { column }) {
-      console.log(column);
-      return <div><span style="color: red;">* </span>{column.label}</div>
-    },
     isReadonly (value) {
       return this.defaultFields.includes(value)
     }
   }
 }
 </script>
+<style scoped>
+.red-star::before {
+  content: '* ';
+  color: red;
+}
+</style>

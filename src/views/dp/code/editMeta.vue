@@ -166,9 +166,12 @@ export default {
   created() {
     if (this.isDialog) {
       entityModelDetail(this.entityModelId).then(res => {
-        console.log("🚀 ~ file: editMeta.vue ~ line 171 ~ entityModelDetail ~ res", res)
-        this.code = {}
-        this.codes = {}
+        let codeMetadata = res.data.codeMetadata
+        if (codeMetadata) {
+          codeMetadata = JSON.parse(codeMetadata)
+        }
+        this.code = { ...res.data, ...codeMetadata }
+        this.codes = []
       })
     } else {
       const id = this.$route.params && this.$route.params.id
@@ -201,10 +204,8 @@ export default {
           const genTable = Object.assign({}, basicForm.model, genForm.model);
           genTable.codeMetaList = this.codeMetas;
           addOrUpdateCode(genTable).then(res => {
-            this.msgSuccess(res.message);
-            if (res.code === 0) {
-              this.close();
-            }
+            this.msgSuccess('生成代码成功');
+            this.close();
           });
         } else {
           this.msgError("表单校验未通过，请重新检查提交内容");
@@ -220,8 +221,12 @@ export default {
     },
     /** 关闭按钮 */
     close() {
-      this.$store.dispatch("tagsView/delView", this.$route);
-      this.$router.push({ path: "/dp/code", query: { t: Date.now()}})
+      if (this.isDialog) {
+        this.$emit('success')
+      } else {
+        this.$store.dispatch("tagsView/delView", this.$route);
+        this.$router.push({ path: "/dp/code", query: { t: Date.now()}})
+      }
     }
   },
   mounted() {

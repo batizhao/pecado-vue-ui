@@ -124,39 +124,20 @@
       :limit.sync="queryParams.size"
       @pagination="getList"
     />
-    <!-- 预览界面 -->
-    <el-dialog :title="preview.title" :visible.sync="preview.open" width="80%" top="5vh" append-to-body>
-      <el-tabs v-model="preview.activeName">
-        <el-tab-pane
-          v-for="(value, key) in preview.data"
-          :label="key"
-          :name="key"
-          :key="key"
-        >
-          <pre><code class="hljs" v-html="highlightedCode(value, key)"></code></pre>
-        </el-tab-pane>
-      </el-tabs>
-    </el-dialog>
+    <preview-code-dialog ref="previewCodeDialogRef"></preview-code-dialog>
     <import-meta ref="import" @ok="handleQuery" />
   </div>
 </template>
 
 <script>
-import { listCodePage, previewCode, deleteCode, genCode, syncCodeMeta } from "@/api/dp/code";
+import { listCodePage, deleteCode, genCode, syncCodeMeta } from "@/api/dp/code";
 import importMeta from "./importMeta";
 import { downLoadZip } from "@/utils/download";
-import hljs from "highlight.js/lib/core";
-import "highlight.js/styles/github-gist.css";
-hljs.registerLanguage("java", require("highlight.js/lib/languages/java"));
-hljs.registerLanguage("xml", require("highlight.js/lib/languages/xml"));
-hljs.registerLanguage("html", require("highlight.js/lib/languages/xml"));
-hljs.registerLanguage("vue", require("highlight.js/lib/languages/xml"));
-hljs.registerLanguage("javascript", require("highlight.js/lib/languages/javascript"));
-hljs.registerLanguage("sql", require("highlight.js/lib/languages/sql"));
+import previewCodeDialog from './previewCodeDialog.vue'
 
 export default {
   name: "Code",
-  components: { importMeta },
+  components: { importMeta, previewCodeDialog },
   data() {
     return {
       // 遮罩层
@@ -183,13 +164,6 @@ export default {
         size: 10,
         tableName: undefined,
         tableComment: undefined
-      },
-      // 预览参数
-      preview: {
-        open: false,
-        title: "代码预览",
-        data: {},
-        activeName: "Domain.java"
       }
     };
   },
@@ -258,16 +232,7 @@ export default {
     },
     /** 预览按钮 */
     handlePreview(row) {
-      previewCode(row.id).then(response => {
-        this.preview.data = response.data;
-        this.preview.open = true;
-      });
-    },
-    /** 高亮显示 */
-    highlightedCode(code, key) {
-      var language = key.substring(key.lastIndexOf(".") + 1, key.length);
-      const result = hljs.highlight(language, code || "", true);
-      return result.value || '&nbsp;';
+      this.$refs.previewCodeDialogRef.open(row.id)
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
