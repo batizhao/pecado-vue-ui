@@ -98,8 +98,8 @@ const getDefaultFrom = () => {
     columnMetadata: [] // 字段定义
   }
 }
-const checkNameReg = /^[a-z][a-z_]{0,30}$/
-const checkNameRegMsg = '只能使用小写字母和下划线，并以字母开头，长度不超过32位'
+const checkNameReg = /^[A-Za-z][A-Za-z0-9_]{0,30}$/
+const checkNameRegMsg = '只能使用字母、数字和下划线，并以字母开头，长度不超过32位'
 const keywords = 'abstract,assert,boolean,break,byte,case,catch,char,class,const,continue,default,do,double,else,enum,extends,final,finally,float,for,goto,if,implements,import,instanceof,int,interface,long,native,new,package,private,protected,public,return,short,static,strictfp,super,switch,synchronized,this,throw,throws,transient,try,void,volatile,while'
 const keywordsArr = keywords.split(',')
 const checkName = (rule, value, callback) => {
