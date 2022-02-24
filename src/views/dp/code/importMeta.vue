@@ -35,8 +35,8 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="small" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
     <el-row>
@@ -57,8 +57,8 @@
       />
     </el-row>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="handleImportTable">确 定</el-button>
-      <el-button @click="visible = false">取 消</el-button>
+      <el-button type="primary" @click="handleImportTable" size="small" :loading="submitLoading">确 定</el-button>
+      <el-button @click="visible = false" size="small">取 消</el-button>
     </div>
   </el-dialog>
 </template>
@@ -85,7 +85,8 @@ export default {
         pageSize: 10,
         tableName: undefined,
         tableComment: undefined
-      }
+      },
+      submitLoading: false
     };
   },
   methods: {
@@ -131,13 +132,21 @@ export default {
     },
     /** 导入按钮操作 */
     handleImportTable() {
+      if (!this.tables.length) {
+        this.msgInfo('未选中数据')
+        return
+      }
+      this.submitLoading = true
       importCodeMeta(this.tables).then(res => {
-        this.msgSuccess(res.message);
+        this.msgSuccess('导入成功');
         if (res.code === 0) {
           this.visible = false;
           this.$emit("ok");
+          this.submitLoading = false
         }
-      });
+      }).catch(() => {
+        this.submitLoading = false
+      })
     }
   }
 };

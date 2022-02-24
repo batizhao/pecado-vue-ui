@@ -2,6 +2,7 @@
   <div>
     <div class="action-buttons mb8">
       <action-button @click="handleAdd" actionType="1">新增</action-button>
+      <action-button @click="handleImport" icon="el-icon-folder-opened" type="info">从数据库加载</action-button>
       <action-button @click="handleDel" actionType="2">删除</action-button>
     </div>
     <action-table ref="actionTableRef" url="/app/tables" :columns="columns">
@@ -44,6 +45,8 @@
     </action-dialog>
     <!-- 预览代码弹窗 -->
     <preview-code-dialog ref="previewCodeDialogRef"></preview-code-dialog>
+    <!-- 从数据库加载弹窗 -->
+    <import-meta ref="impotMetaRef" @ok="getTableData"></import-meta>
   </div>
 </template>
 
@@ -52,11 +55,13 @@ import addModel from './add.vue'
 import { addOrEditEntityModel, deleteEntityModel, syncEntityModel } from '@/api/app/dataModel.js'
 import generateCode from '@/views/dp/code/editMeta.vue'
 import PreviewCodeDialog from '@/views/dp/code/previewCodeDialog.vue'
+import ImportMeta from '@/views/dp/code/importMeta.vue'
 export default {
   components: {
     addModel,
     generateCode,
-    PreviewCodeDialog
+    PreviewCodeDialog,
+    ImportMeta
   },
   data () {
     return {
@@ -165,6 +170,9 @@ export default {
     },
     previewCode (id) {
       this.$refs.previewCodeDialogRef.open(id)
+    },
+    handleImport () {
+      this.$refs.impotMetaRef.show();
     }
   }
 
