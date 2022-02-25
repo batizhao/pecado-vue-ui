@@ -3,19 +3,10 @@
     <div class="app-setting-main">
       <el-tabs v-model="activeName">
         <el-tab-pane label="数据模型" name="1">
-          <el-tabs v-model="activeName_1">
-            <entity-model></entity-model>
-          </el-tabs>
+          <entity-model></entity-model>
         </el-tab-pane>
         <el-tab-pane label="表单模型" name="2">
-          <el-tabs v-model="activeName_2">
-            <el-tab-pane label="电子表单" name="2_1">
-              
-            </el-tab-pane>
-            <el-tab-pane label="注册表单" name="2_2">
-              
-            </el-tab-pane>
-          </el-tabs>
+          <electronic-form></electronic-form>
         </el-tab-pane>
         <el-tab-pane label="流程模型" name="3">
 
@@ -46,13 +37,15 @@
 
 <script>
 import entityModel from './models/dataModel/entityModel/index.vue'
+import electronicForm from './models/formModel/electronicForm/index.vue'
 export default {
   components: {
-    entityModel
+    entityModel,
+    electronicForm
   },
   data () {
     return {
-      activeName: '1',
+      activeName: '2',
       activeName_1: '1_1',
       activeName_2: '2_1',
       activeName_4: '4_1'

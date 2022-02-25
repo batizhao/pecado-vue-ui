@@ -100,7 +100,6 @@ export default {
         ...this.tableFilterParams,
         ...this.otherParams
       }
-      console.log("🚀 ~ file: actionTable.vue ~ line 100 ~ getTableData ~ params", params)
       this.loading = true
       getTableData(this.url, params).then(res => {
         this.pagination.total = res.data.total
