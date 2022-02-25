@@ -55,9 +55,9 @@
 <script>
 import addModel from './add.vue'
 import { addOrEditEntityModel, deleteEntityModel, syncEntityModel } from '@/api/app/dataModel.js'
-import generateCode from '@/views/dp/code/editMeta.vue'
-import PreviewCodeDialog from '@/views/dp/code/previewCodeDialog.vue'
-import ImportMeta from '@/views/dp/code/importMeta.vue'
+import generateCode from './editMeta.vue'
+import PreviewCodeDialog from './previewCodeDialog.vue'
+import ImportMeta from './importMeta.vue'
 export default {
   components: {
     addModel,

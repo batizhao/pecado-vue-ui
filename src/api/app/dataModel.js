@@ -36,3 +36,39 @@ export function syncEntityModel (id) {
     method: 'post'
   })
  }
+
+ // 生成代码
+export function addOrUpdateCode(data) {
+  return request({
+    url: '/dp/code',
+    method: 'post',
+    data: data
+  })
+}
+
+// 查询代码元数据表详细信息
+export function listCodeMeta(id) {
+  return request(`/dp/code/meta?codeId=${id}`);
+}
+
+// 查询生成元数据列表
+export function listCodeMetaPage(query) {
+  return request({
+    url: '/dp/code/tables',
+    params: query
+  })
+}
+
+// 导入生成元数据
+export function importCodeMeta(data) {
+  return request({
+    url: '/dp/code/table',
+    method: 'post',
+    data: data
+  })
+}
+
+// 预览生成代码
+export function previewCode(id) {
+  return request(`/dp/code/preview/${id}`)
+}
