@@ -1110,11 +1110,12 @@ export default {
 	top: 0;
 	padding-top: 3px;
 	width: 350px;
+	height: 100%;
 	.field-box {
 		overflow: hidden;
 		position: relative;
 		box-sizing: border-box;
-		height: calc(100vh - 42px);
+		height: calc(100% - 42px);
 	}
 	.el-scrollbar {
 		height: 100%;

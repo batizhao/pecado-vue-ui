@@ -41,3 +41,22 @@ export function changeFormStatus (id, status) {
     }
   })
 }
+
+// 通过key查询表单
+export function getFormByKey(key) {
+  return request(`/dp/form?key=${key}`);
+}
+
+// 添加表单元数据
+export function addFormMetaData(id, formKey, metadata) {
+  const data = {
+    id,
+    formKey,
+    metadata,
+  }
+  return request({
+    url: '/dp/form',
+    method: 'post',
+    data: data
+  })
+}

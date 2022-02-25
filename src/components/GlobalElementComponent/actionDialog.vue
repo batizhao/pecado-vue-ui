@@ -6,9 +6,10 @@
     :close-on-click-modal="false"
     :fullscreen="fullscreen"
     append-to-body
+    :custom-class="customClass"
   >
     <slot></slot>
-    <div slot="footer">
+    <div slot="footer" v-if="showFooter">
       <el-button type="primary" @click="confirm" size="small" :loading="loading">确 定</el-button>
       <el-button @click="cancel" size="small">取 消</el-button>
     </div>
@@ -28,7 +29,12 @@ export default {
       default: '50%'
     },
     loading: Boolean,
-    fullscreen: Boolean
+    fullscreen: Boolean,
+    customClass: String,
+    showFooter: {
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {

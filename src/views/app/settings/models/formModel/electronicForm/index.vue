@@ -22,7 +22,7 @@
       <template v-slot:action="scope">
         <action-button actionType="3" @click="handleEdit(scope.row)" icon="el-icon-edit">编辑</action-button>
         <action-dropdown>
-          <el-dropdown-item icon="el-icon-edit" @click.native="handleDesign(scope.row.id)">表单设计</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-edit" @click.native="handleDesign(scope.row.formKey)">表单设计</el-dropdown-item>
           <el-dropdown-item icon="el-icon-delete" @click.native="handleDel(scope.row.id)">删除</el-dropdown-item>
         </action-dropdown>
       </template>
@@ -38,15 +38,29 @@
       <add-component ref="addComponentRef"></add-component>
     </action-dialog>
 
+    <!-- 设计表单弹窗 -->
+    <action-dialog
+      v-model="designFormVisible"
+      title="设计表单"
+      fullscreen
+      custom-class="form-design-dialog"
+      :showFooter="false"
+    >
+      <design-form ref="designFormRef"></design-form>
+    </action-dialog>
+
+
   </div>
 </template>
 
 <script>
 import addComponent from './add.vue'
-import { addOrEditData, deleteData, changeFormStatus } from '@/api/app/form.js'
+import { addOrEditData, deleteData, changeFormStatus } from '@/api/app/formModel.js'
+import designForm from './design.vue'
 export default {
   components: {
-    addComponent
+    addComponent,
+    designForm
   },
   data () {
     return {
@@ -72,7 +86,8 @@ export default {
       ],
       dialogVisible: false,
       dialogTitle: '',
-      submitLoading: false
+      submitLoading: false,
+      designFormVisible: false
     }
   },
   methods: {
@@ -122,8 +137,8 @@ export default {
         
       }
     },
-    handleDesign (id) {
-      this.msgInfo('未开发')
+    handleDesign (formKey) {
+      this.designFormVisible = true
     },
     // 表单状态编辑
     handleStatusChange(row) {
@@ -141,3 +156,15 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.form-design-dialog .el-dialog__body{
+  padding: 0;
+  border-top: 1px solid #f1e8e8;
+  height: calc(100vh - 54px);
+  .app-container{
+    height: 100%;
+    overflow: hidden;
+    padding: 0;
+  }
+}
+</style>
