@@ -1,24 +1,33 @@
 <template>
   <div>
+    <table-filter
+      v-if="conditions"
+      @query="tableQuery"
+      :conditions="conditions"
+      :loading="loading"
+    ></table-filter>
+    <slot name="actionButtons"></slot>
     <el-table
       :data="data"
       v-loading="loading"
-      border
       @selection-change="selectionChange"
     >
-      <el-table-column type="selection" width="55">
+      <el-table-column type="selection" width="55" align="center">
       </el-table-column>
       <el-table-column
         type="index"
         label="序号"
         width="55"
-        :index="indexMethod">
+        :index="indexMethod"
+        align="center"
+      >
       </el-table-column>
       <el-table-column
         v-for="(item, index) in columns"
         :key="index"
         v-bind="item"
         show-overflow-tooltip
+        align="center"
       >
         <template slot-scope="scope"> 
           <div v-if="item.slotName">
@@ -27,7 +36,7 @@
           <span v-else>{{ scope.row[item.prop] }}</span>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="230">
+      <el-table-column fixed="right" label="操作" width="230" align="center">
         <template slot-scope="scope">
           <slot name="action" :row="scope.row"></slot>
         </template>
@@ -45,10 +54,15 @@
 
 <script>
 import { getTableData } from '@/api/app/dev.js'
+import tableFilter from './tableFilter.vue'
 export default {
+  components: {
+    tableFilter
+  },
   props: {
     url: String, // 请求接口路径
     columns: Array, // 表格列
+    conditions: Array, // 条件筛选
     otherParams: Object // 其他参数
   },
   data () {
@@ -61,7 +75,8 @@ export default {
       },
       data: [],
       loading: false,
-      selectedIds: []
+      selectedIds: [],
+      tableFilterParams: {}
     }
   },
   methods: {
@@ -82,8 +97,10 @@ export default {
       const params = {
         size: pageSize,
         current: currentPage,
+        ...this.tableFilterParams,
         ...this.otherParams
       }
+      console.log("🚀 ~ file: actionTable.vue ~ line 100 ~ getTableData ~ params", params)
       this.loading = true
       getTableData(this.url, params).then(res => {
         this.pagination.total = res.data.total
@@ -103,6 +120,11 @@ export default {
       } else {
         this.msgInfo('无选中数据')
       }
+    },
+    tableQuery (params) {
+      this.pagination.currentPage = 1
+      this.tableFilterParams = params
+      this.getTableData()
     }
   },
   mounted () {

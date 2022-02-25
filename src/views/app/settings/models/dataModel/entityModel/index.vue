@@ -10,11 +10,13 @@
         {{getModelStatusLabel(scope.row.status)}}
       </template>
       <template v-slot:action="scope">
-        <action-button actionType="3" @click="handleEdit(scope.row)">编辑</action-button>
-        <action-button actionType="3" @click="generateCode(scope.row)" v-if="scope.row.status === 'synced'">生成代码</action-button>
-        <action-button actionType="3" @click="syncEntityModel(scope.row.id)" v-if="['created', 'nosync'].includes(scope.row.status)">同步实体表</action-button>
-        <action-button actionType="3" @click="previewCode(scope.row.id)">预览代码</action-button>
-        <action-button actionType="3" @click="handleDel(scope.row.id)">删除</action-button>
+        <action-button actionType="3" @click="handleEdit(scope.row)" icon="el-icon-edit">编辑</action-button>
+        <action-dropdown>
+            <el-dropdown-item icon="el-icon-view" @click.native="previewCode(scope.row.id)">预览代码</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-delete" @click.native="handleDel(scope.row.id)">删除</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-refresh" @click.native="syncEntityModel(scope.row.id)" v-if="['created', 'nosync'].includes(scope.row.status)">同步实体表</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-download" @click.native="generateCode(scope.row)" v-if="scope.row.status === 'synced'">生成代码</el-dropdown-item>
+        </action-dropdown>
       </template>
     </action-table>
     <!-- 新增编辑弹窗 -->

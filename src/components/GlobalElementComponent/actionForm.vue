@@ -1,11 +1,11 @@
 <template>
   <el-form ref="form" :model="model" :rules="rules" :label-width="labelWidth">
     <el-row :gutter="10">
-      <el-col :span="span" v-for="(item, index) in formOptions" :key="index">
+      <el-col :span="item.span || span" v-for="(item, index) in formOptions" :key="index">
         <el-form-item :label="item.label" :prop="item.prop">
           <!-- 下拉框 -->
           <template v-if="item.type === 'select'">
-            <el-select v-model="model[item.prop]" style="width: 100%;" clearable>
+            <el-select v-model="model[item.prop]" style="width: 100%;" clearable :placeholder="'请选择' + item.label">
               <el-option
                 v-for="option in item.options"
                 :key="option[item.optionsProps ? item.optionsProps.value : 'value']"
@@ -20,7 +20,7 @@
           </template>
           <!-- 多行输入框 -->
           <template v-else-if="item.type === 'textarea'">
-            <el-input v-model="model[item.prop]" type="textarea" placeholder="请输入"></el-input>
+            <el-input v-model="model[item.prop]" type="textarea" :rows="3" :placeholder="'请输入' + item.label"></el-input>
           </template>
           <!-- 插槽 -->
           <template v-else-if="item.type === 'slot'">
@@ -28,7 +28,7 @@
           </template>
           <!-- 默认渲染输入框 -->
           <template v-else>
-            <el-input v-model="model[item.prop]" placeholder="请输入"></el-input>
+            <el-input v-model="model[item.prop]" :placeholder="'请输入' + item.label"></el-input>
           </template>
         </el-form-item>
       </el-col>

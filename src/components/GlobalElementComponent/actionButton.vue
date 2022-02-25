@@ -1,7 +1,7 @@
 <template>
   <el-button
     class="action-button"
-    size="mini"
+    :size="newSize"
     :plain="newPlain"
     :type="newType"
     :icon="newIcon"
@@ -49,6 +49,10 @@ export default {
     newPlain () {
       if (this.actionType === '3') return false
       return this.plain
+    },
+    newSize () {
+      if (this.actionType === '3') return undefined
+      return 'mini'
     }
   },
   methods: {

@@ -5,8 +5,10 @@ import ActionButton from './actionButton.vue'
 import ActionDialog from './actionDialog.vue'
 import ActionForm from './actionForm.vue'
 import ActionTable from './actionTable.vue'
+import ActionDropdown from './actionDropdown.vue'
 
 Vue.component('ActionButton', ActionButton)
 Vue.component('ActionDialog', ActionDialog)
 Vue.component('ActionForm', ActionForm)
 Vue.component('ActionTable', ActionTable)
+Vue.component('ActionDropdown', ActionDropdown)
