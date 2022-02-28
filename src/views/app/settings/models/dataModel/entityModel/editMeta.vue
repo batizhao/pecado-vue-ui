@@ -4,8 +4,8 @@
       <el-step title="基本信息"></el-step>
       <el-step title="生成信息"></el-step>
     </el-steps>
-    <basic-info-form v-show="active === 0" ref="basicInfo" :info="code" />
-    <gen-info-form v-show="active === 1" ref="genInfo" :info="code" :tables="codes" :menus="menus"/>
+    <basic-info-form v-show="active === 0" ref="basicInfo" :info="code" :genarateInfo="genarateInfo" />
+    <gen-info-form v-show="active === 1" ref="genInfo" :info="genarateInfo" :tables="codes" :menus="menus"/>
     <div class="action-buttons" v-show="active === 0">
       <action-button :plain="false" size="medium" @click="stepOneSubmit">下一步</action-button>
     </div>
@@ -18,7 +18,7 @@
 </template>
 <script>
 import { listMenu as getMenuTreeSelect } from "@/api/ims/menu";
-import { entityModelDetail, addOrUpdateCode, submitGenarateCode } from '@/api/app/dataModel.js'
+import { entityModelDetail, submitGenarateCode, addOrEditEntityModel } from '@/api/app/dataModel.js'
 import basicInfoForm from "./basicInfoForm";
 import genInfoForm from "./genInfoForm";
 
@@ -44,6 +44,8 @@ export default {
       menus: [],
       // 表详细信息
       code: {},
+      // 生成信息
+      genarateInfo: {},
       saveLoading: false,
       genarateLoading: false
     };
@@ -52,10 +54,10 @@ export default {
     entityModelDetail(this.entityModelId).then(res => {
       let codeMetadata = res.data.codeMetadata
       if (codeMetadata) {
-        codeMetadata = JSON.parse(codeMetadata)
+        this.genarateInfo = JSON.parse(codeMetadata)
       }
-      this.code = { ...res.data, ...codeMetadata }
-      this.codes = []
+      this.code = res.data
+      this.codes = [] // 生成模板为一对多表时，这个数组应该要有接口字段，但是暂时没有
     })
     /** 查询菜单下拉列表 */
     getMenuTreeSelect().then(response => {
@@ -73,13 +75,13 @@ export default {
     },
     stepTwoSubmit () {
       const genForm = this.$refs.genInfo.$refs.genInfoForm
-      const basicForm = this.$refs.basicInfo.$refs.basicInfoForm
       genForm.validate(valid => {
         if (valid) {
-          const genTable = Object.assign({}, basicForm.model, genForm.model);
-          genTable.codeMetaList = this.codeMetas;
           this.saveLoading = true
-          addOrUpdateCode(genTable).then(res => {
+          addOrEditEntityModel({ 
+            id: this.entityModelId,
+            codeMetadata: JSON.stringify(this.genarateInfo)
+          }).then(() => {
             this.saveLoading = false
             this.msgSuccess('保存成功');
             this.$emit('success')

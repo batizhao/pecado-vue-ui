@@ -139,6 +139,7 @@ export default {
         this.dialogVisible = false
         this.submitLoading = true
         data.appId = this.$route.params.appId
+        data.columnMetadata = JSON.stringify(data.columnMetadata)
         addOrEditEntityModel(data).then(() => {
           this.submitLoading = false
           this.getTableData()
@@ -161,6 +162,7 @@ export default {
     },
     generaCodeSuccess () {
       this.generateCodeVisible = false
+      this.getTableData()
     },
     syncEntityModel (id) {
       this.$confirm('确认同步实体表?', '提示', {

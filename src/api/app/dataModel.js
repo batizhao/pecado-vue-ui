@@ -1,12 +1,11 @@
 import request from '@/utils/request'
 
 // 添加实体模型
-export function addOrEditEntityModel ({ appId, id, tableName, tableComment, dsName, columnMetadata}) {
-  const columnMetadataJSON = JSON.stringify(columnMetadata)
+export function addOrEditEntityModel (data) {
   return request({
     url:  '/app/table',
     method: 'post',
-    data: { appId, id, tableName, tableComment, dsName, columnMetadata: columnMetadataJSON}
+    data
   })
 }
 
@@ -36,15 +35,6 @@ export function syncEntityModel (id) {
     method: 'post'
   })
  }
-
- // 生成代码/保存
-export function addOrUpdateCode(data) {
-  return request({
-    url: '/dp/code',
-    method: 'post',
-    data: data
-  })
-}
 
 // 生产代码/生产代码
 export function submitGenarateCode (id) {
