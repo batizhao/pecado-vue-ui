@@ -35,6 +35,7 @@
       title="生成代码"
       :loading="submitLoading"
       @confirm="generateCodeSubmit"
+      :showFooter="false"
     >
       <generate-code
         v-if="generateCodeVisible"

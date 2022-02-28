@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="basicInfoForm" :model="info" :rules="rules" label-width="150px">
+  <el-form ref="basicInfoForm" :model="info" :rules="rules" label-width="100px">
     <el-row>
       <el-col :span="12">
         <el-form-item label="表名称" prop="tableName">

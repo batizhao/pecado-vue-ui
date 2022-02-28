@@ -37,12 +37,20 @@ export function syncEntityModel (id) {
   })
  }
 
- // 生成代码
+ // 生成代码/保存
 export function addOrUpdateCode(data) {
   return request({
     url: '/dp/code',
     method: 'post',
     data: data
+  })
+}
+
+// 生产代码/生产代码
+export function submitGenarateCode (id) {
+  return request({
+    url: '/app/table/zip/' + id,
+    method: 'post'
   })
 }
 

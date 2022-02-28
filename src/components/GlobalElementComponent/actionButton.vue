@@ -5,6 +5,7 @@
     :plain="newPlain"
     :type="newType"
     :icon="newIcon"
+    :loading="loading"
     @click="click"
   >
     <slot></slot>
@@ -22,8 +23,13 @@ export default {
       type: Boolean,
       default: true
     },
+    size: {
+      type: String,
+      default: 'mini'
+    },
     icon: String,
-    actionType: String // 1 新增按钮 2 删除按钮 3 位于表格操作栏中的按钮
+    actionType: String, // 1 新增按钮 2 删除按钮 3 位于表格操作栏中的按钮
+    loading: Boolean
   },
   computed: {
     newIcon () {
@@ -52,7 +58,7 @@ export default {
     },
     newSize () {
       if (this.actionType === '3') return undefined
-      return 'mini'
+      return this.size
     }
   },
   methods: {
