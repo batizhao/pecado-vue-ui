@@ -25,14 +25,14 @@ export default {
           label: '表单名称',
           prop: 'name',
           rules: [
-            { required: true, message: "请输入表单名称", trigger: "blur" },
+            { required: true, message: "请输入表单名称", trigger: "change" },
           ]
         },
         {
           label: '表单标识',
           prop: 'formKey',
           rules: [
-            { required: true, message: "请输入表单标识", trigger: "blur" },
+            { required: true, message: "请输入表单标识", trigger: "change" },
           ]
         },
         {

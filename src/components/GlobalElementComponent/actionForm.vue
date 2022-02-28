@@ -5,7 +5,13 @@
         <el-form-item :label="item.label" :prop="item.prop">
           <!-- 下拉框 -->
           <template v-if="item.type === 'select'">
-            <el-select v-model="model[item.prop]" style="width: 100%;" clearable :placeholder="'请选择' + item.label">
+            <el-select
+              v-model="model[item.prop]"
+              style="width: 100%;"
+              clearable
+              :placeholder="'请选择' + item.label"
+              :disabled="item.disabled"
+            >
               <el-option
                 v-for="option in item.options"
                 :key="option[item.optionsProps ? item.optionsProps.value : 'value']"
@@ -16,11 +22,22 @@
           </template>
           <!-- 数字输入框 -->
           <template v-else-if="item.type === 'inputNumber'">
-            <el-input-number v-model="model[item.prop]"  controls-position="right" style="width: 100%;"></el-input-number>
+            <el-input-number
+              v-model="model[item.prop]"
+              controls-position="right"
+              style="width: 100%;"
+              :disabled="item.disabled"
+            ></el-input-number>
           </template>
           <!-- 多行输入框 -->
           <template v-else-if="item.type === 'textarea'">
-            <el-input v-model="model[item.prop]" type="textarea" :rows="3" :placeholder="'请输入' + item.label"></el-input>
+            <el-input 
+              v-model="model[item.prop]"
+              type="textarea"
+              :rows="3"
+              :placeholder="'请输入' + item.label"
+              :disabled="item.disabled"
+            ></el-input>
           </template>
           <!-- 插槽 -->
           <template v-else-if="item.type === 'slot'">
@@ -28,7 +45,11 @@
           </template>
           <!-- 默认渲染输入框 -->
           <template v-else>
-            <el-input v-model="model[item.prop]" :placeholder="'请输入' + item.label"></el-input>
+            <el-input
+              v-model="model[item.prop]"
+              :placeholder="'请输入' + item.label"
+              :disabled="item.disabled"
+            ></el-input>
           </template>
         </el-form-item>
       </el-col>

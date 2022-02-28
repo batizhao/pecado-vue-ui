@@ -94,7 +94,7 @@ const getDefaultFrom = () => {
   return {
     tableName: '', // 表名称
     tableComment: '', // 表描述
-    dsName: '', // 数据源
+    dsName: 'master', // 数据源
     columnMetadata: [] // 字段定义
   }
 }
@@ -119,33 +119,52 @@ export default {
         {
           label: '表名称',
           prop: 'tableName',
+          disabled: false,
           rules: [
-            { required: true, message: "请输入表名称", trigger: "blur" },
-            { validator: checkName, trigger: 'blur' }
+            { required: true, message: "请输入表名称", trigger: "change" },
+            { validator: checkName, trigger: 'change' }
           ]
         },
         {
           label: '表描述',
           prop: 'tableComment',
+          disabled: false,
           rules: [
-            { required: true, message: "请输入表描述", trigger: "blur" }
+            { required: true, message: "请输入表描述", trigger: "change" }
           ]
         },
         {
           label: '数据源',
           prop: 'dsName',
           type: 'select',
-          options: [],
-          optionsProps: {
-            label: 'name',
-            value: 'name'
-          }
+          options: [
+            {
+              label: '主数据源',
+              value: 'master'
+            }
+          ],
+          rules: [
+            { required: true, message: "请选择数据源", trigger: "change" }
+          ]
         }
       ],
       globalId: 0,
       typeOptions: [],
       defaultFields: ['id'], // 默认字段
       selectedItems: []
+    }
+  },
+  watch: {
+    form: {
+      handler: function(val) {
+        // 如果是编辑状态，使表名称和表描述输入框禁用
+        this.formOptions.map(item => {
+          if (['tableName', 'tableComment'].includes(item.prop)) {
+            item.disabled = val.id !== undefined
+          }
+        })
+      },
+      deep: true
     }
   },
   created () {
@@ -201,7 +220,7 @@ export default {
             return !item.name || !item.comment 
           })
           if (!hasNull) {
-            data = this.form
+            data = JSON.parse(JSON.stringify(this.form))
           } else {
             this.msgError('请填写完整')
             return
@@ -245,7 +264,14 @@ export default {
     getDataOrigin () {
       listDs({ size: 999, current: 1 }).then(res => {
         const index = this.formOptions.findIndex(item => item.prop === 'dsName')
-        this.formOptions[index].options = res.data.records || []
+        const records = res.data.records
+        if (records) {
+          const list = records.map(item => ({
+            value: item.name,
+            label: item.name
+          }))
+          this.formOptions[index].options = this.formOptions[index].options.concat(list)
+        }
       })
     },
     isReadonly (value) {

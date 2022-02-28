@@ -3,10 +3,10 @@
     <div class="app-setting-main">
       <el-tabs v-model="activeName">
         <el-tab-pane label="数据模型" name="1">
-          <entity-model></entity-model>
+          <entity-model v-if="activeName === '1'"></entity-model>
         </el-tab-pane>
         <el-tab-pane label="表单模型" name="2">
-          <electronic-form></electronic-form>
+          <electronic-form v-if="activeName === '2'"></electronic-form>
         </el-tab-pane>
         <el-tab-pane label="流程模型" name="3">
 

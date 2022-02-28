@@ -33,14 +33,14 @@ export default {
           label: '模板名称',
           prop: 'name',
           rules: [
-            { required: true, message: '请输入模板名称', trigger: 'blur' },
+            { required: true, message: '请输入模板名称', trigger: 'change' },
           ]
         },
         {
           label: '模板标识',
           prop: 'code',
           rules: [
-            { required: true, message: '请输入模板标识', trigger: 'blur' }
+            { required: true, message: '请输入模板标识', trigger: 'change' }
           ]
         },
         {
