@@ -127,7 +127,7 @@ export default {
         this.submitLoading = true
         data.appId = this.$route.params.appId
         addOrEditData(data).then(() => {
-          this.msgSuccess('新增成功')
+          this.msgSuccess('保存成功')
           this.submitLoading =false
           this.dialogVisible = false
           this.getTableData()

@@ -27,3 +27,15 @@ export function getTemplateDetail (id) {
     method: 'get'
   })
 }
+
+// 状态更改
+export function changeFormStatus (id, status) {
+  return request({
+    url: '/dp/page/model/status',
+    method: 'post',
+    data: {
+      id,
+      status
+    }
+  })
+}

@@ -13,7 +13,12 @@ const getDefaultFrom = () => {
   return {
     name: '',
     code: '', 
-    type: ''
+    type: 'form',
+    modelEvent: '',
+    beforeEvent: '',
+    afterEvent: '',
+    remark: '',
+    pageMetadata: '{}'
   }
 }
 export default {
@@ -28,34 +33,49 @@ export default {
           label: '模板名称',
           prop: 'name',
           rules: [
-            { required: true, message: "请输入模板名称", trigger: "blur" },
+            { required: true, message: '请输入模板名称', trigger: 'blur' },
           ]
         },
         {
           label: '模板标识',
           prop: 'code',
           rules: [
-            { required: true, message: "请输入模板标识", trigger: "blur" }
+            { required: true, message: '请输入模板标识', trigger: 'blur' }
           ]
         },
         {
           label: '模板类型',
           prop: 'type',
           type: 'select',
-          options: this.moduleTypeOptions
+          options: this.moduleTypeOptions,
+          rules: [
+            { required: true, message: '请选择模板类型', trigger: 'change'}
+          ]
         },
         {
-          label: '模板描述',
-          prop: 'pageMetadata',
+          label: '页面事件',
+          prop: 'modelEvent',
           span: 24,
           type: 'textarea'
         },
         {
-          label: '模板脚本',
-          prop: 'js',
+          label: '前置事件',
+          prop: 'beforeEvent',
           span: 24,
           type: 'textarea'
-        }
+        },
+        {
+          label: '后置事件',
+          prop: 'afterEvent',
+          span: 24,
+          type: 'textarea'
+        },
+        {
+          label: '备注',
+          prop: 'remark',
+          span: 24,
+          type: 'textarea'
+        },
       ],
     }
   },

@@ -6,6 +6,17 @@
       :columns="columns"
       :conditions="conditions"
     >
+      <template v-slot:type="scoped">
+        {{getModuleTypeLabel(scoped.row.type)}}
+      </template>
+      <template v-slot:status="scope">
+        <el-switch
+          v-model="scope.row.status"
+          @change="handleStatusChange(scope.row)"
+          active-value="open"
+          inactive-value="close"
+        ></el-switch>
+      </template>
       <template slot="actionButtons">
         <div class="action-buttons mb8">
           <action-button @click="handleAdd" actionType="1">新增</action-button>
@@ -26,7 +37,7 @@
       v-model="dialogVisible"
       :title="dialogTitle"
       :loading="submitLoading"
-      width="80%"
+      width="60%"
       @confirm="dialogConfirm"
     >
       <add-template ref="addTemplateRef" :moduleTypeOptions="moduleTypeOptions"></add-template>
@@ -37,7 +48,7 @@
 
 <script>
 import addTemplate from './add.vue'
-import { addOrEditTemplate, deleteTemplate } from '@/api/dp/page/model.js'
+import { addOrEditTemplate, deleteTemplate, changeFormStatus } from '@/api/dp/page/model.js'
 export default {
   components: {
     addTemplate
@@ -55,7 +66,13 @@ export default {
         },
         {
           label: '模板类型',
-          prop: 'type'
+          prop: 'type',
+          slotName: 'type'
+        },
+        {
+          label: '状态',
+          prop: 'status',
+          slotName: 'status'
         }
       ],
       conditions: [
@@ -108,6 +125,9 @@ export default {
     handleEdit (row) {
       this.dialogVisible = true
       this.dialogTitle = '编辑'
+      this.$nextTick(() => {
+        this.$refs.addTemplateRef.form = row
+      })
     },
     getTableData() {
       this.$refs.actionTableRef.getTableData()
@@ -117,7 +137,7 @@ export default {
       if (data) {
         this.submitLoading = true
         addOrEditTemplate(data).then(() => {
-          this.msgSuccess('新增成功')
+          this.msgSuccess('保存成功')
           this.submitLoading =false
           this.dialogVisible = false
           this.getTableData()
@@ -133,16 +153,40 @@ export default {
     getModuleTypeOptions () {
       const data = [
         {
-          label: '类型1',
-          value: 1
+          label: '首页模型',
+          value: 'index'
         },
         {
-          label: '类型2',
-          value: 2
+          label: '主页模型',
+          value: 'main'
+        },
+        {
+          label: '列表模型',
+          value: 'list'
+        },
+        {
+          label: '表单模型',
+          value: 'form'
         }
       ]
       const index = this.conditions.findIndex(item => item.prop === 'type')
       this.moduleTypeOptions = this.conditions[index].options = data
+    },
+    getModuleTypeLabel (value) {
+      const res = this.moduleTypeOptions.find(item => item.value === value)
+      return  res ? res.label : value
+    },
+    handleStatusChange(row) {
+      let text = row.status === "open" ? "启用" : "停用"
+      this.$confirm('确认要' + text + '"' + row.name + '"吗?', "警告", {
+        type: "warning"
+      }).then(function() {
+        return changeFormStatus(row.id, row.status)
+      }).then(() => {
+        this.msgSuccess(text + "成功")
+      }).catch(function() {
+        row.status = row.status === "open" ? "close" : "open";
+      })
     }
   }
 }
