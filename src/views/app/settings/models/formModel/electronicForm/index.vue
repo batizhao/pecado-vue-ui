@@ -4,6 +4,7 @@
       ref="actionTableRef"
       url="/app/forms"
       :columns="columns"
+       :otherParams="{ appId }"
     >
       <template v-slot:status="scope">
         <el-switch
@@ -70,6 +71,7 @@ export default {
   },
   data () {
     return {
+      appId: this.$route.params.appId,
       columns: [
         {
           label: '表单名称',
@@ -132,7 +134,7 @@ export default {
       const data = this.$refs.addComponentRef.submit()
       if (data) {
         this.submitLoading = true
-        data.appId = this.$route.params.appId
+        data.appId = this.appId
         addOrEditData(data).then(() => {
           this.msgSuccess('保存成功')
           this.submitLoading =false

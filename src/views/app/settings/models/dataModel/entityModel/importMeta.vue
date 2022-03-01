@@ -67,6 +67,9 @@
 import { listTableEntity, importTableEntity } from "@/api/app/dataModel.js";
 import { listAllDs } from "@/api/dp/ds";
 export default {
+  props: {
+    appId: String
+  },
   data() {
     return {
       // 遮罩层
@@ -137,6 +140,9 @@ export default {
         return
       }
       this.submitLoading = true
+      this.tables.map(item => {
+        item.appId = this.appId
+      })
       importTableEntity(this.tables).then(res => {
         this.msgSuccess('导入成功');
         if (res.code === 0) {

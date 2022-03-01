@@ -2,8 +2,9 @@
   <div>
     <action-table
       ref="actionTableRef"
-      url="/app/forms"
+      url="/app/processes"
       :columns="columns"
+      :otherParams="{ appId }"
     >
       <template v-slot:status="scope">
         <el-switch
@@ -48,6 +49,7 @@ export default {
   },
   data () {
     return {
+      appId: this.$route.params.appId,
       columns: [
         {
           label: '流程定义Key',

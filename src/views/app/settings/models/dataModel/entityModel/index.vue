@@ -5,7 +5,7 @@
       <action-button @click="handleImport" icon="el-icon-folder-opened" type="info">从数据库加载</action-button>
       <action-button @click="handleDel" actionType="2">删除</action-button>
     </div>
-    <action-table ref="actionTableRef" url="/app/tables" :columns="columns">
+    <action-table ref="actionTableRef" url="/app/tables" :columns="columns" :otherParams="{ appId }">
       <template v-slot:status="scope">
         {{getModelStatusLabel(scope.row.status)}}
       </template>
@@ -49,7 +49,7 @@
     <!-- 预览代码弹窗 -->
     <preview-code-dialog ref="previewCodeDialogRef"></preview-code-dialog>
     <!-- 从数据库加载弹窗 -->
-    <import-meta ref="importMetaRef" @ok="getTableData"></import-meta>
+    <import-meta ref="importMetaRef" :appId="appId" @ok="getTableData"></import-meta>
   </div>
 </template>
 
@@ -68,6 +68,7 @@ export default {
   },
   data () {
     return {
+      appId: this.$route.params.appId,
       columns: [
         {
           prop: 'tableName',
