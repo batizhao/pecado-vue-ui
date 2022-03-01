@@ -18,7 +18,7 @@
 </template>
 <script>
 import { listMenu as getMenuTreeSelect } from "@/api/ims/menu";
-import { entityModelDetail, addOrEditEntityModel, genCode } from '@/api/app/dataModel.js'
+import { entityModelDetail, updateCodeMetadata, genCode } from '@/api/app/dataModel.js'
 import basicInfoForm from "./basicInfoForm";
 import genInfoForm from "./genInfoForm";
 import { downLoadZip } from "@/utils/download";
@@ -79,7 +79,7 @@ export default {
       genForm.validate(valid => {
         if (valid) {
           this.saveLoading = true
-          addOrEditEntityModel({ 
+          updateCodeMetadata({ 
             id: this.entityModelId,
             codeMetadata: JSON.stringify(this.genarateInfo)
           }).then(() => {
@@ -106,7 +106,7 @@ export default {
           this.genarateLoading = false
         })
       } else {
-        console.error('下载方式type值不存在');
+        console.error('下载方式不支持');
       }
     }
   }
