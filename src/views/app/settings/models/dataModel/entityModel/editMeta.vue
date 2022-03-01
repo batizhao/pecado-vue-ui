@@ -18,9 +18,10 @@
 </template>
 <script>
 import { listMenu as getMenuTreeSelect } from "@/api/ims/menu";
-import { entityModelDetail, submitGenarateCode, addOrEditEntityModel } from '@/api/app/dataModel.js'
+import { entityModelDetail, addOrEditEntityModel, genCode } from '@/api/app/dataModel.js'
 import basicInfoForm from "./basicInfoForm";
 import genInfoForm from "./genInfoForm";
+import { downLoadZip } from "@/utils/download";
 
 export default {
   name: "EditMeta",
@@ -92,13 +93,21 @@ export default {
       })
     },
     genarateCode () {
-      this.genarateLoading = true
-      submitGenarateCode(this.entityModelId).then(() => {
-        this.msgSuccess('生成代码成功')
-        this.genarateLoading = false
-      }).catch(() => {
-        this.genarateLoading = false
-      })
+      if (this.genarateInfo.type === 'zip') {
+        // zip下载
+        downLoadZip("/app/table/zip/" + this.entityModelId)
+      } else if (this.genarateInfo.type === 'path') {
+        // 自定义路径下载
+        this.genarateLoading = true
+        genCode(this.entityModelId).then(() => {
+          this.msgSuccess("成功生成到自定义路径：" + this.genarateInfo.path);
+          this.genarateLoading = false
+        }).catch(() => {
+          this.genarateLoading = false
+        })
+      } else {
+        console.error('下载方式type值不存在');
+      }
     }
   }
 };

@@ -36,14 +36,6 @@ export function syncEntityModel (id) {
   })
  }
 
-// 生产代码/生产代码
-export function submitGenarateCode (id) {
-  return request({
-    url: '/app/table/zip/' + id,
-    method: 'post'
-  })
-}
-
 // 查询代码元数据表详细信息
 export function listCodeMeta(id) {
   return request(`/dp/code/meta?codeId=${id}`);
@@ -69,4 +61,12 @@ export function importCodeMeta(data) {
 // 预览生成代码
 export function previewCode(id) {
   return request(`/dp/code/preview/${id}`)
+}
+
+// 生成代码（自定义路径）
+export function genCode(id) {
+  return request({
+    url: `/app/table/path/${id}`,
+    method: 'post'
+  })
 }
