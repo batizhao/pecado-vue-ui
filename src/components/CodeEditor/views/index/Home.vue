@@ -143,7 +143,7 @@ import {
 } from '../../components/generator/html'
 import { makeUpJs } from '../../components/generator/js'
 import { makeUpCss } from '../../components/generator/css'
-import drawingDefalut from '../../components/generator/drawingDefalut'
+// import drawingDefalut from '../../components/generator/drawingDefalut'
 import logo from '../../assets/logo.png'
 import CodeTypeDialog from './CodeTypeDialog'
 import DraggableItem from './DraggableItem'
@@ -196,7 +196,7 @@ export default {
 			jsonDrawerVisible: false,
 			generateConf: null,
 			showFileName: false,
-			activeData: drawingDefalut[0],
+			activeData: null,
 			saveDrawingListDebounce: debounce(340, saveDrawingList),
 			saveIdGlobalDebounce: debounce(340, saveIdGlobal),
 			leftComponents: [
@@ -254,10 +254,10 @@ export default {
 			this.drawingList = deepClone(this.pageData.fields)
       this.formConf = deepClone(this.pageData)
       delete this.formConf.fields
+			this.activeFormItem(this.drawingList[0])
 		} else {
-			this.drawingList = drawingDefalut
+			this.drawingList = []
 		}
-		this.activeFormItem(this.drawingList[0])
 
     // if (Array.isArray(this.list) && this.list.length > 0) {
 		// 	this.drawingList = deepClone(this.list)

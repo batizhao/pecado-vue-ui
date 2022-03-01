@@ -1,8 +1,7 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" v-loading="codeEditorLoading">
     <codeEditor
-      v-loading="codeEditorLoading"
-      :key="id"
+      v-if="pageData"
       :pageData="pageData"
       @save="handleSave"
     />
@@ -11,18 +10,18 @@
 
 <script>
 import codeEditor from '@/components/CodeEditor/views/index/Home.vue'
-import { getFormByKey, addFormMetaData } from "@/api/app/formModel.js";
+import { getDataDetail, addOrEditData } from "@/api/app/formModel.js";
 export default {
   name: "FormDesign",
   components: {
 		codeEditor
 	},
+  props: {
+    formInfo: Object
+  },
   data() {
     return {
-      id: 0,
-      formKey: "",
-      metadata: "{}",
-      pageData:{},
+      pageData: null,
       codeEditorLoading:false
     }
   },
@@ -32,32 +31,25 @@ export default {
   methods: {
     handleFormReady () {
       this.codeEditorLoading = true;
-      const formKey = this.$route.params && this.$route.params.formKey;
-      if (formKey) {
-        this.formKey = formKey
         // 获取表单详细信息
-        getFormByKey(formKey).then(res => {
-          this.id = res.data.id;
+        getDataDetail(this.formInfo.id).then(res => {
+          this.codeEditorLoading = false
           const formObj = JSON.parse(res.data.metadata || '{}');
           this.pageData = formObj.formData || {};
-          this.codeEditorLoading = false;
-          this.$forceUpdate();
-        }).catch( err => {
-          console.log(err);
-          this.codeEditorLoading = false;
-        });
-      }else{
-        this.codeEditorLoading = false;
-      }
+        }).catch(() => {
+          this.pageData = null
+          this.codeEditorLoading = false
+        })
     },
     handleSave (args) {
       this.codeEditorLoading = true;
-      addFormMetaData(this.id, this.formKey, JSON.stringify(args)).then(res => {
-        this.msgSuccess(res.message);
+      addOrEditData({
+        id: this.formInfo.id,
+        metadata: JSON.stringify(args)
+      }).then(res => {
+        this.msgSuccess('保存成功');
         this.codeEditorLoading = false;
-        if (res.code === 0) {
-          this.close();
-        }
+        this.$emit('success')
       }).catch( err => {
         console.log(err);
         this.codeEditorLoading = false;

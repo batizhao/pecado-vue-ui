@@ -22,7 +22,7 @@
       <template v-slot:action="scope">
         <action-button actionType="3" @click="handleEdit(scope.row)" icon="el-icon-edit">编辑</action-button>
         <action-dropdown>
-          <el-dropdown-item icon="el-icon-edit" @click.native="handleDesign(scope.row.formKey)">表单设计</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-edit" @click.native="handleDesign(scope.row)">表单设计</el-dropdown-item>
           <el-dropdown-item icon="el-icon-delete" @click.native="handleDel(scope.row.id)">删除</el-dropdown-item>
         </action-dropdown>
       </template>
@@ -34,6 +34,7 @@
       :title="dialogTitle"
       :loading="submitLoading"
       @confirm="dialogConfirm"
+
     >
       <add-component ref="addComponentRef"></add-component>
     </action-dialog>
@@ -41,12 +42,17 @@
     <!-- 设计表单弹窗 -->
     <action-dialog
       v-model="designFormVisible"
-      title="设计表单"
+      :title="'设计表单-' + currentItem.name"
       fullscreen
       custom-class="form-design-dialog"
       :showFooter="false"
     >
-      <design-form ref="designFormRef"></design-form>
+      <design-form
+        v-if="designFormVisible"
+        ref="designFormRef"
+        :formInfo="currentItem"
+        @success="designFormSuccess"
+      ></design-form>
     </action-dialog>
 
 
@@ -87,7 +93,8 @@ export default {
       dialogVisible: false,
       dialogTitle: '',
       submitLoading: false,
-      designFormVisible: false
+      designFormVisible: false,
+      currentItem: {}
     }
   },
   methods: {
@@ -137,8 +144,12 @@ export default {
         
       }
     },
-    handleDesign (formKey) {
+    handleDesign (item) {
       this.designFormVisible = true
+      this.currentItem = item
+    },
+    designFormSuccess () {
+      this.designFormVisible = false
     },
     // 表单状态编辑
     handleStatusChange(row) {

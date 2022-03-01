@@ -10,7 +10,7 @@
 			</a> -->
 			<el-scrollbar class="right-scrollbar">
 				<!-- 组件属性 -->
-				<el-form v-show="currentTab==='field' && showField" size="small" label-width="90px">
+				<el-form v-if="activeData" v-show="currentTab==='field' && showField" size="small" label-width="90px">
 					<el-form-item v-if="activeData.changeTag" label="组件类型">
 						<el-select
 							v-model="activeData.__config__.tagIcon"
@@ -723,7 +723,7 @@
 		</div>
 
 		<treeNode-dialog :visible.sync="dialogVisible" title="添加选项" @commit="addNode" />
-		<icons-dialog :visible.sync="iconsVisible" :current="activeData[currentIconModel]" @select="setIcon" />
+		<icons-dialog v-if="activeData" :visible.sync="iconsVisible" :current="activeData[currentIconModel]" @select="setIcon" />
 	</div>
 </template>
 
