@@ -42,7 +42,7 @@ export function resolveBlob(res, mimeType) {
   var patt = new RegExp('filename=([^;]+\\.[^\\.;]+);*')
   var contentDisposition = decodeURI(res.headers['content-disposition'])
   var result = patt.exec(contentDisposition)
-  var fileName = result[1]
+  var fileName = result ? result[1] : '未命名文件'
   fileName = fileName.replace(/\"/g, '')
   aLink.href = URL.createObjectURL(blob)
   aLink.setAttribute('download', fileName) // 设置下载文件名称

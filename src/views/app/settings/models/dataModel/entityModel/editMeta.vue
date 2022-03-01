@@ -74,40 +74,57 @@ export default {
         }
       })
     },
-    stepTwoSubmit () {
-      const genForm = this.$refs.genInfo.$refs.genInfoForm
-      genForm.validate(valid => {
-        if (valid) {
-          this.saveLoading = true
-          addOrEditEntityModel({ 
-            id: this.entityModelId,
-            codeMetadata: JSON.stringify(this.genarateInfo)
-          }).then(() => {
-            this.saveLoading = false
-            this.msgSuccess('保存成功');
-            this.$emit('success')
-          }).catch(() => {
-            this.saveLoading = false
-          })
-        }
+    stepTwoSubmit (isFromGenarateCode) {
+      return new Promise((resolve, reject) => {
+        const genForm = this.$refs.genInfo.$refs.genInfoForm
+        genForm.validate(valid => {
+          if (valid) {
+            this.saveLoading = true
+            addOrEditEntityModel({ 
+              id: this.entityModelId,
+              codeMetadata: JSON.stringify(this.genarateInfo)
+            }).then(() => {
+              this.saveLoading = false
+              if (!isFromGenarateCode) {
+                this.msgSuccess('保存成功');
+                this.$emit('success')
+              }
+              resolve()
+            }).catch(() => {
+              this.saveLoading = false
+              reject('保存接口报错')
+            })
+          } else {
+            reject('表单校验不通过')
+          }
+        })
       })
     },
     genarateCode () {
-      if (this.genarateInfo.type === 'zip') {
-        // zip下载
-        downLoadZip("/app/table/zip/" + this.entityModelId)
-      } else if (this.genarateInfo.type === 'path') {
-        // 自定义路径下载
-        this.genarateLoading = true
-        genCode(this.entityModelId).then(() => {
-          this.msgSuccess("成功生成到自定义路径：" + this.genarateInfo.path);
-          this.genarateLoading = false
-        }).catch(() => {
-          this.genarateLoading = false
-        })
-      } else {
-        console.error('下载方式type值不存在');
-      }
+      this.genarateLoading = true
+      this.stepTwoSubmit(true).then(() => {
+        this.genarateLoading = false
+        if (this.genarateInfo.type === 'zip') {
+          // zip下载
+          downLoadZip("/app/table/zip/" + this.entityModelId)
+          this.$emit('success')
+        } else if (this.genarateInfo.type === 'path') {
+          // 自定义路径下载
+          this.genarateLoading = true
+          genCode(this.entityModelId).then(() => {
+            this.msgSuccess("成功生成到自定义路径：" + this.genarateInfo.path);
+            this.$emit('success')
+            this.genarateLoading = false
+          }).catch(() => {
+            this.genarateLoading = false
+          })
+        } else {
+          console.error('下载方式type值不存在');
+        }
+      }).catch(err => {
+        this.genarateLoading = false
+        console.error(err)
+      })
     }
   }
 };
