@@ -9,7 +9,7 @@
           <electronic-form v-if="activeName === '2'"></electronic-form>
         </el-tab-pane>
         <el-tab-pane label="流程模型" name="3">
-
+          <process-model></process-model>
         </el-tab-pane>
         <el-tab-pane label="报表模型" name="4">
           <el-tabs v-model="activeName_4">
@@ -38,10 +38,12 @@
 <script>
 import entityModel from './models/dataModel/entityModel/index.vue'
 import electronicForm from './models/formModel/electronicForm/index.vue'
+import processModel from './models/processModel/index.vue'
 export default {
   components: {
     entityModel,
-    electronicForm
+    electronicForm,
+    processModel
   },
   data () {
     return {
