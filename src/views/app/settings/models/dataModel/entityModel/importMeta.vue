@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { listCodeMetaPage, importCodeMeta } from "@/api/app/dataModel.js";
+import { listTableEntity, importTableEntity } from "@/api/app/dataModel.js";
 import { listAllDs } from "@/api/dp/ds";
 export default {
   data() {
@@ -105,7 +105,7 @@ export default {
     },
     // 查询表数据
     getList() {
-      listCodeMetaPage(this.queryParams).then(res => {
+      listTableEntity(this.queryParams).then(res => {
         if (res.code === 0) {
           this.dbTableList = res.data.records;
           this.total = res.data.total;
@@ -137,7 +137,7 @@ export default {
         return
       }
       this.submitLoading = true
-      importCodeMeta(this.tables).then(res => {
+      importTableEntity(this.tables).then(res => {
         this.msgSuccess('导入成功');
         if (res.code === 0) {
           this.visible = false;

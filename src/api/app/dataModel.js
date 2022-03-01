@@ -9,6 +9,15 @@ export function addOrEditEntityModel (data) {
   })
 }
 
+// 添加实体模型
+export function updateCodeMetadata (data) {
+  return request({
+    url:  '/app/table/code',
+    method: 'post',
+    data
+  })
+}
+
 // 删除实体模型
 export function deleteEntityModel (ids = '') {
   return request({
@@ -42,17 +51,17 @@ export function listCodeMeta(id) {
 }
 
 // 查询生成元数据列表
-export function listCodeMetaPage(query) {
+export function listTableEntity(query) {
   return request({
-    url: '/dp/code/tables',
+    url: '/app/table/entity',
     params: query
   })
 }
 
 // 导入生成元数据
-export function importCodeMeta(data) {
+export function importTableEntity(data) {
   return request({
-    url: '/dp/code/table',
+    url: '/app/table/import',
     method: 'post',
     data: data
   })
@@ -60,7 +69,7 @@ export function importCodeMeta(data) {
 
 // 预览生成代码
 export function previewCode(id) {
-  return request(`/dp/code/preview/${id}`)
+  return request(`/app/table/preview/${id}`)
 }
 
 // 生成代码（自定义路径）

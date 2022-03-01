@@ -49,7 +49,7 @@
     <!-- 预览代码弹窗 -->
     <preview-code-dialog ref="previewCodeDialogRef"></preview-code-dialog>
     <!-- 从数据库加载弹窗 -->
-    <import-meta ref="impotMetaRef" @ok="getTableData"></import-meta>
+    <import-meta ref="importMetaRef" @ok="getTableData"></import-meta>
   </div>
 </template>
 
@@ -178,7 +178,7 @@ export default {
       this.$refs.previewCodeDialogRef.open(id)
     },
     handleImport () {
-      this.$refs.impotMetaRef.show();
+      this.$refs.importMetaRef.show();
     }
   }
 

@@ -5,9 +5,9 @@
         <el-form-item prop="template">
           <span slot="label">生成模板</span>
           <el-select v-model="info.template" @change="tplSelectChange">
-            <el-option label="单表（增删改查）" value="crud" />
-            <el-option label="树表（增删改查）" value="tree" />
-            <el-option label="一对多表（增删改查）" value="onetomany" />
+            <el-option label="单表" value="single" />
+            <el-option label="树表" value="tree" />
+            <el-option label="一对多表" value="onetomany" />
           </el-select>
         </el-form-item>
       </el-col>
