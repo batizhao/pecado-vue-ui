@@ -108,7 +108,7 @@ export default {
     },
     handleAdd () {
       this.dialogVisible = true
-      this.dialogTitle = '新增'
+      this.dialogTitle = '新增数据模型'
       this.$nextTick(() => {
         this.$refs.addModelRef.reset()
       })

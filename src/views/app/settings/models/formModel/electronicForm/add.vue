@@ -29,17 +29,9 @@ export default {
           ]
         },
         {
-          label: '表单标识',
-          prop: 'formKey',
-          rules: [
-            { required: true, message: "请输入表单标识", trigger: "change" },
-          ]
-        },
-        {
           label: '表单描述',
           prop: 'description',
           type: 'textarea',
-          span: 24
         }
       ]
     }
