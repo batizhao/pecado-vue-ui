@@ -4,7 +4,7 @@
       ref="actionTableRef"
       url="/app/forms"
       :columns="columns"
-       :otherParams="{ appId }"
+      :otherParams="{ appId }"
     >
       <template v-slot:status="scope">
         <el-switch
@@ -35,7 +35,7 @@
       :title="dialogTitle"
       :loading="submitLoading"
       @confirm="dialogConfirm"
-
+      width="30%"
     >
       <add-component ref="addComponentRef"></add-component>
     </action-dialog>
@@ -102,7 +102,7 @@ export default {
   methods: {
     handleAdd () {
       this.dialogVisible = true
-      this.dialogTitle = '新增'
+      this.dialogTitle = '新增表单模型'
       this.$nextTick(() => {
         this.$refs.addComponentRef.reset()
       })

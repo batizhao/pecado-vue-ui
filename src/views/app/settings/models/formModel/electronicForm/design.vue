@@ -58,7 +58,7 @@ export default {
     /** 关闭按钮 */
     close() {
       this.$store.dispatch("tagsView/delView", this.$route);
-      this.$router.push({ path: "/dp/form", query: { t: Date.now()}})
+      this.$router.push({ path: "/app/form", query: { t: Date.now()}})
     }
   }
 }
