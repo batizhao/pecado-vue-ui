@@ -9,7 +9,7 @@
           <electronic-form v-if="activeName === '2'"></electronic-form>
         </el-tab-pane>
         <el-tab-pane label="流程模型" name="3">
-          <process-model></process-model>
+          <process-model v-if="activeName === '3'"></process-model>
         </el-tab-pane>
         <el-tab-pane label="报表模型" name="4">
           <el-tabs v-model="activeName_4">
@@ -22,7 +22,7 @@
           </el-tabs>
         </el-tab-pane>
         <el-tab-pane label="页面模型" name="5">
-
+          <page-model v-if="activeName === '5'"></page-model>
         </el-tab-pane>
         <el-tab-pane label="数据字典" name="6">
 
@@ -39,11 +39,13 @@
 import entityModel from './models/dataModel/entityModel/index.vue'
 import electronicForm from './models/formModel/electronicForm/index.vue'
 import processModel from './models/processModel/index.vue'
+import pageModel from './models/pageModel/index.vue'
 export default {
   components: {
     entityModel,
     electronicForm,
-    processModel
+    processModel,
+    pageModel
   },
   data () {
     return {

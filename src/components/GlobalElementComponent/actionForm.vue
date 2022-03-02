@@ -39,6 +39,16 @@
               :disabled="item.disabled"
             ></el-input>
           </template>
+          <!-- 单选 -->
+          <template v-else-if="item.type === 'radio'">
+            <el-radio-group v-model="model[item.prop]">
+              <el-radio
+                v-for="option in item.options"
+                :key="option[item.optionsProps ? item.optionsProps.value : 'value']"
+                :label="option[item.optionsProps ? item.optionsProps.value : 'value']"
+              >{{option[item.optionsProps ? item.optionsProps.label : 'label']}}</el-radio>
+            </el-radio-group>
+          </template>
           <!-- 插槽 -->
           <template v-else-if="item.type === 'slot'">
             <slot :name="item.prop"></slot>

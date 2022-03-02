@@ -2,9 +2,9 @@
   <div>
     <action-table
       ref="actionTableRef"
-      url="/app/forms"
+      url="/app/processes"
       :columns="columns"
-       :otherParams="{ appId }"
+      :otherParams="{ appId }"
     >
       <template v-slot:status="scope">
         <el-switch
@@ -16,16 +16,13 @@
       </template>
       <template slot="actionButtons">
         <div class="action-buttons mb8">
-          <action-button @click="handleAdd" actionType="1">新增</action-button>
+          <action-button @click="handleAdd" actionType="1">新增列表页面</action-button>
           <action-button @click="handleDel" actionType="2">删除</action-button>
         </div>
       </template>
       <template v-slot:action="scope">
         <action-button actionType="3" @click="handleEdit(scope.row)" icon="el-icon-edit">编辑</action-button>
-        <action-dropdown>
-          <el-dropdown-item icon="el-icon-edit" @click.native="handleDesign(scope.row)">表单设计</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-delete" @click.native="handleDel(scope.row.id)">删除</el-dropdown-item>
-        </action-dropdown>
+        <action-button actionType="3" @click="handleDel(scope.row.id)" icon="el-icon-delete">删除</action-button>
       </template>
     </action-table>
 
@@ -35,55 +32,38 @@
       :title="dialogTitle"
       :loading="submitLoading"
       @confirm="dialogConfirm"
-
+      width="30%"
+      fullscreen
+      custom-class="add-page-model-dialog"
     >
       <add-component ref="addComponentRef"></add-component>
     </action-dialog>
-
-    <!-- 设计表单弹窗 -->
-    <action-dialog
-      v-model="designFormVisible"
-      :title="'设计表单-' + currentItem.name"
-      fullscreen
-      custom-class="form-design-dialog"
-      :showFooter="false"
-    >
-      <design-form
-        v-if="designFormVisible"
-        ref="designFormRef"
-        :formInfo="currentItem"
-        @success="designFormSuccess"
-      ></design-form>
-    </action-dialog>
-
 
   </div>
 </template>
 
 <script>
 import addComponent from './add.vue'
-import { addOrEditData, deleteData, changeFormStatus } from '@/api/app/formModel.js'
-import designForm from './design.vue'
+import { addOrEditData, deleteData, changeStatus } from '@/api/app/pageModel.js'
 export default {
   components: {
-    addComponent,
-    designForm
+    addComponent
   },
   data () {
     return {
       appId: this.$route.params.appId,
       columns: [
         {
-          label: '表单名称',
+          label: '页面名称',
           prop: 'name'
         },
         {
-          label: '表单标识',
-          prop: 'formKey',
+          label: '页面编码',
+          prop: 'code'
         },
         {
-          label: '表单描述',
-          prop: 'description'
+          label: '页面类型',
+          prop: 'type'
         },
         {
           label: '表单状态',
@@ -94,9 +74,7 @@ export default {
       ],
       dialogVisible: false,
       dialogTitle: '',
-      submitLoading: false,
-      designFormVisible: false,
-      currentItem: {}
+      submitLoading: false
     }
   },
   methods: {
@@ -133,8 +111,9 @@ export default {
     dialogConfirm () {
       const data = this.$refs.addComponentRef.submit()
       if (data) {
+        console.log("🚀 ~ file: index.vue ~ line 114 ~ dialogConfirm ~ data", data)
         this.submitLoading = true
-        data.appId = this.appId
+        data.basicForm.appId = this.appId
         addOrEditData(data).then(() => {
           this.msgSuccess(this.dialogTitle + '成功')
           this.submitLoading =false
@@ -146,38 +125,23 @@ export default {
         
       }
     },
-    handleDesign (item) {
-      this.designFormVisible = true
-      this.currentItem = item
-    },
-    designFormSuccess () {
-      this.designFormVisible = false
-    },
-    // 表单状态编辑
     handleStatusChange(row) {
-      let text = row.status === "open" ? "启用" : "停用";
+      let text = row.status === "open" ? "启用" : "停用"
       this.$confirm('确认要' + text + '"' + row.name + '"吗?', "警告", {
         type: "warning"
       }).then(function() {
-        return changeFormStatus(row.id, row.status);
+        return changeStatus(row.id, row.status)
       }).then(() => {
-        this.msgSuccess(text + "成功");
+        this.msgSuccess(text + "成功")
       }).catch(function() {
         row.status = row.status === "open" ? "close" : "open";
-      });
-    },
+      })
+    }
   }
 }
 </script>
-<style lang="scss">
-.form-design-dialog>.el-dialog__body{
-  padding: 0;
-  border-top: 1px solid #f1e8e8;
-  height: calc(100vh - 54px);
-  .app-container{
-    height: 100%;
-    overflow: hidden;
-    padding: 0;
-  }
+<style>
+.add-page-model-dialog>.el-dialog__body {
+  padding: 0 30px;
 }
 </style>

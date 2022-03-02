@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-const url = '/app/form'
+const url = '/app/page'
 
 // 添加编辑
 export function addOrEditData (data) {
@@ -22,16 +22,8 @@ export function deleteData (ids = '') {
   })
 }
 
-// 详情
-export function getDataDetail (id) {
-  return request({
-    url: url + '/' + id,
-    method: 'get'
-  })
-}
-
-// 修改表单状态
-export function changeFormStatus (id, status) {
+// 状态更改
+export function changeStatus (id, status) {
   return request({
     url: url + '/status',
     method: 'post',
