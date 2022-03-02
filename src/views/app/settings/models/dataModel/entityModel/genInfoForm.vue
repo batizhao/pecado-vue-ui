@@ -102,7 +102,7 @@
             </el-tooltip>
           </span>
           <treeselect
-            :append-to-body="true"
+            :append-to-body="false"
             v-model="info.parentMenuId"
             :options="menus"
             :normalizer="normalizer"
@@ -274,15 +274,12 @@ export default {
     },
     /** 设置关联外键 */
     setSubTableColumns(value) {
-      for (var item in this.tables) {
-        const id = this.tables[item].id;
-        if (value === id) {
-          entityModelDetail(id).then(response => {
-              this.subColumns = response.data.columnMetadata;
-            }
-          );
-          break;
-        }
+      const item = this.tables.find(item => item.id === value)
+      if (item) {
+        entityModelDetail(item.id).then(response => {
+            this.subColumns = JSON.parse(response.data.columnMetadata);
+          }
+        );
       }
     }
   }

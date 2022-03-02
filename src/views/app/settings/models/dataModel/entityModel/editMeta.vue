@@ -18,7 +18,7 @@
 </template>
 <script>
 import { listMenu as getMenuTreeSelect } from "@/api/ims/menu";
-import { entityModelDetail, updateCodeMetadata, genCode } from '@/api/app/dataModel.js'
+import { entityModelDetail, updateCodeMetadata, genCode, getTableRelations } from '@/api/app/dataModel.js'
 import basicInfoForm from "./basicInfoForm";
 import genInfoForm from "./genInfoForm";
 import { downLoadZip } from "@/utils/download";
@@ -56,10 +56,11 @@ export default {
       let codeMetadata = res.data.codeMetadata
       if (codeMetadata) {
         this.genarateInfo = JSON.parse(codeMetadata)
+        this.getTableRelations()
       }
       this.code = res.data
-      this.codes = [] // 生成模板为一对多表时，这个数组应该要有接口字段，但是暂时没有
     })
+    
     /** 查询菜单下拉列表 */
     getMenuTreeSelect().then(response => {
       this.menus = response.data;
@@ -124,6 +125,16 @@ export default {
       }).catch(err => {
         this.genarateLoading = false
         console.error(err)
+      })
+    },
+    getTableRelations () {
+      getTableRelations(this.entityModelId).then(res => {
+        this.codes = res.data
+        this.$nextTick(() => {
+          if (this.genarateInfo.subTableId) {
+            this.$refs.genInfo.setSubTableColumns(this.genarateInfo.subTableId)
+          }
+        })
       })
     }
   }

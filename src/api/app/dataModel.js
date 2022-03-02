@@ -74,3 +74,11 @@ export function genCode(id) {
     method: 'post'
   })
 }
+
+// 获取关联表
+export function getTableRelations(id) {
+  return request({
+    url: `/app/table/relations/${id}`,
+    method: 'get'
+  })
+}
