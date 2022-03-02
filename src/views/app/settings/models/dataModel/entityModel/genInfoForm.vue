@@ -78,21 +78,6 @@
       </el-col>
 
       <el-col :span="12">
-        <el-form-item prop="form">
-          <span slot="label">
-            生成表单方式
-            <el-tooltip content="默认为根据字段信息生成，如果可视化，需要自己设计表单" placement="top">
-              <i class="el-icon-question"></i>
-            </el-tooltip>
-          </span>
-          <el-radio-group v-model="info.form" :disabled="info.workflow == 'yes'" size="medium">
-            <el-radio-button label="meta">元数据</el-radio-button>
-            <el-radio-button label="visual">可视化</el-radio-button>
-          </el-radio-group>
-        </el-form-item>
-      </el-col>
-
-      <el-col :span="12">
         <el-form-item prop="testcase">
           <span slot="label">
             生成测试用例
@@ -144,7 +129,7 @@
     </el-row>
 
     <el-row>
-      <el-col :span="12" v-if="info.type == 'path'">
+      <el-col :span="24" v-if="info.type == 'path'">
         <el-form-item prop="path">
           <span slot="label">
             后端项目路径
@@ -160,28 +145,6 @@
               </el-button>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item @click.native="info.path = '/'">恢复默认的生成基础路径</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </el-input>
-        </el-form-item>
-      </el-col>
-
-      <el-col :span="12" v-if="info.type == 'path'">
-        <el-form-item prop="frontPath">
-          <span slot="label">
-            前端项目路径
-            <el-tooltip content="需要填写磁盘绝对路径，可以直接指向你的项目或者模块路径。若不填写，则生成到当前Web项目下。" placement="top">
-              <i class="el-icon-question"></i>
-            </el-tooltip>
-          </span>
-          <el-input v-model="info.frontPath">
-            <el-dropdown slot="append">
-              <el-button type="primary">
-                最近路径快速选择
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item @click.native="info.frontPath = '/'">恢复默认的生成基础路径</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-input>
@@ -221,8 +184,8 @@
             <el-option
               v-for="(column, index) in subColumns"
               :key="index"
-              :label="column.columnName + '：' + column.columnComment"
-              :value="column.columnName"
+              :label="column.name + '：' + column.comment"
+              :value="column.name"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -231,7 +194,7 @@
   </el-form>
 </template>
 <script>
-import { listCodeMeta } from "@/api/app/dataModel.js";
+import { entityModelDetail } from "@/api/app/dataModel.js";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -314,8 +277,8 @@ export default {
       for (var item in this.tables) {
         const id = this.tables[item].id;
         if (value === id) {
-          listCodeMeta(id).then(response => {
-              this.subColumns = response.data;
+          entityModelDetail(id).then(response => {
+              this.subColumns = response.data.columnMetadata;
             }
           );
           break;
