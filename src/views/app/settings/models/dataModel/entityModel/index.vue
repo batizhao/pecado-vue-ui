@@ -144,7 +144,7 @@ export default {
         addOrEditEntityModel(data).then(() => {
           this.submitLoading = false
           this.getTableData()
-          this.msgSuccess('保存成功')
+          this.msgSuccess(this.dialogTitle + '成功')
         }).catch(() =>{
           this.submitLoading = false
         })
