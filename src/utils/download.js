@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getToken } from '@/utils/auth'
+import { Message } from 'element-ui'
 
 const mimeMap = {
   xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8',
@@ -16,6 +17,11 @@ export function downLoadZip(str) {
     headers: { 'Authorization': 'Bearer ' + getToken() }
   }).then(res => {
     resolveBlob(res, mimeMap.zip)
+  }).catch(() => {
+    Message({
+      type: 'error',
+      message: '下载失败'
+    })
   })
 }
 export function downLoadExcel(str, queryParams) {
@@ -28,6 +34,11 @@ export function downLoadExcel(str, queryParams) {
     headers: { 'Authorization': 'Bearer ' + getToken() }
   }).then(res => {
     resolveBlob(res, mimeMap.xlsx)
+  }).catch(() => {
+    Message({
+      type: 'error',
+      message: '下载失败'
+    })
   })
 }
 /**
@@ -42,7 +53,7 @@ export function resolveBlob(res, mimeType) {
   var patt = new RegExp('filename=([^;]+\\.[^\\.;]+);*')
   var contentDisposition = decodeURI(res.headers['content-disposition'])
   var result = patt.exec(contentDisposition)
-  var fileName = result ? result[1] : '未命名文件'
+  var fileName = result[1]
   fileName = fileName.replace(/\"/g, '')
   aLink.href = URL.createObjectURL(blob)
   aLink.setAttribute('download', fileName) // 设置下载文件名称
