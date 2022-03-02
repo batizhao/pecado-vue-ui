@@ -12,9 +12,9 @@
 <script>
 const getDefaultFrom = () => {
   return {
-    name: '',
-    formKey: '', 
-    description: ''
+    processKey: '',
+    name: '', 
+    version: ''
   }
 }
 export default {
@@ -24,7 +24,7 @@ export default {
       formOptions: [
         {
           label: '流程定义Key',
-          prop: 'key',
+          prop: 'processKey',
           rules: [
             { required: true, message: "请输入流程定义Key", trigger: "change" },
           ]
@@ -39,6 +39,7 @@ export default {
         {
           label: '版本',
           prop: 'version',
+          type: 'inputNumber',
           rules: [
             { required: true, message: "请输入版本", trigger: "change" },
           ]

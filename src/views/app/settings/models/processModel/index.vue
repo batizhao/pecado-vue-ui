@@ -42,7 +42,7 @@
 
 <script>
 import addComponent from './add.vue'
-import { addOrEditData, deleteData, changeFormStatus } from '@/api/app/processModel.js'
+import { addOrEditData, deleteData, changeStatus } from '@/api/app/processModel.js'
 export default {
   components: {
     addComponent
@@ -53,7 +53,7 @@ export default {
       columns: [
         {
           label: '流程定义Key',
-          prop: 'key'
+          prop: 'processKey'
         },
         {
           label: '流程名称',
@@ -112,7 +112,7 @@ export default {
         this.submitLoading = true
         data.appId = this.$route.params.appId
         addOrEditData(data).then(() => {
-          this.msgSuccess('新增成功')
+          this.msgSuccess(this.dialogTitle + '成功')
           this.submitLoading =false
           this.dialogVisible = false
           this.getTableData()
@@ -127,7 +127,7 @@ export default {
       this.$confirm('确认要' + text + '"' + row.name + '"吗?', "警告", {
         type: "warning"
       }).then(function() {
-        return changeFormStatus(row.id, row.status)
+        return changeStatus(row.id, row.status)
       }).then(() => {
         this.msgSuccess(text + "成功")
       }).catch(function() {
