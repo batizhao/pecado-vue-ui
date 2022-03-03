@@ -2,16 +2,22 @@
   <div>
     <el-steps :active="active" finish-status="success" align-center style="margin-bottom: 30px;">
       <el-step title="基本信息"></el-step>
+      <el-step title="表单配置"></el-step>
       <el-step title="生成信息"></el-step>
     </el-steps>
     <basic-info-form v-show="active === 0" ref="basicInfo" :info="code" :genarateInfo="genarateInfo" />
-    <gen-info-form v-show="active === 1" ref="genInfo" :info="genarateInfo" :tables="codes" :menus="menus"/>
+    <configure-form v-show="active === 1" ref="configureForm" v-if="columnMetadata" :columnMetadata="columnMetadata"></configure-form>
+    <gen-info-form v-show="active === 2" ref="genInfo" :info="genarateInfo" :tables="codes" :menus="menus"/>
     <div class="action-buttons" v-show="active === 0">
-      <action-button :plain="false" size="medium" @click="stepOneSubmit">下一步</action-button>
+      <action-button :plain="false" size="medium" @click="basicInfoSubmit">下一步</action-button>
     </div>
     <div class="action-buttons" v-show="active === 1">
       <action-button type="text" size="medium" @click="active = 0">上一步</action-button>
-      <action-button :plain="false" size="medium" @click="stepTwoSubmit" :loading="saveLoading">保存</action-button>
+      <action-button :plain="false" size="medium" @click="configureFormSubmit">下一步</action-button>
+    </div>
+    <div class="action-buttons" v-show="active === 2">
+      <action-button type="text" size="medium" @click="active = 1">上一步</action-button>
+      <action-button :plain="false" size="medium" @click="updateCodeMetadata" :loading="saveLoading">保存</action-button>
       <action-button  size="medium" @click="genarateCode" :loading="genarateLoading">生成代码</action-button>
     </div>
   </div>
@@ -21,13 +27,15 @@ import { listMenu as getMenuTreeSelect } from "@/api/ims/menu";
 import { entityModelDetail, updateCodeMetadata, genCode, getTableRelations } from '@/api/app/dataModel.js'
 import basicInfoForm from "./basicInfoForm";
 import genInfoForm from "./genInfoForm";
+import configureForm from './configureForm.vue'
 import { downLoadZip } from "@/utils/download";
 
 export default {
   name: "EditMeta",
   components: {
     basicInfoForm,
-    genInfoForm
+    genInfoForm,
+    configureForm
   },
   props: {
     isDialog: Boolean,
@@ -47,12 +55,23 @@ export default {
       code: {},
       // 生成信息
       genarateInfo: {},
+      // 列配置列表
+      columnMetadata: null,
       saveLoading: false,
       genarateLoading: false
     };
   },
   created() {
     entityModelDetail(this.entityModelId).then(res => {
+      console.log("🚀 ~ file: editMeta.vue ~ line 62 ~ entityModelDetail ~ res", res)
+      // columnMetadata数组的对象里没有某些属性，初始化给他加上
+      this.columnMetadata = JSON.parse(res.data.columnMetadata).map(item => {
+        item.javaType = ''
+        item.javaField = ''
+        item.save = false
+        item.htmlType = ''
+        return item
+      })
       let codeMetadata = res.data.codeMetadata
       if (codeMetadata) {
         this.genarateInfo = JSON.parse(codeMetadata)
@@ -67,7 +86,7 @@ export default {
     });
   },
   methods: {
-    stepOneSubmit () {
+    basicInfoSubmit () {
       const basicForm = this.$refs.basicInfo.$refs.basicInfoForm
       basicForm.validate(valid => {
         if (valid) {
@@ -75,7 +94,17 @@ export default {
         }
       })
     },
-    stepTwoSubmit (isFromGenarateCode) {
+    configureFormSubmit () {
+      const configureForm = this.$refs.configureForm.$refs.form
+      configureForm.validate(valid => {
+        if (valid) {
+          this.active = 2
+        } else {
+          this.msgError('请填写完整')
+        }
+      })
+    },
+    updateCodeMetadata (isFromGenarateCode) {
       return new Promise((resolve, reject) => {
         const genForm = this.$refs.genInfo.$refs.genInfoForm
         genForm.validate(valid => {
@@ -83,7 +112,8 @@ export default {
             this.saveLoading = true
             updateCodeMetadata({ 
               id: this.entityModelId,
-              codeMetadata: JSON.stringify(this.genarateInfo)
+              codeMetadata: JSON.stringify(this.genarateInfo),
+              columnMetadata: JSON.stringify(this.columnMetadata)
             }).then(() => {
               this.saveLoading = false
               if (!isFromGenarateCode) {
@@ -103,7 +133,7 @@ export default {
     },
     genarateCode () {
       this.genarateLoading = true
-      this.stepTwoSubmit(true).then(() => {
+      this.updateCodeMetadata(true).then(() => {
         this.genarateLoading = false
         if (this.genarateInfo.type === 'zip') {
           // zip下载

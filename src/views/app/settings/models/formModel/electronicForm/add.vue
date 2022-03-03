@@ -5,6 +5,7 @@
       :formOptions="formOptions"
       label-width="100px"
       ref="actionFormRef"
+      :span="24"
     ></action-form>
   </div>
 </template>

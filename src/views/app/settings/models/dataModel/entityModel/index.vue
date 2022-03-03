@@ -36,6 +36,7 @@
       :loading="submitLoading"
       @confirm="generateCodeSubmit"
       :showFooter="false"
+      width="70%"
     >
       <generate-code
         v-if="generateCodeVisible"
