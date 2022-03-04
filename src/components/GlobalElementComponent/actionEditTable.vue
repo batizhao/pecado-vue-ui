@@ -28,6 +28,7 @@
             v-for="(item, index) in tableColumns"
             :key="index"
             :align="align"
+            show-overflow-tooltip
           >
             <template slot="header">
               <span :class="{ 'red-star': hasRedStar(item.rules)}">{{item.label}}</span>
@@ -44,7 +45,7 @@
                     style="width: 100%;"
                     clearable
                     :size="size"
-                    :disabled="item.disabled || readonlyCondition(row)"
+                    :disabled="item.disabled || isReadonly(row, item)"
                   >
                     <el-option
                       v-for="option in item.options"
@@ -56,9 +57,9 @@
                 </template>
                 <!-- 数字输入框 -->
                 <template v-else-if="item.type === 'inputNumber'">
-                  <span v-show="readonlyCondition(row)">{{row[item.prop]}}</span>
+                  <span v-show="isReadonly(row, item)">{{row[item.prop]}}</span>
                   <el-input-number
-                    v-show="!readonlyCondition(row)"
+                    v-show="!isReadonly(row, item)"
                     v-model="row[item.prop]"
                     style="width: 100%;"
                     :disabled="item.disabled"
@@ -71,14 +72,18 @@
                 <template v-else-if="item.type === 'checkbox'">
                   <el-checkbox
                     v-model="row[item.prop]"
-                    :disabled="item.disabled || readonlyCondition(row)"
+                    :disabled="item.disabled || isReadonly(row, item)"
                   ></el-checkbox>
+                </template>
+                <!-- 插槽 -->
+                <template v-else-if="item.type === 'slot'">
+                  <slot :name="item.slotName" :row="row"></slot>
                 </template>
                 <!-- 默认为输入框 -->
                 <template v-else>
-                  <span v-show="readonlyCondition(row)">{{row[item.prop]}}</span>
+                  <span v-show="isReadonly(row, item)">{{row[item.prop]}}</span>
                   <el-input
-                    v-show="!readonlyCondition(row)"
+                    v-show="!isReadonly(row, item)"
                     :size="size"
                     v-model="row[item.prop]"
                     :disabled="item.disabled"
@@ -115,7 +120,6 @@ export default {
       type: Function, // 传入判断行数据是否只读的函数
       default: () => {}
     }
-    
   },
   data() {
     return {
@@ -125,6 +129,9 @@ export default {
       },
       globalId: 0
     }
+  },
+  created () {
+    this.setDefaultValue()
   },
   watch: {
     defaultData () {
@@ -149,6 +156,9 @@ export default {
       if (!rules) return false
       const item = rules.find(item => item.required === true)
       return Boolean(item)
+    },
+    isReadonly (row, item) {
+      return this.readonlyCondition(row) || item.readonly
     },
     addRow () {
       const row = {}

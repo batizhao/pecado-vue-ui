@@ -6,7 +6,7 @@
       <el-step title="生成信息"></el-step>
     </el-steps>
     <basic-info-form v-show="active === 0" ref="basicInfo" :info="code" :genarateInfo="genarateInfo" />
-    <configure-form v-show="active === 1" ref="configureForm" v-if="columnMetadata" :columnMetadata="columnMetadata"></configure-form>
+    <configure-form v-show="active === 1" ref="configureForm" :columnMetadata="columnMetadata"></configure-form>
     <gen-info-form v-show="active === 2" ref="genInfo" :info="genarateInfo" :tables="codes" :menus="menus"/>
     <div class="action-buttons" v-show="active === 0">
       <action-button :plain="false" size="medium" @click="basicInfoSubmit">下一步</action-button>
@@ -56,14 +56,13 @@ export default {
       // 生成信息
       genarateInfo: {},
       // 列配置列表
-      columnMetadata: null,
+      columnMetadata: [],
       saveLoading: false,
       genarateLoading: false
     };
   },
   created() {
     entityModelDetail(this.entityModelId).then(res => {
-      console.log("🚀 ~ file: editMeta.vue ~ line 62 ~ entityModelDetail ~ res", res)
       // columnMetadata数组的对象里没有某些属性，初始化给他加上
       this.columnMetadata = JSON.parse(res.data.columnMetadata).map(item => {
         item.javaType = ''
@@ -95,12 +94,11 @@ export default {
       })
     },
     configureFormSubmit () {
-      const configureForm = this.$refs.configureForm.$refs.form
-      configureForm.validate(valid => {
+      const configureForm = this.$refs.configureForm.$refs.actionEditTableRef
+      configureForm.getRef().validate(valid => {
         if (valid) {
           this.active = 2
-        } else {
-          this.msgError('请填写完整')
+          this.columnMetadata = configureForm.getData()
         }
       })
     },
