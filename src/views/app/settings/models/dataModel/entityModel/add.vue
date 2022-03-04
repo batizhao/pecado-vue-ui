@@ -232,9 +232,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-.red-star::before {
-  content: '* ';
-  color: red;
-}
-</style>
