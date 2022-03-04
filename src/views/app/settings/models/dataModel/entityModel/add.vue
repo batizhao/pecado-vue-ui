@@ -11,80 +11,13 @@
       <action-button actionType="1" @click="handleAdd">新增</action-button>
       <action-button actionType="2" @click="handleDel">删除</action-button>
     </div>
-    <el-table
-      :data="form.columnMetadata"
-      border
-      @selection-change="selectionChange"
-    >
-      <el-table-column type="selection" width="55">
-      </el-table-column>
-      <el-table-column
-        type="index"
-        label="序号"
-        width="55"
-        :index="indexMethod">
-      </el-table-column>
-      <el-table-column align="center">
-        <template slot="header">
-          <div class="red-star">字段名称</div>
-        </template>
-        <template slot-scope="scope">
-          <span v-if="isReadonly(scope.row.name)">{{scope.row.name}}</span>
-          <el-input v-else size="mini" v-model="scope.row.name"></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column align="center">
-        <template slot="header">
-          <div class="red-star">字段描述</div>
-        </template>
-        <template slot-scope="scope">
-          <span v-if="isReadonly(scope.row.name)">{{scope.row.comment}}</span>
-          <el-input v-else size="mini" v-model="scope.row.comment"></el-input>
-        </template>
-      </el-table-column>
-      <el-table-column align="center">
-        <template slot="header">
-          <div class="red-star">字段类型</div>
-        </template>
-        <template slot-scope="scope">
-          <el-select v-model="scope.row.type" size="mini" :disabled="isReadonly(scope.row.name)">
-            <el-option
-              v-for="item in typeOptions"
-              :key="item.id"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </template>
-      </el-table-column>
-      <el-table-column label="字段长度" align="center">
-        <template slot-scope="scope">
-          <span v-if="isReadonly(scope.row.name)">{{scope.row.length}}</span>
-          <el-input-number v-else size="mini" v-model="scope.row.length" :min="1"></el-input-number>
-        </template>
-      </el-table-column>
-      <el-table-column label="小数点位" align="center">
-        <template slot-scope="scope">
-          <span v-if="isReadonly(scope.row.name)">{{scope.row.decimal}}</span>
-          <el-input-number v-else size="mini" v-model="scope.row.decimal" :min="0" :max="30"></el-input-number>
-        </template>
-      </el-table-column>
-      <el-table-column label="主键" align="center">
-        <template slot-scope="scope">
-          <el-checkbox v-model="scope.row.primary" disabled></el-checkbox>
-        </template>
-      </el-table-column>
-      <el-table-column label="不允许空值" align="center">
-        <template slot-scope="scope">
-          <el-checkbox v-model="scope.row.required" :disabled="isReadonly(scope.row.name)"></el-checkbox>
-        </template>
-      </el-table-column>
-      <el-table-column label="默认值" align="center">
-        <template slot-scope="scope">
-          <el-input size="mini" v-model="scope.row.defaultValue" v-if="!isReadonly(scope.row.name)"></el-input>
-        </template>
-      </el-table-column>
-    </el-table>
+    <action-edit-table
+      ref="actionEditTableRef"
+      :defaultData="tableDefaultData"
+      showSelection
+      :tableColumns="tableColumns"
+      :readonlyCondition="isReadonly"
+    ></action-edit-table>
   </div>
 </template>
 
@@ -95,7 +28,7 @@ const getDefaultFrom = () => {
     tableName: '', // 表名称
     tableComment: '', // 表描述
     dsName: 'master', // 数据源
-    columnMetadata: [] // 字段定义
+    columnMetadata: '[]' // 字段定义
   }
 }
 const checkNameReg = /^[A-Za-z][A-Za-z0-9_]{0,30}$/
@@ -148,10 +81,65 @@ export default {
           ]
         }
       ],
-      globalId: 0,
-      typeOptions: [],
-      defaultFields: ['id'], // 默认字段
-      selectedItems: []
+      tableColumns: [
+        {
+          label: '字段名称',
+          prop: 'name',
+          rules: [
+            { required: true, trigger: 'change', message: '请输入'},
+            { validator: checkName, trigger: 'change' }
+          ]
+        },
+        {
+          label: '字段描述',
+          prop: 'comment',
+          rules: [
+            { required: true, trigger: 'change', message: '请输入'}
+          ]
+        },
+        {
+          label: '字段类型',
+          prop: 'type',
+          type: 'select',
+          rules: [
+            { required: true, trigger: 'change', message: '请输入'}
+          ],
+          options: [],
+          defaultValue: 'VARCHAR'
+        },
+        {
+          label: '字段长度',
+          prop: 'length',
+          type: 'inputNumber',
+          min: 1,
+          defaultValue: 255
+        },
+        {
+          label: '小数点位',
+          prop: 'decimal',
+          type: 'inputNumber',
+          min: 0,
+          max: 30,
+          defaultValue: 0
+        },
+        {
+          label: '主键',
+          prop: 'primary',
+          type: 'checkbox',
+          disabled: true
+        },
+        {
+          label: '不允许空值',
+          prop: 'required',
+          type: 'checkbox'
+        },
+        {
+          label: '默认值',
+          prop: 'defaultValue'
+        }
+      ],
+      tableDefaultData: [],
+      defaultFields: ['id'] // 默认字段
     }
   },
   watch: {
@@ -170,7 +158,8 @@ export default {
   created () {
     this.getDataOrigin()
     this.listDictDataByCode('db_column_type').then(res => {
-      this.typeOptions = res.data
+      const index = this.tableColumns.findIndex(item => item.prop === 'type')
+      this.tableColumns[index].options = res.data
     })
   },
   methods: {
@@ -178,75 +167,38 @@ export default {
       return index + 1
     },
     handleAdd () {
-      this.form.columnMetadata.push({
-        id: this.globalId,
-        name: '',
-        comment: '',
-        type: 'VARCHAR',
-        length: 255,
-        decimal: 0,
-        primary: false,
-        required: false,
-        defaultValue: null
-      })
-      this.globalId ++
-    },
-    selectionChange (data) {
-      this.selectedItems = data
+      this.$refs.actionEditTableRef.addRow()
     },
     handleDel () {
-      // 判断勾选的数据中是否有默认字段，有就不能删除
-      const hasDefaultFields = this.selectedItems.some(item => this.defaultFields.includes(item.name))
-      if (hasDefaultFields) {
-        this.msgError('默认字段不能删除')
-        return
-      }
-      const deleteIds = this.selectedItems.map(item => item.id)
-      for (let i = this.form.columnMetadata.length - 1; i >= 0; i-- ) {
-        const item = this.form.columnMetadata[i]
-        if (deleteIds.includes(item.id)) {
-          this.form.columnMetadata.splice(i, 1)
+      this.$refs.actionEditTableRef.deleteRow(selectedItems => {
+        // 判断勾选的数据中是否有默认字段，有就不能删除
+        const hasDefaultFields = selectedItems.some(item => this.defaultFields.includes(item.name))
+        if (hasDefaultFields) {
+          this.msgError('默认字段不能删除')
+          return false
         }
-      }
-      this.selectedItems = []
+        return true
+      })
     },
     submit () {
-      let data = null
-      const form = this.$refs.actionFormRef.getRef()
-      form.validate(valid => {
-        if (valid) {
-          // js校验下字段名称描述是否为空
-          const hasNull = this.form.columnMetadata.some(item => {
-            return !item.name || !item.comment 
-          })
-          if (!hasNull) {
-            data = JSON.parse(JSON.stringify(this.form))
-          } else {
-            this.msgError('请填写完整')
-            return
-          }
-          // js校验字段名称是否符合规范
-          for (let item of this.form.columnMetadata) {
-            if (!checkNameReg.test(item.name)) {
-              this.msgError(`字段名 ${item.name} 不符合规范：${checkNameRegMsg}`)
-              data = null
-              return
-            }
-            if (keywordsArr.includes(item.name)) {
-              this.msgError(`字段名 ${item.name} 不符合规范：不能使用关键字`)
-              data = null
-              return
-            }
-          }
-
-        }
+      const p1 = new Promise((resolve, reject) => {
+        const form1 = this.$refs.actionFormRef.getRef()
+        form1.validate(valid => {
+          if (valid) resolve(this.form)
+        })
       })
-      return data
+      const p2 = new Promise((resolve, reject) => {
+        const ref = this.$refs.actionEditTableRef
+        ref.getRef().validate(valid => {
+          if (valid) resolve(ref.getData())
+        })
+      })
+      return Promise.all([p1, p2])
     },
     reset () {
       this.$refs.actionFormRef.reset()
       this.form = getDefaultFrom()
-      this.form.columnMetadata = [
+      this.tableDefaultData = [
         {
           name: 'id',
           type: 'INT',
@@ -274,8 +226,8 @@ export default {
         }
       })
     },
-    isReadonly (value) {
-      return this.defaultFields.includes(value)
+    isReadonly (row) {
+      return this.defaultFields.includes(row.name)
     }
   }
 }

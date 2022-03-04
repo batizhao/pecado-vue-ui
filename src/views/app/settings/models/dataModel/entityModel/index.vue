@@ -119,8 +119,8 @@ export default {
       this.dialogVisible = true
       this.dialogTitle = '编辑'
       this.$nextTick(() => {
-        rowCopy.columnMetadata = JSON.parse(rowCopy.columnMetadata)
         this.$refs.addModelRef.form = rowCopy
+        this.$refs.addModelRef.tableDefaultData = JSON.parse(rowCopy.columnMetadata)
       })
     },
     handleDel (id) {
@@ -135,21 +135,21 @@ export default {
         })
       }).catch(() => {})
     },
-    dialogConfirm () {
-      const data = this.$refs.addModelRef.submit()
-      if (data) {
-        this.dialogVisible = false
-        this.submitLoading = true
-        data.appId = this.$route.params.appId
-        data.columnMetadata = JSON.stringify(data.columnMetadata)
-        addOrEditEntityModel(data).then(() => {
-          this.submitLoading = false
-          this.getTableData()
-          this.msgSuccess(this.dialogTitle + '成功')
-        }).catch(() =>{
-          this.submitLoading = false
-        })
-      }
+    async dialogConfirm () {
+      const res = await this.$refs.addModelRef.submit()
+      this.dialogVisible = false
+      this.submitLoading = true
+      const formData = res[0]
+      const tableData = res[1]
+      formData.columnMetadata = JSON.stringify(tableData)
+      formData.appId = this.appId
+      addOrEditEntityModel(formData).then(() => {
+        this.submitLoading = false
+        this.getTableData()
+        this.msgSuccess(this.dialogTitle + '成功')
+      }).catch(() =>{
+        this.submitLoading = false
+      })
     },
     generateCode (row) {
       this.generateCodeVisible = true
