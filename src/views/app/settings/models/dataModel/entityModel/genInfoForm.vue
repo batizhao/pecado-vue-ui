@@ -266,12 +266,6 @@ export default {
         children: node.children
       };
     },
-    /** 整合工作流引擎RadioChange */
-    workflowRadioChange(val){
-      if (val == "yes") {
-        this.info.form = "visual"
-      }
-    },
     /** 选择子表名触发 */
     subSelectChange(value) {
       this.info.subTableFkName = '';
