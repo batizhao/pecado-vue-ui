@@ -6,7 +6,7 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 import ParentView from '@/components/ParentView';
-
+import PageLayout from '@/components/pageLayout'
 /**
  * Note: 路由配置项
  *
@@ -61,15 +61,20 @@ export const constantRoutes = [
   {
     path: '/portal',// 门户配置
     component: Layout,
-    redirect: 'index',
+    redirect: '',
     children: [
       {
-        path: 'index',
-        component: (resolve) => require(['@/views/dashboard'], resolve),
+        path: '',
+        component: (resolve) => require(['@/views/portal'], resolve),
         name: '门户配置',
         meta: { title: '门户配置', icon: 'dashboard', affix: true }
-      }
+      },
     ]
+  },
+  {
+    path: '/page',
+    component: (resolve) => require(['@/components/pageLayout'], resolve),
+    hidden: true,
   },
   {
     path: '',
@@ -190,6 +195,7 @@ export const constantRoutes = [
       }
     ]
   }
+
 ]
 
 export default new Router({

@@ -56,7 +56,20 @@ const layouts = {
 				<render conf={scheme} on={listeners} />
 			</el-col>
 		)
+	},
+  raw(h, scheme) {
+		const config = scheme.__config__
+		const listeners = buildListeners.call(this, scheme)
+
+		const child = renderChildren.apply(this, arguments)
+
+		return (
+			<div v-show={config.show} span={config.span}>
+				<render conf={scheme} on={listeners} />
+			</div>
+		)
 	}
+
 }
 
 function renderFrom(h) {

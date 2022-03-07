@@ -25,6 +25,7 @@ import RightToolbar from "@/components/RightToolbar"
 // font-awesome图标库
 import './assets/styles/font-awesome-4.7.0/css/font-awesome.min.css'
 
+import '@/components/CodeEditor/components/index'
 import VueI18n from 'vue-i18n'
 import enLocale from 'element-ui/lib/locale/lang/en'
 import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
