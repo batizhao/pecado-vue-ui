@@ -105,7 +105,7 @@ export default {
             { required: true, trigger: 'change', message: '请输入'}
           ],
           options: [],
-          defaultValue: 'VARCHAR'
+          defaultValue: 'varchar'
         },
         {
           label: '字段长度',

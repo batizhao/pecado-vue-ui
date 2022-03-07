@@ -109,11 +109,9 @@ export default {
       this.$refs.actionTableRef.getTableData()
     },
     dialogConfirm () {
-      const data = this.$refs.addComponentRef.submit()
-      if (data) {
-        console.log("🚀 ~ file: index.vue ~ line 114 ~ dialogConfirm ~ data", data)
+      this.$refs.addComponentRef.submit().then(data => {
         this.submitLoading = true
-        data.basicForm.appId = this.appId
+        data.appId = this.appId
         addOrEditData(data).then(() => {
           this.msgSuccess(this.dialogTitle + '成功')
           this.submitLoading =false
@@ -122,8 +120,7 @@ export default {
         }).catch(() => {
           this.submitLoading =false
         })
-        
-      }
+      })
     },
     handleStatusChange(row) {
       let text = row.status === "open" ? "启用" : "停用"

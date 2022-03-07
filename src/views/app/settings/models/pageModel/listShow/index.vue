@@ -40,7 +40,7 @@ export default{
           rules: [
             { required: true, trigger: 'change', message: '请选择' }
           ],
-          defaultValue: 'VARCHAR'
+          defaultValue: 'varchar'
         },
         {
           label: '对齐方式',
