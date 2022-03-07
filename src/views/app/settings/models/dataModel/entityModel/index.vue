@@ -7,7 +7,9 @@
     </div>
     <action-table ref="actionTableRef" url="/app/tables" :columns="columns" :otherParams="{ appId }">
       <template v-slot:status="scope">
-        {{getModelStatusLabel(scope.row.status)}}
+        <el-tag :type="getModelStatusTag(scope.row.status)">
+          {{getModelStatusLabel(scope.row.status)}}
+        </el-tag>
       </template>
       <template v-slot:action="scope">
         <action-button actionType="3" @click="handleEdit(scope.row)" icon="el-icon-edit">编辑</action-button>
@@ -88,6 +90,10 @@ export default {
           label: '实体表状态',
           slotName: 'status',
           width: 120
+        },
+        {
+          prop: 'createTime',
+          label: '创建时间'
         }
       ],
       dialogVisible: false,
@@ -161,6 +167,11 @@ export default {
     getModelStatusLabel (value) {
       const res = this.modelStatusOptions.find(item => item.value === value)
       return  res ? res.label : value
+    },
+    getModelStatusTag (value) {
+      if (value === 'created') return undefined
+      if (value === 'nosync') return 'danger'
+      if (value === 'synced') return 'success'
     },
     generaCodeSuccess () {
       this.generateCodeVisible = false

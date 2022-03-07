@@ -23,10 +23,13 @@ export function deleteData (ids = '') {
 }
 
 // 详情
-export function getDataDetail (id) {
+export function getDataDetail (formKey) {
   return request({
-    url: url + '/' + id,
-    method: 'get'
+    url: url,
+    method: 'get',
+    params: {
+      key: formKey
+    }
   })
 }
 

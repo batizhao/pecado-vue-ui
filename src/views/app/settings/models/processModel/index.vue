@@ -68,6 +68,10 @@ export default {
           prop: 'status',
           width: 100,
           slotName: 'status'
+        },
+        {
+          prop: 'createTime',
+          label: '创建时间'
         }
       ],
       dialogVisible: false,
