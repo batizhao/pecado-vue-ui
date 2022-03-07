@@ -6,9 +6,6 @@
       :defaultData="columnMetadata"
       :tableColumns="tableColumns"
     >
-      <template v-slot:type="scope">
-        {{getTypeLabel(scope.row.type)}}
-      </template>
     </action-edit-table>
     <br/>
   </div>
@@ -36,8 +33,7 @@ export default {
         {
           label: '字段类型',
           prop: 'type',
-          type: 'slot',
-          slotName: 'type'
+          readonly: true
         },
         {
           label: 'Java类型',
@@ -104,17 +100,6 @@ export default {
           ]
         }
       ]
-    }
-  },
-  created () {
-    this.listDictDataByCode('db_column_type').then(res => {
-      this.typeOptions = res.data
-    })
-  },
-  methods: {
-    getTypeLabel (val) {
-      const item = this.typeOptions.find(item => item.value === val)
-      return item ? item.label : val
     }
   }
 }

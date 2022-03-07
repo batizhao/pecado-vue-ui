@@ -76,7 +76,18 @@
           <el-input v-model="info.workflowKey" />
         </el-form-item>
       </el-col>
-
+      <el-col :span="12">
+        <el-form-item prop="form">
+          <span slot="label">
+            生成表单模型
+          </span>
+          <el-switch
+            v-model="info.form"
+            active-value="yes"
+            inactive-value="no">
+          </el-switch>
+        </el-form-item>
+      </el-col>
       <el-col :span="12">
         <el-form-item prop="testcase">
           <span slot="label">

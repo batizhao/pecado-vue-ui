@@ -65,10 +65,7 @@ export default {
     entityModelDetail(this.entityModelId).then(res => {
       // columnMetadata数组的对象里没有某些属性，初始化给他加上
       this.columnMetadata = JSON.parse(res.data.columnMetadata).map(item => {
-        item.javaType = ''
-        item.javaField = ''
-        item.save = false
-        item.htmlType = ''
+        !item.save && (item.save = false)
         return item
       })
       let codeMetadata = res.data.codeMetadata
