@@ -139,8 +139,18 @@
           display: none;
         }
       }
+
     }
 
+    .nav-bar{
+      .el-submenu > .el-submenu__title {
+        padding: 0 20px !important;
+        & .el-submenu__icon-arrow{
+          display: inline-block;
+        }
+      }
+
+    }
     .el-menu--collapse {
       .el-submenu {
         &>.el-submenu__title {
