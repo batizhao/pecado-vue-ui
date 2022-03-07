@@ -201,12 +201,12 @@ export default {
       this.tableDefaultData = [
         {
           name: 'id',
-          type: 'INT',
+          type: 'int',
           length: 10,
           comment: '主键',
           decimal: 0,
           primary: true,
-          required: true,
+          required: false,
           increment: true,
           defaultValue: null
         },
