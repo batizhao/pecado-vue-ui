@@ -25,7 +25,7 @@ export const inputComponents = [
 			tagIcon: 'input',
 			defaultValue: undefined,
 			required: true,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			span: 24,
       show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/input',
@@ -57,7 +57,7 @@ export const inputComponents = [
 			tagIcon: 'textarea',
 			defaultValue: undefined,
 			required: true,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			span: 24,
 			regList: [],
 			changeTag: true,
@@ -85,7 +85,7 @@ export const inputComponents = [
 			tag: 'el-input',
 			tagIcon: 'password',
 			defaultValue: undefined,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			span: 24,
 			required: true,
 			regList: [],
@@ -117,7 +117,7 @@ export const inputComponents = [
 			tagIcon: 'number',
 			defaultValue: undefined,
 			span: 24,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			required: true,
 			regList: [],
       show:true,
@@ -142,7 +142,7 @@ export const inputComponents = [
 			tagIcon: 'rich-text',
 			defaultValue: null,
 			span: 24,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			required: true,
 			regList: [],
       show:true,
@@ -163,7 +163,7 @@ export const selectComponents = [
 			labelWidth: null,
 			tag: 'el-select',
 			tagIcon: 'select',
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			span: 24,
 			required: true,
 			regList: [],
@@ -198,7 +198,7 @@ export const selectComponents = [
 			labelWidth: null,
 			tag: 'el-cascader',
 			tagIcon: 'cascader',
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			defaultValue: [],
 			dataType: 'dynamic',
 			span: 24,
@@ -243,7 +243,7 @@ export const selectComponents = [
 			tagIcon: 'radio',
 			changeTag: true,
 			defaultValue: undefined,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			span: 24,
 			optionType: 'default',
 			regList: [],
@@ -274,7 +274,7 @@ export const selectComponents = [
 			span: 24,
 			showLabel: true,
 			labelWidth: null,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			optionType: 'default',
 			required: true,
 			regList: [],
@@ -307,7 +307,7 @@ export const selectComponents = [
 			span: 24,
 			showLabel: true,
 			labelWidth: null,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			required: true,
 			regList: [],
 			changeTag: true,
@@ -331,7 +331,7 @@ export const selectComponents = [
 			defaultValue: null,
 			span: 24,
 			showLabel: true,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			labelWidth: null,
 			required: true,
 			regList: [],
@@ -354,7 +354,7 @@ export const selectComponents = [
 			defaultValue: null,
 			span: 24,
 			showLabel: true,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			labelWidth: null,
 			required: true,
 			regList: [],
@@ -380,7 +380,7 @@ export const selectComponents = [
 			span: 24,
 			showLabel: true,
 			labelWidth: null,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			defaultValue: null,
 			required: true,
 			regList: [],
@@ -407,7 +407,7 @@ export const selectComponents = [
 			showLabel: true,
 			labelWidth: null,
 			span: 24,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			required: true,
 			regList: [],
 			changeTag: true,
@@ -433,7 +433,7 @@ export const selectComponents = [
 			showLabel: true,
 			labelWidth: null,
 			required: true,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			regList: [],
 			changeTag: true,
       show:true,
@@ -459,7 +459,7 @@ export const selectComponents = [
 			span: 24,
 			showLabel: true,
 			labelWidth: null,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			required: true,
 			regList: [],
 			changeTag: true,
@@ -482,7 +482,7 @@ export const selectComponents = [
 			defaultValue: null,
 			showLabel: true,
 			labelWidth: null,
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			required: true,
 			regList: [],
 			changeTag: true,
@@ -499,7 +499,7 @@ export const selectComponents = [
 			label: '上传',
 			tag: 'el-upload',
 			tagIcon: 'upload',
-			layout: 'colFormItem',
+			layout: 'rowTable',
 			defaultValue: null,
 			showLabel: true,
 			labelWidth: null,
@@ -551,7 +551,7 @@ export const layoutComponents = [
 			tag: 'el-button',
 			tagIcon: 'button',
 			span: 24,
-			layout: 'colFormItem',
+			layout: 'rowTable',
       show:true,
 			document: 'https://element.eleme.cn/#/zh-CN/component/button'
 		},
@@ -632,3 +632,306 @@ export const layoutComponents = [
 		pagination: null
 	}
 ]
+
+export const showComponents =[
+  {
+		// 组件的自定义配置
+		__config__: {
+			label: '我的待办',
+			labelWidth: null,
+			showLabel: false,
+			changeTag: false,
+			tag: 'my-backlog',
+			tagIcon: 'input',
+			defaultValue: undefined,
+			required: true,
+			layout: 'rowTable',
+			span: 24,
+      show:true,
+			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
+			// 正则校验规则
+			regList: []
+		},
+		// 组件的插槽属性
+		__slot__: {
+			prepend: '',
+			append: ''
+		},
+		// 其余的为可直接写在组件标签上的属性
+		placeholder: '请输入',
+		style: { width: '100%' },
+		clearable: true,
+		'prefix-icon': '',
+		'suffix-icon': '',
+		maxlength: null,
+		'show-word-limit': false,
+		readonly: false,
+		disabled: false
+	},
+  {
+		// 组件的自定义配置
+		__config__: {
+			label: '通知公告',
+			labelWidth: null,
+			showLabel: false,
+			changeTag: false,
+			tag: 'notice',
+			tagIcon: 'input',
+			defaultValue: undefined,
+			required: true,
+			layout: 'rowTable',
+			span: 24,
+      show:true,
+			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
+			// 正则校验规则
+			regList: []
+		},
+		// 组件的插槽属性
+		__slot__: {
+			prepend: '',
+			append: ''
+		},
+		// 其余的为可直接写在组件标签上的属性
+		placeholder: '请输入',
+		style: { width: '100%' },
+		clearable: true,
+		'prefix-icon': '',
+		'suffix-icon': '',
+		maxlength: null,
+		'show-word-limit': false,
+		readonly: false,
+		disabled: false
+	},
+  {
+		// 组件的自定义配置
+		__config__: {
+			label: '常用流程',
+			labelWidth: null,
+			showLabel: false,
+			changeTag: false,
+			tag: 'used-process',
+			tagIcon: 'input',
+			defaultValue: undefined,
+			required: true,
+			layout: 'rowTable',
+			span: 24,
+      show:true,
+			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
+			// 正则校验规则
+			regList: []
+		},
+		// 组件的插槽属性
+		__slot__: {
+			prepend: '',
+			append: ''
+		},
+		// 其余的为可直接写在组件标签上的属性
+		placeholder: '请输入',
+		style: { width: '100%' },
+		clearable: true,
+		'prefix-icon': '',
+		'suffix-icon': '',
+		maxlength: null,
+		'show-word-limit': false,
+		readonly: false,
+		disabled: false
+	},
+  {
+		// 组件的自定义配置
+		__config__: {
+			label: '多折线图',
+			labelWidth: null,
+			showLabel: false,
+			changeTag: false,
+			tag: 'stacked-line',
+			tagIcon: 'input',
+			defaultValue: undefined,
+			required: true,
+			layout: 'rowTable',
+			span: 24,
+      show:true,
+			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
+			// 正则校验规则
+			regList: []
+		},
+		// 组件的插槽属性
+		__slot__: {
+			prepend: '',
+			append: ''
+		},
+		// 其余的为可直接写在组件标签上的属性
+		placeholder: '请输入',
+		style: { width: '100%' },
+		clearable: true,
+		'prefix-icon': '',
+		'suffix-icon': '',
+		maxlength: null,
+		'show-word-limit': false,
+		readonly: false,
+		disabled: false
+	},
+  {
+		// 组件的自定义配置
+		__config__: {
+			label: '分组柱状图',
+			labelWidth: null,
+			showLabel: false,
+			changeTag: false,
+			tag: 'bar-base',
+			tagIcon: 'input',
+			defaultValue: undefined,
+			required: true,
+			layout: 'rowTable',
+			span: 24,
+      show:true,
+			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
+			// 正则校验规则
+			regList: []
+		},
+		// 组件的插槽属性
+		__slot__: {
+			prepend: '',
+			append: ''
+		},
+		// 其余的为可直接写在组件标签上的属性
+		placeholder: '请输入',
+		style: { width: '100%' },
+		clearable: true,
+		'prefix-icon': '',
+		'suffix-icon': '',
+		maxlength: null,
+		'show-word-limit': false,
+		readonly: false,
+		disabled: false
+	},
+  {
+		// 组件的自定义配置
+		__config__: {
+			label: '横向导航条',
+			labelWidth: null,
+			showLabel: false,
+			changeTag: false,
+			tag: 'header-bar',
+			tagIcon: 'input',
+			defaultValue: undefined,
+			required: true,
+			layout: 'rowTable',
+			span: 24,
+      show:true,
+			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
+			// 正则校验规则
+			regList: []
+		},
+		// 组件的插槽属性
+		__slot__: {
+			prepend: '',
+			append: ''
+		},
+		// 其余的为可直接写在组件标签上的属性
+		placeholder: '请输入',
+		style: { width: '100%' },
+		clearable: true,
+		'prefix-icon': '',
+		'suffix-icon': '',
+		maxlength: null,
+		'show-word-limit': false,
+		readonly: false,
+		disabled: false
+	},
+  {
+		// 组件的自定义配置
+		__config__: {
+			label: '纵向导航条',
+			labelWidth: null,
+			showLabel: false,
+			changeTag: false,
+			tag: 'nav-bar',
+			tagIcon: 'input',
+			defaultValue: undefined,
+			required: true,
+			layout: 'rowTable',
+			span: 24,
+      show:true,
+			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
+			// 正则校验规则
+			regList: []
+		},
+		// 组件的插槽属性
+		__slot__: {
+			prepend: '',
+			append: ''
+		},
+		// 其余的为可直接写在组件标签上的属性
+		placeholder: '请输入',
+		clearable: true,
+    style: {},
+		maxlength: null,
+		readonly: false,
+		disabled: false
+	},
+  {
+		// 组件的自定义配置
+		__config__: {
+			label: '底部导航条',
+			labelWidth: null,
+			showLabel: false,
+			changeTag: false,
+			tag: 'footer-bar',
+			tagIcon: 'input',
+			defaultValue: undefined,
+			required: true,
+			layout: 'rowTable',
+			span: 24,
+      show:true,
+			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
+			// 正则校验规则
+			regList: []
+		},
+		// 组件的插槽属性
+		__slot__: {
+			prepend: '',
+			append: ''
+		},
+		// 其余的为可直接写在组件标签上的属性
+		placeholder: '请输入',
+		style: {},
+		clearable: true,
+
+		maxlength: null,
+		readonly: false,
+		disabled: false
+	},
+  {
+		// 组件的自定义配置
+		__config__: {
+			label: '上下主体框架',
+			labelWidth: null,
+			showLabel: false,
+			changeTag: false,
+			tag: 'up-frame',
+			tagIcon: 'input',
+			defaultValue: undefined,
+			required: true,
+			layout: 'rowTable',
+			span: 24,
+      show:true,
+			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
+			// 正则校验规则
+			regList: []
+		},
+		// 组件的插槽属性
+		__slot__: {
+			prepend: '',
+			append: ''
+		},
+		// 其余的为可直接写在组件标签上的属性
+		placeholder: '请输入',
+		style: {},
+		clearable: true,
+
+		maxlength: null,
+		readonly: false,
+		disabled: false
+	}
+]
+
