@@ -43,6 +43,7 @@
       </el-table-column>
     </el-table>
     <el-pagination
+      v-if="showPagination"
       background
       @size-change="paginationSizeChange"
       @current-change="paginationCurrentChange"
@@ -63,7 +64,11 @@ export default {
     url: String, // 请求接口路径
     columns: Array, // 表格列
     conditions: Array, // 条件筛选
-    otherParams: Object // 其他参数
+    otherParams: Object, // 其他参数
+    showPagination: { // 显示分页组件
+      type: Boolean,
+      default: true
+    }
   },
   data () {
     return {
@@ -95,15 +100,23 @@ export default {
     getTableData () {
       const { currentPage, pageSize } = this.pagination
       const params = {
-        size: pageSize,
-        current: currentPage,
         ...this.tableFilterParams,
         ...this.otherParams
       }
+      if (this.showPagination) {
+        Object.assign(params, {
+          size: pageSize,
+          current: currentPage
+        })
+      }
       this.loading = true
       getTableData(this.url, params).then(res => {
-        this.pagination.total = res.data.total
-        this.data = res.data.records
+        if (this.showPagination) {
+          this.pagination.total = res.data.total
+          this.data = res.data.records
+        } else {
+          this.data = res.data
+        }
         this.loading = false
         this.selectedIds = []
       }).catch(() => {

@@ -158,7 +158,7 @@ export default {
     },
 		showSubmit:{
 			type: Boolean,
-			required: true
+			default: true
 		}
 	},
 

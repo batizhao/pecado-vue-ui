@@ -44,3 +44,11 @@ export function changeFormStatus (id, status) {
     }
   })
 }
+
+// 恢复表单历史版本
+export function revertForm (id) {
+  return request({
+    url: url + '/history/' + id,
+    method: 'post'
+  })
+}
