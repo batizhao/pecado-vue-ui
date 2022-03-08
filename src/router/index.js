@@ -79,13 +79,13 @@ export const constantRoutes = [
   {
     path: '',
     component: Layout,
-    redirect: 'dashboard',
+    redirect: 'admin',
     children: [
       {
-        path: 'dashboard',
-        component: (resolve) => require(['@/views/dashboard'], resolve),
-        name: '工作台',
-        meta: { title: '工作台', icon: 'dashboard', affix: true }
+        path: 'admin',
+        component: (resolve) => require(['@/views/admin'], resolve),
+        name: '控制台',
+        meta: { title: '控制台', icon: 'dashboard', affix: true }
       }
     ]
   },
@@ -118,54 +118,6 @@ export const constantRoutes = [
       }
     ]
   },
-  // {
-  //   path: '/job',
-  //   component: Layout,
-  //   hidden: true,
-  //   children: [
-  //     {
-  //       path: 'log',
-  //       component: (resolve) => require(['@/views/monitor/job/log'], resolve),
-  //       name: '调度日志',
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/code',
-  //   component: Layout,
-  //   hidden: true,
-  //   redirect: 'noRedirect',
-  //   meta: { title: '代码生成' },
-  //   children: [
-  //     {
-  //       path: 'edit/:id(\\d+)',
-  //       component: (resolve) => require(['@/views/dp/code/editMeta'], resolve),
-  //       name: '编辑配置',
-  //       meta: { title: '编辑配置', icon: 'code', activeMenu: '/dp/code' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/form',
-  //   component: Layout,
-  //   hidden: true,
-  //   redirect: 'noRedirect',
-  //   meta: { title: '表单管理' },
-  //   children: [
-  //     {
-  //       path: 'design/:formKey?',
-  //       component: (resolve) => require(['@/views/dp/form/design'], resolve),
-  //       name: 'FormDesign',
-  //       meta: { title: '表单设计', icon: 'form', activeMenu: '/dp/form' }
-  //     },
-  //     {
-  //       path: 'history/:formKey?',
-  //       component: (resolve) => require(['@/views/dp/form/history'], resolve),
-  //       name: 'FormVersion',
-  //       meta: { title: '表单版本', icon: 'form', activeMenu: '/dp/form' }
-  //     }
-  //   ]
-  // },
   {
     path: '/parse',
     component: Layout,

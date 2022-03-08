@@ -42,7 +42,7 @@ export default {
       url: '/app/form/history/' + this.formKey,
       columns: [
         {
-          label: '表单Key',
+          label: '表单标识',
           prop: 'formKey'
         },
         {
