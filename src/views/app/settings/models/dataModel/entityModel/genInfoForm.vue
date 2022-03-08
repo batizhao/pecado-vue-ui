@@ -105,25 +105,6 @@
       </el-col>
 
       <el-col :span="12">
-        <el-form-item>
-          <span slot="label">
-            上级菜单
-            <el-tooltip content="分配到指定菜单下，例如 系统管理" placement="top">
-              <i class="el-icon-question"></i>
-            </el-tooltip>
-          </span>
-          <treeselect
-            :append-to-body="false"
-            v-model="info.parentMenuId"
-            :options="menus"
-            :normalizer="normalizer"
-            :show-count="true"
-            placeholder="请选择系统菜单"
-          />
-        </el-form-item>
-      </el-col>
-
-      <el-col :span="12">
         <el-form-item prop="type">
           <span slot="label">
             生成代码方式
@@ -220,11 +201,7 @@ export default {
     tables: {
       type: Array,
       default: null
-    },
-    menus: {
-      type: Array,
-      default: []
-    },
+    }
   },
   data() {
     return {

@@ -42,11 +42,6 @@ export default {
       url: '/app/form/history/' + this.formKey,
       columns: [
         {
-          label: 'id',
-          prop: 'id',
-          width: '120px'
-        },
-        {
           label: '表单Key',
           prop: 'formKey'
         },
@@ -79,7 +74,7 @@ export default {
     /** 恢复按钮操作 */
     handleRevert(row) {
       const id = row.id;
-      this.$confirm('是否确认恢复表单编号为"' + id + '"的数据项?', "警告", {
+      this.$confirm('确认恢复版本号为"' + row.version + '"的表单?', "警告", {
         type: "warning"
       }).then(() => {
         return revertForm(id);

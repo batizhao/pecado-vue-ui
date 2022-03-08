@@ -145,27 +145,27 @@ export const constantRoutes = [
   //     }
   //   ]
   // },
-  {
-    path: '/form',
-    component: Layout,
-    hidden: true,
-    redirect: 'noRedirect',
-    meta: { title: '表单管理' },
-    children: [
-      {
-        path: 'design/:formKey?',
-        component: (resolve) => require(['@/views/dp/form/design'], resolve),
-        name: 'FormDesign',
-        meta: { title: '表单设计', icon: 'form', activeMenu: '/dp/form' }
-      },
-      {
-        path: 'history/:formKey?',
-        component: (resolve) => require(['@/views/dp/form/history'], resolve),
-        name: 'FormVersion',
-        meta: { title: '表单版本', icon: 'form', activeMenu: '/dp/form' }
-      }
-    ]
-  },
+  // {
+  //   path: '/form',
+  //   component: Layout,
+  //   hidden: true,
+  //   redirect: 'noRedirect',
+  //   meta: { title: '表单管理' },
+  //   children: [
+  //     {
+  //       path: 'design/:formKey?',
+  //       component: (resolve) => require(['@/views/dp/form/design'], resolve),
+  //       name: 'FormDesign',
+  //       meta: { title: '表单设计', icon: 'form', activeMenu: '/dp/form' }
+  //     },
+  //     {
+  //       path: 'history/:formKey?',
+  //       component: (resolve) => require(['@/views/dp/form/history'], resolve),
+  //       name: 'FormVersion',
+  //       meta: { title: '表单版本', icon: 'form', activeMenu: '/dp/form' }
+  //     }
+  //   ]
+  // },
   {
     path: '/parse',
     component: Layout,
