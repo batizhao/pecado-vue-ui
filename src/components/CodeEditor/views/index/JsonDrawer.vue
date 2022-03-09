@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-drawer v-bind="$attrs" v-on="$listeners" @opened="onOpen" @close="onClose">
+		<el-drawer v-bind="$attrs" v-on="$listeners" @opened="onOpen" @close="onClose" :modal="false">
 			<div class="action-bar" :style="{'text-align': 'left'}">
 				<span class="bar-btn" @click="refresh">
 					<i class="el-icon-refresh" />
