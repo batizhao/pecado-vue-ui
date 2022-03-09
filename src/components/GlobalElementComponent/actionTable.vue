@@ -10,6 +10,8 @@
     <el-table
       :data="data"
       v-loading="loading"
+      :row-key="rowKey"
+      :tree-props="treeProps"
       @selection-change="selectionChange"
     >
       <el-table-column
@@ -78,6 +80,17 @@ export default {
       type: Boolean,
       default: true
     },
+    rowKey: {
+      type: String,
+      default: 'id'
+    },
+    treeProps: {
+      type: Object,
+      default: () => ({
+        children: 'children',
+        hasChildren: 'hasChildren'
+      })
+    }
   },
   data () {
     return {
