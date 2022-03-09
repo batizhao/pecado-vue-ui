@@ -12,7 +12,12 @@
       v-loading="loading"
       @selection-change="selectionChange"
     >
-      <el-table-column type="selection" width="55" align="center">
+      <el-table-column
+        v-if="showSelection"
+        type="selection"
+        width="55"
+        align="center"
+      >
       </el-table-column>
       <el-table-column
         type="index"
@@ -68,7 +73,11 @@ export default {
     showPagination: { // 显示分页组件
       type: Boolean,
       default: true
-    }
+    },
+    showSelection: { // 显示复选框
+      type: Boolean,
+      default: true
+    },
   },
   data () {
     return {

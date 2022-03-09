@@ -58,7 +58,6 @@
           </span>
           <el-switch
             v-model="info.workflow"
-            @change="workflowRadioChange"
             active-value="yes"
             inactive-value="no">
           </el-switch>

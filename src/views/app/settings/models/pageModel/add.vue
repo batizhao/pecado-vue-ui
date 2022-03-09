@@ -155,6 +155,13 @@ export default {
       queryConditionDefaultValue: []
     }
   },
+  created () {
+    const listMetadata =  this.form.listMetadata
+    console.log("🚀 ~ file: add.vue ~ line 161 ~ created ~ listMetadata", listMetadata)
+    if (listMetadata) {
+      this.form.listMetadata = JSON.parse(listMetadata)
+    }
+  },
   methods: {
     submit () {
       const forms = [
@@ -198,11 +205,13 @@ export default {
       })
       return new Promise((resolve, reject) => {
         Promise.all(proxyArr).then(res => {
-          // 将数据合并到第一个元素的对象中
+          // 将除基本信息外的模块数据合并到一个对象中
+          const listMetadata = {}
+          listMetadata.header = res[1]
+          listMetadata.condition = res[2]
+          listMetadata.button = res[3]
           const obj = res[0]
-          obj.header = res[1]
-          obj.condition = res[2]
-          obj.button = res[3]
+          obj.listMetadata = JSON.stringify(listMetadata)
           resolve(obj)
         }).catch(err => {
           this.msgError(err)
