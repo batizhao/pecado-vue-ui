@@ -204,7 +204,7 @@
 						</el-input>
 					</el-form-item>
 					<el-form-item
-						v-if="activeData['icon']!==undefined && activeData.__config__.tag === 'el-button'"
+						v-if="activeData['icon']!==undefined && activeData.__config__.tag === 'event-button'"
 						label="按钮图标"
 					>
 						<el-input v-model="activeData['icon']" placeholder="请输入按钮图标名称">
@@ -337,7 +337,7 @@
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item
-						v-if="activeData.type !== undefined && activeData.__config__.tag === 'el-button'"
+						v-if="activeData.type !== undefined && activeData.__config__.tag === 'event-button'"
 						label="按钮类型"
 					>
 						<el-select v-model="activeData.type" :style="{ width: '100%' }">
@@ -357,11 +357,21 @@
 						<el-input v-model="activeData.__config__.buttonText" placeholder="请输入按钮文字" />
 					</el-form-item>
 					<el-form-item
-						v-if="activeData.__config__.tag === 'el-button'"
+						v-if="activeData.__config__.tag === 'event-button'"
 						label="按钮文字"
 					>
 						<el-input v-model="activeData.__slot__.default" placeholder="请输入按钮文字" />
 					</el-form-item>
+					<el-form-item
+						v-if="activeData.__config__.tag === 'event-button'"
+						label="按钮事件"
+					>
+						<el-select v-model="activeData.eventSettings.emit">
+							<el-option value="buttonEmitSubmit" label="提交"></el-option>
+							<el-option value="buttonEmitSave" label="保存"></el-option>
+						</el-select>
+					</el-form-item>
+
 					<el-form-item v-if="activeData['range-separator'] !== undefined" label="分隔符">
 						<el-input v-model="activeData['range-separator']" placeholder="请输入分隔符" />
 					</el-form-item>
@@ -560,7 +570,7 @@
 							(activeData.__config__.optionType === 'button' ||
 								activeData.__config__.border ||
 								activeData.__config__.tag === 'el-color-picker' ||
-								activeData.__config__.tag === 'el-button')"
+								activeData.__config__.tag === 'event-button')"
 						label="组件尺寸"
 					>
 						<el-radio-group v-model="activeData.size">

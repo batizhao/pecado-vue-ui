@@ -548,7 +548,7 @@ export const layoutComponents = [
 			showLabel: true,
 			changeTag: true,
 			labelWidth: null,
-			tag: 'el-button',
+			tag: 'event-button',
 			tagIcon: 'button',
 			span: 24,
 			layout: 'rowTable',
@@ -938,11 +938,34 @@ export const showComponents =[
 export const formModelComponents = [
 	{
 		__config__: {
+			label: '表单容器',
+			tag: 'form-container',
+			tagIcon: 'el-icon-s-grid',
+			span: 24,
+			layout: 'raw',
+			show: true
+		}
+	},
+	{
+		__config__: {
+			layout: 'rowFormItem',
+			tagIcon: 'row',
+			label: '行容器',
+			layoutTree: true,
+      show:true,
+			document: 'https://element.eleme.cn/#/zh-CN/component/layout#row-attributes'
+		},
+		type: 'default',
+		justify: 'start',
+		align: 'top'
+	},
+	{
+		__config__: {
 			label: '按钮',
 			showLabel: true,
 			changeTag: true,
 			labelWidth: null,
-			tag: 'el-button',
+			tag: 'event-button',
 			tagIcon: 'button',
 			span: 24,
 			layout: 'rowTable',
@@ -952,6 +975,9 @@ export const formModelComponents = [
 		__slot__: {
 			default: '主要按钮'
 		},
+		eventSettings: {
+			emit: ''
+		},
 		type: 'primary',
 		icon: 'el-icon-search',
 		round: false,
@@ -959,14 +985,5 @@ export const formModelComponents = [
 		plain: false,
 		circle: false,
 		disabled: false
-	},
-	{
-		__config__: {
-			label: '表单容器',
-			tag: 'form-container',
-			tagIcon: 'el-icon-s-grid',
-			span: 24,
-			layout: 'rowTable',
-		}
 	}
 ]

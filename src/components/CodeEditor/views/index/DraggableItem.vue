@@ -71,12 +71,30 @@ const layouts = {
 	},
 	raw(h, currentItem, index, list) {
 		const config = currentItem.__config__
-		const child = renderChildren.apply(this, arguments)
-		return <render v-show={config.show} key={config.renderKey} conf={currentItem} onInput={ event => {
-			this.$set(config, 'defaultValue', event)
-		}}>
-			{child}
-		</render>
+		const { activeItem } = this.$listeners
+		let child = renderChildren.apply(this, arguments)
+		const className = this.activeId === config.formId
+			? 'drawing-row-item active-from-item'
+			: 'drawing-row-item'
+		return (
+			<el-col
+				v-show={config.show}
+        span={config.span}
+        class={className}
+        nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
+      >
+				<render
+					key={config.renderKey}
+					conf={currentItem}
+					onInput={ event => {
+						this.$set(config, 'defaultValue', event)
+					}}>
+					{child}
+				</render>
+				{components.itemBtns.apply(this, arguments)}
+      </el-col>
+
+		)
 	},
 	rowTable(h, currentItem, index, list) {
 		const { activeItem } = this.$listeners
