@@ -1,5 +1,5 @@
 <template>
-  <el-dialog fullscreen :visible.sync="visible" :show-close="false">
+  <el-dialog fullscreen :visible.sync="visible" :show-close="false" v-if="visible">
     <span slot="title" class="d-head">
       <span>门户网站设计</span>
       <span class="d-action">
@@ -9,17 +9,30 @@
         <el-button @click="close()" size="small">取 消</el-button>
       </span>
     </span>
-    <PortalSetting />
+    <PortalSetting
+      ref="refPortalSetting"
+      :pageData="modelData.pageMetadata"
+      @save="saveCallBack"
+    />
   </el-dialog>
 </template>
 
 <script>
 import PortalSetting from '@/components/CodeEditor/views/index/PortalSetting'
+import { addOrEditTemplate} from '@/api/dp/page/model.js'
+import { deepClone } from '@/components/CodeEditor/utils/index'
 export default {
   props: {
     visible: {
       type: Boolean,
       default: false
+    },
+    modelData:{
+      type:Object,
+      default:_=>{
+        return {
+        }
+      }
     }
   },
   components: {
@@ -29,16 +42,29 @@ export default {
     return {
     };
   },
-
   methods: {
 
     save() {
-      this.close();
+      this.$refs.refPortalSetting.save()
+    },
+    saveCallBack(pageMetadata){
+      const data = deepClone(this.modelData)
+      data.pageMetadata = JSON.stringify(pageMetadata)
+      addOrEditTemplate(data).then(() => {
+        this.$message({
+          message: '保存成功！',
+          type: 'success'
+        });
+        this.close()
+        this.$emit('refresh')
+      })
     },
     show() {
       this.close();
     },
-    empty() {},
+    empty() {
+      this.$refs.refPortalSetting.empty()
+		},
     cancel() {
       this.close();
     },

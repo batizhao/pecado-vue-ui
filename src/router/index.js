@@ -58,24 +58,24 @@ export const constantRoutes = [
     component: (resolve) => require(['@/views/home'], resolve),
     hidden: true
   },
-  {
-    path: '/portal',// 门户配置
-    component: Layout,
-    redirect: '',
-    children: [
-      {
-        path: '',
-        component: (resolve) => require(['@/views/portal'], resolve),
-        name: '门户配置',
-        meta: { title: '门户配置', icon: 'dashboard', affix: true }
-      },
-    ]
-  },
-  {
-    path: '/page',
-    component: (resolve) => require(['@/components/pageLayout'], resolve),
-    hidden: true,
-  },
+  // {
+  //   path: '/portal',// 门户配置
+  //   component: Layout,
+  //   redirect: '',
+  //   children: [
+  //     {
+  //       path: '',
+  //       component: (resolve) => require(['@/views/portal'], resolve),
+  //       name: '门户配置',
+  //       meta: { title: '门户配置', icon: 'dashboard', affix: true }
+  //     },
+  //   ]
+  // },
+  // {
+  //   path: '/page',
+  //   component: (resolve) => require(['@/components/pageLayout'], resolve),
+  //   hidden: true,
+  // },
   {
     path: '',
     component: Layout,

@@ -28,6 +28,15 @@ export function getTemplateDetail (id) {
   })
 }
 
+// 页面模型
+export function getPageModelBy (params) {
+  return request({
+    url: '/dp/page/model/by',
+    method: 'get',
+    params
+  })
+}
+
 // 状态更改
 export function changeFormStatus (id, status) {
   return request({

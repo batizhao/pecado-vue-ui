@@ -134,6 +134,7 @@ const drawingListInDB = getDrawingList()
 const formConfInDB = getFormConf()
 const idGlobal = getIdGlobal()
 
+
 export default {
 	components: {
 		draggable,
@@ -216,28 +217,15 @@ export default {
     if (Array.isArray(this.pageData.fields) && this.pageData.fields.length > 0) {
 			this.drawingList = deepClone(this.pageData.fields)
       this.formConf = deepClone(this.pageData)
+      //添加noForm属性，标示为非表单组件布局
+      this.formConf.isForm = false
       delete this.formConf.fields
+      this.activeFormItem(this.drawingList[0])
 		} else {
-			this.drawingList = drawingDefalut
-		}
-		this.activeFormItem(this.drawingList[0])
-
-    // if (Array.isArray(this.list) && this.list.length > 0) {
-		// 	this.drawingList = deepClone(this.list)
-		// } else {
 			// this.drawingList = drawingDefalut
-		// }
-		// this.activeFormItem(this.drawingList[0])
+		}
 
-		// if (Array.isArray(drawingListInDB) && drawingListInDB.length > 0) {
-		// 	this.drawingList = drawingListInDB
-		// } else {
-		// 	this.drawingList = drawingDefalut
-		// }
-		// this.activeFormItem(this.drawingList[0])
-		// if (formConfInDB) {
-		// 	this.formConf = formConfInDB
-		// }
+
 		loadBeautifier(btf => {
 			beautifier = btf
 		})
@@ -404,9 +392,9 @@ export default {
 			this.AssembleFormData()
 			// 提交数据
 			// JS,CSS,HTML,JSON
-			this.$emit('save', {
-        formData:this.formData
-      })
+
+      this.$emit('save',this.formData)
+      // this.clearAll()
 		},
 		// 清空所有组件
 		clearAll () {
@@ -453,7 +441,6 @@ export default {
 			this.updateDrawingList(newTag, this.drawingList)
 		},
 		updateDrawingList(newTag, list) {
-			console.log('gogogogo.')
 			const index = list.findIndex(item => item.__config__.formId === this.activeId)
 			if (index > -1) {
 				list.splice(index, 1, newTag)

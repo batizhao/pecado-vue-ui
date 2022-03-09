@@ -26,7 +26,7 @@
       <template v-slot:action="scope">
         <action-button actionType="3" @click="handleEdit(scope.row)" icon="el-icon-edit">编辑</action-button>
         <action-dropdown>
-          <el-dropdown-item icon="el-icon-edit" @click.native="handleDesign(scope.row.id)">设计</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-edit" @click.native="handleDesign(scope.row)">设计</el-dropdown-item>
           <el-dropdown-item icon="el-icon-delete" @click.native="handleDel(scope.row.id)">删除</el-dropdown-item>
         </action-dropdown>
       </template>
@@ -42,19 +42,24 @@
     >
       <add-template ref="addTemplateRef" :moduleTypeOptions="moduleTypeOptions"></add-template>
     </action-dialog>
-
+    <!-- 设计 -->
+    <Design :visible="designVisible" :modelData="currentItem"  @close="designClose" @refresh="getTableData"/>
   </div>
 </template>
 
 <script>
 import addTemplate from './add.vue'
+import Design from '../design'
 import { addOrEditTemplate, deleteTemplate, changeFormStatus } from '@/api/dp/page/model.js'
+import { deepClone } from '@/components/CodeEditor/utils/index'
 export default {
   components: {
-    addTemplate
+    addTemplate,
+    Design
   },
   data () {
     return {
+      designVisible:false,
       columns: [
         {
           label: '模板名称',
@@ -96,6 +101,7 @@ export default {
       dialogVisible: false,
       dialogTitle: '',
       submitLoading: false,
+      currentItem:{},
       moduleTypeOptions: [] // 模板类型选项
     }
   },
@@ -144,11 +150,17 @@ export default {
         }).catch(() => {
           this.submitLoading =false
         })
-        
       }
     },
-    handleDesign (id) {
-
+    handleDesign (item) {
+      this.currentItem = deepClone(item)
+      if(typeof(this.currentItem.pageMetadata)==='string' && this.currentItem.pageMetadata.length>0){
+        this.currentItem.pageMetadata = JSON.parse(this.currentItem.pageMetadata)
+      }else{
+        this.currentItem.pageMetadata = {}
+      }
+      // console.log(this.currentItem)
+      this.designVisible= true
     },
     getModuleTypeOptions () {
       const data = [
@@ -187,7 +199,11 @@ export default {
       }).catch(function() {
         row.status = row.status === "open" ? "close" : "open";
       })
-    }
+    },
+
+    designClose(){
+      this.designVisible= false
+    },
   }
 }
 </script>
