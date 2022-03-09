@@ -150,7 +150,11 @@ export default {
         return {}
       }
     },
-		leftComponents: Array
+		leftComponents: Array,
+    pageType:{
+      type:String,
+      default:''
+    }
   },
 	data() {
 		return {

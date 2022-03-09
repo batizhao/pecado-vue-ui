@@ -13,6 +13,7 @@
       ref="refPortalSetting"
       :pageData="modelData.pageMetadata"
       :leftComponents="leftComponents"
+      :pageType="modelData.type"
       @save="saveCallBack"
     />
   </el-dialog>
