@@ -12,6 +12,7 @@
     <PortalSetting
       ref="refPortalSetting"
       :pageData="modelData.pageMetadata"
+      :leftComponents="leftComponents"
       @save="saveCallBack"
     />
   </el-dialog>
@@ -33,7 +34,8 @@ export default {
         return {
         }
       }
-    }
+    },
+    leftComponents: Array
   },
   components: {
     PortalSetting
