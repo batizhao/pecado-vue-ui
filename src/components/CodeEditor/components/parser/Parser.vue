@@ -78,6 +78,7 @@ const layouts = {
 
 function renderFrom(h) {
   const { formConfCopy } = this;
+
   if (formConfCopy && !formConfCopy.isForm) {
     return (
       <div style="height:100%">{renderFormItem.call(this, h, formConfCopy.fields)}</div>

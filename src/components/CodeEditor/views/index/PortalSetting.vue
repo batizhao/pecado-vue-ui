@@ -151,6 +151,10 @@ export default {
       default:_=>{
         return {}
       }
+    },
+    pageType:{
+      type:String,
+      default:''
     }
   },
 	data() {
