@@ -24,6 +24,7 @@
         <action-button actionType="3" @click="handleEdit(scope.row)" icon="el-icon-edit">编辑</action-button>
         <action-dropdown>
           <el-dropdown-item icon="el-icon-edit" @click.native="handleDesign(scope.row)">表单设计</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-view" @click.native="handleView(scope.row)">版本</el-dropdown-item>
           <el-dropdown-item icon="el-icon-delete" @click.native="handleDel(scope.row.id)">删除</el-dropdown-item>
         </action-dropdown>
       </template>
@@ -56,6 +57,16 @@
       ></design-form>
     </action-dialog>
 
+    <!-- 版本弹窗 -->
+    <action-dialog
+      v-model="versionVisible"
+      :title="'版本-' + currentItem.name"
+      :showFooter="false"
+      width="70%"
+    >
+      <form-version v-if="versionVisible" :formKey="currentItem.formKey"></form-version>
+    </action-dialog>
+
 
   </div>
 </template>
@@ -64,10 +75,12 @@
 import addComponent from './add.vue'
 import { addOrEditData, deleteData, changeFormStatus } from '@/api/app/formModel.js'
 import designForm from './design.vue'
+import formVersion from './version.vue'
 export default {
   components: {
     addComponent,
-    designForm
+    designForm,
+    formVersion
   },
   data () {
     return {
@@ -90,13 +103,18 @@ export default {
           prop: 'status',
           width: 100,
           slotName: 'status'
+        },
+        {
+          prop: 'createTime',
+          label: '创建时间'
         }
       ],
       dialogVisible: false,
       dialogTitle: '',
       submitLoading: false,
       designFormVisible: false,
-      currentItem: {}
+      currentItem: {},
+      versionVisible: false
     }
   },
   methods: {
@@ -166,6 +184,11 @@ export default {
         row.status = row.status === "open" ? "close" : "open";
       });
     },
+    // 版本浏览
+    handleView (item) {
+      this.versionVisible = true
+      this.currentItem = item
+    }
   }
 }
 </script>

@@ -288,7 +288,7 @@ $iconSize: 80px;
       .title {
         text-align: center;
         font-size: 14px;
-        margin-top: 15px;
+        margin: 15px 0px 0px 0px;
         display: block;
         white-space: nowrap;
         overflow: hidden;

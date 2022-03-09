@@ -32,7 +32,7 @@ export default {
     handleFormReady () {
       this.codeEditorLoading = true;
         // 获取表单详细信息
-        getDataDetail(this.formInfo.id).then(res => {
+        getDataDetail(this.formInfo.formKey).then(res => {
           this.codeEditorLoading = false
           const formObj = JSON.parse(res.data.metadata || '{}');
           this.pageData = formObj.formData || {};
@@ -45,6 +45,7 @@ export default {
       this.codeEditorLoading = true;
       addOrEditData({
         id: this.formInfo.id,
+        formKey: this.formInfo.formKey,
         metadata: JSON.stringify(args)
       }).then(res => {
         this.msgSuccess('保存成功');

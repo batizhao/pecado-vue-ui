@@ -23,10 +23,13 @@ export function deleteData (ids = '') {
 }
 
 // 详情
-export function getDataDetail (id) {
+export function getDataDetail (formKey) {
   return request({
-    url: url + '/' + id,
-    method: 'get'
+    url: url,
+    method: 'get',
+    params: {
+      key: formKey
+    }
   })
 }
 
@@ -39,5 +42,13 @@ export function changeFormStatus (id, status) {
       id,
       status
     }
+  })
+}
+
+// 恢复表单历史版本
+export function revertForm (id) {
+  return request({
+    url: url + '/history/' + id,
+    method: 'post'
   })
 }

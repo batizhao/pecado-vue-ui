@@ -140,7 +140,7 @@ export default {
   },
   methods: {
     setDefaultValue () {
-      const defaultData = JSON.parse(JSON.stringify(this.defaultData))
+      const defaultData = JSON.parse(JSON.stringify(this.defaultData || []))
       defaultData.map(item => {
         item.globalId = this.globalId ++
       })

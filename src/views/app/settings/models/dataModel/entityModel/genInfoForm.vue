@@ -65,18 +65,21 @@
         </el-form-item>
       </el-col>
 
-      <el-col :span="12" v-if="info.workflow == 'yes'">
-        <el-form-item prop="workflowKey" :required="info.workflow == 'yes'" error="请输入流程Key">
+      <el-col :span="12">
+        <el-form-item prop="form">
           <span slot="label">
-            流程Key
-            <el-tooltip content="和流程平台绑定流程关键字" placement="top">
+            生成表单模型
+            <el-tooltip content="创建新的或者覆盖已经存在的表单模型，可以从历史版本中恢复" placement="top">
               <i class="el-icon-question"></i>
             </el-tooltip>
           </span>
-          <el-input v-model="info.workflowKey" />
+          <el-switch
+            v-model="info.form"
+            active-value="yes"
+            inactive-value="no">
+          </el-switch>
         </el-form-item>
       </el-col>
-
       <el-col :span="12">
         <el-form-item prop="testcase">
           <span slot="label">
@@ -90,25 +93,6 @@
             active-value="yes"
             inactive-value="no">
           </el-switch>
-        </el-form-item>
-      </el-col>
-
-      <el-col :span="12">
-        <el-form-item>
-          <span slot="label">
-            上级菜单
-            <el-tooltip content="分配到指定菜单下，例如 系统管理" placement="top">
-              <i class="el-icon-question"></i>
-            </el-tooltip>
-          </span>
-          <treeselect
-            :append-to-body="false"
-            v-model="info.parentMenuId"
-            :options="menus"
-            :normalizer="normalizer"
-            :show-count="true"
-            placeholder="请选择系统菜单"
-          />
         </el-form-item>
       </el-col>
 
@@ -209,11 +193,7 @@ export default {
     tables: {
       type: Array,
       default: null
-    },
-    menus: {
-      type: Array,
-      default: []
-    },
+    }
   },
   data() {
     return {
@@ -230,10 +210,7 @@ export default {
         ],
         mappingPath: [
           { required: true, message: "请输入后端 API 路径", trigger: "blur" }
-        ],
-        workflowKey: [
-          { required: true, message: "请输入流程Key", trigger: "blur" }
-        ],
+        ]
       }
     };
   },
@@ -254,12 +231,6 @@ export default {
         label: node.name,
         children: node.children
       };
-    },
-    /** 整合工作流引擎RadioChange */
-    workflowRadioChange(val){
-      if (val == "yes") {
-        this.info.form = "visual"
-      }
     },
     /** 选择子表名触发 */
     subSelectChange(value) {

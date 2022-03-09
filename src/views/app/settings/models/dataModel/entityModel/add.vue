@@ -105,7 +105,7 @@ export default {
             { required: true, trigger: 'change', message: '请输入'}
           ],
           options: [],
-          defaultValue: 'VARCHAR'
+          defaultValue: 'varchar'
         },
         {
           label: '字段长度',
@@ -201,12 +201,12 @@ export default {
       this.tableDefaultData = [
         {
           name: 'id',
-          type: 'INT',
+          type: 'int',
           length: 10,
           comment: '主键',
           decimal: 0,
           primary: true,
-          required: true,
+          required: false,
           increment: true,
           defaultValue: null
         },
@@ -232,9 +232,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-.red-star::before {
-  content: '* ';
-  color: red;
-}
-</style>

@@ -7,7 +7,7 @@
     </el-steps>
     <basic-info-form v-show="active === 0" ref="basicInfo" :info="code" :genarateInfo="genarateInfo" />
     <configure-form v-show="active === 1" ref="configureForm" :columnMetadata="columnMetadata"></configure-form>
-    <gen-info-form v-show="active === 2" ref="genInfo" :info="genarateInfo" :tables="codes" :menus="menus"/>
+    <gen-info-form v-show="active === 2" ref="genInfo" :info="genarateInfo" :tables="codes" />
     <div class="action-buttons" v-show="active === 0">
       <action-button :plain="false" size="medium" @click="basicInfoSubmit">下一步</action-button>
     </div>
@@ -23,7 +23,6 @@
   </div>
 </template>
 <script>
-import { listMenu as getMenuTreeSelect } from "@/api/ims/menu";
 import { entityModelDetail, updateCodeMetadata, genCode, getTableRelations } from '@/api/app/dataModel.js'
 import basicInfoForm from "./basicInfoForm";
 import genInfoForm from "./genInfoForm";
@@ -49,8 +48,6 @@ export default {
       codes: [],
       // 表列信息
       codeMetas: [],
-      // 菜单信息
-      menus: [],
       // 表详细信息
       code: {},
       // 生成信息
@@ -65,10 +62,7 @@ export default {
     entityModelDetail(this.entityModelId).then(res => {
       // columnMetadata数组的对象里没有某些属性，初始化给他加上
       this.columnMetadata = JSON.parse(res.data.columnMetadata).map(item => {
-        item.javaType = ''
-        item.javaField = ''
-        item.save = false
-        item.htmlType = ''
+        !item.save && (item.save = false)
         return item
       })
       let codeMetadata = res.data.codeMetadata
@@ -78,11 +72,6 @@ export default {
       }
       this.code = res.data
     })
-    
-    /** 查询菜单下拉列表 */
-    getMenuTreeSelect().then(response => {
-      this.menus = response.data;
-    });
   },
   methods: {
     basicInfoSubmit () {

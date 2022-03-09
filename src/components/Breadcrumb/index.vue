@@ -37,7 +37,7 @@ export default {
       const first = matched[0]
 
       if (!this.isDashboard(first)) {
-        matched = [{ path: '/dashboard', meta: { title: '工作台' }}].concat(matched)
+        matched = [{ path: '/admin', meta: { title: '控制台' }}].concat(matched)
       }
 
       this.levelList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
@@ -47,7 +47,7 @@ export default {
       if (!name) {
         return false
       }
-      return name.trim() === '工作台'
+      return name.trim() === '控制台'
     },
     // pathCompile(path) {
     //   // To solve this problem https://github.com/PanJiaChen/vue-element-admin/issues/561

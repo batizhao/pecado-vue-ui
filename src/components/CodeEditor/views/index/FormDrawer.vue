@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-drawer v-bind="$attrs" v-on="$listeners" @opened="onOpen" @close="onClose">
+		<el-drawer v-bind="$attrs" v-on="$listeners" @opened="onOpen" @close="onClose" :modal="false">
 			<div style="height: 100%;">
 				<el-row style="overflow: auto; height: 100%;">
 					<el-col :md="24" :lg="12" class="left-editor">
