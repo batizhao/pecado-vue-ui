@@ -2,7 +2,7 @@
   <div>
     <action-table
       ref="actionTableRef"
-      url="/app/processes"
+      url="/app/lists"
       :columns="columns"
       :otherParams="{ appId }"
     >
@@ -36,7 +36,7 @@
       fullscreen
       custom-class="add-page-model-dialog"
     >
-      <add-component ref="addComponentRef"></add-component>
+      <add-component v-if="dialogVisible" ref="addComponentRef"></add-component>
     </action-dialog>
 
   </div>
@@ -107,6 +107,7 @@ export default {
       const rowCopy = JSON.parse(JSON.stringify(row))
       this.$nextTick(() => {
         this.$refs.addComponentRef.form = rowCopy
+        console.log("🚀 ~ file: index.vue ~ line 110 ~ this.$nextTick ~ rowCopy", rowCopy)
       })
     },
     getTableData() {

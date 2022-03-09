@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-const url = '/app/page'
+const url = '/app/list'
 
 // 添加编辑
 export function addOrEditData (data) {
