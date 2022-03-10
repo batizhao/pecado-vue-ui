@@ -1,6 +1,7 @@
 <script>
 import { deepClone } from "../../utils/index";
 import render from "../render/render.js";
+import parse from './Parser.vue'
 
 const ruleTrigger = {
   "el-input": "blur",
@@ -15,26 +16,9 @@ const ruleTrigger = {
 };
 
 const layouts = {
-  // 所有表单类填写组件用此布局
-  colFormItem(h, scheme) {
-    const config = scheme.__config__;
-    const listeners = buildListeners.call(this, scheme);
-    let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null;
-    if (config.showLabel === false) labelWidth = "0";
-    return (
-      <el-col span={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
-        <el-form-item
-          label-width={labelWidth}
-          label={config.showLabel ? config.label : ''}
-          prop={scheme.__vModel__}
-        >
-          <render conf={scheme} on={listeners}></render>
-        </el-form-item>
-      </el-col>
-    );
-  },
   // 行容器组件用此布局
   rowFormItem(h, scheme) {
+    const config = scheme.__config__
     let child = renderChildren.apply(this, arguments);
     if (scheme.type === "flex") {
       child = (
@@ -65,15 +49,26 @@ const layouts = {
         <render conf={scheme}></render>
       </el-col>
     )
+  },
+  // 表单容器用此布局
+  parse(h, scheme) {
+    const config = scheme.__config__;
+    return (
+      <el-col span={config.span}>
+        <form-container ref="formContainerRef" url={scheme.url}></form-container>
+      </el-col>
+    )
   }
-};
+}
 
 function renderFrom(h) {
   const { formConfCopy } = this;
 
   if (formConfCopy && !formConfCopy.isForm) {
     return (
-      <div style="height:100%">{renderFormItem.call(this, h, formConfCopy.fields)}</div>
+      <el-row>
+        <div style="height:100%">{renderFormItem.call(this, h, formConfCopy.fields)}</div>
+      </el-row>
     )
   } else {
     return (
@@ -151,9 +146,14 @@ function buildListeners(scheme) {
 
 export default {
   components: {
-    render
+    render,
+    parse
   },
   props: {
+    parseFormConf: {
+      type: Object,
+      require: true
+    },
     formConf: {
       type: Object,
       required: true

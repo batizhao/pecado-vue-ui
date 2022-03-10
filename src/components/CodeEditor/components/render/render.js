@@ -48,6 +48,10 @@ function emitEvents(confClone) {
 
 function buildDataObject(confClone, dataObject) {
 	Object.keys(confClone).forEach(key => {
+		// 暂时先给所有组件绑定个click事件
+		dataObject.on.nativeClick = val => {
+			this.$emit('nativeClick', val)
+		}
 		const val = confClone[key]
 		if (key === '__vModel__') {
 			vModel.call(this, dataObject, confClone.__config__.defaultValue)

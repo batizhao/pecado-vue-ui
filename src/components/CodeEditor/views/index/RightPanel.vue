@@ -621,9 +621,6 @@
 					<el-form-item v-if="activeData.disabled !== undefined" label="是否禁用">
 						<el-switch v-model="activeData.disabled" />
 					</el-form-item>
-          <el-form-item v-if="activeData.__config__.show !== undefined" label="是否显示">
-							<el-switch v-model="activeData.__config__.show"/>
-						</el-form-item>
 					<el-form-item v-if="activeData.__config__.tag === 'el-select'" label="能否搜索">
 						<el-switch v-model="activeData.filterable" />
 					</el-form-item>
@@ -633,6 +630,13 @@
 					<el-form-item v-if="activeData.__config__.required !== undefined" label="是否必填">
 						<el-switch v-model="activeData.__config__.required" />
 					</el-form-item>
+
+					<!-- 表单容器的配置 -->
+					<template v-if="activeData.__config__.tag === 'form-container'">
+						<el-form-item label="请求地址">
+							<el-input v-model="activeData.url"></el-input>
+						</el-form-item>
+					</template>
 
 					<template v-if="activeData.__config__.layoutTree">
 						<el-divider>布局结构树</el-divider>
