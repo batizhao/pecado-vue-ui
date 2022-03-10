@@ -22,6 +22,7 @@
       >
       </el-table-column>
       <el-table-column
+        v-if="showNumber"
         type="index"
         label="序号"
         width="55"
@@ -77,6 +78,10 @@ export default {
       default: true
     },
     showSelection: { // 显示复选框
+      type: Boolean,
+      default: true
+    },
+    showNumber: { // 显示序号
       type: Boolean,
       default: true
     },

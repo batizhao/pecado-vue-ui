@@ -28,7 +28,7 @@
 
         </el-tab-pane>
         <el-tab-pane label="菜单配置" name="7">
-
+          <menu-model v-if="activeName === '7'"></menu-model>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -40,12 +40,14 @@ import entityModel from './models/dataModel/entityModel/index.vue'
 import electronicForm from './models/formModel/electronicForm/index.vue'
 import processModel from './models/processModel/index.vue'
 import pageModel from './models/pageModel/index.vue'
+import menuModel from './models/menuModel/index.vue'
 export default {
   components: {
     entityModel,
     electronicForm,
     processModel,
-    pageModel
+    pageModel,
+    menuModel
   },
   data () {
     return {
