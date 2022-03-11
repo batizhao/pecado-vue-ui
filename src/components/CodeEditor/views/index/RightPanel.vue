@@ -2,6 +2,7 @@
 	<div class="right-board">
 		<el-tabs v-model="currentTab" class="center-tabs">
 			<el-tab-pane label="组件属性" name="field" />
+			<el-tab-pane label="样式" name="style" />
 			<el-tab-pane label="表单属性" name="form" />
 		</el-tabs>
 		<div class="field-box">
@@ -124,9 +125,6 @@
 					</el-form-item>
 					<el-form-item v-if="activeData['end-placeholder']!==undefined" label="结束占位">
 						<el-input v-model="activeData['end-placeholder']" placeholder="请输入占位提示" />
-					</el-form-item>
-					<el-form-item v-if="activeData.__config__.span!==undefined" label="表单栅格">
-						<el-slider v-model="activeData.__config__.span" :max="24" :min="1" :marks="{12:''}" @change="spanChange" />
 					</el-form-item>
 					<el-form-item v-if="activeData.__config__.layout==='rowFormItem'&&activeData.gutter!==undefined" label="栅格间隔">
 						<el-input-number v-model="activeData.gutter" :min="0" placeholder="栅格间隔" />
@@ -680,6 +678,10 @@
 						</div>
 					</template>
 				</el-form>
+				<!-- 样式面板 -->
+        <div v-show="currentTab==='style'">
+          <style-panel :activeData="activeData" :drawingList="drawingList"></style-panel>
+        </div>
 				<!-- 表单属性 -->
 				<el-form v-show="currentTab === 'form'" size="small" label-width="90px">
 					<el-form-item label="表单名">
@@ -751,6 +753,7 @@ import {
 } from '../../components/generator/config'
 import { saveFormConf } from '../../utils/db'
 import draggable from 'vuedraggable'
+import stylePanel from './components/stylePanel/index.vue'
 
 const dateTimeFormat = {
 	date: 'yyyy-MM-dd',
@@ -770,9 +773,10 @@ export default {
 	components: {
 		TreeNodeDialog,
 		IconsDialog,
-		draggable
+		draggable,
+		stylePanel
 	},
-	props: ['showField', 'activeData', 'formConf'],
+	props: ['showField', 'activeData', 'formConf', 'drawingList'],
 	data() {
 		return {
 			currentTab: 'field',

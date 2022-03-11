@@ -2,6 +2,7 @@
 import { deepClone } from "../../utils/index";
 import render from "../render/render.js";
 import parse from './Parser.vue'
+import { addAllNodesStyleToDocument } from './addStyleToDocument.js'
 
 const ruleTrigger = {
   "el-input": "blur",
@@ -192,6 +193,7 @@ export default {
         }
         if (config.children) this.initFormData(config.children, formData);
       });
+      addAllNodesStyleToDocument(componentList)
     },
     buildRules(componentList, rules) {
       componentList.forEach(cur => {

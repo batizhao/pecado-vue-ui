@@ -69,6 +69,7 @@
 			:active-data="activeData"
 			:form-conf="formConf"
 			:show-field="!!drawingList.length"
+			:drawingList="drawingList"
 			@tag-change="tagChange"
 			@fetch-data="fetchData"
 		/>

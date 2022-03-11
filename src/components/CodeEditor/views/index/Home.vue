@@ -95,6 +95,7 @@
 			:active-data="activeData"
 			:form-conf="formConf"
 			:show-field="!!drawingList.length"
+			:drawingList="drawingList"
 			@tag-change="tagChange"
 			@fetch-data="fetchData"
 		/>
@@ -252,6 +253,7 @@ export default {
 	mounted() {
     if (Array.isArray(this.pageData.fields) && this.pageData.fields.length > 0) {
 			this.drawingList = deepClone(this.pageData.fields)
+      console.log("🚀 ~ file: Home.vue ~ line 256 ~ mounted ~ this.drawingList ", this.drawingList )
       this.formConf = deepClone(this.pageData)
       delete this.formConf.fields
 			this.activeFormItem(this.drawingList[0])

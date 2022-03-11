@@ -40,6 +40,7 @@
 
 <script>
 export default {
+  inheritAttrs: false,
   name: 'event-button',
   props: {
     eventSettings: Object

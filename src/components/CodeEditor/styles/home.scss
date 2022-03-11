@@ -191,7 +191,7 @@ $lighterBlue: #409eff;
 .drawing-row-item {
 	position: relative;
 	box-sizing: border-box;
-	margin-bottom: 15px;
+	// margin-bottom: 15px;
 	padding: 0 2px;
 	border: 1px dashed #ccc;
 	border-radius: 3px;
@@ -199,7 +199,7 @@ $lighterBlue: #409eff;
 	.drawing-row-item {
 		margin-bottom: 2px;
 	}
-	.el-col {
+	.el-col .el-form-item {
 		margin-top: 22px;
 	}
 	.el-form-item {
