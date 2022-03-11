@@ -2,7 +2,7 @@
   <div>
     <action-table
       ref="actionTableRef"
-      url="/app/menu"
+      url="/app/menus"
       :columns="columns"
       :otherParams="{ appId }"
       :showPagination="false"
@@ -18,7 +18,7 @@
         ></el-switch>
       </template>
       <template v-slot:icon="scope">
-        <svg-icon :icon-class="scope.row.icon" />
+        <i :class="scope.row.icon"></i>
       </template>
       <template slot="actionButtons">
         <div class="action-buttons mb8">
@@ -40,7 +40,7 @@
       @confirm="dialogConfirm"
       width="30%"
     >
-      <add-component ref="addComponentRef"></add-component>
+      <add-component v-if="dialogVisible" ref="addComponentRef"></add-component>
     </action-dialog>
   </div>
 </template>
@@ -99,6 +99,9 @@ export default {
       this.dialogTitle = '新增应用菜单'
       this.$nextTick(() => {
         this.$refs.addComponentRef.reset()
+        if (row) {
+          this.$refs.addComponentRef.form.pid = row.id
+        }
       })
     },
     handleDel (row) {
@@ -129,6 +132,7 @@ export default {
       if (data) {
         this.submitLoading = true
         data.appId = this.appId
+        data.scope ='dashboard'
         addOrUpdateMenu(data).then(() => {
           this.msgSuccess(this.dialogTitle + '成功')
           this.submitLoading =false

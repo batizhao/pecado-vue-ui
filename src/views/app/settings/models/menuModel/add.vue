@@ -6,23 +6,52 @@
       label-width="100px"
       ref="actionFormRef"
       :span="24"
-    ></action-form>
+    >
+      <template slot="icon">
+        <el-input v-model="form.icon">
+          <el-button slot="append" icon="el-icon-search" @click="$refs.fontAwesomeSelectorRef.open()"></el-button>
+        </el-input>
+        <font-awesome-selector ref="fontAwesomeSelectorRef" v-model="form.icon"></font-awesome-selector>
+      </template>
+    </action-form>
   </div>
 </template>
 <script>
+import { listDashboardMenu } from "@/api/ims/menu";
+import FontAwesomeSelector from '@/components/FontAwesomeSelector/index.vue'
 const getDefaultFrom = () => {
   return {
-    scope: 'dashboard'
+    pid: 0,
+    type: 'M',
+    icon: '',
+    name: '',
+    sort: 0,
+    path: '',
+    permission: '',
+    description: ''
   }
 }
 export default {
+  components: {
+    FontAwesomeSelector
+  },
   data () {
     return {
       form: getDefaultFrom(),
       formOptions: [
         {
           label: '上级菜单',
-          prop: 'pid'
+          prop: 'pid',
+          type: 'treeSelect',
+          options: [],
+          optionsProps: {
+            value: 'id',
+            label: 'name',
+            children: 'children'
+          },
+          rules: [
+            { required: true, message: "上级菜单不能为空", trigger: "change" },
+          ]
         },
         {
           label: '菜单类型',
@@ -32,17 +61,32 @@ export default {
             { value: 'M', label: '菜单' },
             { value: 'B', label: '按钮' }
           ],
-          defaultValue: 'M'
+          rules: [
+            { required: true }
+          ]
         },
         {
           label: '菜单图标',
           prop: 'icon',
-          type: 'input',
+          type: 'slot',
+          slotName: 'icon',
+          showCondition (model) {
+            return model.type === 'M'
+          }
+        },
+        {
+          label: '路由地址',
+          prop: 'path',
+          rules: [
+            { required: true, message: "路由地址不能为空", trigger: "change" },
+          ],
+          showCondition (model) {
+            return model.type === 'M'
+          }
         },
         {
           label: '菜单名称',
           prop: 'name',
-          type: 'input',
           rules: [
             { required: true, message: "菜单名称不能为空", trigger: "change" },
           ]
@@ -56,25 +100,28 @@ export default {
           ]
         },
         {
-          label: '路由地址',
-          prop: 'path',
-          type: 'input',
-          rules: [
-            { required: true, message: "路由地址不能为空", trigger: "change" },
-          ]
-        },
-        {
           label: '权限标识',
           prop: 'permission',
-          type: 'input',
         },
         {
           label: '菜单说明',
           prop: 'description',
-          type: 'input',
         }
       ]
     }
+  },
+  created () {
+    listDashboardMenu().then(res => {
+      const options = [
+        {
+          name: '根节点',
+          id: 0,
+          children: res.data
+        }
+      ]
+      const index = this.formOptions.findIndex(item => item.prop === 'pid')
+      this.formOptions[index].options = options
+    })
   },
   methods: {
     submit () {
