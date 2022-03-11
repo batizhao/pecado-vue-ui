@@ -69,6 +69,11 @@ export default {
     handleView(row) {
       const rowCopy = JSON.parse(JSON.stringify(row))
       rowCopy.metadata = JSON.parse(rowCopy.metadata)
+      if (!rowCopy.metadata) {
+        this.msgError('暂无数据')
+        return
+      }
+      rowCopy.metadata.formData.isForm = true
       this.currentItem = rowCopy
       this.formParserVisible = true
     },
