@@ -1,9 +1,16 @@
 import request from '@/utils/request'
 
 // 查询菜单列表
-export function listMenu(query) {
+export function listAdminMenu(query) {
   return request({
     url: '/ims/menus',
+    params: query
+  })
+}
+
+export function listDashboardMenu(query) {
+  return request({
+    url: '/app/menus',
     params: query
   })
 }

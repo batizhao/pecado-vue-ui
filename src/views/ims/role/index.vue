@@ -134,16 +134,27 @@
 
     <!-- 添加或编辑角色菜单对话框 -->
     <el-dialog :title="title" :visible.sync="openMenu" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item :label="$t('role.name')">
           <el-input v-model="form.name" :disabled="true" />
         </el-form-item>
-        <el-form-item :label="$t('menu')" prop="menuIds">
+        <el-form-item :label="$t('role.adminMenu')" prop="menuIds">
           <el-tree
             class="tree-border"
-            :data="menuList"
+            :data="adminMenuList"
             show-checkbox
-            ref="menu"
+            ref="adminMenu"
+            node-key="id"
+            :check-strictly="true"
+            :props="defaultProps"
+          ></el-tree>
+        </el-form-item>
+        <el-form-item :label="$t('role.dashboardMenu')" prop="menuIds">
+          <el-tree
+            class="tree-border"
+            :data="dashboardMenuList"
+            show-checkbox
+            ref="dashboardMenu"
             node-key="id"
             :check-strictly="true"
             :props="defaultProps"
@@ -196,7 +207,7 @@
 
 <script>
 import { listRole, getRole, deleteRole, addOrUpdateRole, changeRoleStatus, changeRoleMenus, changeDataScope } from "@/api/ims/role";
-import { listMenusByRoleId, listMenu } from "@/api/ims/menu";
+import { listMenusByRoleId, listAdminMenu, listDashboardMenu } from "@/api/ims/menu";
 import { listAllDepartment, listDepartmentByRoleId } from "@/api/ims/department";
 import { downLoadExcel } from "@/utils/download";
 
@@ -223,7 +234,9 @@ export default {
       // 角色表格数据
       roleList: [],
       // 角色菜单数据
-      menuList: [],
+      adminMenuList: [],
+      // 角色菜单数据
+      dashboardMenuList: [],
       // 部门列表
       deptOptions: [],
       // 弹出层标题
@@ -296,7 +309,7 @@ export default {
     // 所有菜单节点数据
     getMenuAllCheckedKeys() {
       // 目前被选中的菜单节点
-      return this.$refs.menu.getCheckedKeys();
+      return this.$refs.adminMenu.getCheckedKeys().concat(this.$refs.dashboardMenu.getCheckedKeys());
     },
     // 所有部门节点数据
     getDeptAllCheckedKeys() {
@@ -375,13 +388,17 @@ export default {
     handleMenu(row) {
       this.reset();
       const id = row.id;
-      listMenu().then(response => {
-        this.menuList = response.data;
+      listAdminMenu().then(response => {
+        this.adminMenuList = response.data;
+      });
+      listDashboardMenu().then(response => {
+        this.dashboardMenuList = response.data;
       });
       const menus = listMenusByRoleId(id);
       this.$nextTick(() => {
         menus.then(res => {
-          this.$refs.menu.setCheckedKeys(res.data.map(item => item.id));
+          this.$refs.adminMenu.setCheckedKeys(res.data.map(item => item.id));
+          this.$refs.dashboardMenu.setCheckedKeys(res.data.map(item => item.id));
         });
       });
       this.form = row;

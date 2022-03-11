@@ -156,7 +156,7 @@ export default {
     }
   },
   created () {
-    this.getDataOrigin()
+    this.getDataSource()
     this.listDictDataByCode('db_column_type').then(res => {
       const index = this.tableColumns.findIndex(item => item.prop === 'type')
       this.tableColumns[index].options = res.data
@@ -213,7 +213,7 @@ export default {
       ]
     },
     // 获取数据源列表
-    getDataOrigin () {
+    getDataSource () {
       listDs({ size: 999, current: 1 }).then(res => {
         const index = this.formOptions.findIndex(item => item.prop === 'dsName')
         const records = res.data.records

@@ -173,7 +173,7 @@
 </template>
 
 <script>
-import { listMenu, getMenu, deleteMenu, addOrUpdateMenu, changeMenuStatus } from "@/api/ims/menu";
+import { listAdminMenu, getMenu, deleteMenu, addOrUpdateMenu, changeMenuStatus } from "@/api/ims/menu";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 import IconSelect from "@/components/IconSelect";
@@ -232,7 +232,7 @@ export default {
     /** 查询菜单列表 */
     getList() {
       this.loading = true;
-      listMenu(this.queryParams).then(response => {
+      listAdminMenu(this.queryParams).then(response => {
         this.menuList = response.data;
         this.loading = false;
       });
@@ -265,7 +265,7 @@ export default {
     },
     /** 查询菜单下拉树结构 */
     getTreeselect() {
-      listMenu().then(response => {
+      listAdminMenu().then(response => {
         const menu = { id: 0, name: '根菜单', children: [] };
         menu.children = this.handleTree(response.data, "id");
         this.menuOptions.push(menu);
