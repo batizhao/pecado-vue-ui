@@ -339,6 +339,7 @@
 						label="按钮类型"
 					>
 						<el-select v-model="activeData.type" :style="{ width: '100%' }">
+							<el-option label="default" value="default" />
 							<el-option label="primary" value="primary" />
 							<el-option label="success" value="success" />
 							<el-option label="warning" value="warning" />
@@ -367,6 +368,7 @@
 						<el-select v-model="activeData.eventSettings.emit">
 							<el-option value="buttonEmitSubmit" label="提交"></el-option>
 							<el-option value="buttonEmitSave" label="保存"></el-option>
+							<el-option value="buttonEmitReset" label="重置"></el-option>
 						</el-select>
 					</el-form-item>
 

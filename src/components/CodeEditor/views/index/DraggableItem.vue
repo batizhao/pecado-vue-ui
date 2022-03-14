@@ -110,12 +110,12 @@ const layouts = {
       : 'drawing-row-item'
     return (
       <el-col
-        v-show={config.show}
         span={config.span}
         class={className}
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
       >
         <form-container url={currentItem.url}></form-container>
+        {components.itemBtns.apply(this, arguments)}
       </el-col>
     )
   }

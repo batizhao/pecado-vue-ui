@@ -1,6 +1,7 @@
 <script>
 import { deepClone } from "../../utils/index";
 import render from "../render/render.js";
+import { addAllNodesStyleToDocument } from './addStyleToDocument.js'
 
 const ruleTrigger = {
   "el-input": "blur",
@@ -36,6 +37,7 @@ const layouts = {
   // 行容器组件用此布局
   rowFormItem(h, scheme) {
     let child = renderChildren.apply(this, arguments);
+    const config = scheme.__config__
     if (scheme.type === "flex") {
       child = (
         <el-row
@@ -60,9 +62,23 @@ const layouts = {
   // 自定义组件如表格、文本等用此布局
   native (h, scheme) {
     const config = scheme.__config__
+    const listeners = {
+      nativeClick: callback => {
+        callback(this.$refs.formContainerRef)
+      }
+    }
     return (
       <el-col span={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
-        <render conf={scheme}></render>
+        <render conf={scheme} on={listeners}></render>
+      </el-col>
+    )
+  },
+  // 表单容器用此布局
+  parse(h, scheme) {
+    const config = scheme.__config__;
+    return (
+      <el-col span={config.span}>
+        <form-container ref="formContainerRef" url={scheme.url}></form-container>
       </el-col>
     )
   }
@@ -73,7 +89,9 @@ function renderFrom(h) {
 
   if (formConfCopy && !formConfCopy.isForm) {
     return (
-      <div style="height:100%">{renderFormItem.call(this, h, formConfCopy.fields)}</div>
+      <el-row>
+        <div style="height:100%">{renderFormItem.call(this, h, formConfCopy.fields)}</div>
+      </el-row>
     )
   } else {
     return (
@@ -192,6 +210,7 @@ export default {
         }
         if (config.children) this.initFormData(config.children, formData);
       });
+      addAllNodesStyleToDocument(componentList)
     },
     buildRules(componentList, rules) {
       componentList.forEach(cur => {

@@ -77,7 +77,7 @@
                 </template>
                 <!-- 插槽 -->
                 <template v-else-if="item.type === 'slot'">
-                  <slot :name="item.slotName" :row="row"></slot>
+                  <slot :name="item.slotName || item.prop" :row="row"></slot>
                 </template>
                 <!-- 默认为输入框 -->
                 <template v-else>

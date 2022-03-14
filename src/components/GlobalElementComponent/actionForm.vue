@@ -1,5 +1,11 @@
 <template>
-  <el-form ref="form" :model="model" :rules="rules" :label-width="labelWidth">
+  <el-form
+    ref="form"
+    :model="model"
+    :rules="rules"
+    :label-width="labelWidth"
+    :label-position="labelPosition"
+  >
     <el-row :gutter="10">
       <el-col :span="item.span || span" v-for="(item, index) in formOptions" :key="index">
         <!-- 下拉框 -->
@@ -73,6 +79,7 @@
           <el-radio-group
             v-model="model[item.prop]"
             :disabled="item.disabled"
+            @change="selectChange(item, model[item.prop])"
           >
             <el-radio
               v-for="option in item.options"
@@ -83,13 +90,41 @@
             </el-radio>
           </el-radio-group>
         </el-form-item>
+        <!-- 多选 -->
+        <el-form-item
+          v-else-if="item.type === 'checkbox' && getShowCondition(item)"
+          :prop="item.prop"
+        >
+          <template slot="label">
+            {{item.label}}
+            <!-- 是否显示全选 -->
+            <el-checkbox
+              v-if="item.checkAll"
+              style="margin-left: 10px;"
+              v-model="model[item.prop + 'CheckAll']"
+              @change="checkAllChange(item, model[item.prop + 'CheckAll'])"
+            >全选</el-checkbox>
+          </template>
+          <el-checkbox-group
+            v-model="model[item.prop]"
+            :disabled="item.disabled"
+          >
+            <el-checkbox
+              v-for="option in item.options"
+              :key="option[item.optionsProps ? item.optionsProps.value : 'value']"
+              :label="option[item.optionsProps ? item.optionsProps.value : 'value']"
+            >
+              {{option[item.optionsProps ? item.optionsProps.label : 'label']}}
+            </el-checkbox>
+          </el-checkbox-group>
+        </el-form-item>
         <!-- 插槽 -->
         <el-form-item
           v-else-if="item.type === 'slot' && getShowCondition(item)"
           :label="item.label"
           :prop="item.prop"
         >
-          <slot :name="item.prop"></slot>
+          <slot :name="item.slotName || item.prop"></slot>
         </el-form-item>
         <!-- 默认渲染输入框 -->
         <el-form-item
@@ -130,7 +165,9 @@ export default {
     span: {
       type: Number,
       default: 12
-    }
+    },
+    // 标签位置
+    labelPosition: String
   },
   computed: {
     rules () {
@@ -193,6 +230,25 @@ export default {
         this.transferTreeSelectOptionsFlag = 1
       }
       return options
+    },
+    // 多选框全选
+    checkAllChange (item, value) {
+      if (value) { // 全选
+        // 1 拿到所有选项的值
+        const values = item.options.map(option => {
+          return option[item.optionsProps ? item.optionsProps.value : 'value']
+        })
+        // 2 赋值给对应的prop
+        this.model[item.prop] = values
+      } else { // 取消全需
+        this.model[item.prop] = []
+      }
+    },
+    // change回调
+    selectChange (item, value) {
+      if (item.change) {
+        item.change(value)
+      }
     }
   }
 }

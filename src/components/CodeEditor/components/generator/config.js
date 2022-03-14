@@ -938,7 +938,7 @@ export const formModelComponents = [
 			labelWidth: null,
 			tag: 'event-button',
 			tagIcon: 'button',
-			span: 24,
+			span: 0,
 			layout: 'native',
 			document: 'https://element.eleme.cn/#/zh-CN/component/button'
 		},

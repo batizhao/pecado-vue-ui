@@ -6,7 +6,7 @@
       :form-conf="formConf"
       :showSubmit="false"
     ></parser>
-    <span class="tip" v-else>表单容器</span>
+    <div class="tip" v-else>{{`表单容器 ${errorTip}`}}</div>
   </div>
 </template>
 
@@ -23,7 +23,8 @@ export default {
   },
   data () {
     return {
-      formConf: null
+      formConf: null,
+      errorTip: ''
     }
   },
   methods: {
@@ -35,11 +36,19 @@ export default {
         const data = JSON.parse(res.data.metadata).formData
         data.isForm = true
         this.formConf = data
+      }).catch(err => {
+        this.errorTip = err
       })
     },
     submit () {
+      if (!this.formConf) return Promise.reject()
       return this.$refs.parseRef.submitForm()
+    },
+    reset () {
+      if (!this.formConf) return Promise.reject()
+      return this.$refs.parseRef.resetForm()
     }
+
   },
   created () {
     this.getFormConf()
