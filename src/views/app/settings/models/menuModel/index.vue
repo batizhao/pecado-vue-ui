@@ -2,7 +2,7 @@
   <div>
     <action-table
       ref="actionTableRef"
-      url="/app/menus"
+      url="/app/menu"
       :columns="columns"
       :otherParams="{ appId }"
       :showPagination="false"
