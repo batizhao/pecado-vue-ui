@@ -67,3 +67,12 @@ export function changeDataScope(role) {
     data: role
   })
 }
+
+// 分配用户角色
+export function changeRoleUsers(users) {
+  return request({
+    url: '/ims/role/user',
+    method: 'post',
+    data: users
+  })
+}

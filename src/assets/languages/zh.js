@@ -30,6 +30,7 @@ var zh = {
     status: "状态",
     createTime: "创建时间",
     menu: "分配菜单",
+    user: "分配用户",
     dashboardMenu: "工作台菜单",
     adminMenu: "控制台菜单",
     dataScope: "数据权限",
