@@ -74,7 +74,6 @@ export default {
 			}
 		},
 		onOpen() {
-			console.log('gogogo.')
 			loadBeautifier(btf => {
 				beautifier = btf
 				this.beautifierJson = beautifier.js(this.jsonStr, beautifierConf.js)

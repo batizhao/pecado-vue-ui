@@ -2,7 +2,7 @@
 	<div class="right-board">
 		<el-tabs v-model="currentTab" class="center-tabs">
 			<el-tab-pane label="组件属性" name="field" />
-			<el-tab-pane label="表单属性" name="form" />
+			<el-tab-pane label="表单属性" name="form" v-if="formConf.isForm" />
 		</el-tabs>
 		<div class="field-box">
 			<!-- <a class="document-link" target="_blank" :href="documentLink" title="查看组件文档">
@@ -920,6 +920,7 @@ export default {
 			deep: true
 		}
 	},
+
 	methods: {
 		addReg() {
 			this.activeData.__config__.regList.push({

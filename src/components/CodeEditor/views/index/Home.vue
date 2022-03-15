@@ -253,6 +253,7 @@ export default {
     if (Array.isArray(this.pageData.fields) && this.pageData.fields.length > 0) {
 			this.drawingList = deepClone(this.pageData.fields)
       this.formConf = deepClone(this.pageData)
+      this.formConf.isForm = true
       delete this.formConf.fields
 			this.activeFormItem(this.drawingList[0])
 		} else {
@@ -490,7 +491,6 @@ export default {
 			this.updateDrawingList(newTag, this.drawingList)
 		},
 		updateDrawingList(newTag, list) {
-			console.log('gogogogo.')
 			const index = list.findIndex(item => item.__config__.formId === this.activeId)
 			if (index > -1) {
 				list.splice(index, 1, newTag)

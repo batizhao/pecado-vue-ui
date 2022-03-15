@@ -70,13 +70,22 @@ const layouts = {
 		)
 	},
 	raw(h, currentItem, index, list) {
+		const { activeItem } = this.$listeners
 		const config = currentItem.__config__
 		const child = renderChildren.apply(this, arguments)
-		return <render v-show={config.show} key={config.renderKey} conf={currentItem} onInput={ event => {
-			this.$set(config, 'defaultValue', event)
-		}}>
-			{child}
-		</render>
+
+		let className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'
+		if (this.formConf.unFocusedComponentBorder) className += ' unfocus-bordered'
+
+		return (
+			<el-col v-show={config.show} span={config.span} class={className}
+				nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
+				<render key={config.renderKey} conf={currentItem}>
+					{child}
+				</render>
+				{components.itemBtns.apply(this, arguments)}
+			</el-col>
+		)
 	},
 	rowTable(h, currentItem, index, list) {
 		const { activeItem } = this.$listeners
@@ -85,7 +94,6 @@ const layouts = {
 
 		let className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'
 		if (this.formConf.unFocusedComponentBorder) className += ' unfocus-bordered'
-
 		return (
 			<el-col v-show={config.show} span={config.span} class={className}
 				nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
@@ -107,9 +115,12 @@ function renderChildren(h, currentItem, index, list) {
 
 	return config.children.map((el, i) => {
 		const layout = layouts[el.__config__.layout]
+
 		if (layout) {
+
 			return layout.call(this, h, el, i, config.children)
 		}
+
 		return layoutIsNotFound.call(this)
 	})
 }
