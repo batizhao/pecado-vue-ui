@@ -3,21 +3,21 @@ import draggable from 'vuedraggable'
 import render from '../../components/render/render'
 
 const components = {
-	itemBtns(h, currentItem, index, list) {
-		const { copyItem, deleteItem } = this.$listeners
-		return [
-			<span class="drawing-item-copy" title="复制" onClick={event => {
+  itemBtns(h, currentItem, index, list) {
+    const { copyItem, deleteItem } = this.$listeners
+    return [
+      <span class="drawing-item-copy" title="复制" onClick={event => {
         copyItem(currentItem, list); event.stopPropagation()
-			}}>
-				<i class="el-icon-copy-document" />
-			</span>,
-			<span class="drawing-item-delete" title="删除" onClick={event => {
-				deleteItem(index, list); event.stopPropagation()
-			}}>
-				<i class="el-icon-delete" />
-			</span>
-		]
-	}
+      }}>
+        <i class="el-icon-copy-document" />
+      </span>,
+      <span class="drawing-item-delete" title="删除" onClick={event => {
+        deleteItem(index, list); event.stopPropagation()
+      }}>
+        <i class="el-icon-delete" />
+      </span>
+    ]
+  }
 }
 const layouts = {
 	colFormItem(h, currentItem, index, list) {
@@ -105,13 +105,49 @@ const layouts = {
 				{components.itemBtns.apply(this, arguments)}
 			</el-col>
 		)
-	}
+	},
+
+  // 自定义组件如表格、文本等用此布局
+  native (h, currentItem, index, list) {
+    const { activeItem } = this.$listeners
+    const config = currentItem.__config__
+    const className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'
+    return (
+      <el-col
+        span={config.span}
+        style={config.span === 0 && { width: 'auto', display: 'block' }}
+        class={className}
+        nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
+      >
+        <render key={config.renderKey} conf={currentItem}></render>
+        {components.itemBtns.apply(this, arguments)}
+      </el-col>
+    )
+  },
+  // 表单容器用此布局
+  parse(h, currentItem, index, list) {
+    const config = currentItem.__config__
+    const { activeItem } = this.$listeners
+    const className = this.activeId === config.formId
+      ? 'drawing-row-item active-from-item'
+      : 'drawing-row-item'
+    return (
+      <el-col
+        span={config.span}
+        class={className}
+        nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
+      >
+        <form-container url={currentItem.url}></form-container>
+        {components.itemBtns.apply(this, arguments)}
+      </el-col>
+    )
+  }
 }
 
 function renderChildren(h, currentItem, index, list) {
-	const config = currentItem.__config__
-	if (!Array.isArray(config.children)) return null
-	// const children = Array.isArray(config.action) ? config.children.concat(config.action) : config.children
+  const config = currentItem.__config__
+  if (!Array.isArray(config.children)) return null
+  // const children = Array.isArray(config.action) ? config.children.concat(config.action) : config.children
 
 	return config.children.map((el, i) => {
 		const layout = layouts[el.__config__.layout]
@@ -126,27 +162,27 @@ function renderChildren(h, currentItem, index, list) {
 }
 
 function layoutIsNotFound() {
-	throw new Error(`没有与${this.currentItem.__config__.layout}匹配的layout`)
+  throw new Error(`没有与${this.currentItem.__config__.layout}匹配的layout`)
 }
 
 export default {
-	components: {
-		render,
-		draggable
-	},
-	props: [
-		'currentItem',
-		'index',
-		'drawingList',
-		'activeId',
-		'formConf'
-	],
-	render(h) {
-		const layout = layouts[this.currentItem.__config__.layout]
-		if (layout) {
-			return layout.call(this, h, this.currentItem, this.index, this.drawingList)
-		}
-		return layoutIsNotFound.call(this)
-	}
+  components: {
+    render,
+    draggable
+  },
+  props: [
+    'currentItem',
+    'index',
+    'drawingList',
+    'activeId',
+    'formConf'
+  ],
+  render(h) {
+    const layout = layouts[this.currentItem.__config__.layout]
+    if (layout) {
+      return layout.call(this, h, this.currentItem, this.index, this.drawingList)
+    }
+    return layoutIsNotFound.call(this)
+  }
 }
 </script>

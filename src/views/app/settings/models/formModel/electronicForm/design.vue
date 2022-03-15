@@ -55,11 +55,6 @@ export default {
         console.log(err);
         this.codeEditorLoading = false;
       });
-    },
-    /** 关闭按钮 */
-    close() {
-      this.$store.dispatch("tagsView/delView", this.$route);
-      this.$router.push({ path: "/app/form", query: { t: Date.now()}})
     }
   }
 }

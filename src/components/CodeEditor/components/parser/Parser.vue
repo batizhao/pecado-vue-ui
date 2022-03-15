@@ -1,6 +1,7 @@
 <script>
 import { deepClone } from "../../utils/index";
 import render from "../render/render.js";
+import { addAllNodesStyleToDocument } from './addStyleToDocument.js'
 
 const ruleTrigger = {
   "el-input": "blur",
@@ -15,26 +16,28 @@ const ruleTrigger = {
 };
 
 const layouts = {
+  // 所有表单类填写组件用此布局
   colFormItem(h, scheme) {
     const config = scheme.__config__;
     const listeners = buildListeners.call(this, scheme);
-
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null;
     if (config.showLabel === false) labelWidth = "0";
     return (
-      <el-col v-show={config.show} span={config.span}>
+      <el-col span={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
         <el-form-item
           label-width={labelWidth}
+          label={config.showLabel ? config.label : ''}
           prop={scheme.__vModel__}
-          label={config.showLabel ? config.label : ""}
         >
-          <render conf={scheme} on={listeners} />
+          <render conf={scheme} on={listeners}></render>
         </el-form-item>
       </el-col>
     );
   },
+  // 行容器组件用此布局
   rowFormItem(h, scheme) {
     let child = renderChildren.apply(this, arguments);
+    const config = scheme.__config__
     if (scheme.type === "flex") {
       child = (
         <el-row
@@ -47,32 +50,37 @@ const layouts = {
       );
     }
     return (
-      <el-col v-show={config.show} span={scheme.span}>
-        <el-row gutter={scheme.gutter}>{child}</el-row>
+      <el-col span={scheme.span}>
+        <el-row gutter={scheme.gutter}>
+          <div class={'drag-wrapper flex-start-wrap component-style-panel-' + config.formId}>
+            {child}
+          </div>
+        </el-row>
       </el-col>
     );
   },
-  rowTable(h, scheme) {
-    const config = scheme.__config__;
-    const listeners = buildListeners.call(this, scheme);
-
-    const child = renderChildren.apply(this, arguments);
-
+  // 自定义组件如表格、文本等用此布局
+  native (h, scheme) {
+    const config = scheme.__config__
+    const listeners = {
+      nativeClick: callback => {
+        callback(this.$refs.formContainerRef)
+      }
+    }
     return (
-      <el-col v-show={config.show} span={config.span}>
-        <render conf={scheme} on={listeners} />
+      <el-col span={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
+        <render conf={scheme} on={listeners}></render>
       </el-col>
-    );
+    )
   },
-  raw(h, scheme) {
+  // 表单容器用此布局
+  parse(h, scheme) {
     const config = scheme.__config__;
-    const listeners = buildListeners.call(this, scheme);
-
-    const child = renderChildren.apply(this, arguments);
-
     return (
-      <render conf={scheme} on={listeners} />
-    );
+      <el-col span={config.span}>
+        <form-container ref="formContainerRef" url={scheme.url}></form-container>
+      </el-col>
+    )
   }
 };
 
@@ -81,7 +89,9 @@ function renderFrom(h) {
 
   if (formConfCopy && !formConfCopy.isForm) {
     return (
-      <div style="height:100%">{renderFormItem.call(this, h, formConfCopy.fields)}</div>
+      <el-row>
+        <div style="height:100%">{renderFormItem.call(this, h, formConfCopy.fields)}</div>
+      </el-row>
     )
   } else {
     return (
@@ -200,6 +210,7 @@ export default {
         }
         if (config.children) this.initFormData(config.children, formData);
       });
+      addAllNodesStyleToDocument(componentList)
     },
     buildRules(componentList, rules) {
       componentList.forEach(cur => {

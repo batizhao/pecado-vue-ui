@@ -2,7 +2,8 @@
 	<div class="right-board">
 		<el-tabs v-model="currentTab" class="center-tabs">
 			<el-tab-pane label="组件属性" name="field" />
-			<el-tab-pane label="表单属性" name="form" v-if="formConf.isForm" />
+			<el-tab-pane label="样式" name="style" />
+			<el-tab-pane label="表单属性" name="form" />
 		</el-tabs>
 		<div class="field-box">
 			<!-- <a class="document-link" target="_blank" :href="documentLink" title="查看组件文档">
@@ -125,9 +126,6 @@
 					<el-form-item v-if="activeData['end-placeholder']!==undefined" label="结束占位">
 						<el-input v-model="activeData['end-placeholder']" placeholder="请输入占位提示" />
 					</el-form-item>
-					<el-form-item v-if="activeData.__config__.span!==undefined" label="表单栅格">
-						<el-slider v-model="activeData.__config__.span" :max="24" :min="1" :marks="{12:''}" @change="spanChange" />
-					</el-form-item>
 					<el-form-item v-if="activeData.__config__.layout==='rowFormItem'&&activeData.gutter!==undefined" label="栅格间隔">
 						<el-input-number v-model="activeData.gutter" :min="0" placeholder="栅格间隔" />
 					</el-form-item>
@@ -204,7 +202,7 @@
 						</el-input>
 					</el-form-item>
 					<el-form-item
-						v-if="activeData['icon']!==undefined && activeData.__config__.tag === 'el-button'"
+						v-if="activeData['icon']!==undefined && activeData.__config__.tag === 'event-button'"
 						label="按钮图标"
 					>
 						<el-input v-model="activeData['icon']" placeholder="请输入按钮图标名称">
@@ -337,10 +335,11 @@
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item
-						v-if="activeData.type !== undefined && activeData.__config__.tag === 'el-button'"
+						v-if="activeData.type !== undefined && activeData.__config__.tag === 'event-button'"
 						label="按钮类型"
 					>
 						<el-select v-model="activeData.type" :style="{ width: '100%' }">
+							<el-option label="default" value="default" />
 							<el-option label="primary" value="primary" />
 							<el-option label="success" value="success" />
 							<el-option label="warning" value="warning" />
@@ -357,11 +356,22 @@
 						<el-input v-model="activeData.__config__.buttonText" placeholder="请输入按钮文字" />
 					</el-form-item>
 					<el-form-item
-						v-if="activeData.__config__.tag === 'el-button'"
+						v-if="activeData.__config__.tag === 'event-button'"
 						label="按钮文字"
 					>
 						<el-input v-model="activeData.__slot__.default" placeholder="请输入按钮文字" />
 					</el-form-item>
+					<el-form-item
+						v-if="activeData.__config__.tag === 'event-button'"
+						label="按钮事件"
+					>
+						<el-select v-model="activeData.eventSettings.emit">
+							<el-option value="buttonEmitSubmit" label="提交"></el-option>
+							<el-option value="buttonEmitSave" label="保存"></el-option>
+							<el-option value="buttonEmitReset" label="重置"></el-option>
+						</el-select>
+					</el-form-item>
+
 					<el-form-item v-if="activeData['range-separator'] !== undefined" label="分隔符">
 						<el-input v-model="activeData['range-separator']" placeholder="请输入分隔符" />
 					</el-form-item>
@@ -560,7 +570,7 @@
 							(activeData.__config__.optionType === 'button' ||
 								activeData.__config__.border ||
 								activeData.__config__.tag === 'el-color-picker' ||
-								activeData.__config__.tag === 'el-button')"
+								activeData.__config__.tag === 'event-button')"
 						label="组件尺寸"
 					>
 						<el-radio-group v-model="activeData.size">
@@ -611,9 +621,6 @@
 					<el-form-item v-if="activeData.disabled !== undefined" label="是否禁用">
 						<el-switch v-model="activeData.disabled" />
 					</el-form-item>
-          <el-form-item v-if="activeData.__config__.show !== undefined" label="是否显示">
-							<el-switch v-model="activeData.__config__.show"/>
-						</el-form-item>
 					<el-form-item v-if="activeData.__config__.tag === 'el-select'" label="能否搜索">
 						<el-switch v-model="activeData.filterable" />
 					</el-form-item>
@@ -623,6 +630,13 @@
 					<el-form-item v-if="activeData.__config__.required !== undefined" label="是否必填">
 						<el-switch v-model="activeData.__config__.required" />
 					</el-form-item>
+
+					<!-- 表单容器的配置 -->
+					<template v-if="activeData.__config__.tag === 'form-container'">
+						<el-form-item label="请求地址">
+							<el-input v-model="activeData.url"></el-input>
+						</el-form-item>
+					</template>
 
 					<template v-if="activeData.__config__.layoutTree">
 						<el-divider>布局结构树</el-divider>
@@ -666,6 +680,10 @@
 						</div>
 					</template>
 				</el-form>
+				<!-- 样式面板 -->
+        <div v-show="currentTab==='style'">
+          <style-panel :activeData="activeData" :drawingList="drawingList"></style-panel>
+        </div>
 				<!-- 表单属性 -->
 				<el-form v-show="currentTab === 'form'" size="small" label-width="90px">
 					<el-form-item label="表单名">
@@ -737,6 +755,7 @@ import {
 } from '../../components/generator/config'
 import { saveFormConf } from '../../utils/db'
 import draggable from 'vuedraggable'
+import stylePanel from './components/stylePanel/index.vue'
 
 const dateTimeFormat = {
 	date: 'yyyy-MM-dd',
@@ -756,9 +775,10 @@ export default {
 	components: {
 		TreeNodeDialog,
 		IconsDialog,
-		draggable
+		draggable,
+		stylePanel
 	},
-	props: ['showField', 'activeData', 'formConf'],
+	props: ['showField', 'activeData', 'formConf', 'drawingList'],
 	data() {
 		return {
 			currentTab: 'field',

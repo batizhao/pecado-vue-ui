@@ -13,6 +13,7 @@
     <PortalSetting
       ref="refPortalSetting"
       :pageData="modelData.pageMetadata"
+      :leftComponents="leftComponents"
       :pageType="modelData.type"
       @save="saveCallBack"
     />
@@ -35,7 +36,8 @@ export default {
         return {
         }
       }
-    }
+    },
+    leftComponents: Array
   },
   components: {
     PortalSetting

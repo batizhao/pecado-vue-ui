@@ -218,7 +218,7 @@ textarea {
 		margin-bottom: 0 !important;
 	}
 	.el-tabs__item {
-		width: 50%;
+		width: 33.33%;
 		text-align: center;
 	}
 	.el-tabs__nav {
@@ -289,4 +289,7 @@ textarea {
 }
 .el-upload__tip {
 	line-height: 1.2;
+}
+.drag-wrapper {
+	min-height: 80px;
 }

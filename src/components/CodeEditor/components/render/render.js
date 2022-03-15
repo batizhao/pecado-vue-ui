@@ -49,6 +49,13 @@ function emitEvents(confClone) {
 
 function buildDataObject(confClone, dataObject) {
 	Object.keys(confClone).forEach(key => {
+		// 暂时先给所有组件绑定个click事件
+		dataObject.on.nativeClick = val => {
+			this.$emit('nativeClick', val)
+		}
+		// 给每个组件添加class，用于样式面板添加样式
+		dataObject.class = 'component-style-panel-' + confClone.__config__.formId
+		
 		const val = confClone[key]
 		if (key === '__vModel__') {
 			vModel.call(this, dataObject, confClone.__config__.defaultValue)

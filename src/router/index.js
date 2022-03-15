@@ -58,6 +58,11 @@ export const constantRoutes = [
     component: (resolve) => require(['@/views/home'], resolve),
     hidden: true
   },
+  {
+    path: '/form', //表单模型
+    component: (resolve) => require(['@/views/form'], resolve),
+    hidden: true
+  },
   // {
   //   path: '/portal',// 门户配置
   //   component: Layout,

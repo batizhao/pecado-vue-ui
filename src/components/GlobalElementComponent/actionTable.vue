@@ -10,6 +10,8 @@
     <el-table
       :data="data"
       v-loading="loading"
+      :row-key="rowKey"
+      :tree-props="treeProps"
       @selection-change="selectionChange"
     >
       <el-table-column
@@ -20,6 +22,7 @@
       >
       </el-table-column>
       <el-table-column
+        v-if="showNumber"
         type="index"
         label="序号"
         width="55"
@@ -78,6 +81,21 @@ export default {
       type: Boolean,
       default: true
     },
+    showNumber: { // 显示序号
+      type: Boolean,
+      default: true
+    },
+    rowKey: {
+      type: String,
+      default: 'id'
+    },
+    treeProps: {
+      type: Object,
+      default: () => ({
+        children: 'children',
+        hasChildren: 'hasChildren'
+      })
+    }
   },
   data () {
     return {

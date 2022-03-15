@@ -69,6 +69,7 @@
 			:active-data="activeData"
 			:form-conf="formConf"
 			:show-field="!!drawingList.length"
+			:drawingList="drawingList"
 			@tag-change="tagChange"
 			@fetch-data="fetchData"
 		/>
@@ -106,9 +107,7 @@ import FormDrawer from './FormDrawer'
 import JsonDrawer from './JsonDrawer'
 import RightPanel from './RightPanel'
 import request from '@/utils/request'
-import {
-	showComponents, formConf
-} from '../../components/generator/config'
+import { formConf } from '../../components/generator/config'
 import {
 	exportDefault, beautifierConf, isNumberStr, titleCase, deepClone, isObjectObject
 } from '../../utils/index'
@@ -152,6 +151,7 @@ export default {
         return {}
       }
     },
+		leftComponents: Array,
     pageType:{
       type:String,
       default:''
@@ -174,13 +174,7 @@ export default {
 			showFileName: false,
 			activeData: drawingDefalut[0],
 			saveDrawingListDebounce: debounce(340, saveDrawingList),
-			saveIdGlobalDebounce: debounce(340, saveIdGlobal),
-			leftComponents: [
-				{
-					title: '展示型组件',
-					list: showComponents
-				}
-			]
+			saveIdGlobalDebounce: debounce(340, saveIdGlobal)
 		}
 	},
 	computed: {
