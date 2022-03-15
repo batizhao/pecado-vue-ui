@@ -778,7 +778,9 @@ export const showComponents =[
 			layout: 'raw',
 			span: 24,
       show:true,
-
+      dataType:'dynamic',
+      url: 'https://www.fastmock.site/mock/f8d7a54fb1e60561e2f720d5a810009d/fg/tableData',
+      method:'get'
 		}
 	}
 ]
