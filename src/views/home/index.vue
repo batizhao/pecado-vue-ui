@@ -36,14 +36,12 @@ export default {
       let p2= getPageModelBy(params2)
       Promise.all([p1,p2]).then(res=>{
         const formConf = JSON.parse(res[0].data.pageMetadata)
-        this.formConf = formConf
         const mainConf = JSON.parse(res[1].data.pageMetadata)
-        console.log(formConf,mainConf)
-        this.formConf.fields[0].props={
+        formConf.fields[0].props={
           formConf:mainConf,
           editData:{}
         }
-        console.log(this.formConf)
+        this.formConf = formConf
       })
     },
     sumbitForm(){}
