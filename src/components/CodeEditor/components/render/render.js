@@ -24,6 +24,7 @@ function vModel(dataObject, defaultValue) {
 
 function mountSlotFiles(h, confClone, children) {
 	const childObjs = componentChild[confClone.__config__.tag]
+  console.log(confClone.__slot__)
 	if (childObjs) {
 		Object.keys(childObjs).forEach(key => {
 			const childFunc = childObjs[key]
@@ -125,6 +126,7 @@ export default {
 
 		// 将json表单配置转化为vue render可以识别的 “数据对象（dataObject）”
 		buildDataObject.call(this, confClone, dataObject)
+
 		return h(this.conf.__config__.tag, dataObject, children)
 	}
 }

@@ -111,3 +111,8 @@ export function listLeaderByDepartmentId(departmentId, type) {
 export function listLeader() {
   return request('/ims/user/dept/leader');
 }
+
+// 根据角色ID查询用户
+export function listUserByRoleId(roleId) {
+  return request(`/ims/user?roleId=${roleId}`);
+}

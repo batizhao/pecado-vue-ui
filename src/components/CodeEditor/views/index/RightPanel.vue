@@ -425,7 +425,7 @@
 						<el-divider />
 					</template>
 
-					<template v-if="['el-cascader', 'el-table'].includes(activeData.__config__.tag)">
+					<template v-if="['el-cascader', 'el-table','up-frame'].includes(activeData.__config__.tag)">
 						<el-divider>选项</el-divider>
 						<el-form-item v-if="activeData.__config__.dataType" label="数据类型">
 							<el-radio-group v-model="activeData.__config__.dataType" size="small">
@@ -940,6 +940,7 @@ export default {
 			deep: true
 		}
 	},
+
 	methods: {
 		addReg() {
 			this.activeData.__config__.regList.push({

@@ -10,7 +10,7 @@
       <div class="wrap">
         <div class="main">
           <parser
-            v-if="parserShow"
+            v-if="parserShow && parserFormConf"
             :form-conf="parserFormConf"
             :edit-data="editData"
             @submit="sumbitForm"
@@ -37,7 +37,7 @@ export default {
     formConf:{
       type:Object,
       default:_=>{
-        return {}
+        return null
       }
     },
     editData:{

@@ -97,6 +97,7 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item icon="el-icon-circle-check" @click.native="handleMenu(scope.row)" v-hasPermi="['ims:role:admin']">{{$t('role.menu')}}</el-dropdown-item>
+              <el-dropdown-item icon="el-icon-circle-check" @click.native="handleUser(scope.row)" v-hasPermi="['ims:role:admin']">{{$t('role.user')}}</el-dropdown-item>
               <el-dropdown-item icon="el-icon-circle-check" @click.native="handleDataScope(scope.row)" v-hasPermi="['ims:role:admin']">{{$t('role.dataScope')}}</el-dropdown-item>
               <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" v-hasPermi="['ims:role:delete']">{{$t('delete')}}</el-dropdown-item>
             </el-dropdown-menu>
@@ -167,6 +168,32 @@
       </div>
     </el-dialog>
 
+    <!-- 添加或编辑角色用户对话框 -->
+    <el-dialog :title="title" :visible.sync="openRoleUser" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+        <el-form-item label="用户" prop="userIds">
+          <el-select v-model="form.userIds" 
+            multiple
+            filterable
+            remote
+            placeholder="请输入关键词"
+            :remote-method="filterUser"
+            @change="change()">
+            <el-option
+              v-for="item in userList"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitUserForm">确 定</el-button>
+        <el-button @click="cancelUserForm">取 消</el-button>
+      </div>
+    </el-dialog>
+
     <!-- 分配角色数据权限对话框 -->
     <el-dialog :title="title" :visible.sync="openDataScope" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
@@ -206,7 +233,8 @@
 </template>
 
 <script>
-import { listRole, getRole, deleteRole, addOrUpdateRole, changeRoleStatus, changeRoleMenus, changeDataScope } from "@/api/ims/role";
+import { listRole, getRole, deleteRole, addOrUpdateRole, changeRoleStatus, changeRoleMenus, changeDataScope, changeRoleUsers } from "@/api/ims/role";
+import { listUser, listUserByRoleId } from "@/api/ims/user";
 import { listMenusByRoleId, listAdminMenu, listDashboardMenu } from "@/api/ims/menu";
 import { listAllDepartment, listDepartmentByRoleId } from "@/api/ims/department";
 import { downLoadExcel } from "@/utils/download";
@@ -216,6 +244,13 @@ export default {
   components: {
   },
   data() {
+    const userNotBlank = (rule, value, callback) => {
+      if (this.form.userIds.length === 0) {
+        callback(new Error("用户不能为空"));
+      } else {
+        callback();
+      }
+    };
     return {
       // 遮罩层
       loading: true,
@@ -233,6 +268,8 @@ export default {
       total: 0,
       // 角色表格数据
       roleList: [],
+      // 用户数据
+      userList: [],
       // 角色菜单数据
       adminMenuList: [],
       // 角色菜单数据
@@ -243,6 +280,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否显示弹出层（用户）
+      openRoleUser: false,
       // 是否显示弹出层（菜单）
       openMenu: false,
       // 是否显示弹出层（数据权限）
@@ -290,6 +329,9 @@ export default {
         code: [
           { required: true, message: this.$t('role.codeNotBlank'), trigger: "blur" }
         ],
+        userIds: [
+          { required: true, validator: userNotBlank, trigger: "blur" }
+        ],
       }
     };
   },
@@ -305,6 +347,10 @@ export default {
         this.total = response.data.total;
         this.loading = false;
       });
+    },
+    // 强制更新 this.form.userIds
+    change() { 
+      this.$forceUpdate(); 
     },
     // 所有菜单节点数据
     getMenuAllCheckedKeys() {
@@ -334,6 +380,11 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.reset();
+    },
+    // 取消按钮（用户）
+    cancelUserForm() {
+      this.openRoleUser = false;
       this.reset();
     },
     // 取消按钮（角色）
@@ -384,6 +435,31 @@ export default {
         this.title = this.$t('role.eidtRole');
       });
     },
+    filterUser(query) {
+      if (query !== '') {
+        this.loading = true;
+        setTimeout(() => {
+          listUser({name: query}).then(response => {
+            this.userList = response.data;
+            this.loading = false;
+          });
+        }, 200);
+      }
+    },
+    /** 分配用户操作 */
+    handleUser(row) {
+      this.reset();
+      const id = row.id || this.ids;
+      listUser().then(response => {
+        this.userList = response.data;
+      });
+      listUserByRoleId(id).then(response => {
+        this.form.id = id;
+        this.form.userIds = response.data.map(item => item.id);
+        this.openRoleUser = true;
+        this.title = "分配用户";
+      });
+    },
     /** 分配菜单操作 */
     handleMenu(row) {
       this.reset();
@@ -430,6 +506,26 @@ export default {
             this.msgSuccess(this.$t('submitMessage'));
             this.open = false;
             this.getList();
+          });
+        }
+      });
+    },
+    /** 提交用户按钮 */
+    submitUserForm() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          const users = this.form.userIds;
+          const optionArray = [];
+          Object.keys(users).forEach((key) =>
+            optionArray.push({
+              roleId: this.form.id,
+              userId: users[key],
+            }),
+          );
+
+          changeRoleUsers(optionArray).then(response => {
+            this.msgSuccess("保存成功");
+            this.openRoleUser = false;
           });
         }
       });

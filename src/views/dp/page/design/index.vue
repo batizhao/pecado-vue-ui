@@ -4,6 +4,7 @@
       <span>门户网站设计</span>
       <span class="d-action">
         <el-button type="primary" @click="save()" size="small">保 存</el-button>
+        <el-button @click="showJSON()" size="small">查看json</el-button>
         <el-button @click="show()" size="small">预览</el-button>
         <el-button @click="empty()" size="small">清 空</el-button>
         <el-button @click="close()" size="small">取 消</el-button>
@@ -64,6 +65,9 @@ export default {
     },
     show() {
       this.close();
+    },
+    showJSON(){
+      this.$refs.refPortalSetting.showJson()
     },
     empty() {
       this.$refs.refPortalSetting.empty()

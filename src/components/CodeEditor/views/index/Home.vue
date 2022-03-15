@@ -255,6 +255,7 @@ export default {
 			this.drawingList = deepClone(this.pageData.fields)
       console.log("🚀 ~ file: Home.vue ~ line 256 ~ mounted ~ this.drawingList ", this.drawingList )
       this.formConf = deepClone(this.pageData)
+      this.formConf.isForm = true
       delete this.formConf.fields
 			this.activeFormItem(this.drawingList[0])
 		} else {
@@ -492,7 +493,6 @@ export default {
 			this.updateDrawingList(newTag, this.drawingList)
 		},
 		updateDrawingList(newTag, list) {
-			console.log('gogogogo.')
 			const index = list.findIndex(item => item.__config__.formId === this.activeId)
 			if (index > -1) {
 				list.splice(index, 1, newTag)

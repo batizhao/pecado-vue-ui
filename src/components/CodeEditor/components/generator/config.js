@@ -620,7 +620,7 @@ export const showComponents =[
 		__config__: {
 			label: '我的待办',
 			labelWidth: null,
-			showLabel: false,
+			showLabel: undefined,
 			changeTag: false,
 			tag: 'my-backlog',
 			tagIcon: 'input',
@@ -637,16 +637,7 @@ export const showComponents =[
 			prepend: '',
 			append: ''
 		},
-		// 其余的为可直接写在组件标签上的属性
-		placeholder: '请输入',
-		style: { width: '100%' },
-		clearable: true,
-		'prefix-icon': '',
-		'suffix-icon': '',
-		maxlength: null,
-		'show-word-limit': false,
-		readonly: false,
-		disabled: false
+		style: { width: '100%' }
 	},
   {
 		// 组件的自定义配置
@@ -663,23 +654,8 @@ export const showComponents =[
 			span: 24,
 			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
 			// 正则校验规则
-			regList: []
 		},
-		// 组件的插槽属性
-		__slot__: {
-			prepend: '',
-			append: ''
-		},
-		// 其余的为可直接写在组件标签上的属性
-		placeholder: '请输入',
-		style: { width: '100%' },
-		clearable: true,
-		'prefix-icon': '',
-		'suffix-icon': '',
-		maxlength: null,
-		'show-word-limit': false,
-		readonly: false,
-		disabled: false
+
 	},
   {
 		// 组件的自定义配置
@@ -691,28 +667,13 @@ export const showComponents =[
 			tag: 'used-process',
 			tagIcon: 'input',
 			defaultValue: undefined,
-			required: true,
-			layout: 'native',
+			required: undefined,
+			layout: 'raw',
 			span: 24,
-			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
-			// 正则校验规则
-			regList: []
+      show:true,
+
 		},
-		// 组件的插槽属性
-		__slot__: {
-			prepend: '',
-			append: ''
-		},
-		// 其余的为可直接写在组件标签上的属性
-		placeholder: '请输入',
-		style: { width: '100%' },
-		clearable: true,
-		'prefix-icon': '',
-		'suffix-icon': '',
-		maxlength: null,
-		'show-word-limit': false,
-		readonly: false,
-		disabled: false
+
 	},
   {
 		// 组件的自定义配置
@@ -724,28 +685,12 @@ export const showComponents =[
 			tag: 'stacked-line',
 			tagIcon: 'input',
 			defaultValue: undefined,
-			required: true,
-			layout: 'native',
+			required: undefined,
+			layout: 'raw',
 			span: 24,
-			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
-			// 正则校验规则
-			regList: []
+      show:true,
 		},
-		// 组件的插槽属性
-		__slot__: {
-			prepend: '',
-			append: ''
-		},
-		// 其余的为可直接写在组件标签上的属性
-		placeholder: '请输入',
-		style: { width: '100%' },
-		clearable: true,
-		'prefix-icon': '',
-		'suffix-icon': '',
-		maxlength: null,
-		'show-word-limit': false,
-		readonly: false,
-		disabled: false
+
 	},
   {
 		// 组件的自定义配置
@@ -757,28 +702,13 @@ export const showComponents =[
 			tag: 'bar-base',
 			tagIcon: 'input',
 			defaultValue: undefined,
-			required: true,
-			layout: 'native',
+			required: undefined,
+			layout: 'raw',
 			span: 24,
-			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
-			// 正则校验规则
-			regList: []
+      show:true,
+
 		},
-		// 组件的插槽属性
-		__slot__: {
-			prepend: '',
-			append: ''
-		},
-		// 其余的为可直接写在组件标签上的属性
-		placeholder: '请输入',
-		style: { width: '100%' },
-		clearable: true,
-		'prefix-icon': '',
-		'suffix-icon': '',
-		maxlength: null,
-		'show-word-limit': false,
-		readonly: false,
-		disabled: false
+
 	},
   {
 		// 组件的自定义配置
@@ -790,28 +720,13 @@ export const showComponents =[
 			tag: 'header-bar',
 			tagIcon: 'input',
 			defaultValue: undefined,
-			required: true,
-			layout: 'native',
+			required: undefined,
+			layout: 'raw',
 			span: 24,
-			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
-			// 正则校验规则
-			regList: []
+      show:true,
+
 		},
-		// 组件的插槽属性
-		__slot__: {
-			prepend: '',
-			append: ''
-		},
-		// 其余的为可直接写在组件标签上的属性
-		placeholder: '请输入',
-		style: { width: '100%' },
-		clearable: true,
-		'prefix-icon': '',
-		'suffix-icon': '',
-		maxlength: null,
-		'show-word-limit': false,
-		readonly: false,
-		disabled: false
+
 	},
   {
 		// 组件的自定义配置
@@ -823,25 +738,13 @@ export const showComponents =[
 			tag: 'nav-bar',
 			tagIcon: 'input',
 			defaultValue: undefined,
-			required: true,
-			layout: 'native',
+			required: undefined,
+			layout: 'raw',
 			span: 24,
-			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
-			// 正则校验规则
-			regList: []
+      show:true,
+
 		},
-		// 组件的插槽属性
-		__slot__: {
-			prepend: '',
-			append: ''
-		},
-		// 其余的为可直接写在组件标签上的属性
-		placeholder: '请输入',
-		clearable: true,
-    style: {},
-		maxlength: null,
-		readonly: false,
-		disabled: false
+
 	},
   {
 		// 组件的自定义配置
@@ -853,26 +756,13 @@ export const showComponents =[
 			tag: 'footer-bar',
 			tagIcon: 'input',
 			defaultValue: undefined,
-			required: true,
-			layout: 'native',
+			required: undefined,
+			layout: 'raw',
 			span: 24,
-			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
-			// 正则校验规则
-			regList: []
-		},
-		// 组件的插槽属性
-		__slot__: {
-			prepend: '',
-			append: ''
-		},
-		// 其余的为可直接写在组件标签上的属性
-		placeholder: '请输入',
-		style: {},
-		clearable: true,
+      show:true,
 
-		maxlength: null,
-		readonly: false,
-		disabled: false
+		},
+
 	},
   {
 		// 组件的自定义配置
@@ -884,26 +774,14 @@ export const showComponents =[
 			tag: 'up-frame',
 			tagIcon: 'input',
 			defaultValue: undefined,
-			required: true,
-			layout: 'native',
+			required: undefined,
+			layout: 'raw',
 			span: 24,
-			// document: 'https://element.eleme.cn/#/zh-CN/component/input',
-			// 正则校验规则
-			regList: []
-		},
-		// 组件的插槽属性
-		__slot__: {
-			prepend: '',
-			append: ''
-		},
-		// 其余的为可直接写在组件标签上的属性
-		placeholder: '请输入',
-		style: {},
-		clearable: true,
-
-		maxlength: null,
-		readonly: false,
-		disabled: false
+      show:true,
+      dataType:'dynamic',
+      url: 'https://www.fastmock.site/mock/f8d7a54fb1e60561e2f720d5a810009d/fg/tableData',
+      method:'get'
+		}
 	}
 ]
 
