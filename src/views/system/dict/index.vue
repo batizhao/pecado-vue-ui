@@ -100,7 +100,7 @@
             type="text"
             icon="el-icon-view"
             @click="handleDictData(scope.row)"
-            v-hasPermi="['dp:code:edit']"
+            v-hasPermi="['system:dict:edit']"
           >详情</el-button>
         </template>
       </el-table-column>
