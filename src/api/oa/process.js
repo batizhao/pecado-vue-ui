@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+// 获取app流程对象
+export function getAppProcess (appId) {
+  return request({
+    url: '/app/init/' + appId,
+    method: 'get'
+  })
+}
+
 // 获取环节的输出路由及路由后的任务环节配置信息
 export function getProcessConfigInfo ({ processDefinitionId, taskDefKey }) {
   return request({

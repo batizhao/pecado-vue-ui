@@ -2,6 +2,18 @@ import request from '@/utils/request'
 
 const url = '/app/form'
 
+// 获取所有数据
+export function getListData (appId) {
+  return request({
+    url: '/app/forms',
+    params: {
+      appId,
+      size: 999,
+      current: 1
+    }
+  })
+}
+
 // 添加编辑
 export function addOrEditData (data) {
   return request({

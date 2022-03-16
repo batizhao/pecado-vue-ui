@@ -6,140 +6,142 @@
     :label-width="labelWidth"
     :label-position="labelPosition"
   >
-    <el-row :gutter="10">
-      <el-col :span="item.span || span" v-for="(item, index) in formOptions" :key="index">
-        <!-- 下拉框 -->
-        <el-form-item 
-           v-if="item.type === 'select' && getShowCondition(item)"
-          :label="item.label"
-          :prop="item.prop"
-        >
-          <el-select
-            v-model="model[item.prop]"
-            style="width: 100%;"
-            clearable
-            :placeholder="'请选择' + item.label"
-            :disabled="item.disabled"
+    <el-row :gutter="10" style="display: flex;flex-wrap: wrap;">
+      <template v-for="(item, index) in formOptions">
+        <el-col :span="item.span || span" :key="index" v-if="getShowCondition(item)">
+          <!-- 下拉框 -->
+          <el-form-item 
+            v-if="item.type === 'select'"
+            :label="item.label"
+            :prop="item.prop"
           >
-            <el-option
-              v-for="option in item.options"
-              :key="option[item.optionsProps ? item.optionsProps.value : 'value']"
-              :label="option[item.optionsProps ? item.optionsProps.label : 'label']"
-              :value="option[item.optionsProps ? item.optionsProps.value : 'value']"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <!-- 树型下拉框 -->
-        <el-form-item
-          v-else-if="item.type === 'treeSelect' && getShowCondition(item)"
-          :label="item.label"
-          :prop="item.prop"
-        >
-          <tree-select
-            v-model="model[item.prop]"
-            :options="transferTreeSelectOptions(item)"
-            :normalizer="normalizer"
-            :placeholder="'请选择' + item.label"
-            :disabled="item.disabled"
-          ></tree-select>
-        </el-form-item>
-        <!-- 数字输入框 -->
-        <el-form-item
-          v-else-if="item.type === 'inputNumber' && getShowCondition(item)"
-          :label="item.label"
-          :prop="item.prop"
-        >
-          <el-input-number
-            v-model="model[item.prop]"
-            controls-position="right"
-            style="width: 100%;"
-            :disabled="item.disabled"
-          ></el-input-number>
-        </el-form-item>
-        <!-- 多行输入框 -->
-        <el-form-item
-          v-else-if="item.type === 'textarea' && getShowCondition(item)"
-          :label="item.label"
-          :prop="item.prop"
-        >
-          <el-input 
-            v-model="model[item.prop]"
-            type="textarea"
-            :rows="3"
-            :placeholder="'请输入' + item.label"
-            :disabled="item.disabled"
-          ></el-input>
-        </el-form-item>
-        <!-- 单选 -->
-        <el-form-item
-          v-else-if="item.type === 'radio' && getShowCondition(item)"
-          :label="item.label"
-          :prop="item.prop"
-        >
-          <el-radio-group
-            v-model="model[item.prop]"
-            :disabled="item.disabled"
-            @change="selectChange(item, model[item.prop])"
-          >
-            <el-radio
-              v-for="option in item.options"
-              :key="option[item.optionsProps ? item.optionsProps.value : 'value']"
-              :label="option[item.optionsProps ? item.optionsProps.value : 'value']"
+            <el-select
+              v-model="model[item.prop]"
+              style="width: 100%;"
+              clearable
+              :placeholder="'请选择' + item.label"
+              :disabled="item.disabled"
+              @change="selectChange(item, model[item.prop])"
             >
-              {{option[item.optionsProps ? item.optionsProps.label : 'label']}}
-            </el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <!-- 多选 -->
-        <el-form-item
-          v-else-if="item.type === 'checkbox' && getShowCondition(item)"
-          :prop="item.prop"
-        >
-          <template slot="label">
-            {{item.label}}
-            <!-- 是否显示全选 -->
-            <el-checkbox
-              v-if="item.checkAll"
-              style="margin-left: 10px;"
-              v-model="model[item.prop + 'CheckAll']"
-              @change="checkAllChange(item, model[item.prop + 'CheckAll'])"
-            >全选</el-checkbox>
-          </template>
-          <el-checkbox-group
-            v-model="model[item.prop]"
-            :disabled="item.disabled"
+              <el-option
+                v-for="option in item.options"
+                :key="option[item.optionsProps ? item.optionsProps.value : 'value']"
+                :label="option[item.optionsProps ? item.optionsProps.label : 'label']"
+                :value="option[item.optionsProps ? item.optionsProps.value : 'value']"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <!-- 树型下拉框 -->
+          <el-form-item
+            v-else-if="item.type === 'treeSelect'"
+            :label="item.label"
+            :prop="item.prop"
           >
-            <el-checkbox
-              v-for="option in item.options"
-              :key="option[item.optionsProps ? item.optionsProps.value : 'value']"
-              :label="option[item.optionsProps ? item.optionsProps.value : 'value']"
+            <tree-select
+              v-model="model[item.prop]"
+              :options="transferTreeSelectOptions(item)"
+              :normalizer="normalizer"
+              :placeholder="'请选择' + item.label"
+              :disabled="item.disabled"
+            ></tree-select>
+          </el-form-item>
+          <!-- 数字输入框 -->
+          <el-form-item
+            v-else-if="item.type === 'inputNumber'"
+            :label="item.label"
+            :prop="item.prop"
+          >
+            <el-input-number
+              v-model="model[item.prop]"
+              controls-position="right"
+              style="width: 100%;"
+              :disabled="item.disabled"
+            ></el-input-number>
+          </el-form-item>
+          <!-- 多行输入框 -->
+          <el-form-item
+            v-else-if="item.type === 'textarea'"
+            :label="item.label"
+            :prop="item.prop"
+          >
+            <el-input 
+              v-model="model[item.prop]"
+              type="textarea"
+              :rows="3"
+              :placeholder="'请输入' + item.label"
+              :disabled="item.disabled"
+            ></el-input>
+          </el-form-item>
+          <!-- 单选 -->
+          <el-form-item
+            v-else-if="item.type === 'radio'"
+            :label="item.label"
+            :prop="item.prop"
+          >
+            <el-radio-group
+              v-model="model[item.prop]"
+              :disabled="item.disabled"
+              @change="selectChange(item, model[item.prop])"
             >
-              {{option[item.optionsProps ? item.optionsProps.label : 'label']}}
-            </el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
-        <!-- 插槽 -->
-        <el-form-item
-          v-else-if="item.type === 'slot' && getShowCondition(item)"
-          :label="item.label"
-          :prop="item.prop"
-        >
-          <slot :name="item.slotName || item.prop"></slot>
-        </el-form-item>
-        <!-- 默认渲染输入框 -->
-        <el-form-item
-          v-else-if="(item.type === undefined || item.type === 'text') && getShowCondition(item)"
-          :label="item.label"
-          :prop="item.prop"
-        >
-          <el-input
-            v-if="getShowCondition(item)"
-            v-model="model[item.prop]"
-            :placeholder="'请输入' + item.label"
-            :disabled="item.disabled"
-          ></el-input>
-        </el-form-item>
-      </el-col>
+              <el-radio
+                v-for="option in item.options"
+                :key="option[item.optionsProps ? item.optionsProps.value : 'value']"
+                :label="option[item.optionsProps ? item.optionsProps.value : 'value']"
+              >
+                {{option[item.optionsProps ? item.optionsProps.label : 'label']}}
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <!-- 多选 -->
+          <el-form-item
+            v-else-if="item.type === 'checkbox'"
+            :prop="item.prop"
+          >
+            <template slot="label">
+              {{item.label}}
+              <!-- 是否显示全选 -->
+              <el-checkbox
+                v-if="item.checkAll"
+                style="margin-left: 10px;"
+                v-model="model[item.prop + 'CheckAll']"
+                @change="checkAllChange(item, model[item.prop + 'CheckAll'])"
+              >全选</el-checkbox>
+            </template>
+            <el-checkbox-group
+              v-model="model[item.prop]"
+              :disabled="item.disabled"
+            >
+              <el-checkbox
+                v-for="option in item.options"
+                :key="option[item.optionsProps ? item.optionsProps.value : 'value']"
+                :label="option[item.optionsProps ? item.optionsProps.value : 'value']"
+              >
+                {{option[item.optionsProps ? item.optionsProps.label : 'label']}}
+              </el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+          <!-- 插槽 -->
+          <el-form-item
+            v-else-if="item.type === 'slot'"
+            :label="item.label"
+            :prop="item.prop"
+          >
+            <slot :name="item.slotName || item.prop"></slot>
+          </el-form-item>
+          <!-- 默认渲染输入框 -->
+          <el-form-item
+            v-else-if="item.type === undefined || item.type === 'text'"
+            :label="item.label"
+            :prop="item.prop"
+          >
+            <el-input
+              v-model="model[item.prop]"
+              :placeholder="'请输入' + item.label"
+              :disabled="item.disabled"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </template>
     </el-row>
   </el-form>
 </template>
@@ -247,7 +249,7 @@ export default {
     // change回调
     selectChange (item, value) {
       if (item.change) {
-        item.change(value)
+        item.change(value, item)
       }
     }
   }

@@ -3,9 +3,9 @@
     <action-form
       :model="form"
       :formOptions="formOptions"
-      label-width="100px"
+      label-width="120px"
       ref="actionFormRef"
-      :span="24"
+      :span="12"
     >
       <template slot="icon">
         <el-input v-model="form.icon">
@@ -18,6 +18,9 @@
 </template>
 <script>
 import { listDashboardMenu } from "@/api/ims/menu";
+import { getListData } from "@/api/app/formModel";
+import { getListData as getListModelData } from "@/api/app/pageModel.js";
+import { getListData as getPageModelList } from '@/api/dp/page/model.js'
 import FontAwesomeSelector from '@/components/FontAwesomeSelector/index.vue'
 const getDefaultFrom = () => {
   return {
@@ -28,12 +31,19 @@ const getDefaultFrom = () => {
     sort: 0,
     path: '',
     permission: '',
-    description: ''
+    description: '',
+    appPageCode: '',
+    pageModelCode: '',
+
+    currentAppPageType: ''
   }
 }
 export default {
   components: {
     FontAwesomeSelector
+  },
+  props: {
+    appId: [Number, String]
   },
   data () {
     return {
@@ -52,6 +62,63 @@ export default {
           rules: [
             { required: true, message: "上级菜单不能为空", trigger: "change" },
           ]
+        },
+        {
+          label: '菜单名称',
+          prop: 'name',
+          rules: [
+            { required: true, message: "菜单名称不能为空", trigger: "change" },
+          ]
+        },
+        {
+          label: '页面模型',
+          prop: 'appPageCode',
+          type: 'select',
+          rules: [
+            { required: true, message: "页面模型不能为空", trigger: "change" }
+          ],
+          options: [],
+          optionsProps: {
+            label: 'name',
+            value: 'id'
+          },
+          change: (value, item) => {
+            const target = item.options.find(t => t.id === value)
+            this.form.currentAppPageType = target.type
+            this.form.pageModelCode = ''
+          }
+        },
+        {
+          label: '表单模型',
+          prop: 'pageModelCode',
+          type: 'select',
+          options: [],
+          optionsProps: {
+            label: 'name',
+            value: 'formKey'
+          },
+          rules: [
+            { required: true, message: "表单模型不能为空", trigger: "change" }
+          ],
+          showCondition: () => {
+            return this.form.currentAppPageType === 'form' || !this.form.currentAppPageType
+          }
+        },
+        {
+          label: '列表模型',
+          prop: 'pageModelCode',
+          type: 'select',
+          options: [],
+          optionsProps: {
+            label: 'name',
+            value: 'code'
+          },
+          rules: [
+            { required: true, message: "列表模型不能为空", trigger: "change" }
+          ],
+          showCondition: () => {
+            return this.form.currentAppPageType === 'list'
+          }
         },
         {
           label: '菜单类型',
@@ -77,19 +144,9 @@ export default {
         {
           label: '路由地址',
           prop: 'path',
-          rules: [
-            { required: true, message: "路由地址不能为空", trigger: "change" },
-          ],
           showCondition (model) {
             return model.type === 'M'
           }
-        },
-        {
-          label: '菜单名称',
-          prop: 'name',
-          rules: [
-            { required: true, message: "菜单名称不能为空", trigger: "change" },
-          ]
         },
         {
           label: '显示排序',
@@ -111,6 +168,7 @@ export default {
     }
   },
   created () {
+    // 获取上级菜单
     listDashboardMenu().then(res => {
       const options = [
         {
@@ -122,6 +180,27 @@ export default {
       const index = this.formOptions.findIndex(item => item.prop === 'pid')
       this.formOptions[index].options = options
     })
+    // 获取表单模型
+    getListData(this.appId).then(res => {
+      const index = this.formOptions.findIndex(item => item.label === '表单模型')
+      this.formOptions[index].options = res.data.records
+    })
+    // 获取列表模型
+    getListModelData(this.appId).then(res => {
+      const index = this.formOptions.findIndex(item => item.label === '列表模型')
+      this.formOptions[index].options = res.data.records
+    })
+    // 获取页面模型类型
+    getPageModelList().then(res => {
+      let list = res.data.records || []
+      list = list.filter(item => {
+        return item.type !== 'layout'
+      })
+      const index = this.formOptions.findIndex(item => item.prop === 'appPageCode')
+      // 排除主页模型和首页模型
+      this.formOptions[index].options = list
+    })
+
   },
   methods: {
     submit () {

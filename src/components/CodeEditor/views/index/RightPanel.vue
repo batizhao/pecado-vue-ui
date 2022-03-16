@@ -631,13 +631,6 @@
 						<el-switch v-model="activeData.__config__.required" />
 					</el-form-item>
 
-					<!-- 表单容器的配置 -->
-					<template v-if="activeData.__config__.tag === 'form-container'">
-						<el-form-item label="请求地址">
-							<el-input v-model="activeData.url"></el-input>
-						</el-form-item>
-					</template>
-
 					<template v-if="activeData.__config__.layoutTree">
 						<el-divider>布局结构树</el-divider>
 						<el-tree

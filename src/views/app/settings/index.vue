@@ -8,6 +8,9 @@
         <el-tab-pane label="表单模型" name="2">
           <electronic-form v-if="activeName === '2'"></electronic-form>
         </el-tab-pane>
+        <el-tab-pane label="列表模型" name="5">
+          <page-model v-if="activeName === '5'"></page-model>
+        </el-tab-pane>
         <el-tab-pane label="流程模型" name="3">
           <process-model v-if="activeName === '3'"></process-model>
         </el-tab-pane>
@@ -20,9 +23,6 @@
               
             </el-tab-pane>
           </el-tabs>
-        </el-tab-pane>
-        <el-tab-pane label="页面模型" name="5">
-          <page-model v-if="activeName === '5'"></page-model>
         </el-tab-pane>
         <el-tab-pane label="数据字典" name="6">
 

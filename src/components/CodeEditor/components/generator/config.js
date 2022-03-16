@@ -794,7 +794,7 @@ export const formModelComponents = [
 			span: 24,
 			layout: 'parse',
 		},
-		url: '/app/form?key=432' // 请求接口
+		url: '' // 请求接口
 	},
 	{
 		__config__: {

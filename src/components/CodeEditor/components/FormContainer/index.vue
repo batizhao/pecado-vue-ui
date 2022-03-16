@@ -29,6 +29,7 @@ export default {
   },
   methods: {
     getFormConf () {
+      if (!this.url) return
       request({
         url:  this.url,
         method: 'get'

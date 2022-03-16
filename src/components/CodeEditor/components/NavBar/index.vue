@@ -23,7 +23,7 @@ export default {
     const getElSubmenu = (item) => {
       const getElSubmenuChildren = (list) => {
         return list.map((item) => {
-          return item.children ? getElSubmenu(item) : getElMenuItem(item)
+          return item.children && item.children.length ? getElSubmenu(item) : getElMenuItem(item)
         })
       }
       return <el-submenu index={item.index}>
@@ -33,7 +33,7 @@ export default {
     }
     const getElMenuChildren = (data) => {
       return data.map((item) => {
-        return item.children ? getElSubmenu(item) : getElMenuItem(item)
+        return item.children && item.children.length ? getElSubmenu(item) : getElMenuItem(item)
       })
     }
     // 注意props的传入

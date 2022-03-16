@@ -29,7 +29,7 @@ const layouts = {
 		let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null
 		if (config.showLabel === false) labelWidth = '0'
 		return (
-			<el-col v-show={config.show} span={config.span} class={className}
+			<el-col span={config.span} class={className}
 				nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
 				<el-form-item label-width={labelWidth}
 					label={config.showLabel ? config.label : ''} required={config.required}>
@@ -56,12 +56,12 @@ const layouts = {
 			</el-row>
 		}
 		return (
-			<el-col v-show={config.show} span={config.span}>
+			<el-col span={config.span}>
 				<el-row gutter={config.gutter} class={className}
 					nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
 					<span class="component-name">{config.componentName}</span>
 					<draggable list={config.children || []} animation={340}
-						group="componentsGroup" class="drag-wrapper">
+						group="componentsGroup" class={'drag-wrapper flex-start-wrap component-style-panel-' + config.formId}>
 						{child}
 					</draggable>
 					{components.itemBtns.apply(this, arguments)}
@@ -78,7 +78,7 @@ const layouts = {
 		if (this.formConf.unFocusedComponentBorder) className += ' unfocus-bordered'
 
 		return (
-			<el-col v-show={config.show} span={config.span} class={className}
+			<el-col span={config.span} class={className}
 				nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
 				<render key={config.renderKey} conf={currentItem}>
 					{child}
@@ -95,7 +95,7 @@ const layouts = {
 		let className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'
 		if (this.formConf.unFocusedComponentBorder) className += ' unfocus-bordered'
 		return (
-			<el-col v-show={config.show} span={config.span} class={className}
+			<el-col span={config.span} class={className}
 				nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}>
 				<render key={config.renderKey} conf={currentItem} onInput={ event => {
 					this.$set(config, 'defaultValue', event)

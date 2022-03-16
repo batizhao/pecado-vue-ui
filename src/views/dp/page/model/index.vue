@@ -67,10 +67,10 @@ export default {
           label: '模板名称',
           prop: 'name'
         },
-        {
-          label: '模板标识',
-          prop: 'code',
-        },
+        // {
+        //   label: '模板标识',
+        //   prop: 'code',
+        // },
         {
           label: '模板类型',
           prop: 'type',
@@ -88,11 +88,11 @@ export default {
           prop: 'name',
           componentType: 'input'
         },
-        {
-          label: '模板标识',
-          prop: 'code',
-          componentType: 'input'
-        },
+        // {
+        //   label: '模板标识',
+        //   prop: 'code',
+        //   componentType: 'input'
+        // },
         {
           label: '模板类型',
           prop: 'type',
@@ -186,12 +186,12 @@ export default {
     getModuleTypeOptions () {
       const data = [
         {
-          label: '首页模型',
-          value: 'index'
+          label: '布局',
+          value: 'layout'
         },
         {
           label: '主页模型',
-          value: 'main'
+          value: 'index'
         },
         {
           label: '列表模型',

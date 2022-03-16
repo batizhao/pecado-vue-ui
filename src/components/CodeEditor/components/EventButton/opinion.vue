@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { getProcessConfigInfo } from '@/api/oa/process.js'
+import { getProcessConfigInfo, getAppProcess } from '@/api/oa/process.js'
 export default {
   data () {
     return {
@@ -99,8 +99,11 @@ export default {
   },
   methods: {
     open () {
-      this.opinionDialogVisible = true
-      this.getProcessConfigInfo()
+      this.getAppProcess(this.$route.query.appId).then(() => {
+        this.opinionDialogVisible = true
+      }).catch(err => {
+        this.msgError(err)
+      })
     },
     opinionDialogConfirm () {
       this.$refs.actionFormRef.getRef().validate(valid => {
@@ -109,10 +112,20 @@ export default {
         }
       })
     },
-    getProcessConfigInfo () {
+    getAppProcess (appId) {
+      return getAppProcess(appId).then(res => {
+      const process = res.data.process
+        if (process) {
+          this.getProcessConfigInfo(process.dto.id, process.view.dto.id)
+        } else {
+          return Promise.reject(`app(ID:${appId})无流程数据`)
+        }
+      })
+    },
+    getProcessConfigInfo (processDefinitionId, taskDefKey) {
       getProcessConfigInfo({
-        processDefinitionId: 1,
-        taskDefKey: 2
+        processDefinitionId,
+        taskDefKey
       }).then(res => {
         console.log("🚀 ~ file: opinion.vue ~ line 117 ~ getProcessConfigInfo ~ res", res)
       })

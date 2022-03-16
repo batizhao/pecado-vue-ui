@@ -1,5 +1,16 @@
 import request from '@/utils/request'
 
+// 获取所有数据
+export function getListData () {
+  return request({
+    url: '/dp/page/models',
+    params: {
+      size: 999,
+      current: 1
+    }
+  })
+}
+
 // 添加编辑
 export function addOrEditTemplate (data) {
   return request({

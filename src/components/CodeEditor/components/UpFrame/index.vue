@@ -5,15 +5,14 @@
       <nav-bar
         style="height:100%; width: 200px;"
         :menuData="navBarMenuData"
-        @select="navBarSelect"
+        :default-active="sideActiveIndex"
+        @selectItem="navBarSelect"
       ></nav-bar>
       <div class="wrap">
         <div class="main">
           <parser
             v-if="parserShow && parserFormConf"
             :form-conf="parserFormConf"
-            :edit-data="editData"
-            @submit="sumbitForm"
             :showSubmit="false"
           />
         </div>
@@ -26,78 +25,92 @@
 <script>
 import Parser from "@/components/CodeEditor/components/parser";
 import { getNavBarData } from '@/api/app/menu.js'
-import { getPageModelBy} from '@/api/dp/page/model.js'
-import { deepClone } from '@/components/CodeEditor/utils/index'
+import { getTemplateDetail} from '@/api/dp/page/model.js'
 export default {
   name: "up-frame",
   components: {
     Parser
   },
-  props: {
-    formConf:{
-      type:Object,
-      default:_=>{
-        return null
-      }
-    },
-    editData:{
-      type:Object,
-      default:_=>{
-        return {}
-      }
-    }
-  },
   data() {
     return {
-      parserFormConf: deepClone(this.formConf),
+      parserFormConf: null,
       parserShow: true,
-      navBarMenuData: [
-        {
-          label: '导航1',
-          index: '1'
-        },
-        {
-          label: '导航2',
-          index: '2',
-          children: [
-            {
-              label: '导航2-1',
-              index: '3'
-            }
-          ]
-        }
-      ]
+      navBarMenuData: []
     };
   },
-  created () {
-    this.getNavBarData()
+  async created () {
+    await this.getNavBarData()
+    const { appPageCode, pageModelCode, appId, id } = this.$route.query
+    if (appPageCode) {
+      this.navBarSelect({ id, appId, appPageCode, pageModelCode })
+      this.sideActiveIndex = id.toString()
+    } else {
+      // 默认选中第一个菜单
+      this.navBarSelect(this.navBarMenuData[0])
+      this.sideActiveIndex = this.navBarMenuData[0].id.toString()
+    }
   },
   methods: {
     // 获取侧边栏菜单数据
     getNavBarData () {
-      getNavBarData().then(res => {
-
+      return getNavBarData().then(res => {
+        const recursion = list => {
+          for (let item of list) {
+            item.label = item.name
+            item.index = String(item.id)
+            if (item.children && item.children.length) {
+              recursion(item.children)
+            }
+          }
+        }
+        recursion(res.data)
+        this.navBarMenuData = this.navBarMenuData.concat(res.data)
       })
     },
     // 侧边菜单选中事件
     navBarSelect (data) {
-    console.log("🚀 ~ file: index.vue ~ line 79 ~ navBarSelect ~ data", data)
-    if (data === '1') {
-      this.getFormFrame()
-    }
-
-    },
-    // 获取表单框架
-    getFormFrame(){
-      this.parserShow = false
-      const params={
-        type:'form',
-        status:"open"
-      }
-      getPageModelBy(params).then(res => {
-        this.parserFormConf = JSON.parse(res.data.pageMetadata)
-        this.parserShow = true
+      this.getFrame(data)
+      const currentPath = this.$route.path
+      this.$router.push({
+        path: currentPath,
+        query: {
+          id: data.id,
+          appId: data.appId,
+          appPageCode: data.appPageCode,
+          pageModelCode: data.pageModelCode
+        }
       })
+    },
+    // 获取框架
+    getFrame({ appPageCode, pageModelCode }){
+      // 通过appPageCode查询出页面模型的类型
+      // 根据类型决定渲染什么页面
+      this.parserShow = false
+      getTemplateDetail(appPageCode).then(res => {
+        const pageMetadata = JSON.parse(res.data.pageMetadata)
+        if (pageMetadata && Object.keys(pageMetadata).length) {
+          if (res.data.type === 'form') {
+            this.getFormCoontainerData(pageMetadata.fields, pageModelCode)
+          }
+          this.parserFormConf = pageMetadata
+          this.parserShow = true
+        }
+      })
+    },
+    // 针对表单容器要传入pageModelCode查询页面JSON
+    getFormCoontainerData (fields, pageModelCode) {
+      // 找到表单容器，并给url赋值
+      const recursion = list => {
+        for (let item of list) {
+          if (item.__config__.tag === 'form-container') {
+            item.url = '/app/form?key=' + pageModelCode
+          }
+          if (item.children && item.children.length) {
+            recursion(item.children)
+          }
+        }
+      }
+      recursion(fields)
     },
     sumbitForm(data) {
       console.log("sumbitForm1提交数据：", data);

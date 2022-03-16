@@ -38,9 +38,9 @@
       :title="dialogTitle"
       :loading="submitLoading"
       @confirm="dialogConfirm"
-      width="30%"
+      width="70%"
     >
-      <add-component v-if="dialogVisible" ref="addComponentRef"></add-component>
+      <add-component v-if="dialogVisible" ref="addComponentRef" :appId="appId"></add-component>
     </action-dialog>
   </div>
 </template>
@@ -120,6 +120,7 @@ export default {
       this.dialogVisible = true
       this.dialogTitle = '编辑应用菜单'
       const rowCopy = JSON.parse(JSON.stringify(row))
+      rowCopy.appPageCode = Number(rowCopy.appPageCode)
       this.$nextTick(() => {
         this.$refs.addComponentRef.form = rowCopy
       })
