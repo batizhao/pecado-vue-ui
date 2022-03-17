@@ -44,7 +44,13 @@
           <span v-else>{{ scope.row[item.prop] }}</span>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="230" align="center">
+      <el-table-column
+        v-if="operationColumn.show"
+        label="操作"
+        align="center"
+        :fixed="operationColumn.fixed"
+        :min-width="operationColumn.width"
+      >
         <template slot-scope="scope">
           <slot name="action" :row="scope.row"></slot>
         </template>
@@ -77,6 +83,10 @@ export default {
       type: Boolean,
       default: true
     },
+    pageSize: {
+      type: Number,
+      default: 10
+    },
     showSelection: { // 显示复选框
       type: Boolean,
       default: true
@@ -84,6 +94,14 @@ export default {
     showNumber: { // 显示序号
       type: Boolean,
       default: true
+    },
+    operationColumn: { // 操作列配置
+      type: Object,
+      default: () => ({
+        show: true, // 是否显示
+        fixed: false, // 固定
+        width: 230 // 宽度
+      })
     },
     rowKey: {
       type: String,
@@ -101,7 +119,7 @@ export default {
     return {
       pagination: {
         currentPage: 1,
-        pageSize: 10,
+        pageSize: this.pageSize,
         total: 0,
         layout: 'total, sizes, prev, pager, next, jumper'
       },

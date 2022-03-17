@@ -53,7 +53,7 @@ import addTemplate from './add.vue'
 import Design from '../design'
 import { addOrEditTemplate, deleteTemplate, changeFormStatus } from '@/api/dp/page/model.js'
 import { deepClone } from '@/components/CodeEditor/utils/index'
-import { showComponents, formModelComponents } from '@/components/CodeEditor/components/generator/config'
+import { indexPageComponents, layoutPageComponents, formModelComponents, listModelComponnets } from '@/components/CodeEditor/components/generator/config'
 export default {
   components: {
     addTemplate,
@@ -116,11 +116,25 @@ export default {
             list: formModelComponents
           }
         ]
-      } else if (this.currentItem.type === 'main' || this.currentItem.type === 'index') {
+      } else if (this.currentItem.type === 'index') {
         return [
           {
             title: '展示型组件',
-            list: showComponents
+            list: indexPageComponents
+          }
+        ]
+      } else if (this.currentItem.type === 'layout') {
+        return [
+          {
+            title: '布局组件',
+            list: layoutPageComponents
+          }
+        ]
+      } else if (this.currentItem.type === 'list') {
+        return [
+          {
+            title: '组件',
+            list: listModelComponnets
           }
         ]
       }

@@ -362,7 +362,7 @@
 						<el-input v-model="activeData.__slot__.default" placeholder="请输入按钮文字" />
 					</el-form-item>
 					<el-form-item
-						v-if="activeData.__config__.tag === 'event-button'"
+						v-if="activeData.__config__.tag === 'event-button' && activeData.eventSettings "
 						label="按钮事件"
 					>
 						<el-select v-model="activeData.eventSettings.emit">

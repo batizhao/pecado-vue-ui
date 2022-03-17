@@ -11,13 +11,13 @@
         ></action-form>
       </el-tab-pane>
       <el-tab-pane label="列表显示" name="2">
-        <list-show ref="listShowRef"></list-show>
+        <list-show ref="listShowRef" :defaultData="listShowDefaultValue"></list-show>
       </el-tab-pane>
       <el-tab-pane label="查询条件" name="3">
         <query-condition ref="queryConditionRef" :defaultData="queryConditionDefaultValue"></query-condition>
       </el-tab-pane>
       <el-tab-pane label="按钮配置" name="4">
-        <buttons-setting ref="buttonSettingRef"></buttons-setting>
+        <buttons-setting ref="buttonSettingRef" :defaultData="buttonsSettingDefaultValue"></buttons-setting>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -133,12 +133,12 @@ export default {
             { required: true, message: "请输入操作列宽度", trigger: "change" },
           ]
         },
-        {
-          label: '横向滚动',
-          prop: 'sideScroll',
-          type: 'radio',
-          options: yesOrNot
-        },
+        // {
+        //   label: '横向滚动',
+        //   prop: 'sideScroll',
+        //   type: 'radio',
+        //   options: yesOrNot
+        // },
         {
           label: '加载前事件',
           prop: 'beforeEvent',
@@ -152,7 +152,9 @@ export default {
           span: 24
         }
       ],
-      queryConditionDefaultValue: []
+      listShowDefaultValue: [],
+      queryConditionDefaultValue: [],
+      buttonsSettingDefaultValue: []
     }
   },
   created () {
@@ -208,8 +210,8 @@ export default {
           // 将除基本信息外的模块数据合并到一个对象中
           const listMetadata = {}
           listMetadata.header = res[1]
-          listMetadata.condition = res[2]
-          listMetadata.button = res[3]
+          listMetadata.button = res[2]
+          listMetadata.condition = res[3]
           const obj = res[0]
           obj.listMetadata = JSON.stringify(listMetadata)
           resolve(obj)

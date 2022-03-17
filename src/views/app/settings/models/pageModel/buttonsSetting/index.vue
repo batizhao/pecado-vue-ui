@@ -6,7 +6,7 @@
     </div>
     <action-edit-table
       ref="actionEditTableRef"
-      :defaultData="defaultData"
+      :defaultData="newDefaultData"
       :tableColumns="tableColumns"
       showSelection
     ></action-edit-table>
@@ -15,6 +15,24 @@
 
 <script>
 export default{
+  props: {
+    defaultData: Array
+  },
+  computed: {
+    newDefaultData () {
+      if (this.defaultData && this.defaultData.length) {
+        return this.defaultData
+      } else {
+        return [
+          { operType: 'create', name: '新增', style: 'text', icon: 'el-icon-plus' },
+          { operType: 'edit', name: '编辑', style: 'text', icon: 'el-icon-edit' },
+          { operType: 'delete', name: '删除', style: 'text', icon: 'el-icon-delete' },
+          { operType: 'batchDelete', name: '批量删除', style: 'text', icon: 'el-icon-delete' }
+        ]
+      }
+
+    }
+  },
   data () {
     return {
       tableColumns: [
@@ -49,9 +67,10 @@ export default{
             { value: 'success' },
             { value: 'info' },
             { value: 'warning' },
-            { value: 'danger' }
+            { value: 'danger' },
+            { value: 'text' }
           ],
-          defaultValue: 'primary',
+          defaultValue: 'text',
           rules: [
             { required: true, trigger: 'change', message: '请选择' }
           ]
@@ -64,16 +83,8 @@ export default{
           label: '请求地址',
           prop: 'addr'
         }
-      ],
-      defaultData: [
-        { operType: 'create', name: '新增', style: 'primary', icon: 'el-icon-plus' },
-        { operType: 'edit', name: '编辑', style: 'primary', icon: 'el-icon-edit' },
-        { operType: 'delete', name: '删除', style: 'danger', icon: 'el-icon-delete' },
-        { operType: 'batchDelete', name: '批量删除', style: 'danger', icon: 'el-icon-delete' }
       ]
     }
-  },
-  created () {
   },
   methods: {
     handleAdd () {

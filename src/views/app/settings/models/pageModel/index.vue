@@ -107,6 +107,10 @@ export default {
       const rowCopy = JSON.parse(JSON.stringify(row))
       this.$nextTick(() => {
         this.$refs.addComponentRef.form = rowCopy
+        const listMetadata = JSON.parse(rowCopy.listMetadata)
+        this.$refs.addComponentRef.listShowDefaultValue = listMetadata.header
+        this.$refs.addComponentRef.queryConditionDefaultValue = listMetadata.condition
+        this.$refs.addComponentRef.buttonsSettingDefaultValue = listMetadata.button
         console.log("🚀 ~ file: index.vue ~ line 110 ~ this.$nextTick ~ rowCopy", rowCopy)
       })
     },

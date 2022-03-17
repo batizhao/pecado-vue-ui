@@ -28,3 +28,14 @@ export function getProcessComments ({ procInstId, taskDefKeyList, orderRule }) {
     }
   })
 }
+
+// 获取送审稿的人员
+export function getCandidate (processDefId, taskDefKey) {
+  return request({
+    url: '/oa/candidate',
+    params: {
+      processDefId,
+      taskDefKey
+    }
+  })
+}

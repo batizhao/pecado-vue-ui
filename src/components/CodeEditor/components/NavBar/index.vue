@@ -16,7 +16,10 @@ export default {
     const getElMenuItem = (item) => {
       return (
         <el-menu-item index={item.index} onClick={() => this.elMenuItemClick(item)}>
-          {item.label}
+          <template slot="title">
+            <i class={item.icon + ' nav-bar-icon'}></i>
+            <span>{item.label}</span>
+          </template>
         </el-menu-item>
       )
     }
@@ -27,7 +30,10 @@ export default {
         })
       }
       return <el-submenu index={item.index}>
-        <span slot="title">{item.label}</span>
+        <template slot="title">
+          <i class={item.icon + ' nav-bar-icon'}></i>
+          <span>{item.label}</span>
+        </template>
         {getElSubmenuChildren(item.children)}
       </el-submenu>
     }
@@ -45,3 +51,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+.nav-bar-icon {
+  font-size: 10px;
+  color: #515151;
+  margin-right: 5px;
+}
+</style>

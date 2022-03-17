@@ -1,5 +1,5 @@
 <template>
-  <div class="form-container" :class="{'gray-back': !formConf}">
+  <div class="form-container" :class="{'gray-back': !url}">
     <parser
       ref="parseRef"
       v-if="formConf"

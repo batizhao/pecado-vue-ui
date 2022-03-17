@@ -8,7 +8,7 @@
     <action-form
       ref="actionFormRef"
       :model="opinionForm"
-      :formOptions="OpinionFormOptions"
+      :formOptions="opinionFormOptions"
       :span="24"
       label-position="top"
     >
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { getProcessConfigInfo, getAppProcess } from '@/api/oa/process.js'
+import { getProcessConfigInfo, getAppProcess, getCandidate } from '@/api/oa/process.js'
 export default {
   data () {
     return {
@@ -36,7 +36,7 @@ export default {
         prop4: '',
         prop6: []
       },
-      OpinionFormOptions: [
+      opinionFormOptions: [
         {
           label: '请输入您的意见',
           prop: 'prop1',
@@ -47,19 +47,10 @@ export default {
           label: '下一节点',
           prop: 'prop2',
           type: 'radio',
-          options: [
-            {
-              label: '送审核',
-              value: '1'
-            },
-            {
-              label: '退回',
-              value: '2'
-            }
-          ],
+          options: [],
           rules: [{ required: true, message: '请选择', trigger: 'change' }],
-          change (value) {
-            console.log("🚀 ~ file: opinion.vue ~ line 62 ~ change ~ value", value)
+          change: (value) => {
+            this.getCandidate(value)
           }
         },
         // {
@@ -76,16 +67,11 @@ export default {
           label: '送核稿',
           prop: 'prop6',
           type: 'checkbox',
-          options: [
-            {
-              label: '小明',
-              value: '1'
-            },
-            {
-              label: '大壮',
-              value: '2'
-            }
-          ],
+          options: [],
+          optionsProps: {
+            label: 'userName',
+            value: 'userId'
+          },
           checkAll: true
         },
         {
@@ -98,6 +84,7 @@ export default {
     }
   },
   methods: {
+    // 打开意见弹窗
     open () {
       this.getAppProcess(this.$route.query.appId).then(() => {
         this.opinionDialogVisible = true
@@ -105,6 +92,7 @@ export default {
         this.msgError(err)
       })
     },
+    // 意见提交
     opinionDialogConfirm () {
       this.$refs.actionFormRef.getRef().validate(valid => {
         if (valid) {
@@ -112,22 +100,36 @@ export default {
         }
       })
     },
+    // 获取app的流程定义id
     getAppProcess (appId) {
       return getAppProcess(appId).then(res => {
       const process = res.data.process
         if (process) {
-          this.getProcessConfigInfo(process.dto.id, process.view.dto.id)
+          this.processDefinitionId = process.dto.id
+          this.getProcessConfigInfo(process.view.dto.id)
         } else {
           return Promise.reject(`app(ID:${appId})无流程数据`)
         }
       })
     },
-    getProcessConfigInfo (processDefinitionId, taskDefKey) {
+    // 获取 下一节点 选项
+    getProcessConfigInfo (taskDefKey) {
       getProcessConfigInfo({
-        processDefinitionId,
+        processDefinitionId: this.processDefinitionId,
         taskDefKey
       }).then(res => {
-        console.log("🚀 ~ file: opinion.vue ~ line 117 ~ getProcessConfigInfo ~ res", res)
+        const index = this.opinionFormOptions.findIndex(item => item.prop === 'prop2')
+        this.opinionFormOptions[index].options = res.data.map(item => ({
+          label: item.name,
+          value: item.node.id
+        }))
+      })
+    },
+    // 获取送审稿人员列表
+    getCandidate (taskDefKey) {
+      getCandidate(this.processDefinitionId, taskDefKey).then(res => {
+        const index = this.opinionFormOptions.findIndex(item => item.prop === 'prop6')
+        this.opinionFormOptions[index].options = res.data
       })
     }
   }

@@ -8,6 +8,7 @@ import NavBar from './NavBar'
 import FooterBar from './FooterBar'
 import UpFrame from './UpFrame'
 import FormContainer from './FormContainer'
+import ListContainer from './ListContainer'
 import EventButton from './EventButton/index.vue'
 Vue.component(MyBacklog.name, MyBacklog)
 Vue.component(UsedProcess.name, UsedProcess)
@@ -19,5 +20,6 @@ Vue.component(NavBar.name, NavBar)
 Vue.component(FooterBar.name, FooterBar)
 Vue.component(UpFrame.name, UpFrame)
 Vue.component(FormContainer.name, FormContainer)
+Vue.component(ListContainer.name, ListContainer)
 Vue.component(EventButton.name, EventButton)
 

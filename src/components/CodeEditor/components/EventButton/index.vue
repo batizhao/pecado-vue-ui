@@ -25,6 +25,7 @@ export default {
   },
   methods: {
     click () {
+      if (!this.eventSettings) return
       const emit = this.eventSettings.emit
       if (!emit) return
       // 通过回调获取表单容器的ref节点

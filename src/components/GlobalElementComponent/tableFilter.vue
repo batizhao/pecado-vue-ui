@@ -1,7 +1,13 @@
 <template>
   <div class="table-filter">
     <el-row :gutter="10">
-      <el-form ref="tableFilterRef" :model="form" label-width="80px" size="small">
+      <el-form
+        v-if="conditions.length"
+        ref="tableFilterRef"
+        :model="form"
+        label-width="80px"
+        size="small"
+      >
         <el-col
           v-bind="grid"
           v-for="(item, index) in conditions"

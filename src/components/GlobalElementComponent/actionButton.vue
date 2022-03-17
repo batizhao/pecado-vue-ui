@@ -71,6 +71,6 @@ export default {
 
 <style scoped>
 .action-button {
-  margin: 0 5px;
+  margin: 0 5px 2px 5px;
 }
 </style>

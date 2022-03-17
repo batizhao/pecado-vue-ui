@@ -1,6 +1,6 @@
 <template>
   <div class="contaner-full">
-    <header-bar></header-bar>
+    <header-bar :menuData="headerBarMenuData"></header-bar>
     <div class="content">
       <nav-bar
         style="height:100%; width: 200px;"
@@ -9,14 +9,16 @@
         @selectItem="navBarSelect"
       ></nav-bar>
       <div class="wrap">
-        <div class="main">
-          <parser
-            v-if="parserShow && parserFormConf"
-            :form-conf="parserFormConf"
-            :showSubmit="false"
-          />
+        <div class="wrap-box">
+          <div class="main">
+            <parser
+              v-if="parserShow && parserFormConf"
+              :form-conf="parserFormConf"
+              :showSubmit="false"
+            />
+          </div>
+          <footer-bar></footer-bar>
         </div>
-        <footer-bar></footer-bar>
       </div>
     </div>
   </div>
@@ -25,7 +27,8 @@
 <script>
 import Parser from "@/components/CodeEditor/components/parser";
 import { getNavBarData } from '@/api/app/menu.js'
-import { getTemplateDetail} from '@/api/dp/page/model.js'
+import { getTemplateDetail } from '@/api/dp/page/model.js'
+import { getDetailData } from '@/api/app/pageModel.js'
 export default {
   name: "up-frame",
   components: {
@@ -35,7 +38,19 @@ export default {
     return {
       parserFormConf: null,
       parserShow: true,
-      navBarMenuData: []
+      navBarMenuData: [],
+      headerBarMenuData: [
+        {
+          label: '导航一',
+          index: '1',
+          icon: 'fa fa-send'
+        },
+        {
+          label: '导航二',
+          index: '2'
+        }
+      ],
+      sideActiveIndex: ''
     };
   },
   async created () {
@@ -90,7 +105,10 @@ export default {
         const pageMetadata = JSON.parse(res.data.pageMetadata)
         if (pageMetadata && Object.keys(pageMetadata).length) {
           if (res.data.type === 'form') {
-            this.getFormCoontainerData(pageMetadata.fields, pageModelCode)
+            this.getFormContainerData(pageMetadata.fields, pageModelCode)
+          }
+          if (res.data.type === 'list') {
+            this.getListContainerData(pageMetadata.fields, pageModelCode)
           }
           this.parserFormConf = pageMetadata
           this.parserShow = true
@@ -98,12 +116,27 @@ export default {
       })
     },
     // 针对表单容器要传入pageModelCode查询页面JSON
-    getFormCoontainerData (fields, pageModelCode) {
+    getFormContainerData (fields, pageModelCode) {
       // 找到表单容器，并给url赋值
       const recursion = list => {
         for (let item of list) {
           if (item.__config__.tag === 'form-container') {
             item.url = '/app/form?key=' + pageModelCode
+          }
+          if (item.children && item.children.length) {
+            recursion(item.children)
+          }
+        }
+      }
+      recursion(fields)
+    },
+    // 针对列表容器要传入pageModelCode查询页面的数据配置
+    getListContainerData (fields, pageModelCode) {
+      // 找到列表容器，并给url赋值
+      const recursion = list => {
+        for (let item of list) {
+          if (item.__config__.tag === 'list-container') {
+            item.url = '/app/list/by/' + pageModelCode
           }
           if (item.children && item.children.length) {
             recursion(item.children)
@@ -128,12 +161,20 @@ export default {
 .content {
   display: flex;
   flex: 1;
+  overflow-x: hidden;
 }
 .wrap {
   display: flex;
   flex: 1;
   height: 100%;
   flex-direction: column;
+  background: #f0f2f5;
+  padding: 15px;
+  box-shadow: 0px 0px 5px 2px #dddbdb inset;
+  overflow: auto;
+  .wrap-box {
+    background: #fff;
+  }
 }
 .main {
   padding: 20px;

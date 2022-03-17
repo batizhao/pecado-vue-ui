@@ -6,7 +6,7 @@
     </div>
     <action-edit-table
       ref="actionEditTableRef"
-      :defaultData="[]"
+      :defaultData="defaultData"
       :tableColumns="tableColumns"
       showSelection
     ></action-edit-table>
@@ -15,6 +15,9 @@
 
 <script>
 export default{
+  props: {
+    defaultData: Array
+  },
   data () {
     return {
       tableColumns: [

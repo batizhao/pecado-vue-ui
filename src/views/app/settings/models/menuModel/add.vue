@@ -74,9 +74,6 @@ export default {
           label: '页面模型',
           prop: 'appPageCode',
           type: 'select',
-          rules: [
-            { required: true, message: "页面模型不能为空", trigger: "change" }
-          ],
           options: [],
           optionsProps: {
             label: 'name',
@@ -84,7 +81,7 @@ export default {
           },
           change: (value, item) => {
             const target = item.options.find(t => t.id === value)
-            this.form.currentAppPageType = target.type
+            this.form.currentAppPageType = target ? target.type : ''
             this.form.pageModelCode = ''
           }
         },
@@ -101,7 +98,7 @@ export default {
             { required: true, message: "表单模型不能为空", trigger: "change" }
           ],
           showCondition: () => {
-            return this.form.currentAppPageType === 'form' || !this.form.currentAppPageType
+            return this.form.currentAppPageType === 'form'
           }
         },
         {
@@ -196,9 +193,14 @@ export default {
       list = list.filter(item => {
         return item.type !== 'layout'
       })
+      // 排除布局模型
       const index = this.formOptions.findIndex(item => item.prop === 'appPageCode')
-      // 排除主页模型和首页模型
       this.formOptions[index].options = list
+
+      // 通过form.appPageCode值判断currentAppPageType的值
+      const target = list.find(item => item.id === this.form.appPageCode)
+      if (target) this.form.currentAppPageType = target.type
+      
     })
 
   },
