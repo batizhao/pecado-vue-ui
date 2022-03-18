@@ -181,13 +181,13 @@ export default {
         },
         {
           label: '按钮配置',
-          activeName: '3',
+          activeName: '4',
           ref: this.$refs.buttonSettingRef.$refs.actionEditTableRef.getRef(),
           value: this.$refs.buttonSettingRef.$refs.actionEditTableRef.getData()
         },
         {
           label: '查询条件',
-          activeName: '4',
+          activeName: '3',
           ref: this.$refs.queryConditionRef.$refs.actionEditTableRef.getRef(),
           value: this.$refs.queryConditionRef.$refs.actionEditTableRef.getData()
         }

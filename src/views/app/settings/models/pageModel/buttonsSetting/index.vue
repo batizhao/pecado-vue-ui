@@ -24,10 +24,11 @@ export default{
         return this.defaultData
       } else {
         return [
-          { operType: 'create', name: '新增', style: 'text', icon: 'el-icon-plus' },
-          { operType: 'edit', name: '编辑', style: 'text', icon: 'el-icon-edit' },
-          { operType: 'delete', name: '删除', style: 'text', icon: 'el-icon-delete' },
-          { operType: 'batchDelete', name: '批量删除', style: 'text', icon: 'el-icon-delete' }
+          { name: '新增', style: 'text', icon: 'el-icon-plus', position: 'outside' },
+          { name: '编辑', style: 'text', icon: 'el-icon-edit', position: 'inside' },
+          { name: '详情', style: 'text', icon: 'el-icon-view', position: 'inside' },
+          { name: '删除', style: 'text', icon: 'el-icon-delete', position: 'inside' },
+          // { name: '批量删除', style: 'text', icon: 'el-icon-delete', position: 'inside' }
         ]
       }
 
@@ -36,21 +37,21 @@ export default{
   data () {
     return {
       tableColumns: [
-        {
-          label: '操作类型',
-          prop: 'operType',
-          type: 'select',
-          options: [
-            { value: 'create', label: '新增' },
-            { value: 'edit', label: '编辑' },
-            { value: 'detail', label: '详情' },
-            { value: 'delete', label: '删除' },
-            { value: 'batchDelete', label: '批量删除' }
-          ],
-          rules: [
-            { required: true, trigger: 'change', message: '请选择' }
-          ]
-        },
+        // {
+        //   label: '操作类型',
+        //   prop: 'operType',
+        //   type: 'select',
+        //   options: [
+        //     { value: 'create', label: '新增' },
+        //     { value: 'edit', label: '编辑' },
+        //     { value: 'detail', label: '详情' },
+        //     { value: 'delete', label: '删除' },
+        //     { value: 'batchDelete', label: '批量删除' }
+        //   ],
+        //   rules: [
+        //     { required: true, trigger: 'change', message: '请选择' }
+        //   ]
+        // },
         {
           label: '按钮名称',
           prop: 'name',
@@ -80,9 +81,41 @@ export default{
           prop: 'icon'
         },
         {
+          label: '按钮位置',
+          prop: 'position',
+          type: 'select',
+          options: [
+            {
+              value: 'outside', label: '表格外'
+            },
+            {
+              value: 'inside', label: '操作列'
+            }
+          ]
+        },
+        {
           label: '请求地址',
           prop: 'addr'
-        }
+        },
+        {
+          label: '请求方法',
+          prop: 'method',
+          type: 'select',
+          options: [
+            { value: 'get' },
+            { value: 'post' },
+            { value: 'put' },
+            { value: 'delete' },
+          ],
+          optionsProps: {
+            label: 'value',
+            value: 'value'
+          }
+        },
+        {
+          label: '跳转地址',
+          prop: 'href'
+        },
       ]
     }
   },

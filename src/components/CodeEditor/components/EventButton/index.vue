@@ -11,6 +11,8 @@
 
 <script>
 import opinion from './opinion.vue'
+import { getDataDetail } from '@/api/app/formModel.js'
+import request from '@/utils/request'
 export default {
   components: { opinion },
   inheritAttrs: false,
@@ -41,10 +43,29 @@ export default {
       this.$refs.opinionRef.open() // 打开意见弹窗
     },
     // 保存
-    buttonEmitSave (formContainerRef) {
-      formContainerRef.submit().then(formData => {
-        console.log("🚀 ~ file: index.vue ~ line 32 ~ buttonEmitSubmit ~ formData", formData)
-      })
+    async buttonEmitSave (formContainerRef) {
+      console.log("🚀 ~ file: index.vue ~ line 45 ~ buttonEmitSave ~ formContainerRef", formContainerRef)
+      // 查询保存接口地址
+      if (!this.submitURL) {
+        const res = await getDataDetail(this.$route.query.pageModelCode)
+        const submitURL = res.data.submitURL
+        if (!submitURL) {
+          this.msgError('未配置保存接口地址')
+          return
+        } else {
+          this.submitURL = submitURL
+        }
+      }
+        formContainerRef.submit().then(formData => {
+          request({
+            url: this.submitURL,
+            method: 'post',
+            data: formData
+          }).then(() => {
+            this.msgSuccess('保存成功')
+          })
+
+        })
     },
     // 重置
     buttonEmitReset (formContainerRef) {

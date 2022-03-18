@@ -84,7 +84,6 @@ export default {
         }
       }
       const { header, button, condition } = data.listMetadata
-      console.log("🚀 ~ file: index.vue ~ line 35 ~ getData ~ data", data)
       // 接口地址
       tableConfig.url = data.addr
       // 生成表头
@@ -120,18 +119,27 @@ export default {
         width: data.operFieldWidth
       }
       // 出现在表格外的按钮类型有
-      const buttonType = ['create']
       // 表格中的操作按钮
-      this.tableActionButtons = button.filter(item => !buttonType.includes(item.operType))
+      this.tableActionButtons = button.filter(item => item.position === 'inside')
       // 表格外的操作按钮， 如新增
-      this.actionButtons = button.filter(item => buttonType.includes(item.operType))
+      this.actionButtons = button.filter(item => item.position === 'outside')
       return tableConfig
     },
     tableActionButtonsClick (row, button) {
-    console.log("🚀 ~ file: index.vue ~ line 112 ~ actionButtonClick ~ row", row)
+    console.log("🚀 ~ file: index.vue ~ line 112 ~ actionButtonClick ~ row", button)
     },
-    actionButtonsClick (item) {
-
+    actionButtonsClick (button) {
+      // 如果有跳转链接，直接跳转
+      if (button.href) {
+        location.href = button.href
+      }
+      // 有接口就调接口
+      if (button.addr) {
+        request({
+          url: button.addr,
+          method: button.method || 'get'
+        })
+      }
     }
   },
   created () {
