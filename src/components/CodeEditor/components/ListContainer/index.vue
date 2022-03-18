@@ -5,15 +5,29 @@
         v-if="tableConfig"
         v-bind="tableConfig"
       >
-        <template v-slot:action="scope">
+        <div slot="actionButtons" style="margin-bottom: 10px;">
           <el-button
             v-for="(item, index) in actionButtons"
             :key="index"
-            @click="actionButtonClick(scope.row, item)"
+            @click="actionButtonsClick(item)"
+            :icon="item.icon"
+            :type="item.style"
+            size="small"
+          >
+            {{item.name}}
+          </el-button>
+        </div>
+        <template v-slot:action="scope">
+          <el-button
+            v-for="(item, index) in tableActionButtons"
+            :key="index"
+            @click="tableActionButtonsClick(scope.row, item)"
             :icon="item.icon"
             :type="item.style"
             size="mini"
-          >{{item.name}}</el-button>
+          >
+            {{item.name}}
+          </el-button>
         </template>
       </action-table>
     </div>
@@ -36,6 +50,7 @@ export default {
     return {
       tableConfig: null,
       actionButtons: [],
+      tableActionButtons: [],
       errorTip: ''
     }
   },
@@ -104,13 +119,19 @@ export default {
         fixed: Boolean(data.fixedOperField) ? 'right' : false,
         width: data.operFieldWidth
       }
-      // 操作按钮
-      this.actionButtons = button
-      console.log("🚀 ~ file: index.vue ~ line 82 ~ getTableConfig ~ tableConfig", tableConfig)
+      // 出现在表格外的按钮类型有
+      const buttonType = ['create']
+      // 表格中的操作按钮
+      this.tableActionButtons = button.filter(item => !buttonType.includes(item.operType))
+      // 表格外的操作按钮， 如新增
+      this.actionButtons = button.filter(item => buttonType.includes(item.operType))
       return tableConfig
     },
-    actionButtonClick (row, button) {
+    tableActionButtonsClick (row, button) {
     console.log("🚀 ~ file: index.vue ~ line 112 ~ actionButtonClick ~ row", row)
+    },
+    actionButtonsClick (item) {
+
     }
   },
   created () {
