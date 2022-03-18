@@ -17,7 +17,7 @@
           class="app-dev-item"
           v-for="item in appListFilter"
           :key="item.id"
-          @click="toAppSettings(item.id)"
+          @click="toAppSettings(item.id, item.name)"
         >
           <div class="icon" :style="{ background: item.background || 'gray' }">
             <i :class="item.icon"></i>
@@ -237,9 +237,12 @@ export default {
       this.currentApp = item
     },
     // 配置应用
-    toAppSettings (appId) {
+    toAppSettings (appId, name) {
       this.$router.push({
-        path: '/app/settings/' + appId
+        path: '/app/settings/' + appId,
+        query: {
+          name
+        }
       })
     }
   }

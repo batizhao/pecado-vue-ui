@@ -1,6 +1,13 @@
 <template>
   <div class="app-setting">
     <div class="app-setting-main">
+      <div class="app-setting-title">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ path: '/app/dev' }">应用开发</el-breadcrumb-item>
+          <el-breadcrumb-item>应用配置</el-breadcrumb-item>
+          <el-breadcrumb-item>{{$route.query.name}}</el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
       <el-tabs v-model="activeName">
         <el-tab-pane label="数据模型" name="1">
           <entity-model v-if="activeName === '1'"></entity-model>
@@ -70,6 +77,9 @@ export default {
     height: 100%;
     padding: 20px 40px;
     overflow: auto;
+    .app-setting-title {
+      margin: 10px 0 20px 0;
+    }
   }
 }
 </style>

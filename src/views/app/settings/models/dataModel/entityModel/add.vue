@@ -17,6 +17,7 @@
       showSelection
       :tableColumns="tableColumns"
       :readonlyCondition="isReadonly"
+      :addRowIndex="-2"
     ></action-edit-table>
   </div>
 </template>
@@ -207,9 +208,38 @@ export default {
           decimal: 0,
           primary: true,
           required: false,
-          increment: true,
-          defaultValue: null
+          defaultValue: ''
         },
+        {
+          name: 'name',
+          type: 'varchar',
+          length: 32,
+          comment: '名称',
+          decimal: 0,
+          primary: false,
+          required: false,
+          defaultValue: ''
+        },
+        {
+          name: 'createTime',
+          type: 'varchar',
+          length: 32,
+          comment: '创建时间',
+          decimal: 0,
+          primary: false,
+          required: false,
+          defaultValue: ''
+        },
+        {
+          name: 'updateTime',
+          type: 'varchar',
+          length: 32,
+          comment: '修改时间',
+          decimal: 0,
+          primary: false,
+          required: false,
+          defaultValue: ''
+        }
       ]
     },
     // 获取数据源列表

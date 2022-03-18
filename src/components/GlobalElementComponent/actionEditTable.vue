@@ -119,7 +119,8 @@ export default {
     readonlyCondition: {
       type: Function, // 传入判断行数据是否只读的函数
       default: () => {}
-    }
+    },
+    addRowIndex: Number // 指定新增行数据时插入的位置,如果为正数就从头插入，如果为负数就从尾插入
   },
   data() {
     return {
@@ -180,7 +181,12 @@ export default {
         }
       })
       row.globalId = this.globalId ++
-      this.form.data.push(row)
+      const tableData = this.form.data
+      if (this.addRowIndex !== undefined) {
+        tableData.splice((this.addRowIndex >= 0 ? 0 : tableData.length) + this.addRowIndex, 0, row)
+      } else {
+        tableData.push(row)
+      }
     },
     deleteRow (callback) {
       if (!this.selectedItems.length) {
@@ -222,9 +228,6 @@ export default {
   }
   .el-form-item .el-form-item {
     margin: 20px 10px;
-  }
-  .el-table td .cell {
-    overflow-y: auto;
   }
 }
 </style>
