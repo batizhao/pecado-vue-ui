@@ -128,6 +128,7 @@ export default {
     tableActionButtonsClick (row, button) {
       // 如果有跳转链接，直接跳转
       if (button.href) {
+        const href = this.analysisUrl(button.href, row)
         // 如果是编辑，那就要把编辑接口和详情接口都传过去
         if (button.operType === 'edit') {
           let url = `&editUrl=${this.analysisUrl(button.addr, row)}&editMethod=${button.method}`
@@ -138,11 +139,11 @@ export default {
           } else {
             this.msgError('请配置详情接口')
           }
-          location.href = `${button.href}${url}`
+          location.href = `${href}${url}`
         } else if (button.operType === 'detail') {
-          location.href = `${button.href}&detailUrl=${this.analysisUrl(button.addr, row)}&detailMethod=${button.method}`
+          location.href = `${href}&detailUrl=${this.analysisUrl(button.addr, row)}&detailMethod=${button.method}`
         } else {
-          location.href = button.href
+          location.href = href
         }
       } else if (button.addr) {
         // 有接口就调接口,但是要解析一下

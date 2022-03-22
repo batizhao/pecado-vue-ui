@@ -29,7 +29,8 @@ import { getProcessConfigInfo, getAppProcess, getCandidate, startProcess, submit
 export default {
   data () {
     return {
-      taskId: this.$route.query.taskId,
+      taskId: this.$route.query.taskId, // 任务id
+      procInstId: undefined, // 流程实例id
       loading: false,
       opinionDialogVisible: false,
       opinionForm: {
@@ -43,7 +44,10 @@ export default {
           label: '请输入您的意见',
           prop: 'suggestion',
           type: 'textarea',
-          rules: [{ required: true, message: '请输入', trigger: 'change' }]
+          rules: [{ required: true, message: '请输入', trigger: 'change' }],
+          showCondition: () => {
+            return this.configObj.config.global.advice
+          }
         },
         {
           label: '下一节点',
@@ -87,7 +91,8 @@ export default {
         //   type: 'textarea'
         // }
       ],
-      opinionEntrustInfo: {} // 委托代理信息
+      opinionEntrustInfo: {}, // 委托代理信息
+      configObj: {} // 关于表单的一些配置
     }
   },
   methods: {
@@ -113,7 +118,7 @@ export default {
             const dataId = res.data.id
             const { pageModelCode, appId } = this.$route.query
             const index = this.opinionFormOptions.findIndex(item => item.prop === 'candidate')
-            const candidateOptions = this.opinionFormOptions[index].options
+            const candidateOptions = this.opinionFormOptions[index].options || []
             const data = {
               processDefinitionId: this.processDefinitionId, // 流程定义id
               current: this.taskDefKey, // 当前环节id
@@ -123,7 +128,7 @@ export default {
                 moduleId: appId, // 应用id
               },
               source: 0, // 用户采用什么提交数据：0 pc、1 手机、2 其他
-              sendSMS: this.processObj.view.config.config.global.sendPhoneMessage, // 手机短信发送标示: false 不发送短信、true 推送短信
+              sendSMS: this.configObj.config.global.sendPhoneMessage, // 手机短信发送标示: false 不发送短信、true 推送短信
               suggestion: this.opinionForm.suggestion ,//处理意见  
               processNodeDTO: [ // 环节
                 {
@@ -137,9 +142,25 @@ export default {
               orgId: 0, // 部门id
             }
             if (this.taskId) {
+              // 从候选人列表里筛选出当前登录人
+              // 获取当前登录人username
+              const username = this.$store.state.user.userInfo.username
+              const user = this.checkUserList.find(item => item.userId === username)
+              const userAttrs = ['userId', 'userName', 'principal', 'orgId', 'orgName', 'roleId', 'roleName']
+              const newUser = {}
+              if (user) {
+                for (let key in user) {
+                  if (userAttrs.includes(key)) {
+                    newUser[key] = user[key]
+                  }
+                }
+              } else {
+                console.error(`没有在checkUserList中找到username为${username}的用户`)
+              }
               Object.assign(data, {
                 taskId: this.taskId,
-                procInstId: ''
+                procInstId: this.procInstId,
+                ...newUser
               })
               submitProcess(data).then(() => {
                 this.msgSuccess('提交成功')
@@ -167,14 +188,24 @@ export default {
       return getAppProcess(appId, taskId).then(res => {
         // 从地址栏判断是否有任务id
         if (this.taskId) {
-          
+          const task = res.data.task
+          if (task) {
+            this.processDefinitionId = task.config.processDefId // 流程定义id
+            this.taskDefKey = task.config.taskDefKey  // 流程审批环节id
+            this.procInstId = task.procInstId // 流程实例id
+            this.configObj = task.config
+            this.checkUserList = task.checkUserList // 任务处理的候选人列表
+            this.getProcessConfigInfo(this.taskDefKey)
+          } else {
+            return Promise.reject(`app(ID:${appId})无流程数据`)
+          }
         } else {
           // 如果没有任务id就从process对象里取值
           const process = res.data.process
           if (process) {
             this.processDefinitionId = process.dto.id // 流程定义id
             this.taskDefKey = process.view.dto.id  // 流程审批环节id
-            this.processObj = process
+            this.configObj = process.view.config
             this.getProcessConfigInfo(this.taskDefKey)
           } else {
             return Promise.reject(`app(ID:${appId})无流程数据`)
@@ -197,7 +228,7 @@ export default {
     },
     // 获取送审稿人员列表
     getCandidate (taskDefKey) {
-      getCandidate(this.processDefinitionId, taskDefKey).then(res => {
+      getCandidate(this.processDefinitionId, taskDefKey, this.procInstId).then(res => {
         const index = this.opinionFormOptions.findIndex(item => item.prop === 'candidate')
         this.opinionFormOptions[index].options = res.data
       })
