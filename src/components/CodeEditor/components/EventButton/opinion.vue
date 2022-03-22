@@ -134,6 +134,7 @@ export default {
                   })
                 }
               ],
+              orgId: 0, // 部门id
             }
             if (this.taskId) {
               Object.assign(data, {
