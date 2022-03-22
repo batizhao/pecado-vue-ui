@@ -24,11 +24,11 @@ export default{
         return this.defaultData
       } else {
         return [
-          { name: '新增', style: 'text', icon: 'el-icon-plus', position: 'outside' },
-          { name: '编辑', style: 'text', icon: 'el-icon-edit', position: 'inside' },
-          { name: '详情', style: 'text', icon: 'el-icon-view', position: 'inside' },
-          { name: '删除', style: 'text', icon: 'el-icon-delete', position: 'inside' },
-          // { name: '批量删除', style: 'text', icon: 'el-icon-delete', position: 'inside' }
+          { operType: 'create', name: '新增', style: 'text', icon: 'el-icon-plus', position: 'outside' },
+          { operType: 'edit', name: '编辑', style: 'text', icon: 'el-icon-edit', position: 'inside' },
+          { operType: 'detail', name: '详情', style: 'text', icon: 'el-icon-view', position: 'inside' },
+          { operType: 'delete', name: '删除', style: 'text', icon: 'el-icon-delete', position: 'inside' },
+          // { operType: 'batchDelete', name: '批量删除', style: 'text', icon: 'el-icon-delete', position: 'inside' }
         ]
       }
 
@@ -37,21 +37,21 @@ export default{
   data () {
     return {
       tableColumns: [
-        // {
-        //   label: '操作类型',
-        //   prop: 'operType',
-        //   type: 'select',
-        //   options: [
-        //     { value: 'create', label: '新增' },
-        //     { value: 'edit', label: '编辑' },
-        //     { value: 'detail', label: '详情' },
-        //     { value: 'delete', label: '删除' },
-        //     { value: 'batchDelete', label: '批量删除' }
-        //   ],
-        //   rules: [
-        //     { required: true, trigger: 'change', message: '请选择' }
-        //   ]
-        // },
+        {
+          label: '操作类型',
+          prop: 'operType',
+          type: 'select',
+          options: [
+            { value: 'create', label: '新增' },
+            { value: 'edit', label: '编辑' },
+            { value: 'detail', label: '详情' },
+            { value: 'delete', label: '删除' },
+            { value: 'batchDelete', label: '批量删除' }
+          ],
+          rules: [
+            { required: true, trigger: 'change', message: '请选择' }
+          ]
+        },
         {
           label: '按钮名称',
           prop: 'name',

@@ -28,7 +28,6 @@
 import Parser from "@/components/CodeEditor/components/parser";
 import { getNavBarData } from '@/api/app/menu.js'
 import { getTemplateDetail } from '@/api/dp/page/model.js'
-import { getDetailData } from '@/api/app/pageModel.js'
 export default {
   name: "up-frame",
   components: {
@@ -55,9 +54,9 @@ export default {
   },
   async created () {
     await this.getNavBarData()
-    const { appPageCode, pageModelCode, appId, id } = this.$route.query
+    const { appPageCode, pageModelCode, id } = this.$route.query
     if (appPageCode) {
-      this.navBarSelect({ id, appId, appPageCode, pageModelCode })
+      this.getFrame({ appPageCode, pageModelCode })
       this.sideActiveIndex = id.toString()
     } else {
       // 默认选中第一个菜单

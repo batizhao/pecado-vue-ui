@@ -5,7 +5,7 @@
     </el-button>
 
     <!-- 意见弹窗 -->
-    <opinion ref="opinionRef"></opinion>
+    <opinion ref="opinionRef" @buttonEmitSave="buttonEmitSave"></opinion>
   </div>
 </template>
 
@@ -22,7 +22,7 @@ export default {
   },
   data () {
     return {
-      
+      formContainerRef: null
     }
   },
   methods: {
@@ -32,44 +32,52 @@ export default {
       if (!emit) return
       // 通过回调获取表单容器的ref节点
       this.$emit('nativeClick', formContainerRef => {
-        this[emit](formContainerRef)
+        this.formContainerRef = formContainerRef
+        this[emit]()
       })
     },
     // 提交
-    buttonEmitSubmit (formContainerRef) {
-      formContainerRef.submit().then(formData => {
+    buttonEmitSubmit () {
+      this.formContainerRef.submit().then(formData => {
         console.log("🚀 ~ file: index.vue ~ line 32 ~ buttonEmitSubmit ~ formData", formData)
+        this.$refs.opinionRef.open() // 打开意见弹窗
       })
-      this.$refs.opinionRef.open() // 打开意见弹窗
     },
     // 保存
-    async buttonEmitSave (formContainerRef) {
-      console.log("🚀 ~ file: index.vue ~ line 45 ~ buttonEmitSave ~ formContainerRef", formContainerRef)
-      // 查询保存接口地址
-      if (!this.submitURL) {
-        const res = await getDataDetail(this.$route.query.pageModelCode)
-        const submitURL = res.data.submitURL
-        if (!submitURL) {
-          this.msgError('未配置保存接口地址')
-          return
-        } else {
-          this.submitURL = submitURL
-        }
-      }
-        formContainerRef.submit().then(formData => {
-          request({
-            url: this.submitURL,
-            method: 'post',
-            data: formData
-          }).then(() => {
-            this.msgSuccess('保存成功')
+    async buttonEmitSave (callback) {
+        const { createUrl, editUrl, createMethod, editMethod } = this.$route.query
+        const url = createUrl || editUrl
+        const method = createMethod || editMethod
+        if (url) {
+          this.formContainerRef.submit().then(formData => {
+            request({
+              url,
+              method,
+              data: formData
+            }).then(res => {
+              this.msgSuccess('保存成功')
+              callback && callback(res)
+            })
           })
-
-        })
+        } else {
+          // 查询保存接口地址
+          const res = await getDataDetail(this.$route.query.pageModelCode)
+          const submitURL = res.data.submitURL
+          this.formContainerRef.submit().then(formData => {
+            request({
+              url: submitURL,
+              method: 'post',
+              data: formData
+            }).then(res => {
+              this.msgSuccess('保存成功')
+              callback && callback(res)
+            })
+          })
+        }
     },
     // 重置
-    buttonEmitReset (formContainerRef) {
-      formContainerRef.reset()
+    buttonEmitReset () {
+      this.formContainerRef.reset()
     }
   }
 }

@@ -3,6 +3,7 @@
   <action-dialog
     v-model="opinionDialogVisible"
     title="输入意见并处理结束"
+    :loading="loading"
     @confirm="opinionDialogConfirm"
   >
     <action-form
@@ -24,33 +25,39 @@
 </template>
 
 <script>
-import { getProcessConfigInfo, getAppProcess, getCandidate } from '@/api/oa/process.js'
+import { getProcessConfigInfo, getAppProcess, getCandidate, startProcess, submitProcess } from '@/api/oa/process.js'
 export default {
   data () {
     return {
+      taskId: this.$route.query.taskId,
+      loading: false,
       opinionDialogVisible: false,
       opinionForm: {
-        prop1: '',
-        prop2: '',
-        prop3: '',
-        prop4: '',
-        prop6: []
+        suggestion: '',
+        target: '',
+        targetName: '',
+        candidate: []
       },
       opinionFormOptions: [
         {
           label: '请输入您的意见',
-          prop: 'prop1',
+          prop: 'suggestion',
           type: 'textarea',
           rules: [{ required: true, message: '请输入', trigger: 'change' }]
         },
         {
           label: '下一节点',
-          prop: 'prop2',
+          prop: 'target',
           type: 'radio',
           options: [],
           rules: [{ required: true, message: '请选择', trigger: 'change' }],
           change: (value) => {
             this.getCandidate(value)
+            this.opinionForm.candidate = []
+            // 存储节点名称
+            const index = this.opinionFormOptions.findIndex(item => item.prop === 'target')
+            const options = this.opinionFormOptions[index].options
+            this.opinionForm.targetName = options.find(item => item.value === value).label
           }
         },
         // {
@@ -65,7 +72,7 @@ export default {
         // },
         {
           label: '送核稿',
-          prop: 'prop6',
+          prop: 'candidate',
           type: 'checkbox',
           options: [],
           optionsProps: {
@@ -74,11 +81,11 @@ export default {
           },
           checkAll: true
         },
-        {
-          label: '附言',
-          prop: 'prop3',
-          type: 'textarea'
-        }
+        // {
+        //   label: '附言',
+        //   prop: 'prop3',
+        //   type: 'textarea'
+        // }
       ],
       opinionEntrustInfo: {} // 委托代理信息
     }
@@ -86,8 +93,11 @@ export default {
   methods: {
     // 打开意见弹窗
     open () {
-      this.getAppProcess(this.$route.query.appId).then(() => {
+      this.getAppProcess(this.$route.query.appId, this.taskId).then(() => {
         this.opinionDialogVisible = true
+        this.$nextTick(() => {
+          this.$refs.actionFormRef.reset()
+        })
       }).catch(err => {
         this.msgError(err)
       })
@@ -97,18 +107,77 @@ export default {
       this.$refs.actionFormRef.getRef().validate(valid => {
         if (valid) {
           console.log('opinionForm', this.opinionForm);
+          // 先调用保存接口获取数据id
+          this.loading = true
+          this.$emit('buttonEmitSave', res => {
+            const dataId = res.data.id
+            const { pageModelCode, appId } = this.$route.query
+            const index = this.opinionFormOptions.findIndex(item => item.prop === 'candidate')
+            const candidateOptions = this.opinionFormOptions[index].options
+            const data = {
+              processDefinitionId: this.processDefinitionId, // 流程定义id
+              current: this.taskDefKey, // 当前环节id
+              dto: {
+                id: dataId,  // 表单保存的id
+                code: pageModelCode, // 表单 编号字段
+                moduleId: appId, // 应用id
+              },
+              source: 0, // 用户采用什么提交数据：0 pc、1 手机、2 其他
+              sendSMS: this.processObj.view.config.config.global.sendPhoneMessage, // 手机短信发送标示: false 不发送短信、true 推送短信
+              suggestion: this.opinionForm.suggestion ,//处理意见  
+              processNodeDTO: [ // 环节
+                {
+                  target: this.opinionForm.target,
+                  flowName: this.opinionForm.targetName,
+                  candidate: candidateOptions.filter(item => {
+                    return this.opinionForm.candidate.includes(item.userId)
+                  })
+                }
+              ],
+            }
+            if (this.taskId) {
+              Object.assign(data, {
+                taskId: this.taskId,
+                procInstId: ''
+              })
+              submitProcess(data).then(() => {
+                this.msgSuccess('提交成功')
+                this.opinionDialogVisible = false
+                this.loading = false
+              }).catch(() => {
+                this.loading = false
+              })
+            } else {
+              console.log("🚀 ~ file: opinion.vue ~ line 120 ~ this.$refs.actionFormRef.getRef ~ data", data)
+              startProcess(data).then(() => {
+                this.msgSuccess('提交成功')
+                this.opinionDialogVisible = false
+                this.loading = false
+              }).catch(() => {
+                this.loading = false
+              })
+            }
+          })
         }
       })
     },
     // 获取app的流程定义id
-    getAppProcess (appId) {
-      return getAppProcess(appId).then(res => {
-      const process = res.data.process
-        if (process) {
-          this.processDefinitionId = process.dto.id
-          this.getProcessConfigInfo(process.view.dto.id)
+    getAppProcess (appId, taskId) {
+      return getAppProcess(appId, taskId).then(res => {
+        // 从地址栏判断是否有任务id
+        if (this.taskId) {
+          
         } else {
-          return Promise.reject(`app(ID:${appId})无流程数据`)
+          // 如果没有任务id就从process对象里取值
+          const process = res.data.process
+          if (process) {
+            this.processDefinitionId = process.dto.id // 流程定义id
+            this.taskDefKey = process.view.dto.id  // 流程审批环节id
+            this.processObj = process
+            this.getProcessConfigInfo(this.taskDefKey)
+          } else {
+            return Promise.reject(`app(ID:${appId})无流程数据`)
+          }
         }
       })
     },
@@ -118,7 +187,7 @@ export default {
         processDefinitionId: this.processDefinitionId,
         taskDefKey
       }).then(res => {
-        const index = this.opinionFormOptions.findIndex(item => item.prop === 'prop2')
+        const index = this.opinionFormOptions.findIndex(item => item.prop === 'target')
         this.opinionFormOptions[index].options = res.data.map(item => ({
           label: item.name,
           value: item.node.id
@@ -128,7 +197,7 @@ export default {
     // 获取送审稿人员列表
     getCandidate (taskDefKey) {
       getCandidate(this.processDefinitionId, taskDefKey).then(res => {
-        const index = this.opinionFormOptions.findIndex(item => item.prop === 'prop6')
+        const index = this.opinionFormOptions.findIndex(item => item.prop === 'candidate')
         this.opinionFormOptions[index].options = res.data
       })
     }

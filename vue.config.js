@@ -68,7 +68,7 @@ const WebpackConf = {
     proxy: {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
-        target: `http://172.168.0.200:8899`,
+        target: `http://2g3998603u.zicp.vip:25388`,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''

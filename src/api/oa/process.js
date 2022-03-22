@@ -1,10 +1,13 @@
 import request from '@/utils/request'
 
 // 获取app流程对象
-export function getAppProcess (appId) {
+export function getAppProcess (appId, taskId) {
   return request({
     url: '/app/init/' + appId,
-    method: 'get'
+    method: 'get',
+    params: {
+      taskId
+    }
   })
 }
 
@@ -37,5 +40,23 @@ export function getCandidate (processDefId, taskDefKey) {
       processDefId,
       taskDefKey
     }
+  })
+}
+
+// 流程启动
+export function startProcess (data) {
+  return request({
+    url: '/oa/start',
+    method: 'post',
+    data
+  })
+}
+
+// 流程提交
+export function submitProcess (data) {
+  return request({
+    url: '/oa/submit',
+    method: 'post',
+    data
   })
 }

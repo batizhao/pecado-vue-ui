@@ -2,6 +2,7 @@
   <div class="list-container" :class="{'gray-back': !url}">
     <div v-if="url">
       <action-table
+        ref="actionTableRef"
         v-if="tableConfig"
         v-bind="tableConfig"
       >
@@ -104,7 +105,7 @@ export default {
         .map(item => ({
           prop: item.code,
           label: item.name,
-          componentType: 'input'
+          componentType: item.showType
         }))
       // 显示分页
       tableConfig.showPagination = Boolean(data.page)
@@ -118,7 +119,6 @@ export default {
         fixed: Boolean(data.fixedOperField) ? 'right' : false,
         width: data.operFieldWidth
       }
-      // 出现在表格外的按钮类型有
       // 表格中的操作按钮
       this.tableActionButtons = button.filter(item => item.position === 'inside')
       // 表格外的操作按钮， 如新增
@@ -126,20 +126,64 @@ export default {
       return tableConfig
     },
     tableActionButtonsClick (row, button) {
-    console.log("🚀 ~ file: index.vue ~ line 112 ~ actionButtonClick ~ row", button)
+      // 如果有跳转链接，直接跳转
+      if (button.href) {
+        // 如果是编辑，那就要把编辑接口和详情接口都传过去
+        if (button.operType === 'edit') {
+          let url = `&editUrl=${this.analysisUrl(button.addr, row)}&editMethod=${button.method}`
+          // 还要查一个详情接口
+          const detailButton = this.tableActionButtons.find(item => item.operType === 'detail')
+          if (detailButton) {
+            url += `&detailUrl=${this.analysisUrl(button.addr, row)}&detailMethod=${button.method}`
+          } else {
+            this.msgError('请配置详情接口')
+          }
+          location.href = `${button.href}${url}`
+        } else if (button.operType === 'detail') {
+          location.href = `${button.href}&detailUrl=${this.analysisUrl(button.addr, row)}&detailMethod=${button.method}`
+        } else {
+          location.href = button.href
+        }
+      } else if (button.addr) {
+        // 有接口就调接口,但是要解析一下
+        const url = this.analysisUrl(button.addr, row)
+        request({
+          url: url,
+          method: button.method || 'get'
+        }).then(() => {
+          // 如果是删除类型按钮，就重新请求表格
+          if (button.operType === 'delete') {
+            this.$refs.actionTableRef.getTableData()
+          }
+        })
+      }
     },
     actionButtonsClick (button) {
       // 如果有跳转链接，直接跳转
       if (button.href) {
-        location.href = button.href
-      }
-      // 有接口就调接口
-      if (button.addr) {
+        // 如果是新增，就要把新增的接口传过去
+        if (button.operType === 'create') {
+          location.href = `${button.href}&createUrl=${button.addr}&createMethod=${button.method}`
+        } else {
+          location.href = button.href
+        }
+      } else if (button.addr) {
+        // 有接口就调接口
         request({
           url: button.addr,
           method: button.method || 'get'
         })
       }
+    },
+    analysisUrl (url, row) {
+      // 匹配花括号中的属性名
+      const result = url.match(/{[^{}]+}/g)
+      if (result) {
+        result.map(res => {
+          url = url.replace(res, row[res.match(/{(.+)}/)[1]])
+        })
+      }
+      return url
     }
   },
   created () {

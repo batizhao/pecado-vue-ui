@@ -5,6 +5,7 @@
       v-if="formConf"
       :form-conf="formConf"
       :showSubmit="false"
+      :editData="editData"
     ></parser>
     <div class="tip" v-else>{{`表单容器 ${errorTip}`}}</div>
   </div>
@@ -24,12 +25,15 @@ export default {
   data () {
     return {
       formConf: null,
+      editData: null,
       errorTip: ''
     }
   },
   methods: {
-    getFormConf () {
+    async getFormConf () {
       if (!this.url) return
+      // 如果是编辑或者详情页 就要获取数据做一下数据回填
+      await this.getFormData()
       request({
         url:  this.url,
         method: 'get'
@@ -39,6 +43,22 @@ export default {
         this.formConf = data
       }).catch(err => {
         this.errorTip = err
+      })
+    },
+    // 获取表单数据
+    getFormData () {
+      return new Promise((resolve, reject) => {
+        const { detailUrl } = this.$route.query
+        if (detailUrl) {
+          request({
+            url: detailUrl
+          }).then(res => {
+            this.editData = res.data
+            resolve()
+          })
+        } else {
+          resolve()
+        }
       })
     },
     submit () {

@@ -46,7 +46,7 @@ export default {
           options: [
             {
               label: '单行文本',
-              value: 'text'
+              value: 'input'
             },
             {
               label: '数字',
@@ -54,11 +54,11 @@ export default {
             },
             {
               label: '日期',
-              value: 'datetime'
+              value: 'date'
             },
             {
               label: '时间',
-              time: 'time'
+              value: 'time'
             }
           ],
           rules: [
@@ -77,9 +77,9 @@ export default {
       this.newDefaultData = this.defaultData.map(item => {
         const oldItem = oldData.find(oldItem => oldItem.code === item.code && oldItem.name === item.name)
         return {
-          ...item,
           display: true,
-          showType: 'text',
+          showType: 'input',
+          ...item,
           ...oldItem
         }
       })
