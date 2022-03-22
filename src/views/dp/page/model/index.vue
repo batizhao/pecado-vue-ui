@@ -67,10 +67,10 @@ export default {
           label: '模板名称',
           prop: 'name'
         },
-        // {
-        //   label: '模板标识',
-        //   prop: 'code',
-        // },
+        {
+          label: '模板标识',
+          prop: 'code',
+        },
         {
           label: '模板类型',
           prop: 'type',
@@ -80,6 +80,10 @@ export default {
           label: '状态',
           prop: 'status',
           slotName: 'status'
+        },
+        {
+          prop: 'createTime',
+          label: '创建时间'
         }
       ],
       conditions: [
