@@ -425,7 +425,7 @@
 						<el-divider />
 					</template>
 
-					<template v-if="['el-cascader', 'el-table','up-frame', 'my-backlog'].includes(activeData.__config__.tag)">
+					<template v-if="['el-cascader', 'el-table','up-frame'].includes(activeData.__config__.tag)">
 						<el-divider>选项</el-divider>
 						<el-form-item v-if="activeData.__config__.dataType" label="数据类型">
 							<el-radio-group v-model="activeData.__config__.dataType" size="small">
@@ -632,6 +632,10 @@
 					</el-form-item>
 					<el-form-item label="是否隐藏">
 						<el-switch v-model="activeData.__config__.hidden" />
+					</el-form-item>
+
+					<el-form-item v-if="['my-backlog'].includes(activeData.__config__.tag)" label="请求地址">
+						<el-input v-model="activeData.url"></el-input>
 					</el-form-item>
 
 					<template v-if="activeData.__config__.layoutTree">

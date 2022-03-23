@@ -3,7 +3,7 @@
     <el-tabs v-model="activeName">
       <el-tab-pane label="我的待办" name="first">
         <div class="backlog-list">
-          <div class="backlog-item" v-for="(item, index) in data" :key="index" @click="go(index)">
+          <div class="backlog-item" v-for="(item, index) in unfinishedList" :key="index" @click="jumpToForm(item)">
             <div class="backlog-item__title">{{ item.title }}</div>
             <div class="backlog-item__tag">{{ item.createName }}</div>
             <div class="backlog-item__date">{{ item.createTime }}</div>
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import request from '@/utils/request'
 export default {
   name: 'my-backlog',
   components: {},
@@ -27,31 +28,31 @@ export default {
   data () {
     return {
       activeName: 'first',
-      data: []
+      unfinishedList: []
     }
   },
-  computed: {},
-  created () { },
-  mounted () { 
-    console.log('url：', this.url);
+  created () {
+    this.getUnfinishedList()
   },
   methods: {
-    go (index) {
-      this.$message('gogogogogo' + index);
-    }
-  },
-  watch: {
-    $attrs: {
-      handler (val) {
-        console.log('右侧组件传参', val);
-        try {
-          if (val.data.records) {
-            this.data = val.data.records
-          }
-        } catch (error) { }
-      },
-      deep: true
+    // 获取代码的列表
+    getUnfinishedList () {
+      request({
+        url: this.url,
+        method: 'get'
+      }).then(res => {
+        this.unfinishedList = res.data.records || []
+      })
     },
+    // 跳转
+    jumpToForm (item) {
+      this.$router.push({
+        path: item.url,
+        query: {
+          taskId: item.taskId
+        }
+      })
+    }
   }
 }
 </script>
@@ -64,7 +65,8 @@ export default {
 .backlog-item {
   display: flex;
   justify-content: space-between;
-  padding: 5px 0;
+  padding: 8px;
+  font-size: 14px;
   &__title {
     width: calc(100% - 280px);
     overflow: hidden;
@@ -73,11 +75,12 @@ export default {
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     padding-right: 100px;
+    color: #1890ff;
   }
   &__tag,
   &__date {
-    width: 100px;
-    color: #333;
+    width: 190px;
+    color: #98a5ba;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -86,6 +89,10 @@ export default {
   }
   &__tag {
     margin-right: 80px;
+  }
+  &:hover {
+    background: #f6faff;
+    cursor: pointer;
   }
 }
 </style>
