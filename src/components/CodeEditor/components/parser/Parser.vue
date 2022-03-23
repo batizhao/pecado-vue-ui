@@ -23,7 +23,7 @@ const layouts = {
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null;
     if (config.showLabel === false) labelWidth = "0";
     return (
-      <el-col span={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
+      <el-col v-show={!config.hidden} span={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
         <el-form-item
           label-width={labelWidth}
           label={config.showLabel ? config.label : ''}
@@ -50,7 +50,7 @@ const layouts = {
       );
     }
     return (
-      <el-col span={scheme.span}>
+      <el-col v-show={!config.hidden} span={scheme.span}>
         <el-row gutter={scheme.gutter}>
           <div class={'drag-wrapper flex-start-wrap component-style-panel-' + config.formId}>
             {child}
@@ -68,7 +68,7 @@ const layouts = {
       }
     }
     return (
-      <el-col span={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
+      <el-col v-show={!config.hidden} span={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
         <render conf={scheme} on={listeners}></render>
       </el-col>
     )
@@ -77,7 +77,7 @@ const layouts = {
   parse(h, scheme) {
     const config = scheme.__config__;
     return (
-      <el-col span={config.span}>
+      <el-col v-show={!config.hidden} span={config.span}>
         <form-container ref="formContainerRef" url={scheme.url}></form-container>
       </el-col>
     )

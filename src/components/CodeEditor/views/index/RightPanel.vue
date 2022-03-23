@@ -630,6 +630,9 @@
 					<el-form-item v-if="activeData.__config__.required !== undefined" label="是否必填">
 						<el-switch v-model="activeData.__config__.required" />
 					</el-form-item>
+					<el-form-item label="是否隐藏">
+						<el-switch v-model="activeData.__config__.hidden" />
+					</el-form-item>
 
 					<template v-if="activeData.__config__.layoutTree">
 						<el-divider>布局结构树</el-divider>

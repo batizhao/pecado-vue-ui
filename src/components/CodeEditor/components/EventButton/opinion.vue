@@ -75,7 +75,7 @@ export default {
         //   }
         // },
         {
-          label: '送核稿',
+          label: '处理人',
           prop: 'candidate',
           type: 'checkbox',
           options: [],
