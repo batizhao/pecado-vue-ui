@@ -207,6 +207,7 @@ export default {
           comment: '主键',
           decimal: 0,
           primary: true,
+          increment: true,
           required: false,
           defaultValue: ''
         },
