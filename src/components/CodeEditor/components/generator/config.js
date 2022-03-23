@@ -615,29 +615,28 @@ export const layoutComponents = [
 
 export const indexPageComponents =[
   {
-    // 组件的自定义配置
-    __config__: {
-      label: '我的待办',
-      labelWidth: null,
-      showLabel: undefined,
-      changeTag: false,
-      tag: 'my-backlog',
-      tagIcon: 'input',
-      defaultValue: undefined,
-      required: true,
-      layout: 'native',
-      span: 24,
-      // document: 'https://element.eleme.cn/#/zh-CN/component/input',
-      // 正则校验规则
-      regList: []
-    },
-    // 组件的插槽属性
-    __slot__: {
-      prepend: '',
-      append: ''
-    },
-    style: { width: '100%' }
-  },
+		// 组件的自定义配置
+		__config__: {
+			label: '我的待办',
+			labelWidth: null,
+			showLabel: undefined,
+			changeTag: false,
+			tag: 'my-backlog',
+			tagIcon: 'input',
+			defaultValue: undefined,
+			required: undefined,
+			layout: 'raw',
+			span: 24,
+			document: 'https://element.eleme.cn/#/zh-CN/component/tabs',
+      dataType:'dynamic',
+      url: '/oa/task/todo',
+      dataConsumer: 'data',
+			dataPath: 'data',
+      method:'get',
+      show:true,
+		},
+    url: '/oa/task/todo',
+	},
   {
     // 组件的自定义配置
     __config__: {
