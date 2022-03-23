@@ -31,6 +31,7 @@ export default {
     return {
       taskId: this.$route.query.taskId, // 任务id
       procInstId: undefined, // 流程实例id
+      formData: null, // 表单数据
       loading: false,
       opinionDialogVisible: false,
       opinionForm: {
@@ -97,7 +98,8 @@ export default {
   },
   methods: {
     // 打开意见弹窗
-    open () {
+    open (formData) {
+      this.formData = formData
       this.getAppProcess(this.$route.query.appId, this.taskId).then(() => {
         this.opinionDialogVisible = true
         this.$nextTick(() => {
@@ -125,7 +127,7 @@ export default {
     },
     // 提交
     submit () {
-      const { pageModelCode, appId } = this.$route.query
+      const { appId } = this.$route.query
       const index = this.opinionFormOptions.findIndex(item => item.prop === 'candidate')
       const candidateOptions = this.opinionFormOptions[index].options || []
       const data = {
@@ -133,7 +135,8 @@ export default {
         current: this.taskDefKey, // 当前环节id
         dto: {
           id: this.$route.query.formDataId,  // 表单保存的id
-          code: pageModelCode, // 表单 编号字段
+          code: this.formData.code, // 表单字段为code的值
+          title: this.formData.title, // 表单字段为title的值
           moduleId: appId, // 应用id
         },
         source: 0, // 用户采用什么提交数据：0 pc、1 手机、2 其他

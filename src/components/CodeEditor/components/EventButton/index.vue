@@ -40,7 +40,7 @@ export default {
     buttonEmitSubmit () {
       this.formContainerRef.submit().then(formData => {
         console.log("🚀 ~ file: index.vue ~ line 32 ~ buttonEmitSubmit ~ formData", formData)
-        this.$refs.opinionRef.open() // 打开意见弹窗
+        this.$refs.opinionRef.open(formData) // 打开意见弹窗
       })
     },
     // 保存
