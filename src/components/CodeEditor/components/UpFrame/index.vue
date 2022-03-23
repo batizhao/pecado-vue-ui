@@ -91,7 +91,6 @@ export default {
     },
     // 侧边菜单选中事件
     navBarSelect (data) {
-      this.getFrame(data)
       const currentPath = this.$route.path
       this.$router.push({
         path: currentPath,
