@@ -92,6 +92,35 @@
               </el-form-item>
             </template>
           </el-table-column>
+          <el-table-column
+            v-if="operationColumn.show"
+            label="操作"
+            align="center"
+            :fixed="operationColumn.fixed"
+            :min-width="operationColumn.width"
+          >
+            <template slot-scope="scope">
+              <!-- 上移下移功能按钮 -->
+              <template v-if="operationColumn.movable">
+                <el-button
+                  type="text"
+                  icon="el-icon-caret-top"
+                  size="mini"
+                  @click="moveUp(scope)"
+                  :disabled="scope.$index === 0"
+                >上移</el-button>
+                <el-button
+                  type="text"
+                  icon="el-icon-caret-bottom"
+                  size="mini"
+                  @click="moveDown(scope)"
+                  :disabled="scope.$index ==form.data.length - 1"
+                >下移</el-button>
+              </template>
+              <!-- 其他插槽 -->
+              <slot name="action" :row="scope.row"></slot>
+            </template>
+          </el-table-column>
         </el-table>
       </el-form-item>
     </el-form>
@@ -120,6 +149,15 @@ export default {
       type: Function, // 传入判断行数据是否只读的函数
       default: () => {}
     },
+    operationColumn: { // 操作列配置
+      type: Object,
+      default: () => ({
+        show: false, // 是否显示
+        fixed: false, // 固定
+        width: undefined, // 宽度
+        movable: false // 可上下移动
+      })
+    },
     addRowIndex: Number // 指定新增行数据时插入的位置,如果为正数就从头插入，如果为负数就从尾插入
   },
   data() {
@@ -140,6 +178,12 @@ export default {
     }
   },
   methods: {
+    getRef () {
+      return this.$refs.form
+    },
+    getData () {
+      return JSON.parse(JSON.stringify(this.form.data))
+    },
     setDefaultValue () {
       const defaultData = JSON.parse(JSON.stringify(this.defaultData || []))
       defaultData.map(item => {
@@ -205,11 +249,13 @@ export default {
         this.selectedItems = []
       }
     },
-    getRef () {
-      return this.$refs.form
+    moveUp (scope) {
+      const delItem = this.form.data.splice(scope.$index, 1)
+      this.form.data.splice(scope.$index - 1, 0, delItem[0])
     },
-    getData () {
-      return JSON.parse(JSON.stringify(this.form.data))
+    moveDown (scope) {
+      const delItem = this.form.data.splice(scope.$index, 1)
+      this.form.data.splice(scope.$index + 1, 0, delItem[0])
     }
   }
 }

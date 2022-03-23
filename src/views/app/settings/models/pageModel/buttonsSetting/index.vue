@@ -6,10 +6,12 @@
     </div>
     <action-edit-table
       ref="actionEditTableRef"
+      showSelection
       :defaultData="newDefaultData"
       :tableColumns="tableColumns"
-      showSelection
-    ></action-edit-table>
+      :operationColumn="{ show: true, movable: true }"
+    >
+    </action-edit-table>
   </div>
 </template>
 

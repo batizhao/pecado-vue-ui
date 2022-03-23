@@ -139,13 +139,12 @@ export default {
           const detailButton = this.tableActionButtons.find(item => item.operType === 'detail')
           if (detailButton) {
             Object.assign(query, {
-              detailUrl: this.analysisUrl(button.addr, row),
-              detailMethod: button.method
+              detailUrl: this.analysisUrl(detailButton.addr, row),
+              detailMethod: detailButton.method
             })
           } else {
             this.msgError('请配置详情接口')
           }
-          console.log("🚀 ~ file: index.vue ~ line 149 ~ tableActionButtonsClick ~ query", query)
           this.$router.push({ path: href, query })
         } else if (button.operType === 'detail') { // 如果是详情，就只要传详情的接口和方法
           const query = {

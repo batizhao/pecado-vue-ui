@@ -100,7 +100,7 @@ export default {
       default: () => ({
         show: true, // 是否显示
         fixed: false, // 固定
-        // width: 230 // 宽度
+        width: undefined // 宽度
       })
     },
     rowKey: {
