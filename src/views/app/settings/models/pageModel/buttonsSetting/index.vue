@@ -26,10 +26,10 @@ export default{
         return this.defaultData
       } else {
         return [
-          { operType: 'create', name: '新增', style: 'text', icon: 'el-icon-plus', position: 'outside' },
-          { operType: 'edit', name: '编辑', style: 'text', icon: 'el-icon-edit', position: 'inside' },
-          { operType: 'detail', name: '详情', style: 'text', icon: 'el-icon-view', position: 'inside' },
-          { operType: 'delete', name: '删除', style: 'text', icon: 'el-icon-delete', position: 'inside' },
+          // { operType: 'create', name: '新增', style: 'text', icon: 'el-icon-plus', position: 'outside' },
+          // { operType: 'edit', name: '编辑', style: 'text', icon: 'el-icon-edit', position: 'inside' },
+          // { operType: 'detail', name: '详情', style: 'text', icon: 'el-icon-view', position: 'inside' },
+          // { operType: 'delete', name: '删除', style: 'text', icon: 'el-icon-delete', position: 'inside' },
           // { operType: 'batchDelete', name: '批量删除', style: 'text', icon: 'el-icon-delete', position: 'inside' }
         ]
       }
