@@ -11,14 +11,23 @@
       :tableColumns="tableColumns"
       :operationColumn="{ show: true, movable: true }"
     >
+      <template v-slot:icon="scope">
+        <el-input v-model="scope.row.icon" size="mini" @focus="$refs.fontAwesomeSelectorRef.open()">
+        </el-input>
+        <font-awesome-selector ref="fontAwesomeSelectorRef" v-model="scope.row.icon"></font-awesome-selector>
+      </template>
     </action-edit-table>
   </div>
 </template>
 
 <script>
+import FontAwesomeSelector from '@/components/FontAwesomeSelector/index.vue'
 export default{
   props: {
     defaultData: Array
+  },
+  components: {
+    FontAwesomeSelector
   },
   computed: {
     newDefaultData () {
@@ -80,7 +89,8 @@ export default{
         },
         {
           label: '按钮图标',
-          prop: 'icon'
+          prop: 'icon',
+          type: 'slot'
         },
         {
           label: '按钮位置',

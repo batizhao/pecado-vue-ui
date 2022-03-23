@@ -1,20 +1,37 @@
 <template>
   <action-dialog v-model="visible" title="选择图标" width="80%" @confirm="confirm">
-    <ul class="icon-list">
-      <li
-        v-for="(item, index) in iconList"
-        :key="index"
-        @click="chooseIcon(item)"
-        :class="{ active: 'fa fa-' + item === currentIcon}"
-      >
-        <i :class="'fa fa-' + item"></i>
-      </li>
-    </ul>
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="FontAwesome" name="first">
+        <ul class="icon-list">
+          <li
+            v-for="(item, index) in iconList"
+            :key="index"
+            @click="chooseIcon(item)"
+            :class="{ active: 'fa fa-' + item === currentIcon}"
+          >
+            <i :class="'fa fa-' + item"></i>
+          </li>
+        </ul>
+      </el-tab-pane>
+      <el-tab-pane label="Element" name="second">
+        <ul class="icon-list">
+          <li
+            v-for="(item, index) in elementIconList"
+            :key="index"
+            @click="chooseElIcon(item)"
+            :class="{ active: item === currentIcon}"
+          >
+            <i :class="item"></i>
+          </li>
+        </ul>
+      </el-tab-pane>
+    </el-tabs>
   </action-dialog>
 </template>
 
 <script>
 import iconList from './iconList.js'
+import elementIconList from './elementIconList.js'
 export default {
   props: {
     value: String
@@ -23,7 +40,9 @@ export default {
     return {
       visible: false,
       iconList,
-      currentIcon: ''
+      elementIconList,
+      currentIcon: '',
+      activeName: 'first'
     }
   },
   methods: {
@@ -36,6 +55,9 @@ export default {
     },
     chooseIcon (icon) {
       this.currentIcon = 'fa fa-' + icon
+    },
+    chooseElIcon (icon) {
+      this.currentIcon = icon
     }
   }
   
