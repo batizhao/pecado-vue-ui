@@ -625,7 +625,7 @@ export const indexPageComponents =[
 			tagIcon: 'input',
 			defaultValue: undefined,
 			required: undefined,
-			layout: 'raw',
+			layout: 'native',
 			span: 24,
 			document: 'https://element.eleme.cn/#/zh-CN/component/tabs',
       dataType:'dynamic',

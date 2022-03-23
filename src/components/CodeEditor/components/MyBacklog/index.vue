@@ -43,6 +43,7 @@ export default {
   watch: {
     $attrs: {
       handler (val) {
+        console.log('右侧组件传参', val);
         try {
           if (val.data.records) {
             this.data = val.data.records
