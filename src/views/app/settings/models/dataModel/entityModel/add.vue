@@ -112,7 +112,7 @@ export default {
           label: '字段长度',
           prop: 'length',
           type: 'inputNumber',
-          min: 1,
+          min: 0,
           defaultValue: 255
         },
         {
@@ -222,8 +222,8 @@ export default {
         },
         {
           name: 'createTime',
-          type: 'varchar',
-          length: 32,
+          type: 'datetime',
+          length: 0,
           comment: '创建时间',
           decimal: 0,
           primary: false,
@@ -232,8 +232,8 @@ export default {
         },
         {
           name: 'updateTime',
-          type: 'varchar',
-          length: 32,
+          type: 'datetime',
+          length: 0,
           comment: '修改时间',
           decimal: 0,
           primary: false,
