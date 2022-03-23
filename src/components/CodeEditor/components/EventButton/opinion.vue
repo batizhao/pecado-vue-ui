@@ -112,76 +112,83 @@ export default {
       this.$refs.actionFormRef.getRef().validate(valid => {
         if (valid) {
           console.log('opinionForm', this.opinionForm);
-          // 先调用保存接口获取数据id
-          this.loading = true
-          this.$emit('buttonEmitSave', res => {
-            const dataId = res.data.id
-            const { pageModelCode, appId } = this.$route.query
-            const index = this.opinionFormOptions.findIndex(item => item.prop === 'candidate')
-            const candidateOptions = this.opinionFormOptions[index].options || []
-            const data = {
-              processDefinitionId: this.processDefinitionId, // 流程定义id
-              current: this.taskDefKey, // 当前环节id
-              dto: {
-                id: dataId,  // 表单保存的id
-                code: pageModelCode, // 表单 编号字段
-                moduleId: appId, // 应用id
-              },
-              source: 0, // 用户采用什么提交数据：0 pc、1 手机、2 其他
-              sendSMS: this.configObj.config.global.sendPhoneMessage, // 手机短信发送标示: false 不发送短信、true 推送短信
-              suggestion: this.opinionForm.suggestion ,//处理意见  
-              processNodeDTO: [ // 环节
-                {
-                  target: this.opinionForm.target,
-                  flowName: this.opinionForm.targetName,
-                  candidate: candidateOptions.filter(item => {
-                    return this.opinionForm.candidate.includes(item.userId)
-                  })
-                }
-              ],
-              orgId: 0, // 部门id
-            }
-            if (this.taskId) {
-              // 从候选人列表里筛选出当前登录人
-              // 获取当前登录人username
-              const username = this.$store.state.user.userInfo.username
-              const user = this.checkUserList.find(item => item.userId === username)
-              const userAttrs = ['userId', 'userName', 'principal', 'orgId', 'orgName', 'roleId', 'roleName']
-              const newUser = {}
-              if (user) {
-                for (let key in user) {
-                  if (userAttrs.includes(key)) {
-                    newUser[key] = user[key]
-                  }
-                }
-              } else {
-                console.error(`没有在checkUserList中找到username为${username}的用户`)
-              }
-              Object.assign(data, {
-                taskId: this.taskId,
-                procInstId: this.procInstId,
-                ...newUser
-              })
-              submitProcess(data).then(() => {
-                this.msgSuccess('提交成功')
-                this.opinionDialogVisible = false
-                this.loading = false
-              }).catch(() => {
-                this.loading = false
-              })
-            } else {
-              console.log("🚀 ~ file: opinion.vue ~ line 120 ~ this.$refs.actionFormRef.getRef ~ data", data)
-              startProcess(data).then(() => {
-                this.msgSuccess('提交成功')
-                this.opinionDialogVisible = false
-                this.loading = false
-              }).catch(() => {
-                this.loading = false
-              })
-            }
-          })
+          // 如果还未保存过就调用下保存接口
+          if (this.$route.query.formDataId === undefined) {
+            this.$emit('buttonEmitSave', () => {
+              this.submit()
+            })
+          } else {
+            this.submit()
+          }
         }
       })
+    },
+    // 提交
+    submit () {
+      const { pageModelCode, appId } = this.$route.query
+      const index = this.opinionFormOptions.findIndex(item => item.prop === 'candidate')
+      const candidateOptions = this.opinionFormOptions[index].options || []
+      const data = {
+        processDefinitionId: this.processDefinitionId, // 流程定义id
+        current: this.taskDefKey, // 当前环节id
+        dto: {
+          id: this.$route.query.formDataId,  // 表单保存的id
+          code: pageModelCode, // 表单 编号字段
+          moduleId: appId, // 应用id
+        },
+        source: 0, // 用户采用什么提交数据：0 pc、1 手机、2 其他
+        sendSMS: this.configObj.config.global.sendPhoneMessage, // 手机短信发送标示: false 不发送短信、true 推送短信
+        suggestion: this.opinionForm.suggestion ,//处理意见  
+        processNodeDTO: [ // 环节
+          {
+            target: this.opinionForm.target,
+            flowName: this.opinionForm.targetName,
+            candidate: candidateOptions.filter(item => {
+              return this.opinionForm.candidate.includes(item.userId)
+            })
+          }
+        ],
+        orgId: 0, // 部门id
+      }
+      this.loading = true
+      if (this.taskId) {
+        // 从候选人列表里筛选出当前登录人
+        // 获取当前登录人username
+        const username = this.$store.state.user.userInfo.username
+        const user = this.checkUserList.find(item => item.userId === username)
+        const userAttrs = ['userId', 'userName', 'principal', 'orgId', 'orgName', 'roleId', 'roleName']
+        const newUser = {}
+        if (user) {
+          for (let key in user) {
+            if (userAttrs.includes(key)) {
+              newUser[key] = user[key]
+            }
+          }
+        } else {
+          console.error(`没有在checkUserList中找到username为${username}的用户`)
+        }
+        Object.assign(data, {
+          taskId: this.taskId,
+          procInstId: this.procInstId,
+          ...newUser
+        })
+        submitProcess(data).then(() => {
+          this.msgSuccess('提交成功')
+          this.opinionDialogVisible = false
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+        })
+      } else {
+        console.log("🚀 ~ file: opinion.vue ~ line 120 ~ this.$refs.actionFormRef.getRef ~ data", data)
+        startProcess(data).then(() => {
+          this.msgSuccess('提交成功')
+          this.opinionDialogVisible = false
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+        })
+      }
     },
     // 获取app的流程定义id
     getAppProcess (appId, taskId) {

@@ -129,21 +129,32 @@ export default {
       // 如果有跳转链接，直接跳转
       if (button.href) {
         const href = this.analysisUrl(button.href, row)
-        // 如果是编辑，那就要把编辑接口和详情接口都传过去
-        if (button.operType === 'edit') {
-          let url = `&editUrl=${this.analysisUrl(button.addr, row)}&editMethod=${button.method}`
+        if (button.operType === 'edit') { // 如果是编辑，那就要把编辑接口和详情接口和方法都传过去，还要加上行数据的id
+          let query = {
+            formDataId: row.id,
+            editUrl: this.analysisUrl(button.addr, row),
+            editMethod: button.method
+          }
           // 还要查一个详情接口
           const detailButton = this.tableActionButtons.find(item => item.operType === 'detail')
           if (detailButton) {
-            url += `&detailUrl=${this.analysisUrl(button.addr, row)}&detailMethod=${button.method}`
+            Object.assign(query, {
+              detailUrl: this.analysisUrl(button.addr, row),
+              detailMethod: button.method
+            })
           } else {
             this.msgError('请配置详情接口')
           }
-          location.href = `${href}${url}`
-        } else if (button.operType === 'detail') {
-          location.href = `${href}&detailUrl=${this.analysisUrl(button.addr, row)}&detailMethod=${button.method}`
+          console.log("🚀 ~ file: index.vue ~ line 149 ~ tableActionButtonsClick ~ query", query)
+          this.$router.push({ path: href, query })
+        } else if (button.operType === 'detail') { // 如果是详情，就只要传详情的接口和方法
+          const query = {
+            detailUrl: this.analysisUrl(button.addr, row),
+            detailMethod: button.method
+          }
+          this.$router.push({ path: href, query })
         } else {
-          location.href = href
+          this.$router.push({ path: href })
         }
       } else if (button.addr) {
         // 有接口就调接口,但是要解析一下
@@ -164,9 +175,13 @@ export default {
       if (button.href) {
         // 如果是新增，就要把新增的接口传过去
         if (button.operType === 'create') {
-          location.href = `${button.href}&createUrl=${button.addr}&createMethod=${button.method}`
+          const query = {
+            createUrl: button.addr,
+            createMethod: button.method
+          }
+          this.$router.push({ path: button.href, query })
         } else {
-          location.href = button.href
+          this.$router.push({ path: button.href })
         }
       } else if (button.addr) {
         // 有接口就调接口

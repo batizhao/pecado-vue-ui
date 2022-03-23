@@ -39,32 +39,40 @@ export default {
       parserShow: true,
       navBarMenuData: [],
       headerBarMenuData: [
-        {
-          label: '导航一',
-          index: '1',
-          icon: 'fa fa-send'
-        },
-        {
-          label: '导航二',
-          index: '2'
-        }
+        // {
+        //   label: '导航一',
+        //   index: '1',
+        //   icon: 'fa fa-send'
+        // },
+        // {
+        //   label: '导航二',
+        //   index: '2'
+        // }
       ],
       sideActiveIndex: ''
     };
   },
-  async created () {
-    await this.getNavBarData()
-    const { appPageCode, pageModelCode, id } = this.$route.query
-    if (appPageCode) {
-      this.getFrame({ appPageCode, pageModelCode })
-      this.sideActiveIndex = id.toString()
-    } else {
-      // 默认选中第一个菜单
-      this.navBarSelect(this.navBarMenuData[0])
-      this.sideActiveIndex = this.navBarMenuData[0].id.toString()
+  watch: {
+    $route () {
+      this.setDefault()
     }
   },
+  async created () {
+    await this.getNavBarData()
+    this.setDefault()
+  },
   methods: {
+    setDefault () {
+      const { appPageCode, pageModelCode, id } = this.$route.query
+      if (appPageCode) {
+        this.getFrame({ appPageCode, pageModelCode })
+        this.sideActiveIndex = id.toString()
+      } else {
+        // 默认选中第一个菜单
+        this.navBarSelect(this.navBarMenuData[0])
+        this.sideActiveIndex = this.navBarMenuData[0].id.toString()
+      }
+    },
     // 获取侧边栏菜单数据
     getNavBarData () {
       return getNavBarData().then(res => {
