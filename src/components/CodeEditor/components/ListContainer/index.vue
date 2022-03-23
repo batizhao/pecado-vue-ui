@@ -143,7 +143,12 @@ export default {
               detailMethod: detailButton.method
             })
           } else {
-            this.msgError('请配置详情接口')
+            // this.msgError('请配置详情接口')
+            // 如果没有配置详情接口，就给个默认值
+            Object.assign(query, {
+              detailUrl: this.analysisUrl(button.addr + '/{id}', row),
+              detailMethod: 'get'
+            })
           }
           this.$router.push({ path: href, query })
         } else if (button.operType === 'detail') { // 如果是详情，就只要传详情的接口和方法
