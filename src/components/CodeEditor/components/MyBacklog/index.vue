@@ -12,7 +12,7 @@
       </el-tab-pane>
     </el-tabs>
     <div class="active">
-      <el-button icon="el-icon-refresh" circle></el-button>
+      <el-button icon="el-icon-refresh" circle @click="getUnfinishedList"></el-button>
     </div>
   </el-card>
 </template>
@@ -61,6 +61,10 @@ export default {
   position: absolute;
   right: 20px;
   top: 15px;
+  .el-button {
+    padding: 6px;
+    font-size: 10px;
+  }
 }
 .backlog-item {
   display: flex;
