@@ -253,8 +253,6 @@ export default {
 $iconSize: 80px;
 .app-dev {
   height: 100%;
-  background: #f0f2f5;
-  padding: 15px;
   .app-dev-main {
     background: #fff;
     height: 100%;

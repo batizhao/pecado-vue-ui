@@ -70,8 +70,6 @@ export default {
 <style lang="scss" scoped>
 .app-setting {
   height: 100%;
-  background: #f0f2f5;
-  padding: 15px;
   .app-setting-main {
     background: #fff;
     height: 100%;
