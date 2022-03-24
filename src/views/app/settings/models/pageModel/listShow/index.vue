@@ -9,6 +9,7 @@
       :defaultData="defaultData"
       :tableColumns="tableColumns"
       showSelection
+      :operationColumn="{ show: true, movable: true }"
     ></action-edit-table>
   </div>
 </template>
