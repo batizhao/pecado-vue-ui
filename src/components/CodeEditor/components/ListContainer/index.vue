@@ -198,7 +198,7 @@ export default {
     analysisUrl (url, row) {
       // 匹配花括号中的属性名,如果值里面还有花括号就继续匹配
       const reg = /{[^{}]+}/g
-      const count = 0 // 限制解析次数，防止死循环
+      let count = 0 // 限制解析次数，防止死循环
       const recursion = () => {
         const result = url.match(reg)
         if (result) {
