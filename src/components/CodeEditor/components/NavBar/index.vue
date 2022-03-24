@@ -45,7 +45,7 @@ export default {
     // 注意props的传入
     return(
       <el-menu props={this.$attrs} onSelect={this.elMenuSelect}>
-        {getElMenuChildren(this.menuData)}
+        {this.menuData && getElMenuChildren(this.menuData)}
       </el-menu>
     )
   }

@@ -726,6 +726,12 @@ export const layoutPageComponents = [
       layout: 'native',
       span: 24,
     },
+    menuData: [
+      {
+        label: '导航一',
+        index: '1'
+      }
+    ]
 
   },
   {
