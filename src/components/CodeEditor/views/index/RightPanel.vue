@@ -1124,79 +1124,131 @@ export default {
 }
 </script>
 
+<style lang="scss">
+.right-board {
+  .right-scrollbar {
+    .el-scrollbar__view {
+      padding: 12px 18px 15px 15px;
+    }
+  }
+  .el-scrollbar__wrap {
+    box-sizing: border-box;
+    overflow-x: hidden !important;
+    margin-bottom: 0 !important;
+  }
+  .center-tabs{
+    .el-tabs__header{
+      margin-bottom: 0!important;
+    }
+    .el-tabs__item{
+      width: 33.3%;
+      text-align: center;
+    }
+    .el-tabs__nav{
+      width: 100%;
+    }
+  }
+  .el-scrollbar {
+    height: 100%;
+  }
+}
+</style>
 <style lang="scss" scoped>
 .right-board {
-	position: absolute;
-	right: 0;
-	top: 0;
-	padding-top: 3px;
-	width: 350px;
-	height: 100%;
-	.field-box {
-		overflow: hidden;
-		position: relative;
-		box-sizing: border-box;
-		height: calc(100% - 42px);
-	}
-	.el-scrollbar {
-		height: 100%;
-	}
+  padding-top: 3px;
+  width: 360px;
+  .field-box {
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    height: calc(100vh - 97px);
+  }
 }
 .select-item {
-	display: flex;
-	box-sizing: border-box;
-	border: 1px dashed #fff;
-	& .close-btn {
-		cursor: pointer;
-		color: #f56c6c;
-	}
-	& .el-input + .el-input {
-		margin-left: 4px;
-	}
+  display: flex;
+  box-sizing: border-box;
+  border: 1px dashed #fff;
+  & .close-btn {
+    cursor: pointer;
+    color: #f56c6c;
+  }
+  & .el-input + .el-input {
+    margin-left: 4px;
+  }
 }
 .select-item + .select-item {
-	margin-top: 4px;
+  margin-top: 4px;
 }
 .select-item.sortable-chosen {
-	border: 1px dashed #409eff;
+  border: 1px dashed #409eff;
 }
 .select-line-icon {
-	padding: 0 4px;
-	line-height: 32px;
-	font-size: 22px;
-	color: #777;
+  padding: 0 4px;
+  line-height: 32px;
+  font-size: 22px;
+  color: #777;
 }
 .option-drag {
-	cursor: move;
+  cursor: move;
 }
 .time-range {
-	.el-date-editor {
-		width: 227px;
-	}
-	::v-deep .el-icon-time {
-		display: none;
-	}
+  .el-date-editor {
+    width: 227px;
+  }
+  ::v-deep .el-icon-time {
+    display: none;
+  }
 }
 .document-link {
-	display: block;
-	position: absolute;
-	left: 0;
-	top: 0;
-	z-index: 1;
-	border-radius: 0 0 6px 0;
-	width: 26px;
-	height: 26px;
-	background: #409eff;
-	cursor: pointer;
-	line-height: 26px;
-	text-align: center;
-	font-size: 18px;
-	color: #fff;
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  border-radius: 0 0 6px 0;
+  width: 26px;
+  height: 26px;
+  background: #409eff;
+  cursor: pointer;
+  line-height: 26px;
+  text-align: center;
+  font-size: 18px;
+  color: #fff;
 }
 .node-label {
-	font-size: 14px;
+  font-size: 14px;
 }
 .node-icon {
-	color: #bebfc3;
+  color: #bebfc3;
+}
+</style>
+<style lang="scss" scoped>
+.reg-item{
+  padding: 12px 6px;
+  background: #f8f8f8;
+  position: relative;
+  border-radius: 4px;
+  .close-btn{
+    position: absolute;
+    right: -6px;
+    top: -6px;
+    display: block;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    z-index: 1;
+    cursor: pointer;
+    font-size: 12px;
+    &:hover{
+      background: rgba(210, 23, 23, 0.5)
+    }
+  }
+  & + .reg-item{
+    margin-top: 18px;
+  }
 }
 </style>

@@ -61,34 +61,36 @@
 					清空
 				</el-button>
 			</div>
-			<el-scrollbar class="center-scrollbar">
-				<el-row class="center-board-row" :gutter="formConf.gutter">
-					<el-form
-						:size="formConf.size"
-						:label-position="formConf.labelPosition"
-						:disabled="formConf.disabled"
-						:label-width="formConf.labelWidth + 'px'"
-					>
-						<draggable class="drawing-board" :list="drawingList" :animation="340" group="componentsGroup">
-							<draggable-item
-								v-for="(item, index) in drawingList"
-								:key="item.renderKey"
-								:drawing-list="drawingList"
-								:current-item="item"
-								:index="index"
-								:active-id="activeId"
-								:form-conf="formConf"
-								@activeItem="activeFormItem"
-								@copyItem="drawingItemCopy"
-								@deleteItem="drawingItemDelete"
-							/>
-						</draggable>
-						<div v-show="!drawingList.length" class="empty-info">
-							从左侧拖入或点选组件进行表单设计
-						</div>
-					</el-form>
-				</el-row>
-			</el-scrollbar>
+			<div class="center-scollbar-container">
+				<el-scrollbar class="center-scrollbar center-scrollbar-editor">
+					<el-row class="center-board-row center-board-row-editor" :gutter="formConf.gutter">
+						<el-form
+							:size="formConf.size"
+							:label-position="formConf.labelPosition"
+							:disabled="formConf.disabled"
+							:label-width="formConf.labelWidth + 'px'"
+						>
+							<draggable class="drawing-board flex-start-wrap" :list="drawingList" :animation="340" group="componentsGroup">
+								<draggable-item
+									v-for="(item, index) in drawingList"
+									:key="item.renderKey"
+									:drawing-list="drawingList"
+									:current-item="item"
+									:index="index"
+									:active-id="activeId"
+									:form-conf="formConf"
+									@activeItem="activeFormItem"
+									@copyItem="drawingItemCopy"
+									@deleteItem="drawingItemDelete"
+								/>
+							</draggable>
+							<div v-show="!drawingList.length" class="empty-info">
+								从左侧拖入或点选组件进行表单设计
+							</div>
+						</el-form>
+					</el-row>
+				</el-scrollbar>
+			</div>
 		</div>
 
 		<right-panel
@@ -177,7 +179,24 @@ export default {
       default:_=>{
         return {}
       }
-    }
+    },
+		leftComponents: {
+			type: Array,
+			default: () => [
+				{
+					title: '输入型组件',
+					list: inputComponents
+				},
+				{
+					title: '选择型组件',
+					list: selectComponents
+				},
+				{
+					title: '布局型组件',
+					list: layoutComponents
+				}
+			]
+		}
   },
 	data() {
 		return {
@@ -199,21 +218,7 @@ export default {
 			showFileName: false,
 			activeData: null,
 			saveDrawingListDebounce: debounce(340, saveDrawingList),
-			saveIdGlobalDebounce: debounce(340, saveIdGlobal),
-			leftComponents: [
-				{
-					title: '输入型组件',
-					list: inputComponents
-				},
-				{
-					title: '选择型组件',
-					list: selectComponents
-				},
-				{
-					title: '布局型组件',
-					list: layoutComponents
-				}
-			]
+			saveIdGlobalDebounce: debounce(340, saveIdGlobal)
 		}
 	},
 	computed: {

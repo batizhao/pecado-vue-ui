@@ -5,7 +5,7 @@ export const formConf = {
   labelPosition: 'right',
   labelWidth: 100,
   formRules: 'rules',
-  gutter: 15,
+  gutter: 0,
   disabled: false,
   span: 24,
   formBtns: true

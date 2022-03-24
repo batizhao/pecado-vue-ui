@@ -1,271 +1,259 @@
 $selectedColor: #f6f7ff;
 $lighterBlue: #409eff;
 .container {
-	position: relative;
-	width: 100%;
-	height: 100%;
-	background-color: #fff;
-}
-.components-list {
-	box-sizing: border-box;
-	padding: 8px;
-	height: 100%;
-	.components-item {
-		display: inline-block;
-		margin: 1%;
-		width: 48%;
-		transition: transform 0ms !important;
-	}
-}
-.components-draggable {
-	padding-bottom: 20px;
-}
-.components-title {
-	margin: 6px 2px;
-	font-size: 14px;
-	color: #222;
-	.svg-icon {
-		font-size: 18px;
-		color: #666;
-	}
-}
-.components-body {
-	padding: 8px 10px;
-	border: 1px dashed $selectedColor;
-	border-radius: 3px;
-	background: $selectedColor;
-	cursor: move;
-	font-size: 12px;
-	.svg-icon {
-		font-size: 15px;
-		color: #777;
-	}
-	&:hover {
-		border: 1px dashed #787be8;
-		color: #787be8;
-		.svg-icon {
-			color: #787be8;
-		}
-	}
-}
-.left-board {
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 260px;
-	height: 100%;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  display: flex;
 }
 .left-scrollbar {
-	overflow: hidden;
-	height: calc(100% - 42px);
+  height: calc(100vh - 80px);
 }
-.center-scrollbar {
-	overflow: hidden;
-	box-sizing: border-box;
-	border-left: 1px solid #f1e8e8;
-	border-right: 1px solid #f1e8e8;
-	height: calc(100% - 42px);
+.components-list {
+  box-sizing: border-box;
+  padding: 8px;
+  .components-item {
+    display: inline-block;
+    margin: 1.5%;
+    width: 46%;
+    transition: transform 0ms !important;
+  }
+  &>div:last-child .components-draggable{
+    padding-bottom: 0;
+  }
+}
+.components-draggable {
+  padding-bottom: 20px;
+}
+.components-title {
+  margin: 6px 2px;
+  font-size: 14px;
+  color: #222;
+  .svg-icon {
+    font-size: 18px;
+    color: #666;
+  }
+}
+.components-body {
+  padding: 8px 10px;
+  border: 1px solid #E5E6E8;
+  border-radius: 3px;
+  cursor: move;
+  font-size: 12px;
+  .svg-icon {
+    font-size: 15px;
+    color: #777;
+  }
+  &:hover {
+    border: 1px solid $lighterBlue;
+    color: $lighterBlue;
+    .svg-icon {
+      color: $lighterBlue;
+    }
+  }
+}
+.left-board {
+  width: 260px;
+  height: 100%;
+}
+.center-scollbar-container {
+  padding: 20px;
+  background: #f5f7fa;
+  border: 1px solid #E5E6E8;
+  border-top: none;
+  box-shadow: 0 2px 6px #d1d1d1cc inset;
+}
+.center-scrollbar-editor {
+  background: #fff;
+  box-sizing: border-box;
+  border-left: 1px solid #f1e8e8;
+  border-right: 1px solid #f1e8e8;
+  height: calc(100vh - 133px);
+  box-shadow: 0px 0px 8px 0px #00000026;
 }
 .center-board {
-	box-sizing: border-box;
-	margin: 0 350px 0 260px;
-	width: auto;
-	height: 100%;
+  box-sizing: border-box;
+  flex: 1;
+  width: 0;
 }
 .empty-info {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 46%;
-	text-align: center;
-	font-size: 18px;
-	color: #ccb1ea;
-	letter-spacing: 4px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 46%;
+  text-align: center;
+  font-size: 18px;
+  color: #ccb1ea;
+  letter-spacing: 4px;
 }
 .action-bar {
-	position: relative;
-	box-sizing: border-box;
-	padding: 0 15px;
-	border: 1px solid #f1e8e8;
-	border-left: none;
-	border-top: none;
-	height: 42px;
-	text-align: right;
-	.delete-btn {
-		color: #f56c6c;
-	}
+  position: relative;
+  box-sizing: border-box;
+  padding-right: 35px;
+  border: 1px solid #f1e8e8;
+  border-left: none;
+  border-top: none;
+  height: 42px;
+  text-align: right;
+  .delete-btn {
+    color: #f56c6c;
+  }
 }
 .logo-wrapper {
-	position: relative;
-	box-sizing: border-box;
-	border-bottom: 1px solid #f1e8e8;
-	height: 42px;
-	background: #fff;
+  position: relative;
+  box-sizing: border-box;
+  border-bottom: 1px solid #f1e8e8;
+  height: 42px;
+  background: #fff;
 }
 .logo {
-	position: absolute;
-	left: 12px;
-	top: 6px;
-	line-height: 30px;
-	font-weight: 600;
-	font-size: 17px;
-	color: #00afff;
-	white-space: nowrap;
-	> img {
-		width: 30px;
-		height: 30px;
-		vertical-align: top;
-	}
-	.github {
-		display: inline-block;
-		margin-left: 15px;
-		vertical-align: sub;
-		> img {
-			height: 22px;
-		}
-	}
-}
-.center-board-row {
-	box-sizing: border-box;
-	padding: 12px 12px 15px 12px;
-	& > .el-form {
-		// 69 = 12+15+42
-		height: calc(100vh - 69px);
-	}
+  position: absolute;
+  left: 12px;
+  top: 6px;
+  line-height: 30px;
+  font-size: 17px;
+  color: #00afff;
+  white-space: nowrap;
+  > img {
+    width: 30px;
+    height: 30px;
+    vertical-align: top;
+  }
+  .github {
+    display: inline-block;
+    margin-left: 15px;
+    vertical-align: sub;
+    > img {
+      height: 22px;
+    }
+  }
 }
 .drawing-board {
-	position: relative;
-	height: 100%;
-	.components-body {
-		margin: 0;
-		padding: 0;
-		font-size: 0;
-	}
-	.sortable-ghost {
-		display: block;
-		overflow: hidden;
-		position: relative;
-		&::before {
-			position: absolute;
-			left: 0;
-			right: 0;
-			top: 0;
-			z-index: 2;
-			height: 3px;
-			background: rgb(89, 89, 223);
-			content: " ";
-		}
-	}
-	.components-item.sortable-ghost {
-		width: 100%;
-		height: 60px;
-		background-color: $selectedColor;
-	}
-	.active-from-item {
-		& > .el-form-item {
-			border-radius: 6px;
-			background: $selectedColor;
-		}
-		& > .drawing-item-copy,
-		& > .drawing-item-delete {
-			display: initial;
-		}
-		& > .component-name {
-			color: $lighterBlue;
-		}
-	}
-	.el-form-item {
-		margin-bottom: 15px;
-	}
+  position: relative;
+  height: 100%;
+  width: 100%;
+  min-height: 300px;
+  .components-body {
+    margin: 0;
+    padding: 0;
+    font-size: 0;
+  }
+  .sortable-ghost {
+    display: block;
+    overflow: hidden;
+    position: relative;
+    &::before {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      z-index: 2;
+      height: 3px;
+      background: rgb(89, 89, 223);
+      content: " ";
+    }
+  }
+  .components-item.sortable-ghost {
+    width: 100%;
+    height: 60px;
+    background-color: $selectedColor;
+  }
+  .active-from-item {
+    &.active,
+    &.hover,
+    &{
+      border: 2px solid $lighterBlue !important;
+      background-color: rgba($color: #000000, $alpha: 0) !important;
+    }
+    & > .drawing-item-copy,
+    & > .drawing-item-delete {
+      display: initial;
+      z-index: 2;
+    }
+    & > .component-name {
+      color: $lighterBlue;
+    }
+  }
 }
 .drawing-item {
-	position: relative;
-	cursor: move;
-	&.unfocus-bordered:not(.active-from-item) > div:first-child {
-		border: 1px dashed #ccc;
-	}
-	.el-form-item {
-		padding: 12px 10px;
-	}
+  position: relative;
+  cursor: move;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0);
 }
 .drawing-row-item {
-	position: relative;
-	box-sizing: border-box;
-	// margin-bottom: 15px;
-	padding: 0 2px;
-	border: 1px dashed #ccc;
-	border-radius: 3px;
-	cursor: move;
-	.drawing-row-item {
-		margin-bottom: 2px;
-	}
-	.el-col .el-form-item {
-		margin-top: 22px;
-	}
-	.el-form-item {
-		margin-bottom: 0;
-	}
-	.drag-wrapper {
-		min-height: 80px;
-	}
-	&.active-from-item {
-		border: 1px dashed $lighterBlue;
-	}
-	.component-name {
-		display: inline-block;
-		position: absolute;
-		left: 0;
-		top: 0;
-		padding: 0 6px;
-		font-size: 12px;
-		color: #bbb;
-	}
+  position: relative;
+  box-sizing: border-box;
+  border: 1px dashed #ccc;
+  border-radius: 2px;
+  cursor: move;
+  .drawing-row-item {
+    margin-bottom: 2px;
+  }
+  &.active-from-item {
+    border: 2px solid $lighterBlue;
+  }
+  .component-name {
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 0 6px;
+    font-size: 12px;
+    color: #bbb;
+  }
 }
 .drawing-item,
 .drawing-row-item {
-	&:hover {
-		& > .el-form-item {
-			border-radius: 6px;
-			background: $selectedColor;
-		}
-		& > .drawing-item-copy,
-		& > .drawing-item-delete {
-			display: initial;
-		}
-	}
-	& > .drawing-item-copy,
-	& > .drawing-item-delete {
-		display: none;
-		position: absolute;
-		top: -10px;
-		z-index: 1;
-		border: 1px solid;
-		border-radius: 50%;
-		width: 22px;
-		height: 22px;
-		cursor: pointer;
-		line-height: 22px;
-		text-align: center;
-		font-size: 12px;
-	}
-	& > .drawing-item-copy {
-		right: 56px;
-		border-color: $lighterBlue;
-		background: #fff;
-		color: $lighterBlue;
-		&:hover {
-			background: $lighterBlue;
-			color: #fff;
-		}
-	}
-	& > .drawing-item-delete {
-		right: 24px;
-		border-color: #f56c6c;
-		background: #fff;
-		color: #f56c6c;
-		&:hover {
-			background: #f56c6c;
-			color: #fff;
-		}
-	}
+  &:hover {
+    &{
+      border: 1px dashed $lighterBlue;
+      background-color: rgba($color: $lighterBlue, $alpha: 0.06);
+    }
+    & > .drawing-item-copy,
+    & > .drawing-item-delete {
+      display: initial;
+    }
+  }
+  & > .drawing-item-copy,
+  & > .drawing-item-delete {
+    display: none;
+    position: absolute;
+    top: -12px;
+    z-index: 1;
+    border: 1px solid;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    line-height: 20px;
+    text-align: center;
+    font-size: 12px;
+  }
+  & > .drawing-item-copy {
+    right: 9px;
+    background: $lighterBlue;
+    color: #fff;
+  }
+  & > .drawing-item-delete {
+    right: -12px;
+    color: #fff;
+    background: #f56c6c;
+  }
+}
+// 收起展开样式
+.close-or-open {
+  position: absolute;
+  top: 12px;
+  left: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  &:hover {
+    color: $lighterBlue;
+  }
+  &.right {
+    right: 8px;
+    left: unset;
+  }
 }

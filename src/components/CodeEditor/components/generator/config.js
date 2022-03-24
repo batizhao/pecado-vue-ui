@@ -724,14 +724,35 @@ export const layoutPageComponents = [
       defaultValue: undefined,
       required: undefined,
       layout: 'native',
-      span: 24,
+      span: 0,
     },
     menuData: [
       {
-        label: '导航一',
-        index: '1'
+        label: '首页',
+        index: '0',
+        icon: 'el-icon-s-home'
+      },
+      {
+        label: '导航1',
+        index: '1',
+        icon: 'el-icon-message-solid',
+        children: [
+          { label: '导航1-1', index: '1-1', icon: 'el-icon-s-claim' },
+          { label: '导航1-2', index: '1-2', icon: 'el-icon-s-open' },
+        ]
+      },
+      {
+        label: '导航2',
+        index: '2',
+        icon: 'el-icon-upload'
       }
-    ]
+    ],
+    styles: {
+      defaultStyles: {
+        width: '200px',
+        height: '100%'
+      }
+    }
 
   },
   {
@@ -745,7 +766,7 @@ export const layoutPageComponents = [
       tagIcon: 'input',
       defaultValue: undefined,
       required: undefined,
-      layout: 'navtive',
+      layout: 'native',
       span: 24
     }
   },

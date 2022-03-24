@@ -43,7 +43,7 @@
       <add-template ref="addTemplateRef" :moduleTypeOptions="moduleTypeOptions"></add-template>
     </action-dialog>
     <!-- 设计 -->
-    <Design :visible="designVisible" :modelData="currentItem" :leftComponents="leftComponents"  @close="designClose" @refresh="getTableData"/>
+    <Design ref="designRef" :modelData="currentItem" :leftComponents="leftComponents" @refresh="getTableData" />
 
   </div>
 </template>
@@ -61,7 +61,6 @@ export default {
   },
   data () {
     return {
-      designVisible:false,
       columns: [
         {
           label: '模板名称',
@@ -198,8 +197,7 @@ export default {
       }else{
         this.currentItem.pageMetadata = {}
       }
-      // console.log(this.currentItem)
-      this.designVisible= true
+      this.$refs.designRef.open()
     },
     getModuleTypeOptions () {
       const data = [
@@ -238,11 +236,7 @@ export default {
       }).catch(function() {
         row.status = row.status === "open" ? "close" : "open";
       })
-    },
-
-    designClose(){
-      this.designVisible= false
-    },
+    }
   }
 }
 </script>
