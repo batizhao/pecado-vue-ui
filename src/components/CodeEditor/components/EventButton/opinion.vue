@@ -93,12 +93,17 @@ export default {
         // }
       ],
       opinionEntrustInfo: {}, // 委托代理信息
-      configObj: {} // 关于表单的一些配置
+      configObj: {}, // 关于表单的一些配置
+      isSubmitted: false // 判断该数据是否已经被提交了，每条业务数据只能被提交一次
     }
   },
   methods: {
     // 打开意见弹窗
     open (formData) {
+      if (this.isSubmitted || (formData.procInstId !== undefined && formData.procInstId !== null)) {
+        this.msgError('请勿重复提交')
+        return
+      }
       this.formData = formData
       this.getAppProcess(this.$route.query.appId, this.taskId).then(() => {
         this.opinionDialogVisible = true
@@ -179,19 +184,27 @@ export default {
           this.msgSuccess('提交成功')
           this.opinionDialogVisible = false
           this.loading = false
+          this.saveAgain(res.data)
         }).catch(() => {
           this.loading = false
         })
       } else {
         console.log("🚀 ~ file: opinion.vue ~ line 120 ~ this.$refs.actionFormRef.getRef ~ data", data)
-        startProcess(data).then(() => {
+        startProcess(data).then(res => {
           this.msgSuccess('提交成功')
           this.opinionDialogVisible = false
           this.loading = false
+          this.saveAgain(res.data)
         }).catch(() => {
           this.loading = false
         })
       }
+    },
+    // 意见提交之后拿到流程实例id，要再调用一次保存接口，修改流程实例id字段值
+    saveAgain (procInstId) {
+      this.$emit('buttonEmitSave', () => {
+        this.isSubmitted = true
+      }, { procInstId })
     },
     // 获取app的流程定义id
     getAppProcess (appId, taskId) {

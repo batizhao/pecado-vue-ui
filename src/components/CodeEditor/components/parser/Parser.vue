@@ -211,6 +211,8 @@ export default {
         if (config.children) this.initFormData(config.children, formData);
       });
       addAllNodesStyleToDocument(componentList)
+      // 将editData中没有被vModel用到的属性都合并到formData中
+      Object.assign(formData, this.editData)
     },
     buildRules(componentList, rules) {
       componentList.forEach(cur => {
@@ -246,13 +248,14 @@ export default {
       return new Promise((resolve, reject) => {
         this.$refs[this.formConf.formRef].validate(valid => {
           if (valid) {
-            //return false
             if (this.showSubmit) {
               this.$emit("submit", this[this.formConf.formModel]); // 触发sumit事件
             }
             resolve(this[this.formConf.formModel]);
+          } else {
+            this.msgError('表单校验不通过')
+            reject(new Error('表单校验不通过'))
           }
-          //return true
         });
       });
     }

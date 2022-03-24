@@ -4,7 +4,7 @@
       <slot></slot>
     </el-button>
 
-    <!-- 意见弹窗 -->
+    <!-- 意见弹窗， 不能加v-if -->
     <opinion ref="opinionRef" @buttonEmitSave="buttonEmitSave"></opinion>
   </div>
 </template>
@@ -44,7 +44,7 @@ export default {
       })
     },
     // 保存
-    async buttonEmitSave (callback) {
+    async buttonEmitSave (callback, params) {
         const { createUrl, editUrl, createMethod, editMethod } = this.$route.query
         const url = createUrl || editUrl
         const method = createMethod || editMethod
@@ -55,8 +55,9 @@ export default {
               url,
               method,
               data: {
+                ...formData,
                 id: editUrl ? formDataId : undefined, // 从地址栏里拿id，有就是编辑操作，没有就是新增操作
-                ...formData
+                ...params
               }
             }).then(res => {
               !callback && this.msgSuccess('保存成功')
@@ -74,7 +75,10 @@ export default {
             request({
               url: submitURL,
               method: 'post',
-              data: formData
+              data: {
+                ...formData,
+                ...params
+              }
             }).then(res => {
               !callback && this.msgSuccess('保存成功')
               this.$route.query.formDataId = res.data.id
