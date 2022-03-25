@@ -19,6 +19,7 @@
 
 <script>
 import request from '@/utils/request'
+import { analysisUrl } from '../ListContainer/analysisUrl'
 export default {
   name: 'my-backlog',
   components: {},
@@ -47,7 +48,7 @@ export default {
     // 跳转
     jumpToForm (item) {
       this.$router.push({
-        path: item.url,
+        path: analysisUrl(item.url, item),
         query: {
           taskId: item.taskId
         }
