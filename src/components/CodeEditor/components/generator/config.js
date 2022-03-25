@@ -6,7 +6,7 @@ export const formConf = {
   labelPosition: 'right',
   labelWidth: 100,
   formRules: 'rules',
-  gutter: 15,
+  gutter: 0,
   disabled: false,
   span: 24,
   formBtns: true,
@@ -724,7 +724,7 @@ export const layoutPageComponents = [
       defaultValue: undefined,
       required: undefined,
       layout: 'native',
-      span: 0,
+      span: 3,
     },
     menuData: [
       {
@@ -749,7 +749,6 @@ export const layoutPageComponents = [
     ],
     styles: {
       defaultStyles: {
-        width: '200px',
         height: '100%'
       }
     }
@@ -768,6 +767,15 @@ export const layoutPageComponents = [
       required: undefined,
       layout: 'native',
       span: 24
+    }
+  },
+  {
+    __config__: {
+      label: '页面容器1',
+      tag: 'page-container',
+      tagIcon: 'row',
+      span: 21,
+      layout: 'native'
     }
   },
   {

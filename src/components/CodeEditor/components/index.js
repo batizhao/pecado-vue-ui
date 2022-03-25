@@ -9,6 +9,7 @@ import FooterBar from './FooterBar'
 import UpFrame from './UpFrame'
 import FormContainer from './FormContainer'
 import ListContainer from './ListContainer'
+import PageContainer from './PageContainer'
 import EventButton from './EventButton/index.vue'
 Vue.component(MyBacklog.name, MyBacklog)
 Vue.component(UsedProcess.name, UsedProcess)
@@ -21,5 +22,6 @@ Vue.component(FooterBar.name, FooterBar)
 Vue.component(UpFrame.name, UpFrame)
 Vue.component(FormContainer.name, FormContainer)
 Vue.component(ListContainer.name, ListContainer)
+Vue.component(PageContainer.name, PageContainer)
 Vue.component(EventButton.name, EventButton)
 

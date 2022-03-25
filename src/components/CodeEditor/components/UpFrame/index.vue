@@ -2,12 +2,12 @@
   <div class="contaner-full">
     <header-bar :menuData="headerBarMenuData"></header-bar>
     <div class="content">
-      <nav-bar
+      <render-menu
         style="height:100%; width: 200px;"
         :menuData="navBarMenuData"
         :default-active="sideActiveIndex"
         @selectItem="navBarSelect"
-      ></nav-bar>
+      ></render-menu>
       <div class="wrap">
         <div class="wrap-box">
           <div class="main">
@@ -28,10 +28,12 @@
 import Parser from "@/components/CodeEditor/components/parser";
 import { getNavBarData } from '@/api/app/menu.js'
 import { getTemplateDetail } from '@/api/dp/page/model.js'
+import RenderMenu from '../NavBar/renderMenu.vue';
 export default {
   name: "up-frame",
   components: {
-    Parser
+    Parser,
+    RenderMenu
   },
   data() {
     return {

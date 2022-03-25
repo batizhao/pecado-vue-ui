@@ -5,7 +5,7 @@
       <h5 class="logo-title">低代码平台</h5>
     </div>
     <div class="nav-bar">
-      <nav-bar :menuData="menuData" mode="horizontal"></nav-bar>
+      <render-menu :menuData="menuData" mode="horizontal"></render-menu>
     </div>
     <div class="actions">
       <i class="el-icon-monitor" title="控制台" @click="jumpToManager"></i>
@@ -14,8 +14,12 @@
 </template>
 
 <script>
+import renderMenu from '../NavBar/renderMenu.vue'
 export default {
   name:'header-bar',
+  components: {
+    renderMenu
+  },
   props:{
     menuData: Array
   },
