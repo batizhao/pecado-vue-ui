@@ -29,6 +29,7 @@ export default {
       }
       getPageModelBy(params).then(res => {
         this.formConf = JSON.parse(res.data.pageMetadata)
+        this.formConf.isForm = false
       })
     }
   }

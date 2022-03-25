@@ -158,6 +158,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+html {
+  overflow-x: hidden;
+}
 .contaner-full {
   display: flex;
   flex-direction: column;
@@ -166,8 +169,7 @@ export default {
 
 .content {
   display: flex;
-  flex: 1;
-  overflow-x: hidden;
+  height: calc(100vh - 50px);
 }
 .wrap {
   display: flex;
