@@ -190,3 +190,10 @@ aside {
   padding: 15px;
 }
 
+// 下拉
+.el-cascader, .el-date-editor {
+  width: 100% !important;
+}
+.el-select {
+  width: 100%;
+}

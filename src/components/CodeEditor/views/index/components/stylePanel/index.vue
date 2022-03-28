@@ -1,6 +1,10 @@
 <template>
   <div class="component-style-panel" v-if="activeData && activeData.__config__">
     <el-form size="small" label-width="70px">
+      <el-form-item label="全局样式">
+        <el-button @click="setGlobalStyles" type="primary" size="mini">设置</el-button>
+        <global-styles ref="globalStylesRef"></global-styles>
+      </el-form-item>
       <el-form-item
         v-if="activeData.__config__.span !== undefined"
         label="栅格"
@@ -321,18 +325,18 @@
 </template>
 
 <script>
+import mixins from '../mixins'
 import BoxShadow from './boxShadow.vue'
 import unitInput from './unitInput.vue'
 import { addOneNodeStyleToDocument, addAllNodesStyleToDocument } from '@/components/CodeEditor/components/parser/addStyleToDocument.js'
 import _ from 'lodash'
+import globalStyles from './globalStyles.vue'
 export default {
+  mixins: [mixins],
   components: {
     unitInput,
-    BoxShadow
-  },
-  props: {
-    activeData: Object,
-    drawingList: Array
+    BoxShadow,
+    globalStyles
   },
   data () {
     return {
@@ -411,21 +415,25 @@ export default {
       }
     }
   },
-  created () {
-    addAllNodesStyleToDocument(this.drawingList || [])
-  },
   watch: {
     // 监听组件切换
-    activeData () {
-      this.styleStatus = 'default'
-      const styles = this.activeData && (this.activeData.styles || {})
-      this.defaultStyles = styles.defaultStyles || {}
-      this.hoverStyles = styles.hoverStyles || {}
-      this.activeStyles = styles.activeStyles || {}
-      this.focusStyles = styles.focusStyles || {}
+    '$store.state.codeEditor.components.activeIndex': function (val, old) {
+      if (String(val) !== String(old)) {
+        this.styleStatus = 'default'
+        const styles = this.activeData && (this.activeData.styles || {})
+        this.defaultStyles = styles.defaultStyles || {}
+        this.hoverStyles = styles.hoverStyles || {}
+        this.activeStyles = styles.activeStyles || {}
+        this.focusStyles = styles.focusStyles || {}
+      }
     },
-    drawingList (val) {
-      addAllNodesStyleToDocument(this.drawingList || [])
+    // 监听页面数据
+    '$store.state.codeEditor.components.drawingList': function (val) {
+      // 初始化一次性加载所有节点样式
+      if (this.initDown && val.length) {
+        addAllNodesStyleToDocument(val)
+        this.initDown = false
+      }
     },
     currentStatusStyle: {
       handler (val) {
@@ -466,7 +474,10 @@ export default {
     },
     _addStyleToDocument: _.debounce(function () {
       addOneNodeStyleToDocument(this.activeData)
-    }, 500)
+    }, 500),
+    setGlobalStyles () {
+      this.$refs.globalStylesRef.globalStylesVisible = true
+    }
   }
 }
 </script>

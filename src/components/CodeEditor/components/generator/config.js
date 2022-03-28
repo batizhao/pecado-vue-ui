@@ -19,6 +19,7 @@ export const inputComponents = [
     // 组件的自定义配置
     __config__: {
       label: '单行文本',
+      panel: 'lx-input',
       labelWidth: null,
       showLabel: true,
       changeTag: true,
@@ -27,7 +28,7 @@ export const inputComponents = [
       defaultValue: undefined,
       required: true,
       layout: 'colFormItem',
-      span: 24,
+      span: 12,
       document: 'https://element.eleme.cn/#/zh-CN/component/input',
       // 正则校验规则
       regList: []
@@ -37,9 +38,9 @@ export const inputComponents = [
       prepend: '',
       append: ''
     },
+    type: 'text',
     // 其余的为可直接写在组件标签上的属性
     placeholder: '请输入',
-    style: { width: '100%' },
     clearable: true,
     'prefix-icon': '',
     'suffix-icon': '',
@@ -51,6 +52,7 @@ export const inputComponents = [
   {
     __config__: {
       label: '多行文本',
+      panel: 'lx-input',
       labelWidth: null,
       showLabel: true,
       tag: 'el-input',
@@ -58,7 +60,7 @@ export const inputComponents = [
       defaultValue: undefined,
       required: true,
       layout: 'colFormItem',
-      span: 24,
+      span: 12,
       regList: [],
       changeTag: true,
       document: 'https://element.eleme.cn/#/zh-CN/component/input'
@@ -69,7 +71,6 @@ export const inputComponents = [
       minRows: 4,
       maxRows: 4
     },
-    style: { width: '100%' },
     maxlength: null,
     'show-word-limit': false,
     readonly: false,
@@ -78,6 +79,7 @@ export const inputComponents = [
   {
     __config__: {
       label: '密码',
+      panel: 'lx-input',
       showLabel: true,
       labelWidth: null,
       changeTag: true,
@@ -85,7 +87,7 @@ export const inputComponents = [
       tagIcon: 'password',
       defaultValue: undefined,
       layout: 'colFormItem',
-      span: 24,
+      span: 12,
       required: true,
       regList: [],
       document: 'https://element.eleme.cn/#/zh-CN/component/input'
@@ -94,6 +96,7 @@ export const inputComponents = [
       prepend: '',
       append: ''
     },
+    type: 'password',
     placeholder: '请输入',
     'show-password': true,
     style: { width: '100%' },
@@ -108,13 +111,14 @@ export const inputComponents = [
   {
     __config__: {
       label: '计数器',
+      panel: 'lx-input-number',
       showLabel: true,
       changeTag: true,
       labelWidth: null,
       tag: 'el-input-number',
       tagIcon: 'number',
       defaultValue: undefined,
-      span: 24,
+      span: 12,
       layout: 'colFormItem',
       required: true,
       regList: [],
@@ -132,6 +136,7 @@ export const inputComponents = [
   {
     __config__: {
       label: '编辑器',
+      panel: 'lx-tinymce',
       showLabel: true,
       changeTag: true,
       labelWidth: null,
@@ -154,29 +159,39 @@ export const inputComponents = [
 export const selectComponents = [
   {
     __config__: {
-      label: '下拉选择',
-      showLabel: true,
-      labelWidth: null,
-      tag: 'el-select',
-      tagIcon: 'select',
-      layout: 'colFormItem',
-      span: 24,
-      required: true,
-      regList: [],
-      changeTag: true,
-      document: 'https://element.eleme.cn/#/zh-CN/component/select'
+      label: '下拉选择', // 表单标签名称
+      showLabel: true, // 显示表单标签
+      tooltips: '', // 提示信息
+      labelWidth: null, // 表单标签宽度
+      tag: 'object-selector', // 要渲染出的element组件名称
+      tagIcon: 'select', // 左菜单面板的组件icon
+      panel: 'lx-select', // 右属性面板配置的组件名称
+      layout: 'colFormItem', // 布局
+      span: 12, // 表格栅格
+      required: false, // 是否必填
+      dataType: 'static', // 数据类型
+      url: 'https://www.fastmock.site/mock/3c316cb88d475a0308d2accca88494ed/lowcode/dynamic', // dataType是"dynamic"时, 请求的地址
+      method: 'get', // dataType是"dynamic"时, 请求的方法
+      dataPath: 'selectorList', // dataType是"dynamic"时，从请求里拿数据的目标
+      defaultValue: '', // 默认值
+      regList: []
     },
     __slot__: {
       options: [{
         label: '选项一',
-        value: 1
+        id: '1'
       }, {
         label: '选项二',
-        value: 2
+        id: '2'
       }]
     },
+    props: {
+      props: { // 配置选项的label和value的属性名称
+        label: 'label',
+        value: 'id'
+      }
+    },
     placeholder: '请选择',
-    style: { width: '100%' },
     clearable: true,
     disabled: false,
     filterable: false,
@@ -185,43 +200,44 @@ export const selectComponents = [
   {
     __config__: {
       label: '级联选择',
-      url: 'https://www.fastmock.site/mock/f8d7a54fb1e60561e2f720d5a810009d/fg/cascaderList',
-      method: 'get',
-      dataPath: 'list',
-      dataConsumer: 'options',
       showLabel: true,
       labelWidth: null,
-      tag: 'el-cascader',
+      tag: 'object-cascader',
       tagIcon: 'cascader',
+      panel: 'lx-cascader',
       layout: 'colFormItem',
+      span: 12,
+      required: false,
+      dataType: 'static',
+      url: 'https://www.fastmock.site/mock/3c316cb88d475a0308d2accca88494ed/lowcode/dynamic',
+      method: 'get',
+      dataPath: 'list',
       defaultValue: [],
-      dataType: 'dynamic',
-      span: 24,
-      required: true,
       regList: [],
-      changeTag: true,
-      document: 'https://element.eleme.cn/#/zh-CN/component/cascader'
+      eventList: {
+        on: {},
+        nativeOn: {}
+      }
     },
     options: [{
       id: 1,
-      value: 1,
+      value: '1',
       label: '选项1',
       children: [{
         id: 2,
-        value: 2,
+        value: '2',
         label: '选项1-1'
       }]
     }],
-    placeholder: '请选择',
-    style: { width: '100%' },
     props: {
       props: {
         multiple: false,
         label: 'label',
-        value: 'value',
+        value: 'id',
         children: 'children'
       }
     },
+    placeholder: '请选择',
     'show-all-levels': true,
     disabled: false,
     clearable: true,

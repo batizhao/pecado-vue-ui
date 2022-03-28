@@ -11,6 +11,9 @@ import FormContainer from './FormContainer'
 import ListContainer from './ListContainer'
 import PageContainer from './PageContainer'
 import EventButton from './EventButton/index.vue'
+import Tinymce from './tinymce/index.vue'
+import objectSelector from './object-selector/index.vue'
+import objectCascader from './object-cascader/index.vue'
 Vue.component(MyBacklog.name, MyBacklog)
 Vue.component(UsedProcess.name, UsedProcess)
 Vue.component(Notice.name, Notice)
@@ -24,4 +27,7 @@ Vue.component(FormContainer.name, FormContainer)
 Vue.component(ListContainer.name, ListContainer)
 Vue.component(PageContainer.name, PageContainer)
 Vue.component(EventButton.name, EventButton)
+Vue.component('tinymce', Tinymce)
+Vue.component('object-selector', objectSelector)
+Vue.component('object-cascader', objectCascader)
 
