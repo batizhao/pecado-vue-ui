@@ -9,7 +9,7 @@ export default {
     }
     if (config.showTip) {
       list.push(
-        <div slot="tip" class="el-upload__tip">只能上传不超过 {config.fileSize}{config.sizeUnit} 的{conf.accept}文件</div>
+        <div slot="tip" class="el-upload__tip">只能上传{conf.limit}个不超过 {config.fileSize}{config.sizeUnit} 的{conf.accept}文件</div>
       )
     }
     return list

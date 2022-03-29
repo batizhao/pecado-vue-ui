@@ -59,6 +59,11 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/test',//门户
+    component: (resolve) => require(['@/views/home/test.vue'], resolve),
+    hidden: true
+  },
+  {
     path: '/form', //表单模型
     component: (resolve) => require(['@/views/form'], resolve),
     hidden: true

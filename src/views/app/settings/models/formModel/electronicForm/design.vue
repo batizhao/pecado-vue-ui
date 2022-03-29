@@ -1,18 +1,16 @@
 <template>
   <div class="app-container" v-loading="codeEditorLoading">
-    <codeEditor
-      v-if="pageData"
-      :pageData="pageData"
-      @save="handleSave"
-    />
+    <codeEditor ref="codeEditorRef" @save="handleSave"/>
   </div>
 </template>
 
 <script>
 import codeEditor from '@/components/CodeEditor/views/index/Home.vue'
 import { getDataDetail, addOrEditData } from "@/api/app/formModel.js";
+import mixins from './setFormDataToStore.js'
 export default {
   name: "FormDesign",
+  mixins: [mixins],
   components: {
 		codeEditor
 	},
@@ -21,7 +19,6 @@ export default {
   },
   data() {
     return {
-      pageData: null,
       codeEditorLoading:false
     }
   },
@@ -35,7 +32,9 @@ export default {
         getDataDetail(this.formInfo.formKey).then(res => {
           this.codeEditorLoading = false
           const formObj = JSON.parse(res.data.metadata || '{}');
-          this.pageData = formObj.formData || {};
+          const assemby = formObj.formData
+          this.setFormDataToStore(assemby)
+          assemby && this.$refs.codeEditorRef.activeFormItem(assemby.fields[0])
         }).catch(() => {
           this.pageData = null
           this.codeEditorLoading = false
@@ -46,7 +45,7 @@ export default {
       addOrEditData({
         id: this.formInfo.id,
         formKey: this.formInfo.formKey,
-        metadata: JSON.stringify(args)
+        metadata: JSON.stringify({formData: args})
       }).then(res => {
         this.msgSuccess('保存成功');
         this.codeEditorLoading = false;
