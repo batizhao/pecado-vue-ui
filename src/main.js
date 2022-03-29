@@ -58,6 +58,9 @@ Vue.prototype.msgInfo = function (msg) {
   this.$message.info(msg);
 }
 
+// 有些功能还是要在测试环境保留，写个全局变量用来判断
+Vue.prototype.$isDevelopment = process.env.NODE_ENV === 'development'
+
 // 全局组件挂载
 Vue.component('Pagination', Pagination)
 Vue.component('RightToolbar', RightToolbar)

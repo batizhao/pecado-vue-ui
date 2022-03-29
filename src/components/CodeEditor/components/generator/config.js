@@ -213,11 +213,7 @@ export const selectComponents = [
       method: 'get',
       dataPath: 'list',
       defaultValue: [],
-      regList: [],
-      eventList: {
-        on: {},
-        nativeOn: {}
-      }
+      regList: []
     },
     options: [{
       id: 1,
@@ -249,61 +245,72 @@ export const selectComponents = [
       label: '单选框组',
       labelWidth: null,
       showLabel: true,
-      tag: 'el-radio-group',
+      tag: 'object-radio-group',
       tagIcon: 'radio',
-      changeTag: true,
-      defaultValue: undefined,
+      panel: 'lx-radio-group',
       layout: 'colFormItem',
-      span: 24,
+      span: 12,
+      required: false,
       optionType: 'default',
-      regList: [],
-      required: true,
       border: false,
-      document: 'https://element.eleme.cn/#/zh-CN/component/radio'
+      dataType: 'static',
+      defaultValue: '',
+      regList: []
     },
     __slot__: {
       options: [{
         label: '选项一',
-        value: 1
+        value: '1'
       }, {
         label: '选项二',
-        value: 2
+        value: '2'
       }]
     },
-    style: {},
+    props: {
+      props: {
+        label: 'label',
+        value: 'value'
+      }
+    },
     size: 'medium',
     disabled: false
   },
   {
     __config__: {
       label: '多选框组',
-      tag: 'el-checkbox-group',
+      tag: 'object-checkbox-group',
       tagIcon: 'checkbox',
-      defaultValue: [],
-      span: 24,
+      panel: 'lx-radio-group',
+      span: 12,
       showLabel: true,
       labelWidth: null,
       layout: 'colFormItem',
       optionType: 'default',
-      required: true,
-      regList: [],
-      changeTag: true,
+      required: false,
       border: false,
-      document: 'https://element.eleme.cn/#/zh-CN/component/checkbox'
+      dataType: 'static',
+      defaultValue: [],
+      regList: []
+
     },
     __slot__: {
       options: [{
         label: '选项一',
-        value: 1
+        value: '1'
       }, {
         label: '选项二',
-        value: 2
+        value: '2'
       }]
     },
-    style: {},
+    props: {
+      props: {
+        label: 'label',
+        value: 'value'
+      }
+    },
     size: 'medium',
-    min: null,
-    max: null,
+    min: undefined, // 这里不能写null，会导致复选框无法勾选
+    max: undefined,
     disabled: false
   },
   {
@@ -311,24 +318,22 @@ export const selectComponents = [
       label: '开关',
       tag: 'el-switch',
       tagIcon: 'switch',
+      panel: 'lx-switch',
       defaultValue: false,
-      span: 24,
+      span: 12,
       showLabel: true,
       labelWidth: null,
       layout: 'colFormItem',
-      required: true,
-      regList: [],
-      changeTag: true,
-      document: 'https://element.eleme.cn/#/zh-CN/component/switch'
+      required: false,
+      regList: []
     },
-    style: {},
     disabled: false,
     'active-text': '',
     'inactive-text': '',
     'active-color': null,
     'inactive-color': null,
-    'active-value': true,
-    'inactive-value': false
+    'active-value': '开',
+    'inactive-value': '关'
   },
   {
     __config__: {
@@ -336,14 +341,14 @@ export const selectComponents = [
       tag: 'el-slider',
       tagIcon: 'slider',
       defaultValue: null,
-      span: 24,
+      span: 12,
+      panel: 'lx-slider',
       showLabel: true,
+      tooltips: '',
       layout: 'colFormItem',
       labelWidth: null,
-      required: true,
-      regList: [],
-      changeTag: true,
-      document: 'https://element.eleme.cn/#/zh-CN/component/slider'
+      required: false,
+      regList: []
     },
     disabled: false,
     min: 0,
@@ -358,44 +363,42 @@ export const selectComponents = [
       tag: 'el-time-picker',
       tagIcon: 'time',
       defaultValue: null,
-      span: 24,
-      showLabel: true,
+      span: 12,
+      panel: 'lx-time-picker',
       layout: 'colFormItem',
+      showLabel: true,
       labelWidth: null,
-      required: true,
-      regList: [],
-      changeTag: true,
-      document: 'https://element.eleme.cn/#/zh-CN/component/time-picker'
+      required: false,
+      regList: []
+    },
+    'is-range': false,
+    'picker-options': {
+      selectableRange: '00:00:00 - 23:59:59'
     },
     placeholder: '请选择',
-    style: { width: '100%' },
     disabled: false,
     clearable: true,
-    'picker-options': {
-      selectableRange: '00:00:00-23:59:59'
-    },
     format: 'HH:mm:ss',
     'value-format': 'HH:mm:ss'
   },
   {
     __config__: {
       label: '时间范围',
-      tag: 'el-time-picker',
+      tag: 'time-range-picker',
       tagIcon: 'time-range',
-      span: 24,
-      showLabel: true,
+      span: 12,
+      panel: 'lx-time-picker',
       labelWidth: null,
+      showLabel: true,
+      tooltips: '',
       layout: 'colFormItem',
-      defaultValue: null,
-      required: true,
+      defaultValue: null, // 这里只能为null，如果为数组会导致组件无法选时间
+      required: false,
       regList: [],
-      changeTag: true,
-      document: 'https://element.eleme.cn/#/zh-CN/component/time-picker'
     },
-    style: { width: '100%' },
+    'is-range': true,
     disabled: false,
     clearable: true,
-    'is-range': true,
     'range-separator': '至',
     'start-placeholder': '开始时间',
     'end-placeholder': '结束时间',
@@ -407,19 +410,17 @@ export const selectComponents = [
       label: '日期选择',
       tag: 'el-date-picker',
       tagIcon: 'date',
+      panel: 'lx-date-picker',
       defaultValue: null,
       showLabel: true,
       labelWidth: null,
-      span: 24,
+      span: 12,
       layout: 'colFormItem',
-      required: true,
-      regList: [],
-      changeTag: true,
-      document: 'https://element.eleme.cn/#/zh-CN/component/date-picker'
+      required: false,
+      regList: []
     },
     placeholder: '请选择',
     type: 'date',
-    style: { width: '100%' },
     disabled: false,
     clearable: true,
     format: 'yyyy-MM-dd',
@@ -429,19 +430,18 @@ export const selectComponents = [
   {
     __config__: {
       label: '日期范围',
-      tag: 'el-date-picker',
+      tag: 'date-range-picker',
       tagIcon: 'date-range',
-      defaultValue: null,
-      span: 24,
+      panel: 'lx-date-picker',
+      defaultValue: [],
+      span: 12,
       showLabel: true,
       labelWidth: null,
-      required: true,
+      tooltips: '',
+      required: false,
       layout: 'colFormItem',
-      regList: [],
-      changeTag: true,
-      document: 'https://element.eleme.cn/#/zh-CN/component/date-picker'
+      regList: []
     },
-    style: { width: '100%' },
     type: 'daterange',
     'range-separator': '至',
     'start-placeholder': '开始日期',
@@ -458,16 +458,15 @@ export const selectComponents = [
       tag: 'el-rate',
       tagIcon: 'rate',
       defaultValue: 0,
-      span: 24,
+      span: 12,
+      panel: 'lx-score',
       showLabel: true,
       labelWidth: null,
+      tooltips: '',
       layout: 'colFormItem',
-      required: true,
-      regList: [],
-      changeTag: true,
-      document: 'https://element.eleme.cn/#/zh-CN/component/rate'
+      required: false,
+      regList: []
     },
-    style: {},
     max: 5,
     'allow-half': false,
     'show-text': false,
@@ -479,15 +478,15 @@ export const selectComponents = [
       label: '颜色选择',
       tag: 'el-color-picker',
       tagIcon: 'color',
-      span: 24,
+      panel: 'lx-color-picker',
+      span: 12,
       defaultValue: null,
       showLabel: true,
       labelWidth: null,
+      tooltips: '',
       layout: 'colFormItem',
-      required: true,
-      regList: [],
-      changeTag: true,
-      document: 'https://element.eleme.cn/#/zh-CN/component/color-picker'
+      required: false,
+      regList: []
     },
     'show-alpha': false,
     'color-format': '',
@@ -497,32 +496,31 @@ export const selectComponents = [
   {
     __config__: {
       label: '上传',
-      tag: 'el-upload',
+      tag: 'file-upload',
       tagIcon: 'upload',
+      panel: 'lx-upload',
       layout: 'colFormItem',
-      defaultValue: null,
+      defaultValue: '',
       showLabel: true,
       labelWidth: null,
-      required: true,
-      span: 24,
+      required: false,
+      span: 12,
       showTip: false,
       buttonText: '点击上传',
       regList: [],
-      changeTag: true,
-      fileSize: 2,
-      sizeUnit: 'MB',
-      document: 'https://element.eleme.cn/#/zh-CN/component/upload'
+      fileSize: 10,
+      sizeUnit: 'MB'
     },
     __slot__: {
       'list-type': true
     },
-    action: 'https://jsonplaceholder.typicode.com/posts/',
+    action: '/upload/saveFile',
     disabled: false,
     accept: '',
     name: 'file',
-    'auto-upload': true,
     'list-type': 'text',
-    multiple: false
+    multiple: false,
+    limit: 1
   }
 ]
 
@@ -532,23 +530,20 @@ export const layoutComponents = [
     __config__: {
       layout: 'rowFormItem',
       tagIcon: 'row',
+      panel: 'lx-row',
       label: '行容器',
       layoutTree: true,
+      span: 24,
       document: 'https://element.eleme.cn/#/zh-CN/component/layout#row-attributes'
-    },
-    type: 'default',
-    justify: 'start',
-    align: 'top'
+    }
   },
   {
     __config__: {
       label: '按钮',
-      showLabel: true,
-      changeTag: true,
-      labelWidth: null,
       tag: 'event-button',
       tagIcon: 'button',
-      span: 24,
+      panel: 'lx-button',
+      span: 0,
       layout: 'native',
       document: 'https://element.eleme.cn/#/zh-CN/component/button'
     },
@@ -561,71 +556,18 @@ export const layoutComponents = [
     size: 'medium',
     plain: false,
     circle: false,
-    disabled: false
-  },
-  {
-    __config__: {
-      layout: 'rowTable',
-      tagIcon: 'table',
-      tag: 'd2-crud',
-      document: 'https://d2.pub/zh/doc/d2-crud-v2/',
-      span: 24,
-      formId: 101,
-      renderKey: 1595761764203,
-      componentName: undefined,
-      showLabel: undefined,
-      changeTag: true,
-      labelWidth: undefined,
-      label: '表格',
-      method: 'get',
-      dataPath: 'list',
-      dataConsumer: 'data',
-      url: 'https://www.fastmock.site/mock/f8d7a54fb1e60561e2f720d5a810009d/fg/tableData',
-      pagination: false
-    },
-    data: [],
-    directives: [{
-      name: 'loading',
-      value: true
-    }],
-    border: true,
-    type: 'default',
-    justify: 'start',
-    align: 'top',
-    columns: [
-      {
-        title: '日期',
-        key: 'date',
-        width: '180'
-      },
-      {
-        title: '姓名',
-        key: 'name',
-        width: '180'
-      },
-      {
-        title: '地址',
-        key: 'address'
-      },
-      {
-        title: '状态',
-        key: 'check'
-
+    disabled: false,
+    styles: {
+      defaultStyles: {
+        marginTop: '8px',
+        marginRight: '8px',
+        marginBottom: '8px',
+        marginLeft: '8px'
       }
-    ],
-    rowHandle: {
-      custom: [
-        {
-          icon: 'el-icon-edit',
-          text: '编辑',
-          type: 'success',
-          size: 'small',
-          emit: 'custom-emit-1'
-        }
-      ]
     },
-    showPagination: false,
-    pagination: null
+    eventSettings: {
+      emit: ''
+    }
   }
 ]
 
@@ -634,14 +576,11 @@ export const indexPageComponents =[
 		// 组件的自定义配置
 		__config__: {
 			label: '我的待办',
-			labelWidth: null,
-			showLabel: undefined,
-			changeTag: false,
+			panel: 'lx-my-backlog',
 			tag: 'my-backlog',
 			tagIcon: 'input',
 			layout: 'native',
-			span: 24,
-			document: 'https://element.eleme.cn/#/zh-CN/component/tabs'
+			span: 24
 		},
     url: '/oa/task/todo',
 	},
@@ -840,11 +779,9 @@ export const formModelComponents = [
   {
     __config__: {
       label: '按钮',
-      showLabel: true,
-      changeTag: true,
-      labelWidth: null,
       tag: 'event-button',
       tagIcon: 'button',
+      panel: 'lx-button',
       span: 0,
       layout: 'native',
       document: 'https://element.eleme.cn/#/zh-CN/component/button'
@@ -852,16 +789,24 @@ export const formModelComponents = [
     __slot__: {
       default: '主要按钮'
     },
-    eventSettings: {
-      emit: ''
-    },
     type: 'primary',
     icon: 'el-icon-search',
     round: false,
     size: 'medium',
     plain: false,
     circle: false,
-    disabled: false
+    disabled: false,
+    styles: {
+      defaultStyles: {
+        marginTop: '8px',
+        marginRight: '8px',
+        marginBottom: '8px',
+        marginLeft: '8px'
+      }
+    },
+    eventSettings: {
+      emit: ''
+    }
   }
 ]
 

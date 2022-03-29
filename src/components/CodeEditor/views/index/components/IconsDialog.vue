@@ -3,7 +3,7 @@
     <el-dialog
       v-bind="$attrs"
       width="80%"
-      :modal="false"
+      :append-to-body="true"
       v-on="$listeners"
       @open="onOpen"
     >

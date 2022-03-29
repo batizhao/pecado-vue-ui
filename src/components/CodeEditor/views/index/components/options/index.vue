@@ -157,6 +157,7 @@
     <el-dialog
       title="关联选项设置"
       :visible.sync="linkageVisible"
+      :append-to-body="true"
       width="50%"
       v-if="!['object-cascader'].includes(activeData.__config__.tag)"
     >

@@ -3,7 +3,7 @@
     <el-tabs v-model="currentTab" class="center-tabs">
       <el-tab-pane label="组件属性" name="field" />
       <el-tab-pane label="样式" name="style" />
-      <el-tab-pane label="表单属性" name="form" />
+      <el-tab-pane label="表单属性" name="form" v-if="formConf.isForm"/>
     </el-tabs>
     <div class="field-box">
       <el-scrollbar class="right-scrollbar">
@@ -80,80 +80,40 @@ import { mapState } from 'vuex'
 import stylePanel from './components/stylePanel/index.vue'
 import LxInput from './components/input.vue'
 import LxSelect from './components/select.vue'
-// import LxScore from './components/score.vue'
+import LxScore from './components/score.vue'
 import LxCascader from './components/cascader.vue'
-// import LxRadioGroup from './components/radioGroup.vue'
+import LxRadioGroup from './components/radioGroup.vue'
 import LxInputNumber from './components/inputNumber.vue'
-// import LxSwitch from './components/switch.vue'
+import LxSwitch from './components/switch.vue'
 import LxTinymce from './components/tinymce.vue'
-// import LxSlider from './components/slider.vue'
-// import LxTimePicker from './components/timePicker.vue'
-// import LxDatePicker from './components/datePicker.vue'
-// import LxRow from './components/row.vue'
-// import LxButton from './components/button.vue'
-// import LxNavmenu from './components/navmenu.vue'
-// import LxProcess from './components/progress.vue'
-// import LxTree from './components/tree.vue'
-// import LxImage from './components/imageUpload/index.vue'
-// import LxPagination from './components/pagination.vue'
-// import LxTabs from './components/tabs.vue'
-// import LxBreadcrumb from './components/breadcrumb.vue'
-// import LxColorPicker from './components/colorPicker.vue'
-// import LxUpload from './components/upload.vue'
-// import LxTable from './components/table.vue'
-// import LxEchartsBar from './components/echarts/bar.vue'
-// import LxEchartsTable from './components/echarts/table.vue'
-// import LxEchartsPie from './components/echarts/pie.vue'
-// import LxEchartsStatistics from './components/echarts/statistics.vue'
-// import LxConditionQuery from './components/conditionQuery.vue'
-// import LxTextBox from './components/text-box.vue'
-// import LxRegion from './components/region.vue'
-// import LxBacktop from './components/backtop.vue'
-// import lxOrgConSelect from './components/orgConSelect.vue'
-// import LxIcon from './components/clickIcon.vue'
-// import LxInputTable from './components/inputTable.vue'
-// import LxCarousel from './components/carousel.vue'
-// import LxMenu from './components/menu.vue'
+import LxSlider from './components/slider.vue'
+import LxTimePicker from './components/timePicker.vue'
+import LxDatePicker from './components/datePicker.vue'
+import LxRow from './components/row.vue'
+import LxButton from './components/button.vue'
+import LxColorPicker from './components/colorPicker.vue'
+import LxUpload from './components/upload.vue'
+import lxMyBacklog from './components/myBacklog.vue'
 
 export default {
   components: {
     stylePanel,
     LxInput,
     LxSelect,
-    // LxScore,
+    LxScore,
     LxCascader,
-    // LxRadioGroup,
-    // LxSlider,
+    LxRadioGroup,
+    LxSlider,
     LxInputNumber,
-    // LxSwitch,
-    // LxTimePicker,
+    LxSwitch,
+    LxTimePicker,
+    LxDatePicker,
     LxTinymce,
-    // LxRow,
-    // LxButton,
-    // LxNavmenu,
-    // LxProcess,
-    // LxTree,
-    // LxImage,
-    // LxPagination,
-    // LxTabs,
-    // LxBreadcrumb,
-    // LxColorPicker,
-    // LxUpload,
-    // LxDatePicker,
-    // LxTable,
-    // LxEchartsBar,
-    // LxEchartsTable,
-    // LxEchartsPie,
-    // LxEchartsStatistics,
-    // LxConditionQuery,
-    // LxTextBox,
-    // LxRegion,
-    // LxBacktop,
-    // lxOrgConSelect,
-    // LxIcon,
-    // LxInputTable,
-    // LxCarousel,
-    // LxMenu
+    LxRow,
+    LxButton,
+    LxColorPicker,
+    LxUpload,
+    lxMyBacklog
   },
   props: ['showField'],
   data () {

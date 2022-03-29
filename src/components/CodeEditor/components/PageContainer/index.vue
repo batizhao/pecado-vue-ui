@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container" :class="{'gray-back': !url}">
+  <div class="page-container" :class="{'gray-back': !pageConf}">
     <parser
       v-if="pageConf"
     ></parser>

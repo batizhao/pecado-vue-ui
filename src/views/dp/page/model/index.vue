@@ -192,12 +192,10 @@ export default {
     },
     handleDesign (item) {
       this.currentItem = deepClone(item)
-      if(typeof(this.currentItem.pageMetadata)==='string' && this.currentItem.pageMetadata.length>0){
-        this.currentItem.pageMetadata = JSON.parse(this.currentItem.pageMetadata)
-      }else{
-        this.currentItem.pageMetadata = {}
-      }
-      this.$refs.designRef.open()
+      this.currentItem.pageMetadata = JSON.parse(this.currentItem.pageMetadata) || {}
+      this.$nextTick(() => {
+        this.$refs.designRef.open()
+      })
     },
     getModuleTypeOptions () {
       const data = [

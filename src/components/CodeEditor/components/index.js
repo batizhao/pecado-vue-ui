@@ -14,6 +14,11 @@ import EventButton from './EventButton/index.vue'
 import Tinymce from './tinymce/index.vue'
 import objectSelector from './object-selector/index.vue'
 import objectCascader from './object-cascader/index.vue'
+import objectCheckboxGroup from './object-checkbox-group/index.vue'
+import objectRadioGroup from './object-radio-group/index.vue'
+import timeRangePicker from './time-range-picker/index.vue'
+import dateRangePicker from './date-range-picker/index.vue'
+import fileUpload from './fileUpload/index.vue'
 Vue.component(MyBacklog.name, MyBacklog)
 Vue.component(UsedProcess.name, UsedProcess)
 Vue.component(Notice.name, Notice)
@@ -30,4 +35,9 @@ Vue.component(EventButton.name, EventButton)
 Vue.component('tinymce', Tinymce)
 Vue.component('object-selector', objectSelector)
 Vue.component('object-cascader', objectCascader)
+Vue.component('object-checkbox-group', objectCheckboxGroup)
+Vue.component('object-radio-group', objectRadioGroup)
+Vue.component('time-range-picker', timeRangePicker)
+Vue.component('date-range-picker', dateRangePicker)
+Vue.component('file-upload', fileUpload)
 

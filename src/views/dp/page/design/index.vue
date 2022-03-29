@@ -9,7 +9,6 @@
     <div class="app-container" v-if="visible">
       <code-editor
         ref="refPortalSetting"
-        :pageData="modelData.pageMetadata"
         :leftComponents="leftComponents"
         @save="saveCallBack"
       ></code-editor>
@@ -23,7 +22,9 @@ import codeEditor from '@/components/CodeEditor/views/index/Home.vue'
 
 import { addOrEditTemplate} from '@/api/dp/page/model.js'
 import { deepClone } from '@/components/CodeEditor/utils/index'
+import setFormDataToStore from '../../../app/settings/models/formModel/electronicForm/setFormDataToStore.js'
 export default {
+  mixins: [setFormDataToStore],
   props: {
     modelData:{
       type:Object,
@@ -42,8 +43,8 @@ export default {
   },
   methods: {
     open () {
+      this.setFormDataToStore(this.modelData.pageMetadata)
       this.visible = true
-      console.log('this/modelData',this.modelData);
     },
     close () {
       this.visible = false
@@ -51,7 +52,7 @@ export default {
     save() {
       this.$refs.refPortalSetting.save()
     },
-    saveCallBack({ formData }){
+    saveCallBack(formData){
       const data = deepClone(this.modelData)
       data.pageMetadata = JSON.stringify(formData)
       addOrEditTemplate(data).then(() => {
