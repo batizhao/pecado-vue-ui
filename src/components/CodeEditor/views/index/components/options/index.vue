@@ -18,7 +18,7 @@
         </el-select>
       </el-form-item>
 
-      <template v-if="activeData.__config__.dataType === 'dynamic'">
+      <div v-if="activeData.__config__.dataType === 'dynamic'">
         <el-form-item label="接口地址">
           <el-input
             v-model="activeData.__config__.url"
@@ -57,7 +57,7 @@
             <el-input v-model="activeData.props.props.children" placeholder="请输入子级键名" @change="changeRenderKey"/>
           </el-form-item>
         </template>
-      </template>
+      </div>
 
       <template v-if="activeData.__config__.dataType === 'static'">
         <template

@@ -181,7 +181,7 @@ export default {
     overflow: hidden;
     position: relative;
     box-sizing: border-box;
-    height: calc(100vh - 42px);
+    height: calc(100vh - 97px);
   }
 }
 .select-item {
