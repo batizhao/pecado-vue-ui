@@ -154,16 +154,26 @@ function setValue(event, config, scheme) {
 
 function buildListeners(scheme) {
   const config = scheme.__config__;
-  const methods = this.formConf.__methods__ || {};
+  const methods = scheme.__methods__ || {};
   const listeners = {};
 
   // 给__methods__中的方法绑定this和event
   Object.keys(methods).forEach(key => {
-    listeners[key] = event => methods[key].call(this, event);
+    let currentMethod = methods[key]
+    if (typeof methods[key] === 'string') {
+      currentMethod = new Function('value', currentMethod)
+    }
+    listeners[key] = event => currentMethod.call(this, event);
   });
   // 响应 render.js 中的 vModel $emit('input', val)
-  listeners.input = event => setValue.call(this, event, config, scheme);
-
+  listeners.input = event => {
+    setValue.call(this, event, config, scheme)
+    // input事件被重写 所以要把原来自定义的onInput加上
+    if (methods.onInput && typeof methods.onInput === 'string') {
+      const met = new Function('value', methods.onInput)
+      met.call(this, event);
+    }
+  }
   return listeners;
 }
 
@@ -190,7 +200,8 @@ export default {
     const data = {
       formConfCopy: deepClone(this.formConf),
       [this.formConf.formModel]: {},
-      [this.formConf.formRules]: {}
+      [this.formConf.formRules]: {},
+      renderKey: ''
     };
 
     this.buildRules(data.formConfCopy.fields, data[this.formConf.formRules]);
@@ -258,9 +269,85 @@ export default {
           }
         });
       });
+    },
+    // 找到字段对应的配置对象
+    recursion (field, callback) {
+      let target = null
+      const recursion = list => {
+        for (let item of list) {
+          if (item.__vModel__ === field) {
+            target = item
+            break
+          }
+          if (item.children && item.children.length) {
+            recursion(item.children)
+          }
+        }
+      }
+      recursion(this.formConfCopy.fields)
+      if (target) {
+        callback && callback(target)
+        target.__config__.renderKey = String(new Date().getTime())
+      } else {
+        console.error(`目标字段${field}不存在`);
+      }
+    },
+    // 获取值
+    getValue (field) {
+      return this[this.formConf.formModel][field]
+    },
+    // 设置值
+    setValue (field, value) {
+      this.recursion(field, target => {
+        target.__config__.defaultValue =this[this.formConf.formModel][field] = value
+      })
+    },
+    // 设置禁用
+    setDisabled (field, value = true) {
+      this.recursion(field, target => {
+        target.disabled = value
+      })
+    },
+    // 设置只读
+    setReadOnly () {
+      this.recursion(field, target => {
+        target.readonly = value
+      })
+    },
+    // 设置隐藏
+    setHidden (field, value = true) {
+      this.recursion(field, target => {
+        this.$set(target.__config__, 'hidden', value)
+      })
+    },
+    // 设置必填
+    setRequired (field, value = true) {
+      this.recursion(field, () => {
+        this[this.formConf.formRules][field][0].required = value
+      }) 
+    },
+    // 设置属性
+    setOption (field, key, value) {
+      this.recursion(field, target => {
+        this.$set(target, key, value)
+      })
     }
   },
   render(h) {
+    this.obj = {
+      config: {}
+    }
+    const key = 'config.a.b'
+    const keyArr = key.split('.')
+    keyArr.reduce((total, current, index) => {
+      if (index === keyArr.length - 1) {
+        this.$set(total, current, '34242')
+      } else if (total[current] === undefined) {
+        this.$set(total, current, {})
+      }
+      return total[current]
+    }, this.obj)
+        console.log("🚀 ~ file: Parser.vue ~ line 339 ~ render ~ this.obj", this.obj)
     return renderFrom.call(this, h);
   }
 };

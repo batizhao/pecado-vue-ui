@@ -33,6 +33,18 @@ export const inputComponents = [
       // 正则校验规则
       regList: []
     },
+    on: {
+      'input': 'onInput',
+      'change': 'onChange',
+      'focus': 'onFocus',
+      'blur': 'onBlur'
+    },
+    __methods__: {
+      'onInput': '',
+      'onChange': '',
+      'onFocus': '',
+      'onBlur': ''
+    },
     // 组件的插槽属性
     __slot__: {
       prepend: '',

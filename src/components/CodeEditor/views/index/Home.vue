@@ -358,7 +358,7 @@ export default {
       this.idGlobal = Number(new Date().getTime() - 1642560259070 + num).toString(16)
     },
     drawingItemEnd () {
-      const data = JSON.parse(JSON.stringify(this.$store.getters['codeEditor/components/getCurrentComponent'] || null))
+      const data = deepClone(this.$store.getters['codeEditor/components/getCurrentComponent'] || null)
       this.activeFormItem(data)
     },
     drawingItemCopy (item, list) {

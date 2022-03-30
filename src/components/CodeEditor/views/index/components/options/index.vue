@@ -110,9 +110,6 @@
               添加选项
             </el-button>
           </div>
-          <el-button type="primary" style="width: 100%; margin-top: 20px" @click="linkageChange">
-            关联选项设置
-          </el-button>
         </template>
         <template
           v-if="['object-cascader', 'el-navmenu', 'el-tree'].includes(activeData.__config__.tag)"
@@ -154,50 +151,6 @@
         </template>
       </template>
     </el-form>
-    <el-dialog
-      title="关联选项设置"
-      :visible.sync="linkageVisible"
-      :append-to-body="true"
-      width="50%"
-      v-if="!['object-cascader'].includes(activeData.__config__.tag)"
-    >
-      <el-table :data="activeData.__slot__.options" border style="width: 100%">
-        <el-table-column prop="label" label="当选项为" width="220"> </el-table-column>
-        <el-table-column label="显示以下组件">
-          <template slot-scope="scope">
-            <el-tag
-              class="tag-list"
-              closable
-              @close="tagDelete(scope, index)"
-              v-for="(linkage, index) in scope.row.linkageList"
-              :key="index"
-              >
-                {{ linkage.label }}
-              </el-tag>
-            <el-popover placement="right" width="200" trigger="click">
-              <ul class="component-list">
-                <li
-                  :class="['item', selectItem(scope, item) ? 'is-select' : '']"
-                  v-for="(item, index) of componentList"
-                  :key="index"
-                  @click="changeComponent(scope, item)"
-                >
-                  <div class="component-list-label">
-                    {{ item.__config__.label }}
-                  </div>
-                  <i class="el-icon-check" v-if="selectItem(scope, item)"></i>
-                </li>
-              </ul>
-              <el-button slot="reference" icon="el-icon-plus" size="small"></el-button>
-            </el-popover>
-          </template>
-        </el-table-column>
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="linkageVisible = false">取 消</el-button>
-        <el-button type="primary" @click="saveLinkage">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -214,7 +167,6 @@ export default {
     return {
       treeNodeDialogVisible: false,
       currentNode: null,
-      linkageVisible: false,
       tableData: [],
       componentList: []
     }
@@ -242,79 +194,8 @@ export default {
   },
   methods: {
     ...mapMutations('codeEditor/components', ['changeRenderKey']),
-    selectItem (scope, component) {
-      const index = findIndex(scope.row.linkageList, { __vModel__: component.__vModel__ || component.__config__.componentName })
-      return index >= 0
-    },
-    changeComponent (scope, component) {
-      const cur = this.activeData.__slot__.options[scope.$index]
-      const vModel = component.__vModel__ || component.__config__.componentName
-      const item = {
-        __vModel__: vModel,
-        label: component.__config__.label
-      }
-      // 判断是否已选中
-      const index = findIndex(cur.linkageList, item)
-      if (index === -1) {
-        if (cur.linkageList) {
-          this.$set(cur.linkageList, cur.linkageList.length, item)
-        } else {
-          this.$set(cur, 'linkageList', [item])
-        }
-      } else {
-        // 选中的删除
-        this.tagDelete(scope, index)
-      }
-    },
     tagDelete (scope, index) {
       this.activeData.__slot__.options[scope.$index].linkageList.splice(index, 1)
-    },
-    saveLinkage () {
-      const currentComponent = this.activeData
-      // 先清除所有组件里添加了当前组件配置的componentAssociation元素
-      this.componentList.map(item => {
-        const componentAssociation = item.__config__.componentAssociation
-        if (componentAssociation) {
-          const index = componentAssociation.findIndex(t => t.key === currentComponent.__vModel__)
-          index !== -1 && componentAssociation.splice(index, 1)
-        }
-      })
-      // 再将componentAssociation添加到目标组件
-      for (const opt of this.activeData.__slot__.options) {
-        const optionValue = opt[currentComponent.props.props.value]
-        if (!opt.linkageList) continue
-        for (const linkage of opt.linkageList) { // 源组件上 linkageList: [{__vModel__: "field123",label: "文本"}]
-          // 找到要显示隐藏的目标组件
-          const targetComponent = this.componentList.find(item => (item.__vModel__ || item.__config__.componentName) === linkage.__vModel__)
-          if (!targetComponent) continue
-          const config = targetComponent.__config__
-          if (config.componentAssociation) { // 目标组件上 componentAssociation: [{ key: 'field456', value: [1, 2] }]
-            // 判断目标组件上是否已存在当前源组件的key
-            const index = config.componentAssociation.findIndex(item => item.key === currentComponent.__vModel__)
-            if (index === -1) { // 不存在就直接push
-              config.componentAssociation.push({
-                key: currentComponent.__vModel__,
-                value: [optionValue]
-              })
-            } else { // 存在的话就要对存在对象的value进行push
-              const arr = JSON.parse(JSON.stringify(config.componentAssociation[index].value))
-              arr.push(optionValue)
-              config.componentAssociation[index].value = arr
-            }
-          } else {
-            this.$set(config, 'componentAssociation', [{
-              key: currentComponent.__vModel__,
-              value: [optionValue]
-            }])
-          }
-        }
-      }
-      this.linkageVisible = false
-    },
-    // 关联选项设置
-    linkageChange () {
-      this.linkageVisible = true
-      this.getComponentAllList()
     },
     // 添加下拉框选项
     addSelectItem () {
@@ -346,19 +227,6 @@ export default {
     },
     addTreeNode (data) {
       this.currentNode.push(data)
-    },
-    getComponentAllList () {
-      const list = []
-      for (const item of this.drawingList) {
-        if (isArray(item.children)) {
-          this.getComponentAllList(item)
-        } else {
-          if (item.__vModel__ !== this.activeData.__vModel__) {
-            list.push(item)
-          }
-        }
-      }
-      this.componentList = list
     }
   }
 }
