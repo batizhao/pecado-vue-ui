@@ -663,6 +663,17 @@ export const layoutComponents = [
     eventSettings: {
       emit: ''
     }
+  },
+  {
+    __config__: {
+      label: 'HTML代码',
+      tag: 'html-interpreter',
+      tagIcon: 'code',
+      panel: 'lx-html-interpreter',
+      span: 24,
+      layout: 'native'
+    },
+    content: '<div>HTML Text</div>'
   }
 ]
 

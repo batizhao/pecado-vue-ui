@@ -94,6 +94,7 @@ import LxButton from './components/button.vue'
 import LxColorPicker from './components/colorPicker.vue'
 import LxUpload from './components/upload.vue'
 import lxMyBacklog from './components/myBacklog.vue'
+import LxHtmlInterpreter from './components/htmlInterpreter.vue'
 
 export default {
   components: {
@@ -113,7 +114,8 @@ export default {
     LxButton,
     LxColorPicker,
     LxUpload,
-    lxMyBacklog
+    lxMyBacklog,
+    LxHtmlInterpreter
   },
   props: ['showField'],
   data () {

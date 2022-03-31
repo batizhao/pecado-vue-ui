@@ -19,6 +19,7 @@ import objectRadioGroup from './object-radio-group/index.vue'
 import timeRangePicker from './time-range-picker/index.vue'
 import dateRangePicker from './date-range-picker/index.vue'
 import fileUpload from './fileUpload/index.vue'
+import HtmlInterpreter from './HtmlInterpreter'
 Vue.component(MyBacklog.name, MyBacklog)
 Vue.component(UsedProcess.name, UsedProcess)
 Vue.component(Notice.name, Notice)
@@ -40,4 +41,5 @@ Vue.component('object-radio-group', objectRadioGroup)
 Vue.component('time-range-picker', timeRangePicker)
 Vue.component('date-range-picker', dateRangePicker)
 Vue.component('file-upload', fileUpload)
+Vue.component('html-interpreter', HtmlInterpreter)
 
