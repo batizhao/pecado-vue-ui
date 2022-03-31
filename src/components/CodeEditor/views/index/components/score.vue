@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-form size="small" label-width="90px">
-            <form-basic-setting></form-basic-setting>
+            <form-basic-setting>
             <el-form-item label="允许半选">
                 <el-switch v-model="activeData['allow-half']" />
             </el-form-item>
@@ -24,6 +24,7 @@
             <el-form-item label="最大值">
                 <el-input-number v-model="activeData.max" placeholder="最大值" />
             </el-form-item>
+            </form-basic-setting>
         </el-form>
     </div>
 </template>

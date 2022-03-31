@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form size="small" label-width="90px">
-      <form-basic-setting></form-basic-setting>
+      <form-basic-setting>
       <el-form-item label="能否清空">
         <el-switch v-model="activeData.clearable" />
       </el-form-item>
@@ -44,6 +44,7 @@
           <el-input v-model="activeData.placeholder" placeholder="请输入占位提示"/>
         </el-form-item>
       </template>
+      </form-basic-setting>
     </el-form>
   </div>
 </template>

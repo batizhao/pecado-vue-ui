@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form size="small" label-width="90px">
-      <form-basic-setting></form-basic-setting>
+      <form-basic-setting>
       <el-form-item label="是否禁用">
         <el-switch v-model="activeData.disabled" />
       </el-form-item>
@@ -26,6 +26,7 @@
       <el-form-item label="按钮文字">
         <el-input v-model="activeData.__slot__.default" @input="changeRenderKey" placeholder="请输入按钮文字" />
       </el-form-item>
+      </form-basic-setting>
       <click-event></click-event>
     </el-form>
     <icons-dialog

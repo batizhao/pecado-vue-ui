@@ -37,13 +37,8 @@ export const inputComponents = [
       'input': 'onInput',
       'change': 'onChange',
       'focus': 'onFocus',
-      'blur': 'onBlur'
-    },
-    __methods__: {
-      'onInput': '',
-      'onChange': '',
-      'onFocus': '',
-      'onBlur': ''
+      'blur': 'onBlur',
+      'clear': 'onClear'
     },
     // 组件的插槽属性
     __slot__: {
@@ -77,6 +72,13 @@ export const inputComponents = [
       changeTag: true,
       document: 'https://element.eleme.cn/#/zh-CN/component/input'
     },
+    on: {
+      'input': 'onInput',
+      'change': 'onChange',
+      'focus': 'onFocus',
+      'blur': 'onBlur',
+      'clear': 'onClear'
+    },
     type: 'textarea',
     placeholder: '请输入',
     autosize: {
@@ -103,6 +105,13 @@ export const inputComponents = [
       required: true,
       regList: [],
       document: 'https://element.eleme.cn/#/zh-CN/component/input'
+    },
+    on: {
+      'input': 'onInput',
+      'change': 'onChange',
+      'focus': 'onFocus',
+      'blur': 'onBlur',
+      'clear': 'onClear'
     },
     __slot__: {
       prepend: '',
@@ -136,6 +145,11 @@ export const inputComponents = [
       regList: [],
       document: 'https://element.eleme.cn/#/zh-CN/component/input-number'
     },
+    on: {
+      'change': 'onChange',
+      'focus': 'onFocus',
+      'blur': 'onBlur'
+    },
     placeholder: '',
     min: undefined,
     max: undefined,
@@ -160,6 +174,11 @@ export const inputComponents = [
       required: true,
       regList: [],
       document: 'http://tinymce.ax-z.cn'
+    },
+    on: {
+      'input': 'onInput',
+      'focus': 'onFocus',
+      'blur': 'onBlur'
     },
     placeholder: '请输入',
     height: 300, // 编辑器高度
@@ -187,6 +206,15 @@ export const selectComponents = [
       dataPath: 'selectorList', // dataType是"dynamic"时，从请求里拿数据的目标
       defaultValue: '', // 默认值
       regList: []
+    },
+    on: {
+      'input': 'onInput',
+      'change': 'onChange',
+      'focus': 'onFocus',
+      'blur': 'onBlur',
+      'clear': 'onClear',
+      'visible-change': 'onVisibleChange',
+      'remove-tag': 'onRemoveTag'
     },
     __slot__: {
       options: [{
@@ -226,6 +254,15 @@ export const selectComponents = [
       dataPath: 'list',
       defaultValue: [],
       regList: []
+    },
+    on: {
+      'input': 'onInput',
+      'change': 'onChange',
+      'focus': 'onFocus',
+      'blur': 'onBlur',
+      'visible-change': 'onVisibleChange',
+      'expand-change': 'onExpandChange',
+      'remove-tag': 'onRemoveTag'
     },
     options: [{
       id: 1,
@@ -269,6 +306,10 @@ export const selectComponents = [
       defaultValue: '',
       regList: []
     },
+    on: {
+      'input': 'onInput',
+      'change': 'onChange'
+    },
     __slot__: {
       options: [{
         label: '选项一',
@@ -305,6 +346,10 @@ export const selectComponents = [
       regList: []
 
     },
+    on: {
+      'input': 'onInput',
+      'change': 'onChange'
+    },
     __slot__: {
       options: [{
         label: '选项一',
@@ -339,6 +384,9 @@ export const selectComponents = [
       required: false,
       regList: []
     },
+    on: {
+      'change': 'onChange'
+    },
     disabled: false,
     'active-text': '',
     'inactive-text': '',
@@ -362,6 +410,10 @@ export const selectComponents = [
       required: false,
       regList: []
     },
+    on: {
+      'input': 'onInput',
+      'change': 'onChange'
+    },
     disabled: false,
     min: 0,
     max: 100,
@@ -382,6 +434,11 @@ export const selectComponents = [
       labelWidth: null,
       required: false,
       regList: []
+    },
+    on: {
+      'change': 'onChange',
+      'focus': 'onFocus',
+      'blur': 'onBlur'
     },
     'is-range': false,
     'picker-options': {
@@ -408,6 +465,11 @@ export const selectComponents = [
       required: false,
       regList: [],
     },
+    on: {
+      'change': 'onChange',
+      'focus': 'onFocus',
+      'blur': 'onBlur'
+    },
     'is-range': true,
     disabled: false,
     clearable: true,
@@ -431,6 +493,11 @@ export const selectComponents = [
       required: false,
       regList: []
     },
+    on: {
+      'change': 'onChange',
+      'focus': 'onFocus',
+      'blur': 'onBlur'
+    },
     placeholder: '请选择',
     type: 'date',
     disabled: false,
@@ -453,6 +520,11 @@ export const selectComponents = [
       required: false,
       layout: 'colFormItem',
       regList: []
+    },
+    on: {
+      'change': 'onChange',
+      'focus': 'onFocus',
+      'blur': 'onBlur'
     },
     type: 'daterange',
     'range-separator': '至',
@@ -479,6 +551,9 @@ export const selectComponents = [
       required: false,
       regList: []
     },
+    on: {
+      'change': 'onChange'
+    },
     max: 5,
     'allow-half': false,
     'show-text': false,
@@ -499,6 +574,10 @@ export const selectComponents = [
       layout: 'colFormItem',
       required: false,
       regList: []
+    },
+    on: {
+      'change': 'onChange',
+      'active-change': 'onActiveChange'
     },
     'show-alpha': false,
     'color-format': '',
@@ -522,6 +601,10 @@ export const selectComponents = [
       regList: [],
       fileSize: 10,
       sizeUnit: 'MB'
+    },
+    on: {
+      'input': 'onInput',
+      'change': 'onChange'
     },
     __slot__: {
       'list-type': true

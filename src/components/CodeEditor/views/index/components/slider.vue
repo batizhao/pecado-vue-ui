@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-form size="small" label-width="90px">
-            <form-basic-setting></form-basic-setting>
+            <form-basic-setting>
             <el-form-item label="显示间断点">
                 <el-switch v-model="activeData['show-stops']" />
             </el-form-item>
@@ -27,6 +27,7 @@
             <el-form-item label="步长">
                 <el-input-number v-model="activeData.step" placeholder="步数" />
             </el-form-item>
+            </form-basic-setting>
         </el-form>
     </div>
 </template>

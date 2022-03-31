@@ -1,5 +1,11 @@
 <template>
-  <el-time-picker v-model="newValue" v-bind="$attrs" @change="handleChange"></el-time-picker>
+  <el-time-picker
+    v-model="newValue"
+    v-bind="$attrs"
+    @change="handleChange"
+    @focus="(event) => $emit('focus', event)"
+    @blur="(event) => $emit('blur', event)"
+  ></el-time-picker>
 </template>
 
 <script>

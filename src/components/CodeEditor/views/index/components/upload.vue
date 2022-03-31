@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form size="small" label-width="90px">
-      <form-basic-setting></form-basic-setting>
+      <form-basic-setting>
       <el-form-item label="显示提示">
         <el-switch v-model="activeData.__config__.showTip" />
       </el-form-item>
@@ -51,6 +51,7 @@
       <el-form-item v-show="'picture-card' !== activeData['list-type']" label="按钮文字">
         <el-input v-model="activeData.__config__.buttonText" placeholder="请输入按钮文字"  @input="changeRenderKey" />
       </el-form-item>
+      </form-basic-setting>
     </el-form>
   </div>
 </template>

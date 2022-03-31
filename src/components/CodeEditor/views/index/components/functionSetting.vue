@@ -1,5 +1,5 @@
 <template>
-  <div v-if="activeData.__methods__">
+  <div v-if="activeData.on">
     <el-divider>事件</el-divider>
     <ul class="event-setting-buttons">
       <li v-for="(value, key, index) in activeData.__methods__" :key="index">
@@ -8,7 +8,7 @@
       </li>
     </ul>
     <action-dialog v-model="editorVisible" title="" @confirm="editorConfirm">
-      <div class="editor-start-end">{{activeData.__vModel__}}.{{eventName}}(value) {</div>
+      <div class="editor-start-end">{{activeData.__vModel__}}.{{eventName}}({{params}}) {</div>
       <div id="editorJs" style="height: 400px;" />
       <div class="editor-start-end">}</div>
     </action-dialog>
@@ -28,7 +28,36 @@ export default {
       eventName: ''
     }
   },
+  watch: {
+    '$store.state.codeEditor.components.activeIndex': function (val, old) {
+      if (String(val) !== String(old)) {
+        this.setMethods()
+      }
+    }
+  },
+  computed: {
+    params () {
+      // 有些事件没有参数，比如onClear
+      return (['onClear'].includes(this.eventName)) ? '' : 'value'
+    }
+  },
+  created () {
+    this.setMethods()
+  },
   methods: {
+    // 初始化__methods__的值
+    setMethods () {
+      if (!this.activeData.__methods__) {
+        const onEvents = this.activeData.on
+        if (onEvents) {
+          const methods = {}
+          Object.values(onEvents).map(value => {
+            methods[value] = ''
+          })
+          this.$set(this.activeData, '__methods__', methods)
+        }
+      }
+    },
     writeFunction (value, key) {
       this.editorStr = value
       this.eventName = key

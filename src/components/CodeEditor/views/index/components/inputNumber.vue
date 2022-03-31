@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form size="small" label-width="90px">
-      <form-basic-setting></form-basic-setting>
+      <form-basic-setting>
       <el-form-item label="默认值">
         <el-input-number
           :value="setDefaultValue(activeData.__config__.defaultValue)"
@@ -35,6 +35,7 @@
           </el-radio-button>
         </el-radio-group>
       </el-form-item>
+      </form-basic-setting>
     </el-form>
   </div>
 </template>

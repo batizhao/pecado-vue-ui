@@ -2,10 +2,15 @@
   <el-cascader
     ref="elCascaderRef"
     v-model="newValue"
-    :props="props"
     v-bind="$attrs"
+    :props="props"
     :options="newOptions"
     @change="handleChange"
+    @blur="(event) => $emit('blur', event)"
+    @focus="(event) => $emit('focus', event)"
+    @visible-change="(event) => $emit('visible-change', event)"
+    @expand-change="(event) => $emit('expand-change', event)"
+    @remove-tag="(event) => $emit('remove-tag', event)"
   ></el-cascader>
 </template>
 <script>

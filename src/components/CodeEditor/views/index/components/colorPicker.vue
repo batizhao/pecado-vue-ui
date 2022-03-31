@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form size="small" label-width="90px">
-      <form-basic-setting></form-basic-setting>
+      <form-basic-setting>
       <el-form-item v-if="activeData.disabled !== undefined" label="是否禁用">
         <el-switch v-model="activeData.disabled" />
       </el-form-item>
@@ -42,6 +42,7 @@
 					@input="onDefaultValueInput"
 				/>
 			</el-form-item>
+      </form-basic-setting>
     </el-form>
   </div>
 </template>

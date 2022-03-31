@@ -6,6 +6,11 @@
       :multiple="multiple"
       :value-key="valueKey"
       @change="selectorChange"
+      @clear="() => $emit('clear')"
+      @blur="(event) => $emit('blur', event)"
+      @focus="(event) => $emit('focus', event)"
+      @visible-change="(event) => $emit('visible-change', event)"
+      @remove-tag="(event) => $emit('remove-tag', event)"
       >
       <el-option
         v-for="(item, index) in options"
@@ -76,7 +81,6 @@ export default {
     },
     selectorChange (val) {
       this.$emit('input', this.multiple ? val.map((item) => item.id) : val.id || '') // 修改value
-      this.$emit('change', val) // 修改label
     },
     async getOptions () {
       this.newValue = null

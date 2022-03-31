@@ -163,7 +163,10 @@ function buildListeners(scheme) {
     if (typeof methods[key] === 'string') {
       currentMethod = new Function('value', currentMethod)
     }
-    listeners[key] = event => currentMethod.call(this, event);
+    listeners[key] = event => {
+      // console.log(key + '事件被执行了--Parser');
+      currentMethod.call(this, event);
+    }
   });
   // 响应 render.js 中的 vModel $emit('input', val)
   listeners.input = event => {
@@ -225,31 +228,27 @@ export default {
       // 将editData中没有被vModel用到的属性都合并到formData中
       Object.assign(formData, this.editData)
     },
-    buildRules(componentList, rules) {
+    buildRules (componentList, rules) {
       componentList.forEach(cur => {
-        const config = cur.__config__;
+        const config = cur.__config__
         if (Array.isArray(config.regList)) {
-          if (config.required) {
-            const required = {
-              required: config.required,
-              message: cur.placeholder
-            };
+          if (config.required !== undefined) { // 只要required存在不管true还是false都要给个校验对象，为后续动态取消必填做准备，而且required对象必须在第一个
+            const required = { required: config.required, message: cur.placeholder }
             if (Array.isArray(config.defaultValue)) {
-              required.type = "array";
-              required.message = `请至少选择一个${config.label}`;
+              required.type = 'array'
             }
-            required.message === undefined &&
-              (required.message = `${config.label}不能为空`);
-            config.regList.push(required);
+            required.message === undefined && (required.message = `${config.label}不能为空`)
+            config.regList.push(required)
           }
+          // 其他正则校验添加
           rules[cur.__vModel__] = config.regList.map(item => {
-            item.pattern && (item.pattern = eval(item.pattern));
-            item.trigger = ruleTrigger && ruleTrigger[config.tag];
-            return item;
-          });
+            // eslint-disable-next-line no-eval
+            item.pattern && (item.pattern = eval(item.pattern))
+            return item
+          })
         }
-        if (config.children) this.buildRules(config.children, rules);
-      });
+        if (config.children) this.buildRules(config.children, rules)
+      })
     },
     resetForm() {
       this.formConfCopy = deepClone(this.formConf);
@@ -298,56 +297,43 @@ export default {
     },
     // 设置值
     setValue (field, value) {
-      this.recursion(field, target => {
-        target.__config__.defaultValue =this[this.formConf.formModel][field] = value
-      })
+      this.setOption(field, '__config__.defaultValue', value)
+      this[this.formConf.formModel][field] = value
     },
     // 设置禁用
     setDisabled (field, value = true) {
-      this.recursion(field, target => {
-        target.disabled = value
-      })
+      this.setOption(field, 'disabled', value)
     },
     // 设置只读
-    setReadOnly () {
-      this.recursion(field, target => {
-        target.readonly = value
-      })
+    setReadOnly (field, value = true) {
+      this.setOption(field, 'readonly', value)
     },
     // 设置隐藏
     setHidden (field, value = true) {
-      this.recursion(field, target => {
-        this.$set(target.__config__, 'hidden', value)
-      })
+      this.setOption(field, '__config__.hidden', value)
     },
     // 设置必填
     setRequired (field, value = true) {
       this.recursion(field, () => {
         this[this.formConf.formRules][field][0].required = value
-      }) 
+      })
     },
-    // 设置属性
+    // 设置指定属性值
     setOption (field, key, value) {
       this.recursion(field, target => {
-        this.$set(target, key, value)
+        const keyArr = key.split('.')
+        keyArr.reduce((total, current, index) => {
+          if (index === keyArr.length - 1) {
+            this.$set(total, current, value)
+          } else if (total[current] === undefined) {
+            this.$set(total, current, {})
+          }
+          return total[current]
+        }, target)
       })
     }
   },
   render(h) {
-    this.obj = {
-      config: {}
-    }
-    const key = 'config.a.b'
-    const keyArr = key.split('.')
-    keyArr.reduce((total, current, index) => {
-      if (index === keyArr.length - 1) {
-        this.$set(total, current, '34242')
-      } else if (total[current] === undefined) {
-        this.$set(total, current, {})
-      }
-      return total[current]
-    }, this.obj)
-        console.log("🚀 ~ file: Parser.vue ~ line 339 ~ render ~ this.obj", this.obj)
     return renderFrom.call(this, h);
   }
 };

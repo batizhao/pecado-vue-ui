@@ -1,8 +1,7 @@
 <template>
   <div>
     <el-form size="small" label-width="90px">
-      <form-basic-setting></form-basic-setting>
-      <function-setting></function-setting>
+      <form-basic-setting>
       <el-form-item v-if="activeData.type === 'password'" label="显示密码">
         <el-switch v-model="activeData['show-password']" />
       </el-form-item>
@@ -59,6 +58,7 @@
           </template>
         </el-input>
       </el-form-item>
+      </form-basic-setting>
       <regular v-if="activeData.__config__.regList"></regular>
     </el-form>
     <icons-dialog
@@ -71,18 +71,15 @@
 
 <script>
 import regular from './regular.vue'
-
 import IconsDialog from './IconsDialog'
 import mixins from './mixins'
 import formBasicSetting from './formBasicSetting.vue'
-import functionSetting from './functionSetting.vue'
 export default {
   name: 'lx-input',
   components: {
     IconsDialog,
     regular,
-    formBasicSetting,
-    functionSetting
+    formBasicSetting
   },
   mixins: [mixins],
   data () {

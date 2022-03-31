@@ -42,13 +42,19 @@
     <el-form-item label="是否隐藏">
       <el-switch v-model="activeData.__config__.hidden" />
     </el-form-item>
+    <slot></slot>
+    <function-setting></function-setting>
   </div>
 </template>
 
 <script>
 import mixins from './mixins'
+import functionSetting from './functionSetting.vue'
 export default {
   mixins: [mixins],
+  components: {
+    functionSetting
+  },
   created () {
     this.originVmodel = this.activeData.__vModel__
     const keywords = 'abstract,assert,boolean,break,byte,case,catch,char,class,const,continue,default,do,double,else,enum,extends,final,finally,float,for,goto,if,implements,import,instanceof,int,interface,long,native,new,package,private,protected,public,return,short,static,strictfp,super,switch,synchronized,this,throw,throws,transient,try,void,volatile,while'

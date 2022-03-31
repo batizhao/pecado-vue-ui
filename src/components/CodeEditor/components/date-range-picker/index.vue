@@ -1,5 +1,11 @@
 <template>
-  <el-date-picker v-model="newValue" v-bind="$attrs" @change="handleChange"></el-date-picker>
+  <el-date-picker
+    v-model="newValue"
+    v-bind="$attrs"
+    @change="handleChange"
+    @focus="(event) => $emit('focus', event)"
+    @blur="(event) => $emit('blur', event)"
+  ></el-date-picker>
 </template>
 
 <script>

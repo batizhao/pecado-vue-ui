@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form size="small" label-width="90px">
-      <form-basic-setting></form-basic-setting>
+      <form-basic-setting>
       <el-form-item label="选项样式">
         <el-radio-group v-model="activeData.__config__.optionType">
           <el-radio-button label="default">
@@ -39,6 +39,7 @@
           <el-input-number v-model="activeData.max" />
         </el-form-item>
       </template>
+      </form-basic-setting>
       <options></options>
     </el-form>
   </div>

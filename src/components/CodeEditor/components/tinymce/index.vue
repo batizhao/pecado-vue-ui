@@ -75,6 +75,8 @@ export default {
 			editor.on('change keyup undo redo', () => {
 				this.$emit('input', editor.getContent())
 			})
+			editor.on('blur', event => this.$emit('blur', event))
+			editor.on('focus', event => this.$emit('focus', event))
 		},
 		destroyTinymce() {
 			if (!window.tinymce) return

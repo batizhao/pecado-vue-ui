@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form size="small" label-width="90px">
-      <form-basic-setting></form-basic-setting>
+      <form-basic-setting>
       <el-form-item label="开启颜色">
         <el-color-picker v-model="activeData['active-color']" />
       </el-form-item>
@@ -22,6 +22,7 @@
           @change="handleInactiveChange"
         />
       </el-form-item>
+      </form-basic-setting>
     </el-form>
   </div>
 </template>
