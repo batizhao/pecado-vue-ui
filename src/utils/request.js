@@ -68,7 +68,7 @@ service.interceptors.response.use(res => {
         location.href = '/';
       })
     })
-  } else if (status !== 200 || res.data.code !== 0) {
+  } else if ((status !== 200) || ((res.data.code !== undefined) && (res.data.code !== 0))) {
     Message({
       message: res.data.data || message,
       type: 'error'

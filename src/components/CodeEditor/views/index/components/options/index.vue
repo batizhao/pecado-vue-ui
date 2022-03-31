@@ -157,7 +157,6 @@
 import TreeNodeDialog from './TreeNodeDialog.vue'
 import mixins from '../mixins'
 import { mapState, mapMutations } from 'vuex'
-import { isArray, findIndex } from 'lodash'
 export default {
   components: {
     TreeNodeDialog,
@@ -167,7 +166,6 @@ export default {
     return {
       treeNodeDialogVisible: false,
       currentNode: null,
-      tableData: [],
       componentList: []
     }
   },
