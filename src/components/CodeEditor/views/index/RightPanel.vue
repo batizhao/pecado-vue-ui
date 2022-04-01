@@ -95,6 +95,7 @@ import LxColorPicker from './components/colorPicker.vue'
 import LxUpload from './components/upload.vue'
 import lxMyBacklog from './components/myBacklog.vue'
 import LxHtmlInterpreter from './components/htmlInterpreter.vue'
+import LxDepartmentSelector from './components/departmentSelector.vue'
 
 export default {
   components: {
@@ -115,7 +116,8 @@ export default {
     LxColorPicker,
     LxUpload,
     lxMyBacklog,
-    LxHtmlInterpreter
+    LxHtmlInterpreter,
+    LxDepartmentSelector
   },
   props: ['showField'],
   data () {

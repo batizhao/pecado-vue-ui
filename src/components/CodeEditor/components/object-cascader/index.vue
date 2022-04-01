@@ -14,7 +14,7 @@
   ></el-cascader>
 </template>
 <script>
-import axios from 'axios'
+import request from '@/utils/request'
 export default {
   data () {
     return {
@@ -45,15 +45,14 @@ export default {
       if (conf.dataType === 'dynamic') {
         const { method, url, dataPath } = this.__config__
         if (method && url) {
-          await axios({ method, url })
+          await request({ method, url })
             .then((res) => {
-              const resp = res.data
               if (!dataPath) {
                 console.error('dataPath值不存在')
                 return
               }
               // 根据dataPath获取到请求的指定位置的数据
-              const respData = dataPath.split('.').reduce((pre, item) => pre[item], resp)
+              const respData = dataPath.split('.').reduce((pre, item) => pre[item], res)
               if (!respData) {
                 this.$message.error('数据位置有误')
                 return

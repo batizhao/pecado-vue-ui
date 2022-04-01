@@ -11,7 +11,7 @@
         >
           <el-option label="自定义" value="static"></el-option>
           <el-option
-            v-if="['object-selector', 'object-cascader'].includes(activeData.__config__.tag)"
+            v-if="['object-selector', 'object-cascader', 'department-selector-1'].includes(activeData.__config__.tag)"
             label="动态数据"
             value="dynamic"
           ></el-option>
@@ -112,7 +112,7 @@
           </div>
         </template>
         <template
-          v-if="['object-cascader', 'el-navmenu', 'el-tree'].includes(activeData.__config__.tag)"
+          v-if="['object-cascader', 'el-navmenu', 'el-tree', 'department-selector-1'].includes(activeData.__config__.tag)"
         >
           <el-tree
             draggable

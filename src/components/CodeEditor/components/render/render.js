@@ -80,7 +80,7 @@ function buildDataObject(confClone, dataObject) {
 function clearAttrs(dataObject) {
 	const tag = dataObject.attrs.__config__.tag
 	// 在进行二次封装下拉框时，要用到__config__中的配置，要把他传入组件
-  if (!['object-selector', 'file-upload', 'object-cascader', 'd2-crud-table', 'text-box'].includes(tag)) {
+  if (!['object-selector', 'file-upload', 'object-cascader', 'department-selector-1'].includes(tag)) {
     delete dataObject.attrs.__config__
   }
   if (!['object-selector', 'object-checkbox-group', 'object-radio-group'].includes(tag)) {

@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  name: 'html-interpreter',
   props: {
     content: String
   }

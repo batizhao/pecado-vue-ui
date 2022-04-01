@@ -677,6 +677,52 @@ export const layoutComponents = [
   }
 ]
 
+export const seniorComponents = [
+  {
+    __config__: {
+      label: '部门选择1',
+      showLabel: true,
+      labelWidth: null,
+      tag: 'department-selector-1',
+      tagIcon: 'select',
+      panel: 'lx-departmentSelector',
+      layout: 'colFormItem',
+      span: 12,
+      required: false,
+      dataType: 'dynamic',
+      url: '/ims/department',
+      method: 'get',
+      dataPath: 'data',
+      defaultValue: [],
+      regList: []
+    },
+    on: {
+      'input': 'onInput',
+      'change': 'onChange',
+      'focus': 'onFocus',
+      'blur': 'onBlur',
+    },
+    options: [{
+      id: 1,
+      value: '1',
+      name: '选项1',
+      children: [{
+        id: 2,
+        value: '2',
+        name: '选项1-1'
+      }]
+    }],
+    props: {
+      props: {
+        multiple: false,
+        label: 'name',
+        value: 'id',
+        children: 'children'
+      }
+    },
+  },
+]
+
 export const indexPageComponents =[
   {
 		// 组件的自定义配置

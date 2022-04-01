@@ -144,7 +144,7 @@ import {
   selectComponents,
   layoutComponents,
   echartsComponents,
-  layoutFormComponents
+  seniorComponents
 } from '../../components/generator/config'
 import {
   beautifierConf,
@@ -178,17 +178,22 @@ export default {
       type: Array,
       default: () => [
         {
-        title: '输入型组件',
-        list: inputComponents
+          title: '输入型组件',
+          list: inputComponents
         },
         {
-        title: '选择型组件',
-        list: selectComponents
+          title: '选择型组件',
+          list: selectComponents
         },
         {
-        title: '布局型组件',
-        list: layoutComponents
+          title: '布局型组件',
+          list: layoutComponents
+        },
+        {
+          title: '高级组件',
+          list: seniorComponents
         }
+
       ]
     }
   },
