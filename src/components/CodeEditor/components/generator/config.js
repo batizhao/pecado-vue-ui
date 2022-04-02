@@ -698,9 +698,7 @@ export const seniorComponents = [
     },
     on: {
       'input': 'onInput',
-      'change': 'onChange',
-      'focus': 'onFocus',
-      'blur': 'onBlur',
+      'focus': 'onFocus'
     },
     options: [{
       id: 1,
@@ -721,6 +719,36 @@ export const seniorComponents = [
       }
     },
   },
+  {
+    __config__: {
+      label: '部门选择2',
+      showLabel: true,
+      labelWidth: null,
+      tag: 'department-selector-2',
+      tagIcon: 'select',
+      panel: 'lx-department-selector2',
+      layout: 'colFormItem',
+      span: 12,
+      required: false,
+      dataType: 'dynamic',
+      url: '/ims/department',
+      method: 'get',
+      dataPath: 'data',
+      defaultValue: [],
+      regList: []
+    },
+    on: {
+      'input': 'onInput',
+      'focus': 'onFocus'
+    },
+    options: [], // 部门分类的选项组
+    props: {
+      props: {
+        label: 'name',
+        value: 'id'
+      }
+    },
+  }
 ]
 
 export const indexPageComponents =[

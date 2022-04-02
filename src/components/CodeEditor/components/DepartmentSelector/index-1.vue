@@ -5,7 +5,6 @@
       :value-key="props.value"
       multiple
       @focus="selectFocus"
-      @blur="(event) => $emit('blur', event)"
       popper-class="department-popper"
     >
       <el-option
@@ -57,13 +56,9 @@
 </template>
 
 <script>
-import draggable from 'vuedraggable'
 import request from '@/utils/request'
 export default {
   name: 'department-selector-1',
-  components: {
-    draggable
-  },
   props: {
     value: Array,
     __config__: Object,
@@ -79,12 +74,6 @@ export default {
     }
   },
   watch: {
-    selectedNodes: {
-      handler (value) {
-        this.$emit('change', value)
-      },
-      deep: true
-    },
     selectedItems: {
       handler (value) {
         this.$emit('input', value)
@@ -177,9 +166,6 @@ export default {
       this.dialogVisible = false
       const data = JSON.parse(JSON.stringify(this.selectedNodes))
       this.selectedItems = data
-      if (this.__config__.dataType === 'dynamic') {
-        this.options = data
-      }
     }
   },
 }

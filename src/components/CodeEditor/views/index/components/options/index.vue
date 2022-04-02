@@ -9,9 +9,13 @@
           placeholder="请选择"
           @change="changeRenderKey"
         >
-          <el-option label="自定义" value="static"></el-option>
           <el-option
-            v-if="['object-selector', 'object-cascader', 'department-selector-1'].includes(activeData.__config__.tag)"
+            label="自定义"
+            value="static" 
+            v-if="!['department-selector-2'].includes(activeData.__config__.tag)"
+          ></el-option>
+          <el-option
+            v-if="['object-selector', 'object-cascader', 'department-selector-1', 'department-selector-2'].includes(activeData.__config__.tag)"
             label="动态数据"
             value="dynamic"
           ></el-option>
