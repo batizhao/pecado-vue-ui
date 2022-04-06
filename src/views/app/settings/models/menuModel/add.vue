@@ -18,10 +18,8 @@
 </template>
 <script>
 import { listDashboardMenu } from "@/api/ims/menu";
-import { getListData } from "@/api/app/formModel";
-import { getListData as getListModelData } from "@/api/app/pageModel.js";
-import { getListData as getPageModelList } from '@/api/dp/page/model.js'
 import FontAwesomeSelector from '@/components/FontAwesomeSelector/index.vue'
+import { getAssociatePageOption, getAssociatePageDataList } from './associatePage.js'
 const getDefaultFrom = () => {
   return {
     pid: 0,
@@ -70,53 +68,7 @@ export default {
             { required: true, message: "菜单名称不能为空", trigger: "change" },
           ]
         },
-        {
-          label: '页面模型',
-          prop: 'appPageCode',
-          type: 'select',
-          options: [],
-          optionsProps: {
-            label: 'name',
-            value: 'id'
-          },
-          change: (value, item) => {
-            const target = item.options.find(t => t.id === value)
-            this.form.currentAppPageType = target ? target.type : ''
-            this.form.pageModelCode = ''
-          }
-        },
-        {
-          label: '表单模型',
-          prop: 'pageModelCode',
-          type: 'select',
-          options: [],
-          optionsProps: {
-            label: 'name',
-            value: 'formKey'
-          },
-          rules: [
-            { required: true, message: "表单模型不能为空", trigger: "change" }
-          ],
-          showCondition: () => {
-            return this.form.currentAppPageType === 'form'
-          }
-        },
-        {
-          label: '列表模型',
-          prop: 'pageModelCode',
-          type: 'select',
-          options: [],
-          optionsProps: {
-            label: 'name',
-            value: 'code'
-          },
-          rules: [
-            { required: true, message: "列表模型不能为空", trigger: "change" }
-          ],
-          showCondition: () => {
-            return this.form.currentAppPageType === 'list'
-          }
-        },
+        ...getAssociatePageOption.call(this, 'form'),
         {
           label: '菜单类型',
           prop: 'type',
@@ -177,31 +129,7 @@ export default {
       const index = this.formOptions.findIndex(item => item.prop === 'pid')
       this.formOptions[index].options = options
     })
-    // 获取表单模型
-    getListData(this.appId).then(res => {
-      const index = this.formOptions.findIndex(item => item.label === '表单模型')
-      this.formOptions[index].options = res.data.records
-    })
-    // 获取列表模型
-    getListModelData(this.appId).then(res => {
-      const index = this.formOptions.findIndex(item => item.label === '列表模型')
-      this.formOptions[index].options = res.data.records
-    })
-    // 获取页面模型类型
-    getPageModelList().then(res => {
-      let list = res.data.records || []
-      list = list.filter(item => {
-        return item.type !== 'layout'
-      })
-      // 排除布局模型
-      const index = this.formOptions.findIndex(item => item.prop === 'appPageCode')
-      this.formOptions[index].options = list
-
-      // 通过form.appPageCode值判断currentAppPageType的值
-      const target = list.find(item => item.id === this.form.appPageCode)
-      if (target) this.form.currentAppPageType = target.type
-      
-    })
+    getAssociatePageDataList.call(this, 'form', 'formOptions')
 
   },
   methods: {

@@ -53,7 +53,8 @@ export default {
       tableConfig: null,
       actionButtons: [],
       tableActionButtons: [],
-      errorTip: ''
+      errorTip: '',
+      requestUrl: '' // 请求地址
     }
   },
   methods: {
@@ -88,7 +89,8 @@ export default {
       }
       const { header, button, condition } = data.listMetadata
       // 接口地址
-      tableConfig.url = data.addr
+      tableConfig.url = data.addr + 's'
+      this.requestUrl = data.addr
       // 生成表头
       tableConfig.columns = 
         header
@@ -127,75 +129,75 @@ export default {
       this.actionButtons = button.filter(item => item.position === 'outside')
       return tableConfig
     },
+    // 表格内按钮点击事件
     tableActionButtonsClick (row, button) {
-      // 如果有跳转链接，直接跳转
-      if (button.href) {
-        const href = this.analysisUrl(button.href, row)
-        if (button.operType === 'edit') { // 如果是编辑，那就要把编辑接口和详情接口和方法都传过去，还要加上行数据的id
-          let query = {
-            formDataId: row.id,
-            editUrl: this.analysisUrl(button.addr, row),
-            editMethod: button.method
-          }
-          // 还要查一个详情接口
-          const detailButton = this.tableActionButtons.find(item => item.operType === 'detail')
-          if (detailButton) {
-            Object.assign(query, {
-              detailUrl: this.analysisUrl(detailButton.addr, row),
-              detailMethod: detailButton.method
-            })
-          } else {
-            // this.msgError('请配置详情接口')
-            // 如果没有配置详情接口，就给个默认值
-            Object.assign(query, {
-              detailUrl: this.analysisUrl(button.addr + '/{id}', row),
-              detailMethod: 'get'
-            })
-          }
-          this.$router.push({ path: href, query })
-        } else if (button.operType === 'detail') { // 如果是详情，就只要传详情的接口和方法
-          const query = {
-            detailUrl: this.analysisUrl(button.addr, row),
-            detailMethod: button.method
-          }
-          this.$router.push({ path: href, query })
+      console.log("🚀 ~ file: index.vue ~ line 131 ~ tableActionButtonsClick ~ row, button", row, button)
+      if (['edit', 'detail'].includes(button.operType)) {
+        if (button.page && button.page.appPageCode) {
+          // 如果配置了关联页面，直接跳转，带上数据id
+          this.$router.push({
+            path: '/home',
+            query: {
+              ...button.page,
+              formDataId: row.id,
+              operType: button.operType,
+              url: this.requestUrl
+            }
+          })
         } else {
-          this.$router.push({ path: href })
+          this.msgError('请配置关联页面')
         }
-      } else if (button.addr) {
-        // 有接口就调接口,但是要解析一下
-        const url = this.analysisUrl(button.addr, row)
-        request({
-          url: url,
-          method: button.method || 'get'
-        }).then(() => {
-          // 如果是删除类型按钮，就重新请求表格
-          if (button.operType === 'delete') {
-            this.$refs.actionTableRef.getTableData()
-          }
-        })
+      } else {
+        // 根据按钮类型执行对应固定事件
+        switch (button.operType) {
+          case 'delete':
+            this.handleDelete(row)
+            break
+          default:
+            console.error('按钮类型未开发对应事件')
+            break
+        }
       }
     },
+    // 表格外按钮点击事件
     actionButtonsClick (button) {
-      // 如果有跳转链接，直接跳转
-      if (button.href) {
-        // 如果是新增，就要把新增的接口传过去
-        if (button.operType === 'create') {
-          const query = {
-            createUrl: button.addr,
-            createMethod: button.method
-          }
-          this.$router.push({ path: button.href, query })
+      if (['create'].includes(button.operType)) {
+        if (button.page && button.page.appPageCode) {
+          this.$router.push({
+            path: '/home',
+            query: {
+              ...button.page,
+              operType: button.operType,
+              url: this.requestUrl
+            }
+          })
         } else {
-          this.$router.push({ path: button.href })
+          this.msgError('请配置关联页面')
         }
-      } else if (button.addr) {
-        // 有接口就调接口
-        request({
-          url: button.addr,
-          method: button.method || 'get'
-        })
+      } else {
+        // 根据按钮类型执行对应固定事件
+        switch (button.operType) {
+          default:
+            console.error('按钮类型未开发对应事件')
+            break
+        }
       }
+    },
+    handleDelete (row) {
+      this.$confirm('确认删除?', "提示", {
+        type: "warning"
+      }).then(() => {
+        request({
+          url: this.requestUrl,
+          method: 'delete',
+          params: {
+            ids: row.id
+          }
+        }).then(() => {
+          this.msgSuccess("删除成功")
+          this.$refs.actionTableRef.getTableData()
+        })
+      }).catch(() => {})
     }
   },
   created () {

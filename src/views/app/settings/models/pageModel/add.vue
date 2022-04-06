@@ -79,7 +79,7 @@ export default {
           ]
         },
         {
-          label: '数据列表接口请求地址',
+          label: '请求地址',
           prop: 'addr',
           rules: [
             { required: true, message: "请输入请求地址", trigger: "change" },

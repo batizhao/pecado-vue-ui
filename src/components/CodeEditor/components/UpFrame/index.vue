@@ -68,7 +68,7 @@ export default {
       const { appPageCode, pageModelCode, id } = this.$route.query
       if (appPageCode) {
         this.getFrame({ appPageCode, pageModelCode })
-        this.sideActiveIndex = id.toString()
+        id && (this.sideActiveIndex = id.toString())
       } else {
         // 默认选中第一个菜单
         this.navBarSelect(this.navBarMenuData[0])

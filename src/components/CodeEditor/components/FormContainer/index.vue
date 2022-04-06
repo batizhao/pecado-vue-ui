@@ -48,10 +48,10 @@ export default {
     // 获取表单数据
     getFormData () {
       return new Promise((resolve, reject) => {
-        const { detailUrl } = this.$route.query
-        if (detailUrl) {
+        const { operType, url, formDataId } = this.$route.query
+        if (['edit', 'detail'].includes(operType)) {
           request({
-            url: detailUrl
+            url: url + '/' + formDataId
           }).then(res => {
             this.editData = res.data
             resolve()

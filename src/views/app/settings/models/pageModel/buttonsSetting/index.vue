@@ -11,10 +11,31 @@
       :tableColumns="tableColumns"
       :operationColumn="{ show: true, movable: true }"
     >
+      <!-- 图标选择 -->
       <template v-slot:icon="scope">
         <el-input v-model="scope.row.icon" size="mini" @focus="$refs.fontAwesomeSelectorRef.open()">
         </el-input>
         <font-awesome-selector ref="fontAwesomeSelectorRef" v-model="scope.row.icon"></font-awesome-selector>
+      </template>
+      <!-- 关联页面 -->
+      <template v-slot:page="scope">
+        <el-badge is-dot v-if="scope.row.page">
+          <el-button size="mini" @click="associatePage(scope)">配置</el-button>
+        </el-badge>
+        <el-button v-else size="mini" @click="associatePage(scope)" :disabled="!['create', 'edit', 'detail'].includes(scope.row.operType)">配置</el-button>
+        <action-dialog
+          v-model="associatePageVisible"
+          title="关联页面"
+          width="30%"
+          @confirm="submitAssociatePage"
+        >
+          <action-form
+            :model="associatePageFormModel"
+            :formOptions="associatePageFormOptions"
+            :span="24"
+          >
+          </action-form>
+        </action-dialog>
       </template>
     </action-edit-table>
   </div>
@@ -22,6 +43,7 @@
 
 <script>
 import FontAwesomeSelector from '@/components/FontAwesomeSelector/index.vue'
+import { getAssociatePageOption, getAssociatePageDataList, getCurrentAppPageType } from '../../menuModel/associatePage.js'
 export default{
   props: {
     defaultData: Array
@@ -106,30 +128,27 @@ export default{
           ]
         },
         {
-          label: '请求地址',
-          prop: 'addr'
-        },
-        {
-          label: '请求方法',
-          prop: 'method',
-          type: 'select',
-          options: [
-            { value: 'get' },
-            { value: 'post' },
-            { value: 'put' },
-            { value: 'delete' },
-          ],
-          optionsProps: {
-            label: 'value',
-            value: 'value'
-          }
-        },
-        {
-          label: '跳转地址',
-          prop: 'href'
-        },
-      ]
+          label: '关联页面',
+          prop: 'page',
+          type: 'slot',
+          slotName: 'page'
+        }
+      ],
+      currentRowIndex: 0,
+      associatePageVisible: false,
+      associatePageFormModel: {
+        appPageCode: '',
+        pageModelCode: '',
+        currentAppPageType: ''
+      },
+      associatePageFormOptions: [
+        ...getAssociatePageOption.call(this, 'associatePageFormModel'),
+      ],
+      appId: this.$route.params.appId
     }
+  },
+  created () {
+    getAssociatePageDataList.call(this, 'associatePageFormModel', 'associatePageFormOptions')
   },
   methods: {
     handleAdd () {
@@ -137,6 +156,23 @@ export default{
     },
     handleDel () {
       this.$refs.actionEditTableRef.deleteRow()
+    },
+    associatePage ({ row, index }) {
+      this.currentRowIndex = index
+      const { appPageCode, pageModelCode } = row.page || {}
+      this.associatePageFormModel.appPageCode = appPageCode || ''
+      this.associatePageFormModel.pageModelCode = pageModelCode || ''
+      getCurrentAppPageType.call(this, 'associatePageFormModel', 'associatePageFormOptions')
+      this.associatePageVisible = true
+    },
+    submitAssociatePage () {
+      const { appPageCode, pageModelCode } = this.associatePageFormModel
+      this.$refs.actionEditTableRef.form.data[this.currentRowIndex].page = {
+        appPageCode,
+        pageModelCode,
+        appId: this.appId
+      }
+      this.associatePageVisible = false
     }
   }
 }
