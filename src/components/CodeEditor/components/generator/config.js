@@ -937,6 +937,98 @@ export const formModelComponents = [
     eventSettings: {
       emit: ''
     }
+  },
+  {
+    __config__: {
+      label: '保存',
+      tag: 'event-button',
+      tagIcon: 'button',
+      panel: 'lx-button',
+      span: 0,
+      layout: 'native',
+      document: 'https://element.eleme.cn/#/zh-CN/component/button'
+    },
+    "__slot__": {
+      "default": "保存"
+    },
+    type: 'primary',
+    functionButton:true,//判断是否是具体功能按钮
+    icon: 'el-icon-circle-check',
+    round: false,
+    size: 'medium',
+    plain: false,
+    circle: false,
+    disabled: false,
+    styles: {
+      defaultStyles: {
+        marginTop: '8px',
+        marginRight: '8px',
+        marginBottom: '8px',
+        marginLeft: '8px'
+      }
+    },
+    eventSettings: {
+      emit: 'buttonEmitSave'
+    }
+  },
+  {
+    __config__: {
+      label: '提交',
+      tag: 'event-button',
+      tagIcon: 'button',
+      panel: 'lx-button',
+      span: 0,
+      layout: 'native',
+      document: 'https://element.eleme.cn/#/zh-CN/component/button'
+    },
+    "__slot__": {
+      "default": "提交"
+    },
+    type: 'primary',
+    functionButton:true,
+    icon: 'el-icon-folder-checked',
+    round: false,
+    size: 'medium',
+    plain: false,
+    circle: false,
+    disabled: false,
+    styles: {
+      defaultStyles: {
+        marginTop: '8px',
+        marginRight: '8px',
+        marginBottom: '8px',
+        marginLeft: '8px'
+      }
+    },
+    eventSettings: {
+      emit: 'buttonEmitSubmit'
+    }
+  },
+  {
+    __config__: {
+      label: '关闭', 
+      tag: 'event-button',
+      tagIcon: 'button',
+      panel: 'lx-button',
+      span: 0,  
+      layout: 'native',
+      isclose:true,//判断是否是关闭按钮
+      document: 'https://element.eleme.cn/#/zh-CN/component/button'
+    },
+    "__slot__": {
+      "default": ""
+    },
+    functionButton:true,
+    type: 'default',
+    icon: 'el-icon-close',
+    round: false,
+    size: 'small',
+    plain: false,
+    circle: true,
+    disabled: false,
+    eventSettings: {
+      emit: 'buttonEmitClose'
+    }
   }
 ]
 
