@@ -40,12 +40,17 @@
               >
                 <!-- 下拉框 -->
                 <template v-if="item.type === 'select'">
+                  <span v-if="isReadonly(row, item)">
+                    {{ getSelectorLabel(row, item) }}
+                  </span>
                   <el-select
+                    v-if="!isReadonly(row, item)"
                     v-model="row[item.prop]"
                     style="width: 100%;"
                     clearable
                     :size="size"
-                    :disabled="item.disabled || isReadonly(row, item)"
+                    :disabled="item.disabled"
+                    @change="selectChange(item, row[item.prop], $index)"
                   >
                     <el-option
                       v-for="option in item.options"
@@ -57,9 +62,9 @@
                 </template>
                 <!-- 数字输入框 -->
                 <template v-else-if="item.type === 'inputNumber'">
-                  <span v-show="isReadonly(row, item)">{{row[item.prop]}}</span>
+                  <span v-if="isReadonly(row, item)">{{row[item.prop]}}</span>
                   <el-input-number
-                    v-show="!isReadonly(row, item)"
+                    v-if="!isReadonly(row, item)"
                     v-model="row[item.prop]"
                     style="width: 100%;"
                     :disabled="item.disabled"
@@ -81,9 +86,9 @@
                 </template>
                 <!-- 默认为输入框 -->
                 <template v-else>
-                  <span v-show="isReadonly(row, item)">{{row[item.prop]}}</span>
+                  <span v-if="isReadonly(row, item)">{{row[item.prop]}}</span>
                   <el-input
-                    v-show="!isReadonly(row, item)"
+                    v-if="!isReadonly(row, item)"
                     :size="size"
                     v-model="row[item.prop]"
                     :disabled="item.disabled"
@@ -178,6 +183,10 @@ export default {
     }
   },
   methods: {
+    // 设置某行数据某个属性的值
+    setValue (index, attrName, value) {
+      this.$set(this.form.data[index], attrName, value)
+    },
     getRef () {
       return this.$refs.form
     },
@@ -256,6 +265,17 @@ export default {
     moveDown (scope) {
       const delItem = this.form.data.splice(scope.$index, 1)
       this.form.data.splice(scope.$index + 1, 0, delItem[0])
+    },
+    // change回调
+    selectChange (item, value, index) {
+      if (item.change) {
+        item.change(value, item, index)
+      }
+    },
+    // 获取下拉框的label
+    getSelectorLabel (row, item) {
+      const target =  item.options.find(option => option[item.optionsProps ? item.optionsProps.value : 'value'] === row[item.prop])
+      return target ? target[item.optionsProps ? item.optionsProps.label : 'label'] : row[item.prop]
     }
   }
 }

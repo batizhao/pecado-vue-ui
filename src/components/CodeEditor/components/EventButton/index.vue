@@ -11,7 +11,6 @@
 
 <script>
 import opinion from './opinion.vue'
-import { getDataDetail } from '@/api/app/formModel.js'
 import request from '@/utils/request'
 export default {
   components: { opinion },
@@ -61,6 +60,9 @@ export default {
             // 新增的时候接口都会返回id，这时把新id存到formData中，以便后续其他按钮操作要用到这条数据的id
             this.$route.query.formDataId = res.data.id // 这样隐式放在query中，就不会改变路由触发页面变动
             callback && callback()
+            if (operType === 'create') {
+              this.buttonEmitReset()
+            }
           })
         })
       } else {

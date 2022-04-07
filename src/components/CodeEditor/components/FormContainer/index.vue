@@ -6,6 +6,7 @@
       :form-conf="formConf"
       :showSubmit="false"
       :editData="editData"
+      :readOnly="readOnly"
     ></parser>
     <div class="tip" v-else>{{`表单容器 ${errorTip}`}}</div>
   </div>
@@ -26,6 +27,7 @@ export default {
     return {
       formConf: null,
       editData: null,
+      readOnly: false,
       errorTip: ''
     }
   },
@@ -54,6 +56,9 @@ export default {
             url: url + '/' + formDataId
           }).then(res => {
             this.editData = res.data
+            if (operType === 'detail') {
+              this.readOnly = true
+            }
             resolve()
           })
         } else {

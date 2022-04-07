@@ -39,7 +39,6 @@
 <script>
 import Parser from '@/components/CodeEditor/components/parser/Parser.vue'
 import request from '@/utils/request'
-import { analysisUrl } from './analysisUrl'
 export default {
   name: 'list-container',
   components: {
@@ -58,7 +57,6 @@ export default {
     }
   },
   methods: {
-    analysisUrl,
     getData () {
       if (!this.url) return
       request({

@@ -83,7 +83,15 @@ export default{
           ],
           rules: [
             { required: true, trigger: 'change', message: '请选择' }
-          ]
+          ],
+          change: (value, item, index) => {
+            this.$refs.actionEditTableRef.setValue(index, 'position', 
+              ['edit', 'detail', 'delete'].includes(value) 
+                ? 'inside'
+                : 'outside'
+            )
+            this.$refs.actionEditTableRef.setValue(index, 'page', null)
+          }
         },
         {
           label: '按钮名称',
@@ -125,7 +133,8 @@ export default{
             {
               value: 'inside', label: '操作列'
             }
-          ]
+          ],
+          readonly: true
         },
         {
           label: '关联页面',
@@ -167,11 +176,11 @@ export default{
     },
     submitAssociatePage () {
       const { appPageCode, pageModelCode } = this.associatePageFormModel
-      this.$refs.actionEditTableRef.form.data[this.currentRowIndex].page = {
+      this.$refs.actionEditTableRef.setValue(this.currentRowIndex, 'page', {
         appPageCode,
         pageModelCode,
         appId: this.appId
-      }
+      })
       this.associatePageVisible = false
     }
   }

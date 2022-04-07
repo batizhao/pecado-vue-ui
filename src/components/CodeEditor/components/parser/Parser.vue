@@ -2,18 +2,7 @@
 import { deepClone } from "../../utils/index";
 import render from "../render/render.js";
 import { addAllNodesStyleToDocument } from './addStyleToDocument.js'
-
-const ruleTrigger = {
-  "el-input": "blur",
-  "el-input-number": "blur",
-  "el-select": "change",
-  "el-radio-group": "change",
-  "el-checkbox-group": "change",
-  "el-cascader": "change",
-  "el-time-picker": "change",
-  "el-date-picker": "change",
-  "el-rate": "change"
-};
+import { getLabels } from './addLabels.js'
 
 const layouts = {
   // 所有表单类填写组件用此布局
@@ -22,14 +11,21 @@ const layouts = {
     const listeners = buildListeners.call(this, scheme);
     let labelWidth = config.labelWidth ? `${config.labelWidth}px` : null;
     if (config.showLabel === false) labelWidth = "0";
+    const getNode = () => {
+      if (!this.readOnly) {
+        return <render conf={scheme} on={listeners}></render>
+      } else {
+        return <div>{getLabels.call(this.editData, h, scheme.__config__.defaultValue, scheme)}</div>
+      }
+    }
     return (
       <el-col v-show={!config.hidden} span={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
         <el-form-item
-          label-width={labelWidth}
+          label-width={labelWidth} 
           label={config.showLabel ? config.label : ''}
           prop={scheme.__vModel__}
         >
-          <render conf={scheme} on={listeners}></render>
+          {getNode()}
         </el-form-item>
       </el-col>
     );
@@ -196,7 +192,8 @@ export default {
     showSubmit: {
       type: Boolean,
       required: true
-    }
+    },
+    readOnly: Boolean
   },
 
   data() {

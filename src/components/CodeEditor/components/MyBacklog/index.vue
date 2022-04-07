@@ -19,7 +19,7 @@
 
 <script>
 import request from '@/utils/request'
-import { analysisUrl } from '../ListContainer/analysisUrl'
+import { analysisUrl } from './analysisUrl'
 export default {
   name: 'my-backlog',
   components: {},
