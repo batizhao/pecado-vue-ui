@@ -106,26 +106,29 @@ export default {
     handleEdit (row) {
       this.dialogVisible = true
       this.dialogTitle = '编辑'
+      const rowCopy = JSON.parse(JSON.stringify(row))
       this.$nextTick(() => {
-        this.$refs.addDictionaryRef.form = row
+        rowCopy.data = JSON.parse(rowCopy.data)
+        this.$refs.addDictionaryRef.form = rowCopy
       })
     },
     getTableData() {
       this.$refs.actionTableRef.getTableData()
     },
-    dialogConfirm () {
-      const data = this.$refs.addDictionaryRef.submit()
-      if (data) {
-        this.submitLoading = true
-        addOrUpdateDictionary(data).then(() => {
-          this.msgSuccess(this.dialogTitle + '成功')
-          this.submitLoading =false
-          this.dialogVisible = false
-          this.getTableData()
-        }).catch(() => {
-          this.submitLoading =false
-        })
-      }
+    async dialogConfirm () {
+      const res = await this.$refs.addDictionaryRef.submit()
+      const formData = JSON.parse(JSON.stringify(res[0]))
+      const tableData = res[1]
+      formData.data = JSON.stringify(tableData)
+      this.submitLoading = true
+      addOrUpdateDictionary(formData).then(() => {
+        this.msgSuccess(this.dialogTitle + '成功')
+        this.submitLoading =false
+        this.dialogVisible = false
+        this.getTableData()
+      }).catch(() => {
+        this.submitLoading =false
+      })
     },
     handleStatusChange(row) {
       let text = row.status === "open" ? "启用" : "停用"

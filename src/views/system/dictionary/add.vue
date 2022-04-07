@@ -15,8 +15,7 @@
       ref="actionEditTableRef"
       showSelection
       :tableColumns="tableColumns"
-      :readonlyCondition="isReadonly"
-      :addRowIndex="0"
+      :defaultData="form.data"
     ></action-edit-table>
   </div>
 </template>
@@ -27,7 +26,7 @@ const getDefaultForm = () => {
     name: '', // 表名称
     code: '', // 表描述
     description: '', // 数据源
-    data: '[]' // 字段定义
+    data: [] // 字段定义
   }
 }
 export default {
@@ -86,19 +85,6 @@ export default {
       ],
     }
   },
-  watch: {
-    form: {
-      handler: function(val) {
-        // 如果是编辑状态，使表名称和表描述输入框禁用
-        this.formOptions.map(item => {
-          if (['name', 'code'].includes(item.prop)) {
-            item.disabled = val.id !== undefined
-          }
-        })
-      },
-      deep: true
-    }
-  },
   methods: {
     indexMethod (index) {
       return index + 1
@@ -107,15 +93,7 @@ export default {
       this.$refs.actionEditTableRef.addRow()
     },
     handleDel () {
-      this.$refs.actionEditTableRef.deleteRow(selectedItems => {
-        // 判断勾选的数据中是否有默认字段，有就不能删除
-        const hasDefaultFields = selectedItems.some(item => this.defaultFields.includes(item.name))
-        if (hasDefaultFields) {
-          this.msgError('默认字段不能删除')
-          return false
-        }
-        return true
-      })
+      this.$refs.actionEditTableRef.deleteRow()
     },
     submit () {
       const p1 = new Promise((resolve, reject) => {
@@ -135,9 +113,6 @@ export default {
     reset () {
       this.$refs.actionFormRef.reset()
       this.form = getDefaultForm()
-    },
-    isReadonly (row) {
-      return this.defaultFields.includes(row.name)
     }
   }
 }
