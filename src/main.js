@@ -15,7 +15,7 @@ import D2Crud from '@d2-projects/d2-crud'
 
 import './assets/icons' // icon
 import './permission' // permission control
-import { listDictDataByCode } from "@/api/system/dict/data";
+import { listDictDataByCode } from "@/api/system/dictionary";
 // import { getConfigKey } from "@/api/system/config";
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, download, handleTree } from "@/utils/ruoyi";
 import Pagination from "@/components/Pagination";

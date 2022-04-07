@@ -109,21 +109,6 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/dict',
-    component: Layout,
-    hidden: true,
-    redirect: 'noRedirect',
-    meta: { title: '字典管理' },
-    children: [
-      {
-        path: 'data/:code(\\w+)',
-        component: (resolve) => require(['@/views/system/dict/data'], resolve),
-        name: '字典数据',
-        meta: { title: '字典数据', icon: 'dict', activeMenu: '/system/dict' }
-      }
-    ]
-  },
-  {
     path: '/parse',
     component: Layout,
     redirect: 'noRedirect',
