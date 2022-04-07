@@ -17,9 +17,6 @@ export default {
   components: {
     renderMenu
   },
-  props: {
-    menuData: Array
-  },
   async created () {
     await this.getNavBarData()
     this.setDefault()
@@ -35,7 +32,6 @@ export default {
       const { id } = this.$route.query
       if (id) {
         this.sideActiveIndex = id.toString()
-        console.log("🚀 ~ file: index.vue ~ line 36 ~ setDefault ~ id.toString()", id.toString())
       } else {
         // 默认选中第一个菜单
         this.navBarSelect(this.navBarMenuData[0])
@@ -45,6 +41,7 @@ export default {
     // 侧边菜单选中事件
     navBarSelect (data) {
       const currentPath = this.$route.path
+      if (currentPath !== '/home') return   // 让导航点击事件在/home页面才生效
       this.$router.push({
         path: currentPath,
         query: {
@@ -58,7 +55,6 @@ export default {
     // 获取侧边栏菜单数据
     getNavBarData () {
       return getNavBarData().then(res => {
-        console.log("🚀 ~ file: index.vue ~ line 59 ~ returngetNavBarData ~ this.menudata", this.menuData)
         if (res.data && res.data.length ) {
           const recursion = list => {
             for (let item of list) {
@@ -71,11 +67,7 @@ export default {
           }
           recursion(res.data)
           this.navBarMenuData = res.data
-        } else {
-          this.navBarMenuData = this.menuData
         }
-      }).catch(() => {
-        this.navBarMenuData = this.menuData
       })
     }
   }

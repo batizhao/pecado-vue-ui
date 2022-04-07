@@ -7,7 +7,7 @@
         @change="vModelChange"
       />
     </el-form-item>
-    <el-form-item v-if="activeData.__config__.showLabel !== undefined" label="标签名">
+    <el-form-item label="标签名">
       <el-input
         v-model="activeData.__config__.label"
         placeholder="请输入标签名"

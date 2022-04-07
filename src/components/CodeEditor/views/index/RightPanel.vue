@@ -97,6 +97,8 @@ import lxMyBacklog from './components/myBacklog.vue'
 import LxHtmlInterpreter from './components/htmlInterpreter.vue'
 import LxDepartmentSelector from './components/departmentSelector.vue'
 import LxDepartmentSelector2 from './components/departmentSelector2.vue'
+import LxPageContainer from './components/pageContainer.vue'
+import LxNavBar from './components/navBar.vue'
 
 export default {
   components: {
@@ -120,6 +122,8 @@ export default {
     LxHtmlInterpreter,
     LxDepartmentSelector,
     LxDepartmentSelector2,
+    LxPageContainer,
+    LxNavBar
   },
   props: ['showField'],
   data () {

@@ -836,13 +836,10 @@ export const layoutPageComponents = [
     // 组件的自定义配置
     __config__: {
       label: '横向导航条',
-      labelWidth: null,
-      showLabel: false,
-      changeTag: false,
+      panel: 'lx-page-container',
       tag: 'header-bar',
       tagIcon: 'input',
       defaultValue: undefined,
-      required: undefined,
       layout: 'native',
       span: 24,
     },
@@ -851,43 +848,12 @@ export const layoutPageComponents = [
     // 组件的自定义配置
     __config__: {
       label: '纵向导航条',
-      labelWidth: null,
-      showLabel: false,
-      changeTag: false,
+      panel: 'lx-nav-bar',
       tag: 'nav-bar',
       tagIcon: 'input',
-      defaultValue: undefined,
-      required: undefined,
       layout: 'native',
-      span: 3,
-    },
-    menuData: [
-      {
-        label: '首页',
-        index: '0',
-        icon: 'el-icon-s-home'
-      },
-      {
-        label: '导航1',
-        index: '1',
-        icon: 'el-icon-message-solid',
-        children: [
-          { label: '导航1-1', index: '1-1', icon: 'el-icon-s-claim' },
-          { label: '导航1-2', index: '1-2', icon: 'el-icon-s-open' },
-        ]
-      },
-      {
-        label: '导航2',
-        index: '2',
-        icon: 'el-icon-upload'
-      }
-    ],
-    styles: {
-      defaultStyles: {
-        height: '100%'
-      }
+      span: 3
     }
-
   },
   {
     // 组件的自定义配置
@@ -906,29 +872,12 @@ export const layoutPageComponents = [
   },
   {
     __config__: {
-      label: '页面容器1',
+      label: '页面容器',
+      panel: 'lx-page-container',
       tag: 'page-container',
       tagIcon: 'row',
       span: 21,
       layout: 'native'
-    }
-  },
-  {
-    // 组件的自定义配置
-    __config__: {
-      label: '上下主体框架',
-      labelWidth: null,
-      showLabel: false,
-      changeTag: false,
-      tag: 'up-frame',
-      tagIcon: 'input',
-      defaultValue: undefined,
-      required: undefined,
-      layout: 'native',
-      span: 24,
-      dataType:'dynamic',
-      url: 'https://www.fastmock.site/mock/f8d7a54fb1e60561e2f720d5a810009d/fg/tableData',
-      method:'get'
     }
   }
 ]
@@ -937,6 +886,7 @@ export const formModelComponents = [
   {
     __config__: {
       label: '表单容器',
+      panel: 'lx-page-container',
       tag: 'form-container',
       tagIcon: 'row',
       span: 24,
@@ -994,6 +944,7 @@ export const listModelComponnets = [
   {
     __config__: {
       label: '列表容器',
+      panel: 'lx-page-container',
       tag: 'list-container',
       tagIcon: 'row',
       span: 24,

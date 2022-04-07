@@ -53,7 +53,8 @@ export default {
       actionButtons: [],
       tableActionButtons: [],
       errorTip: '',
-      requestUrl: '' // 请求地址
+      requestUrl: '', // 请求地址
+      currentPath: this.$route.path // 当前路由地址
     }
   },
   methods: {
@@ -134,7 +135,7 @@ export default {
         if (button.page && button.page.appPageCode) {
           // 如果配置了关联页面，直接跳转，带上数据id
           this.$router.push({
-            path: '/home',
+            path: this.currentPath,
             query: {
               ...button.page,
               formDataId: row.id,
@@ -162,7 +163,7 @@ export default {
       if (['create'].includes(button.operType)) {
         if (button.page && button.page.appPageCode) {
           this.$router.push({
-            path: '/home',
+            path: this.currentPath,
             query: {
               ...button.page,
               operType: button.operType,
