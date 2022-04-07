@@ -18,7 +18,7 @@ export function login(username, password, code, uuid) {
 // 退出方法
 export function logout() {
   return request({
-    url: '/logout',
+    url: '/uaa/logout',
     method: 'post'
   })
 }

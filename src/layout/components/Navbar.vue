@@ -122,7 +122,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('FedLogOut').then(() => {
+        this.$store.dispatch('LogOut').then(() => {
           location.href = '/';
         })
       })
