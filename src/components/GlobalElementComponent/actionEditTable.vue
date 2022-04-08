@@ -80,6 +80,15 @@
                     :disabled="item.disabled || isReadonly(row, item)"
                   ></el-checkbox>
                 </template>
+                <!-- 开关 -->
+                <template v-else-if="item.type === 'switch'">
+                  <el-switch
+                    v-model="row[item.prop]"
+                    :disabled="item.disabled || isReadonly(row, item)"
+                    :active-value="item.activeValue"
+                    :inactive-value="item.inactiveValue"
+                  ></el-switch>
+                </template>
                 <!-- 插槽 -->
                 <template v-else-if="item.type === 'slot'">
                   <slot :name="item.slotName || item.prop" :row="row" :index="$index"></slot>
@@ -293,7 +302,7 @@ export default {
     line-height: 0;
   }
   .el-form-item .el-form-item {
-    margin: 20px 10px;
+    margin: 15px 10px;
   }
 }
 </style>

@@ -73,7 +73,9 @@ export default {
         {
           label: '是否默认',
           prop: 'isDefault',
-          type: 'checkbox'
+          type: 'switch',
+          activeValue: 'yes',
+          inactiveValue: 'no'
         },
         {
           label: '排序',
