@@ -1043,20 +1043,27 @@ export const formModelComponents = [
       panel: 'lx-button',
       span: 0,  
       layout: 'native',
-      isclose:true,//判断是否是关闭按钮
       document: 'https://element.eleme.cn/#/zh-CN/component/button'
     },
     "__slot__": {
-      "default": ""
+      "default": "关闭"
     },
     functionButton:true,
     type: 'default',
     icon: 'el-icon-close',
     round: false,
-    size: 'small',
+    size: 'medium',
     plain: false,
-    circle: true,
+    circle: false,
     disabled: false,
+    styles: {
+      defaultStyles: {
+        marginTop: '8px',
+        marginRight: '8px',
+        marginBottom: '8px',
+        marginLeft: '8px'
+      }
+    },
     eventSettings: {
       emit: 'buttonEmitClose'
     }
