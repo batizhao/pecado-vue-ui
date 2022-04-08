@@ -58,14 +58,13 @@ const layouts = {
   // 自定义组件如表格、文本等用此布局
   native (h, scheme) {
     const config = scheme.__config__
-    let className = config.isclose ? 'close-btn' : ''
     const listeners = {
       nativeClick: callback => {
         callback(this.$refs.formContainerRef)
       }
     }
     return (
-      <el-col v-show={!config.hidden} class={className} span={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
+      <el-col v-show={!config.hidden} span={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
         <render conf={scheme} on={listeners}></render>
       </el-col>
     )
@@ -336,11 +335,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-.close-btn{
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 100;
-}
-</style>

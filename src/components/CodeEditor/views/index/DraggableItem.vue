@@ -88,8 +88,7 @@ const layouts = {
   native (h, currentItem, index, list) {
     const { activeItem } = this.$listeners
     const config = currentItem.__config__
-    let className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'
-    className = config.isclose ? (className + ' ' + 'close-btn') : className;
+    const className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'
     return (
       <el-col
         span={config.span}
