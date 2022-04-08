@@ -22,9 +22,7 @@
       </template>
       <template v-slot:action="scope">
         <action-button actionType="3" @click="handleEdit(scope.row)" icon="el-icon-edit">编辑</action-button>
-        <action-dropdown>
-          <el-dropdown-item icon="el-icon-delete" @click.native="handleDel(scope.row.id)">删除</el-dropdown-item>
-        </action-dropdown>
+        <action-button actionType="3" @click="handleDel(scope.row.id)" icon="el-icon-delete">删除</action-button>
       </template>
     </action-table>
 
