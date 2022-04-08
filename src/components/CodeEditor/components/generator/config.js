@@ -674,6 +674,37 @@ export const layoutComponents = [
       layout: 'native'
     },
     content: '<div>HTML Text</div>'
+  },
+  {
+    __config__: {
+      label: '表格布局',
+      tag: 'layout-table',
+      panel: 'lx-layout-table',
+      layout: 'table',
+      tagIcon: 'row',
+      span: 24
+    },
+    layoutTableData: [
+      [
+        {
+          __config__: {
+            layout: 'tableCell',
+            children: []
+          },
+          rowspan: 1, 
+          colspan: 1
+        },
+        { 
+          __config__: {
+            layout: 'tableCell',
+            children: []
+          },
+          rowspan: 1, 
+          colspan: 1
+        },
+
+      ]
+    ]
   }
 ]
 

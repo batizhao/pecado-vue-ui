@@ -78,6 +78,10 @@ const layouts = {
         <form-container ref="formContainerRef" url={scheme.url}></form-container>
       </el-col>
     )
+  },
+  // 表格布局
+  table(h, scheme) {
+
   }
 };
 

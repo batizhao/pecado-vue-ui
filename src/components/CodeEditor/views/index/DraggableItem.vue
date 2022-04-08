@@ -1,6 +1,7 @@
 <script>
 import draggable from 'vuedraggable'
 import render from '../../components/render/render'
+import layoutTableButtons from './components/layoutTable/layoutTableButtons.js'
 
 const components = {
   itemBtns(h, currentItem, index, list) {
@@ -75,8 +76,12 @@ const layouts = {
           nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
         >
           <span class="component-name">{config.componentName}</span>
-          <draggable list={config.children || []} animation={340}
-            group="componentsGroup" class={'drag-wrapper flex-start-wrap component-style-panel-' + config.formId}>
+          <draggable
+            list={config.children || []}
+            animation={340}
+            group="componentsGroup"
+            class={'drag-wrapper flex-start-wrap component-style-panel-' + config.formId}
+          >
             {child}
           </draggable>
         </el-row>
@@ -120,6 +125,58 @@ const layouts = {
       </el-col>
     )
   },
+  // 表格布局
+  table(h, currentItem, index, list) {
+    const { activeItem } = this.$listeners
+    const config = currentItem.__config__
+    let className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'
+    const layoutTableData = currentItem.layoutTableData
+    const getTds = () => {
+      return layoutTableData.map((tr, trIndex) => {
+        const trNode = <tr></tr>
+        trNode.children = tr.map((td, tdIndex) => {
+          return layouts.tableCell.call(this, h, td, [trIndex, tdIndex], currentItem)
+        })
+        return trNode
+      })
+    }
+    return (
+      <el-col
+        span={config.span}
+        style={config.span === 0 && { width: 'auto', display: 'block' }}
+        class={className}
+        nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
+      >
+        <table class="layout-table" style="width: 100%;">
+          <tbody>
+          {getTds()}
+          </tbody>
+        </table>
+        {components.itemBtns.apply(this, arguments)}
+      </el-col>
+    )
+  },
+  // 单元格
+  tableCell(h, currentItem, index, layoutTableItem) {
+    const child = renderChildren.apply(this, arguments)
+    const config = currentItem.__config__
+    return (
+      <table-td
+        rowspan={currentItem.rowspan}
+        colspan={currentItem.colspan}
+        class={'table-td'}
+      >
+        <draggable
+          list={config.children || []}
+          animation={340}
+          group="componentsGroup"
+        >
+          {child}
+        </draggable>
+        {layoutTableButtons.tableTdButtons.apply(this, arguments)}
+      </table-td>
+    )
+  }
 }
 
 function renderChildren(h, currentItem, index, list) {
