@@ -1,5 +1,5 @@
 <template>
-  <div v-if="activeData.eventSettings">
+  <div v-if="activeData.eventSettings && activeData.functionButton != true">
     <el-divider>事件</el-divider>
       <el-form-item label="事件动作">
         <el-select v-model="activeData.eventSettings.emit">

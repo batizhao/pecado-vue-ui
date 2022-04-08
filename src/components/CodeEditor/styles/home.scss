@@ -257,3 +257,10 @@ $lighterBlue: #409eff;
     left: unset;
   }
 }
+//关闭按钮
+.close-btn{
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 100;
+}

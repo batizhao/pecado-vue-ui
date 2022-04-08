@@ -73,6 +73,10 @@ export default {
     buttonEmitReset () {
       this.$route.query.formDataId = undefined
       this.formContainerRef.reset()
+    },
+    //关闭
+    buttonEmitClose () {
+        this.$router.go(-1)
     }
   }
 }
