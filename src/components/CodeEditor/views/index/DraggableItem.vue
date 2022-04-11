@@ -146,7 +146,7 @@ const layouts = {
         class={className}
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
       >
-        <table class="layout-table" style="width: 100%;">
+        <table class="layout-table" style="width: 100%; table-layout: fixed;">
           <tbody>
           {getTds()}
           </tbody>
@@ -157,6 +157,9 @@ const layouts = {
   },
   // 单元格
   tableCell(h, currentItem, index, layoutTableItem) {
+    if (!currentItem) {
+      return h('', {})
+    }
     const child = renderChildren.apply(this, arguments)
     const config = currentItem.__config__
     return (

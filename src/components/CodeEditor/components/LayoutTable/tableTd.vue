@@ -1,5 +1,5 @@
 <template>
-  <td v-bind="$attrs">
+  <td v-bind="$attrs" :style="{height: $attrs.rowspan * 48 + 'px'}">
     <slot></slot>
   </td>
 </template>
@@ -12,7 +12,7 @@ export default {
 
 <style lang="scss" scoped>
 td {
-  height: 48px;
+  display: table-cell;
   border: 1px dashed #369;
   padding: 3px;
 }
