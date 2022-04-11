@@ -828,7 +828,18 @@ export const indexPageComponents =[
       span: 24,
     },
   },
-
+  {
+    // 组件的自定义配置
+    __config__: {
+      label: '登录日志',
+      panel: 'lx-login-log',
+      tag: 'login-log',
+      tagIcon: 'input',
+      layout: 'native',
+      span: 24,
+    },
+    url: '',
+  },
 ]
 
 export const layoutPageComponents = [
