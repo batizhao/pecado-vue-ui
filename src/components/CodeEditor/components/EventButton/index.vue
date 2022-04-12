@@ -77,6 +77,20 @@ export default {
     //关闭
     buttonEmitClose () {
         this.$router.go(-1)
+    },
+    //收藏
+    collection () {
+      let url = window.location.href;
+      let title = document.title;
+      try {
+         window.external.addFavorite(url, title);
+      } catch(e) {
+          try {
+             window.sidebar.addPanel(title, url, "");
+          } catch(e) {
+             alert("抱歉，您所使用的浏览器无法完成此操作。\n\n加入收藏失败，请使用Ctrl+D进行添加");
+          }
+      }
     }
   }
 }

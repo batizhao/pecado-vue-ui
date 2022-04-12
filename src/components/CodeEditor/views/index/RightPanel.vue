@@ -100,6 +100,7 @@ import LxDepartmentSelector2 from './components/departmentSelector2.vue'
 import LxPageContainer from './components/pageContainer.vue'
 import LxNavBar from './components/navBar.vue'
 import LxLayoutTable from './components/layoutTable/index.vue'
+import LxLoginLog from './components/loginLog.vue'
 
 export default {
   components: {
@@ -125,7 +126,8 @@ export default {
     LxDepartmentSelector2,
     LxPageContainer,
     LxNavBar,
-    LxLayoutTable
+    LxLayoutTable,
+    LxLoginLog,
   },
   props: ['showField'],
   data () {
