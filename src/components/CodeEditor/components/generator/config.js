@@ -1047,6 +1047,39 @@ export const formModelComponents = [
     eventSettings: {
       emit: 'buttonEmitClose'
     }
+  },
+  {
+    __config__: {
+      label: '收藏',
+      tag: 'event-button',
+      tagIcon: 'button',
+      panel: 'lx-button',
+      span: 0,
+      layout: 'native',
+      document: 'https://element.eleme.cn/#/zh-CN/component/button'
+    },
+    "__slot__": {
+      "default": "收藏"
+    },
+    type: 'primary',
+    functionButton:true,//判断是否是具体功能按钮
+    icon: 'el-icon-star-off',
+    round: false,
+    size: 'medium',
+    plain: false,
+    circle: false,
+    disabled: false,
+    styles: {
+      defaultStyles: {
+        marginTop: '8px',
+        marginRight: '8px',
+        marginBottom: '8px',
+        marginLeft: '8px'
+      }
+    },
+    eventSettings: {
+      emit: 'collection'
+    }
   }
 ]
 
