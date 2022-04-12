@@ -166,7 +166,6 @@ const layouts = {
       <table-td
         rowspan={currentItem.rowspan}
         colspan={currentItem.colspan}
-        class={'table-td'}
       >
         <draggable
           list={config.children || []}

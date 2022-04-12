@@ -21,25 +21,22 @@ const commands = [
     value: 'MergeLeftCell',
     divided: true,
     isDisabled (currentItem, [rowIndex, colIndex], { layoutTableData }) {
-      // 1 目标单元格位于第一列时
-      // 2 左侧单元格为null
-      // 3 左侧单元格的rowspan和当前单元格rowspan不相等
-      return colIndex === 0 || 
-        (layoutTableData[rowIndex][colIndex - 1] === null) ||
-        (currentItem.rowspan !== layoutTableData[rowIndex][colIndex - 1].rowspan)
+      // 1 没有左侧单元格
+      // 2 左侧单元格的rowspan和当前单元格rowspan不相等
+      const targetCellIndex = handleCommands.findTargetCell([rowIndex, colIndex], layoutTableData, 'left')
+      const targetCell = targetCellIndex ? layoutTableData[targetCellIndex[0]][targetCellIndex[1]] : null
+      return !targetCellIndex || (currentItem.rowspan !== targetCell.rowspan)
     }
   },
   {
     label: '合并右侧单元格',
     value: 'MergeRightCell',
     isDisabled (currentItem, [rowIndex, colIndex], { layoutTableData }) {
-      // 1 目标单元格位于最后一列时
-      // 2 右侧单元格为null
-      // 3 右侧单元格的rowspan和当前单元格rowspan不相等
-      const rowLength = layoutTableData[rowIndex].length
-      return (colIndex === rowLength - 1) || 
-        (layoutTableData[rowIndex][colIndex + 1] === null)  || 
-        (currentItem.rowspan !== layoutTableData[rowIndex][colIndex + 1].rowspan)
+      // 1 没有右侧单元格
+      // 2 右侧单元格的rowspan和当前单元格rowspan不相等
+      const targetCellIndex = handleCommands.findTargetCell([rowIndex, colIndex], layoutTableData, 'right')
+      const targetCell = targetCellIndex ? layoutTableData[targetCellIndex[0]][targetCellIndex[1]] : null
+      return !targetCellIndex || (currentItem.rowspan !== targetCell.rowspan)
     }
   },
   {
@@ -64,25 +61,22 @@ const commands = [
     value: 'MergeUpperCell',
     divided: true,
     isDisabled (currentItem, [rowIndex, colIndex], { layoutTableData }) {
-      // 1 目标单元格位于第一行时
-      // 2 上方单元格为null
-      // 3 上方单元格的colspan和当前单元格的colspan不相等
-      return rowIndex === 0 ||
-      (layoutTableData[rowIndex - 1][colIndex] === null) ||
-      (currentItem.colspan !== layoutTableData[rowIndex - 1][colIndex].colspan)
+      // 1 没有上方单元格
+      // 2 上方单元格的colspan和当前单元格的colspan不相等
+      const targetCellIndex = handleCommands.findTargetCell([rowIndex, colIndex], layoutTableData, 'upper')
+      const targetCell = targetCellIndex ? layoutTableData[targetCellIndex[0]][targetCellIndex[1]] : null
+      return !targetCellIndex || (currentItem.colspan !== targetCell.colspan)
     }
   },
   {
     label: '合并下方单元格',
     value: 'MergeBelowCell',
     isDisabled (currentItem, [rowIndex, colIndex], { layoutTableData }) {
-      // 1 目标单元格位于最后一行时
-      // 2 下单元格为null
-      // 3 下单元格的colspan和当前单元格的colspan不相等
-      const colLength = layoutTableData.length
-      return (rowIndex === colLength - 1) ||
-      (layoutTableData[rowIndex + 1][colIndex] === null) ||
-      (currentItem.colspan !== layoutTableData[rowIndex + 1][colIndex].colspan)
+      // 1 没有下单元格
+      // 2 下单元格的colspan和当前单元格的colspan不相等
+      const targetCellIndex = handleCommands.findTargetCell([rowIndex, colIndex], layoutTableData, 'below')
+      const targetCell = targetCellIndex ? layoutTableData[targetCellIndex[0]][targetCellIndex[1]] : null
+      return !targetCellIndex || (currentItem.colspan !== targetCell.colspan)
     }
   },
   {
@@ -149,7 +143,7 @@ const commands = [
       const flag2 = currentSpanTotal !== tableSpanLength
       return flag1 || flag2
     }
-  },
+  }
 ]
 
 function getItems (h, currentItem, index, layoutTableItem) {
@@ -166,25 +160,23 @@ function getItems (h, currentItem, index, layoutTableItem) {
   })
 }
 export default {
-  layoutTableButtons () {
-
-  },
   tableTdButtons (h, currentItem, index, layoutTableItem) {
     return [
       <el-dropdown 
         size="mini"
         trigger="click"
+        class="layout-table-td-icon"
         onCommand={
           val => {
             if (handleCommands['handle' + val]) {
-              handleCommands['handle' + val](index, layoutTableItem)
+              handleCommands['handle' + val](currentItem, index, layoutTableItem)
             } else {
               alert('事件未定义')
             }
           }
         }
         >
-        <span class="el-dropdown-link">
+        <span>
           <i class="el-icon-menu"></i>
         </span>
         <el-dropdown-menu slot="dropdown">

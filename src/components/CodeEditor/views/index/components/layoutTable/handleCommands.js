@@ -1,44 +1,64 @@
 import store from '@/store'
-const getCell = () => {
+import { deepClone } from '@/utils'
+const getCell = (rowspan = 1, colspan = 1) => {
   return {
     __config__: {
       layout: 'tableCell',
       children: []
     },
-    rowspan: 1, 
-    colspan: 1
+    rowspan, 
+    colspan
   }
 }
 export default {
-  handleInsertLeftCol ([rowIndex, colIndex], { layoutTableData }, flag) {
-    layoutTableData.map(row => {
-      row.splice(colIndex + (!flag ? 0 : 1), 0, getCell())
-    })
+  changeRenderKey () {
+    store.commit('codeEditor/components/changeRenderKey')
   },
-  handleInsertRightCol ([rowIndex, colIndex], { layoutTableData }) {
+  handleInsertLeftCol (currentItem, [rowIndex, colIndex], { layoutTableData }, flag) {
+    const index = flag ? currentItem.colspan : 0
+    layoutTableData.map(row => {
+      row.splice(colIndex + index, 0, getCell())
+    })
+    this.changeRenderKey()
+  },
+  handleInsertRightCol (currentItem, [rowIndex, colIndex], { layoutTableData }) {
+    // 插入右侧列时要考虑当前单元格的colspan
     this.handleInsertLeftCol(...arguments, true)
   },
-  handleInsertUpperRow ([rowIndex, colIndex], { layoutTableData }, flag) {
-    const colNum = layoutTableData[rowIndex].length
+  handleInsertUpperRow (currentItem, [rowIndex, colIndex], { layoutTableData }, flag) {
+    const index = flag ? currentItem.rowspan : 0
     const arr = []
-    for (let i = 1; i <= colNum; i++) {
+    for (let i = 1; i <= layoutTableData[rowIndex].length; i++) {
       arr.push(getCell())
     }
-    layoutTableData.splice(rowIndex + (!flag ? 0 : 1), 0, arr)
+    layoutTableData.splice(rowIndex + index, 0, arr)
+    this.changeRenderKey()
   },
-  handleInsertBelowRow ([rowIndex, colIndex], { layoutTableData }) {
+  handleInsertBelowRow (currentItem, [rowIndex, colIndex], { layoutTableData }) {
+    // 插入下方行是要考虑当前单元格的rowspan
     this.handleInsertUpperRow(...arguments, true)
   },
-  handleMergeLeftCell ([rowIndex, colIndex], { layoutTableData }, flag) {
+  handleMergeLeftCell (currentItem, [rowIndex, colIndex], { layoutTableData }) {
     // 清空当前单元格，将当前单元格的colspan累加到目标单元格
-    const targeIndex = !flag ? colIndex - 1 : colIndex + 1
-    layoutTableData[rowIndex][targeIndex].colspan += layoutTableData[rowIndex][colIndex].colspan
+    const targetIndex = this.findTargetCell([rowIndex, colIndex], layoutTableData, 'left')
+    const targetCell = layoutTableData[targetIndex[0]][targetIndex[1]]
+    const currentCell = layoutTableData[rowIndex][colIndex]
+    targetCell.colspan += currentCell.colspan
+    targetCell.__config__.children = targetCell.__config__.children.concat(currentCell.__config__.children)
     layoutTableData[rowIndex][colIndex] = null
+    this.changeRenderKey()
   },
-  handleMergeRightCell ([rowIndex, colIndex], { layoutTableData }) {
-    this.handleMergeLeftCell(...arguments, true)
+  handleMergeRightCell (currentItem, [rowIndex, colIndex], { layoutTableData }) {
+    // 清空目标单元格，将目标单元格的colspan累加到当前单元格 （这样做的好处是可以保证每次单元格合并后，数据是存储在左方单元格，便于后续单元格拆分）
+    const targetIndex = this.findTargetCell([rowIndex, colIndex], layoutTableData, 'right')
+    const targetCell = layoutTableData[targetIndex[0]][targetIndex[1]]
+    const currentCell = layoutTableData[rowIndex][colIndex]
+    currentCell.colspan += targetCell.colspan
+    currentCell.__config__.children = currentCell.__config__.children.concat(targetCell.__config__.children)
+    layoutTableData[targetIndex[0]][targetIndex[1]] = null
+    this.changeRenderKey()
   },
-  handleMergeRow ([rowIndex, colIndex], { layoutTableData }) {
+  handleMergeRow (currentItem, [rowIndex, colIndex], { layoutTableData }) {
     // 保留目标单元格，其他单元格全null
     const colNum = layoutTableData[rowIndex].length
     layoutTableData[rowIndex].map((item, index) =>{
@@ -48,17 +68,29 @@ export default {
         layoutTableData[rowIndex][index] = null
       }
     })
+    this.changeRenderKey()
   },
-  handleMergeUpperCell ([rowIndex, colIndex], { layoutTableData }, flag) {
-    // 清空当前单元格，将当前单元格的rowspan累加到目标单元格
-    const targeIndex = !flag ? rowIndex - 1 : rowIndex + 1
-    layoutTableData[targeIndex][colIndex].rowspan += layoutTableData[rowIndex][colIndex].rowspan
+  handleMergeUpperCell (currentItem, [rowIndex, colIndex], { layoutTableData }) {
+    // 合并上单元格时，清空当前单元格，将当前单元格的rowspan累加到目标单元格
+    const targetIndex = this.findTargetCell([rowIndex, colIndex], layoutTableData, 'upper')
+    const targetCell = layoutTableData[targetIndex[0]][targetIndex[1]]
+    const currentCell = layoutTableData[rowIndex][colIndex]
+    targetCell.rowspan += currentCell.rowspan
+    targetCell.__config__.children = targetCell.__config__.children.concat(currentCell.__config__.children)
     layoutTableData[rowIndex][colIndex] = null
+    this.changeRenderKey()
   },
-  handleMergeBelowCell ([rowIndex, colIndex], { layoutTableData }) {
-    this.handleMergeUpperCell(...arguments, true)
+  handleMergeBelowCell (currentItem, [rowIndex, colIndex], { layoutTableData }) {
+    // 合并下单元格时，清空目标单元格，将目标单元格的rowspan累加到当前单元格
+    const targetIndex =  this.findTargetCell([rowIndex, colIndex], layoutTableData, 'below')
+    const targetCell = layoutTableData[targetIndex[0]][targetIndex[1]]
+    const currentCell = layoutTableData[rowIndex][colIndex]
+    currentCell.rowspan += targetCell.rowspan
+    currentCell.__config__.children = currentCell.__config__.children.concat(targetCell.__config__.children)
+    layoutTableData[targetIndex[0]][targetIndex[1]] = null
+    this.changeRenderKey()
   },
-  handleMergeCol ([rowIndex, colIndex], { layoutTableData }) {
+  handleMergeCol (currentItem, [rowIndex, colIndex], { layoutTableData }) {
     // 保留目标单元格，其他单元格全null
     const rowNum = layoutTableData.length
     layoutTableData.map((item, index) => {
@@ -68,32 +100,76 @@ export default {
         layoutTableData[index][colIndex] = null
       }
     })
+    this.changeRenderKey()
   },
-  handleRevokeRowMerge ([rowIndex, colIndex], { layoutTableData }) {
-
-  },
-  handleRevokeColMerge ([rowIndex, colIndex], { layoutTableData }) {
-    // 求出当前单元格左侧所有单元格的colspan累计值, 这个累计值就是拆分单元格的起始索引
-    let colNum = 0
-    layoutTableData[rowIndex].map((item, index) => {
-      if (index < colIndex && item) {
-        colNum += item.colspan
-      }
-    })
-    console.log("🚀 ~ file: handleCommands.js ~ line 77 ~ handleRevokeColMerge ~ colNum", colNum)
-    const revokeNum = layoutTableData[rowIndex][colIndex].colspan // 要拆分的列数
-    for (let i = 0; i < revokeNum; i ++) {
-      layoutTableData[rowIndex][colNum + i] = getCell()
+  handleRevokeRowMerge (currentItem, [rowIndex, colIndex], { layoutTableData }) {
+    const { colspan, rowspan } = layoutTableData[rowIndex][colIndex]
+    for (let i = 0; i < rowspan; i ++) {
+      layoutTableData[rowIndex + i][colIndex] = getCell(1, colspan)
     }
-    store.commit('codeEditor/components/changeRenderKey')
-
+    this.changeRenderKey()
   },
-  handleDeleteRow ([rowIndex, colIndex], { layoutTableData }) {
+  handleRevokeColMerge (currentItem, [rowIndex, colIndex], { layoutTableData }) {
+    const { colspan, rowspan } = layoutTableData[rowIndex][colIndex]
+    for (let i = 0; i < colspan; i ++) {
+      layoutTableData[rowIndex][colIndex + i] = getCell(rowspan)
+    }
+    this.changeRenderKey()
+  },
+  handleDeleteRow (currentItem, [rowIndex, colIndex], { layoutTableData }) {
     layoutTableData.splice(rowIndex, 1)
   },
-  handleDeleteCol ([rowIndex, colIndex], { layoutTableData }) {
+  handleDeleteCol (currentItem, [rowIndex, colIndex], { layoutTableData }) {
     layoutTableData.map((item, index) => {
       layoutTableData[index].splice(colIndex, 1)
     })
+  },
+  // 分别查找当前单元格上下左右的目标单元格
+  findTargetCell ([rowIndex, colIndex], layoutTableData, position) {
+    let targetCellIndex = null
+    if (position === 'left') {
+      let i = colIndex - 1
+      while (i >= 0) {
+        if (layoutTableData[rowIndex][i]) {
+          targetCellIndex = [rowIndex, i]
+          i = -1
+        } else {
+          i --
+        }
+      }
+    } else if (position === 'right') {
+      let i = colIndex + 1
+      const colLength = layoutTableData[rowIndex].length
+      while (i < colLength) {
+        if (layoutTableData[rowIndex][i]) {
+          targetCellIndex = [rowIndex, i]
+          i = colLength
+        } else {
+          i ++
+        }
+      }
+    } else if (position === 'upper') {
+      let i = rowIndex - 1
+      while (i >= 0) {
+        if (layoutTableData[i][colIndex]) {
+          targetCellIndex = [i, colIndex]
+          i = -1
+        } else {
+          i --
+        }
+      }
+    } else if (position === 'below') {
+      let i = rowIndex + 1
+      const rowLength = layoutTableData.length
+      while (i < rowLength) {
+        if (layoutTableData[i][colIndex]) {
+          targetCellIndex = [i, colIndex]
+          i = rowLength
+        } else {
+          i ++
+        }
+      }
+    }
+    return targetCellIndex
   }
 }

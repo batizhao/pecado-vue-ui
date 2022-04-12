@@ -257,3 +257,23 @@ $lighterBlue: #409eff;
     left: unset;
   }
 }
+
+// 表格布局组件操作按钮样式
+.layout-table {
+  .layout-table-td {
+    .layout-table-td-icon {
+      display: none;
+      position: absolute;
+      right: 2px;
+      bottom: 0px;
+      color: #409eff;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    &:hover {
+      .layout-table-td-icon {
+        display: block;
+      }
+    }
+  }
+}
