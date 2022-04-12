@@ -261,6 +261,9 @@ $lighterBlue: #409eff;
 // 表格布局组件操作按钮样式
 .layout-table {
   .layout-table-td {
+    position: relative;
+    border: 1px dashed #369;
+    padding: 3px;
     .layout-table-td-icon {
       display: none;
       position: absolute;

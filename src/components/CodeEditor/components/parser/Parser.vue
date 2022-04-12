@@ -79,8 +79,48 @@ const layouts = {
     )
   },
   // 表格布局
-  table(h, scheme) {
-
+  table(h, currentItem) {
+    const config = currentItem.__config__
+    const layoutTableData = currentItem.layoutTableData
+    const getTds = () => {
+      return layoutTableData.map((tr, trIndex) => {
+        const trNode = <tr></tr>
+        trNode.children = tr.map((td, tdIndex) => {
+          return layouts.tableCell.call(this, h, td, [trIndex, tdIndex], currentItem)
+        })
+        return trNode
+      })
+    }
+    return (
+      <el-col
+        v-show={!config.hidden}
+        span={config.span}
+        style={config.span === 0 && { width: 'auto', display: 'block' }}
+      >
+        <table border="1" class="layout-table" style="width: 100%; table-layout: fixed;">
+          <tbody>
+          {getTds()}
+          </tbody>
+        </table>
+      </el-col>
+    )
+  },
+  // 单元格
+  tableCell(h, currentItem, index, layoutTableItem) {
+    if (!currentItem) {
+      return h('', {})
+    }
+    const child = renderChildren.apply(this, arguments)
+    return (
+      <table-td
+        rowspan={currentItem.rowspan}
+        colspan={currentItem.colspan}
+      >
+        <div class="drag-wrapper flex-start-wrap">
+          {child}
+        </div>
+      </table-td>
+    )
   }
 };
 
@@ -95,7 +135,7 @@ function renderFrom(h) {
     )
   } else {
     return (
-      <el-row gutter={formConfCopy.gutter}>
+      <el-row gutter={formConfCopy.gutter}  class="center-board-row">
         <el-form
           size={formConfCopy.size}
           label-position={formConfCopy.labelPosition}

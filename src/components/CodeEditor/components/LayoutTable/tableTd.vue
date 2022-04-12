@@ -9,12 +9,3 @@ export default {
   name: 'table-td'
 }
 </script>
-
-<style lang="scss" scoped>
-td {
-  display: table-cell;
-  border: 1px dashed #369;
-  padding: 3px;
-  position: relative;
-}
-</style>

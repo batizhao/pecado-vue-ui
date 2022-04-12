@@ -171,6 +171,7 @@ const layouts = {
           list={config.children || []}
           animation={340}
           group="componentsGroup"
+           class="drag-wrapper flex-start-wrap"
         >
           {child}
         </draggable>
