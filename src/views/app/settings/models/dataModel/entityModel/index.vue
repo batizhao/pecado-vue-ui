@@ -26,7 +26,7 @@
       v-model="dialogVisible"
       :title="dialogTitle"
       :loading="submitLoading"
-      width="80%"
+      fullscreen
       @confirm="dialogConfirm"
     >
       <add-model ref="addModelRef"></add-model>

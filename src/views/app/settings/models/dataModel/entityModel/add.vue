@@ -18,7 +18,33 @@
       :tableColumns="tableColumns"
       :readonlyCondition="isReadonly"
       :addRowIndex="-2"
-    ></action-edit-table>
+    >
+      <template v-slot:config="scope">
+        <el-badge is-dot v-if="scope.row.config && scope.row.config.length">
+          <el-button size="mini" @click="configChildren(scope)">配置</el-button>
+        </el-badge>
+        <el-button v-else size="mini" @click="configChildren(scope)" :disabled="scope.row.type !== 'json'">配置</el-button>
+      </template>
+    </action-edit-table>
+    <!-- 配置弹窗 -->
+    <action-dialog
+      v-model="configChildrenVisible"
+      title="配置集合"
+      width="80%"
+      @confirm="configChildrenConfirm"
+    >
+      <div class="mb8">
+        <action-button actionType="1" @click="configChildrenAdd">新增</action-button>
+        <action-button actionType="2" @click="configChildrenDel">删除</action-button>
+      </div>
+      <action-edit-table
+        ref="configChildrenRef"
+        :defaultData="configChildrenTableDefaultData"
+        showSelection
+        :tableColumns="configChildrenTableColumns"
+      >
+      </action-edit-table>
+    </action-dialog>
   </div>
 </template>
 
@@ -106,7 +132,10 @@ export default {
             { required: true, trigger: 'change', message: '请输入'}
           ],
           options: [],
-          defaultValue: 'varchar'
+          defaultValue: 'varchar',
+          change: (value, item, index) => {
+            this.$refs.actionEditTableRef.setValue(index, 'config', [])
+          }
         },
         {
           label: '字段长度',
@@ -137,10 +166,63 @@ export default {
         {
           label: '默认值',
           prop: 'defaultValue'
+        },
+        {
+          label: '配置',
+          prop: 'config',
+          type: 'slot'
         }
       ],
       tableDefaultData: [],
-      defaultFields: ['id'] // 默认字段
+      defaultFields: ['id'], // 默认字段
+      currentRowIndex: null,
+      configChildrenVisible: false,
+      configChildrenTableColumns: [
+        {
+          label: '字段名称',
+          prop: 'name',
+          rules: [
+            { required: true, trigger: 'change', message: '请输入'},
+            { validator: checkName, trigger: 'change' }
+          ]
+        },
+        {
+          label: '字段描述',
+          prop: 'comment',
+          rules: [
+            { required: true, trigger: 'change', message: '请输入'}
+          ]
+        },
+        {
+          label: '字段类型',
+          prop: 'type',
+          type: 'select',
+          rules: [
+            { required: true, trigger: 'change', message: '请输入'}
+          ],
+          options: [
+            {
+              label: '字符串',
+              value: 'varchar'
+            },
+            {
+              label: '数字',
+              value: 'int'
+            }
+          ],
+          defaultValue: 'varchar'
+        },
+        {
+          label: '不允许空值',
+          prop: 'required',
+          type: 'checkbox'
+        },
+        {
+          label: '默认值',
+          prop: 'defaultValue'
+        },
+      ],
+      configChildrenTableDefaultData: []
     }
   },
   watch: {
@@ -259,6 +341,27 @@ export default {
     },
     isReadonly (row) {
       return this.defaultFields.includes(row.name)
+    },
+    configChildren ({row, index}) {
+      this.currentRowIndex = index
+      this.configChildrenTableDefaultData = JSON.parse(JSON.stringify(row.config))
+      this.configChildrenVisible = true
+    },
+    configChildrenConfirm () {
+      const ref = this.$refs.configChildrenRef
+      ref.getRef().validate(valid => {
+        if (valid) {
+          const data = ref.getData()
+          this.$refs.actionEditTableRef.setValue(this.currentRowIndex, 'config', data)
+          this.configChildrenVisible = false
+        }
+      })
+    },
+    configChildrenAdd () {
+      this.$refs.configChildrenRef.addRow()
+    },
+    configChildrenDel () {
+      this.$refs.configChildrenRef.deleteRow()
     }
   }
 }
