@@ -145,6 +145,7 @@ function renderFrom(h) {
           // model不能直接赋值 https://github.com/vuejs/jsx/issues/49#issuecomment-472013664
           props={{ model: this[formConfCopy.formModel] }}
           rules={this[formConfCopy.formRules]}
+          class="flex-start-wrap"
         >
           {renderFormItem.call(this, h, formConfCopy.fields)}
           {formConfCopy.formBtns && formBtns.call(this, h)}
@@ -245,16 +246,22 @@ export default {
       formConfCopy: deepClone(this.formConf),
       [this.formConf.formModel]: {},
       [this.formConf.formRules]: {},
-      renderKey: ''
+      renderKey: '',
+      mountedEvents: []
     };
 
     this.buildRules(data.formConfCopy.fields, data[this.formConf.formRules]);
-    this.initFormData(data.formConfCopy.fields, data[this.formConf.formModel]);
+    this.initFormData(data.formConfCopy.fields, data[this.formConf.formModel], data.mountedEvents);
     return data;
   },
-  mounted() {},
+  mounted() {
+    // 执行所有组件的onMounted事件
+    this.mountedEvents.map(fn => {
+      fn()
+    })
+  },
   methods: {
-    initFormData(componentList, formData) {
+    initFormData(componentList, formData, mountedEvents) {
       componentList.forEach(cur => {
         const config = cur.__config__;
         if (cur.__vModel__) {
@@ -263,8 +270,14 @@ export default {
           }
           formData[cur.__vModel__] = config.defaultValue;
         }
-        if (config.children) this.initFormData(config.children, formData);
+        // 收集onMounted事件
+        if (cur.__methods__ && cur.__methods__.onMounted) {
+          mountedEvents.push(new Function(cur.__methods__.onMounted))
+        }
+        if (config.children) this.initFormData(config.children, formData, mountedEvents);
       });
+
+      // 添加样式
       addAllNodesStyleToDocument(componentList)
       // 将editData中没有被vModel用到的属性都合并到formData中
       Object.assign(formData, this.editData)

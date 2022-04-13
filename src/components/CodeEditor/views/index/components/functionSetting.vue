@@ -11,6 +11,37 @@
       <div class="editor-start-end">{{activeData.__vModel__}}.{{eventName}}({{params}}) {</div>
       <div id="editorJs" style="height: 400px;" />
       <div class="editor-start-end">}</div>
+
+      <ol class="event-tips">
+        <li>
+          <span>获取值</span>
+          <span>this.getValue(field)</span>
+        </li>
+        <li>
+          <span>设置值</span>
+          <span>this.setValue(field, value)</span>
+        </li>
+        <li>
+          <span>设置禁用</span>
+          <span>this.setDisabled(field, value)</span>
+        </li>
+        <li>
+          <span>设置只读</span>
+          <span>this.setReadOnly(field, value)</span>
+        </li>
+        <li>
+          <span>设置隐藏</span>
+          <span>this.setHidden(field, value)</span>
+        </li>
+        <li>
+          <span>设置必填</span>
+          <span>this.setRequired(field, value)</span>
+        </li>
+        <li>
+          <span>设置指定属性值</span>
+          <span>this.setOption(field, key, value)</span>
+        </li>
+      </ol>
     </action-dialog>
   </div>
 </template>
@@ -54,6 +85,8 @@ export default {
           Object.values(onEvents).map(value => {
             methods[value] = ''
           })
+          // 默认全部加上onMounted事件，然后在Parser中收集所有onMounted事件依次执行
+          methods.onMounted = ''
           this.$set(this.activeData, '__methods__', methods)
         }
       }
@@ -106,5 +139,13 @@ export default {
   background: #1e1e1e;
   color: #fff;
   letter-spacing: 1px;
+}
+.event-tips {
+  li {
+    & > span:first-child {
+      margin-right: 10px;
+      font-weight: bold;
+    }
+  }
 }
 </style>
