@@ -179,7 +179,7 @@ export default {
       configChildrenVisible: false,
       configChildrenTableColumns: [
         {
-          label: '字段名称',
+          label: 'Java属性名',
           prop: 'name',
           rules: [
             { required: true, trigger: 'change', message: '请输入'},
@@ -187,14 +187,14 @@ export default {
           ]
         },
         {
-          label: '字段描述',
+          label: 'Java注释',
           prop: 'comment',
           rules: [
             { required: true, trigger: 'change', message: '请输入'}
           ]
         },
         {
-          label: '字段类型',
+          label: 'Java类型',
           prop: 'type',
           type: 'select',
           rules: [
@@ -203,14 +203,14 @@ export default {
           options: [
             {
               label: '字符串',
-              value: 'varchar'
+              value: 'String'
             },
             {
               label: '数字',
-              value: 'int'
+              value: 'Integer'
             }
           ],
-          defaultValue: 'varchar'
+          defaultValue: 'String'
         },
         {
           label: '不允许空值',

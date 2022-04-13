@@ -164,7 +164,7 @@ export default {
       // 是否显示弹出层
       open: false,
       // 状态字典
-      statusOptions: [],
+      // statusOptions: [],
       // 查询参数
       queryParams: {
         current: 1,
@@ -186,9 +186,9 @@ export default {
   },
   created() {
     this.getList();
-    this.listDictDataByCode("yes_or_no").then(response => {
-      this.statusOptions = response.data;
-    });
+    // this.listDictDataByCode("yes_or_no").then(response => {
+    //   this.statusOptions = response.data;
+    // });
   },
   methods: {
     /** 查询应用分类列表 */
@@ -216,9 +216,9 @@ export default {
       });
     },
     // 状态字典翻译
-    statusFormat(row, column) {
-      return this.selectDictLabel(this.statusOptions, row.status);
-    },
+    // statusFormat(row, column) {
+    //   return this.selectDictLabel(this.statusOptions, row.status);
+    // },
     // 取消按钮
     cancel() {
       this.open = false;
