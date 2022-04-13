@@ -107,6 +107,24 @@
         <el-form-item label="编码" prop="code">
           <el-input v-model="form.code" placeholder="请输入编码" />
         </el-form-item>
+        <el-form-item label="类型" prop="type">
+          <el-radio-group v-model="form.type">
+            <el-radio
+              v-for="dict in typeOptions"
+              :key="dict.value"
+              :label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="级别" prop="level">
+          <el-radio-group v-model="form.level">
+            <el-radio
+              v-for="dict in levelOptions"
+              :key="dict.value"
+              :label="dict.value"
+            >{{dict.label}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <el-form-item label="排序" prop="sort">
           <el-input v-model="form.sort" placeholder="请输入排序" />
         </el-form-item>
@@ -176,6 +194,10 @@ export default {
       departmentOptions: [],
       // 领导数据
       leaderList: [],
+      // 类型字典
+      typeOptions: [],
+      // 级别字典
+      levelOptions: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -211,6 +233,12 @@ export default {
   },
   created() {
     this.getList();
+    this.listDictDataByCode("dept_type").then(response => {
+      this.typeOptions = response.data;
+    });
+    this.listDictDataByCode("dept_level").then(response => {
+      this.levelOptions = response.data;
+    });
   },
   methods: {
     /** 查询部门列表 */
