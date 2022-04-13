@@ -18,6 +18,7 @@ export const inputComponents = [
   {
     // 组件的自定义配置
     __config__: {
+      componentCode: 'DANHANGWENBEN',
       label: '单行文本',
       panel: 'lx-input',
       labelWidth: null,
@@ -58,6 +59,7 @@ export const inputComponents = [
   },
   {
     __config__: {
+      componentCode: 'DUOHANGWENBEN',
       label: '多行文本',
       panel: 'lx-input',
       labelWidth: null,
@@ -92,6 +94,7 @@ export const inputComponents = [
   },
   {
     __config__: {
+      componentCode: 'MIMA',
       label: '密码',
       panel: 'lx-input',
       showLabel: true,
@@ -131,6 +134,7 @@ export const inputComponents = [
   },
   {
     __config__: {
+      componentCode: 'JISHUQI',
       label: '计数器',
       panel: 'lx-input-number',
       showLabel: true,
@@ -161,6 +165,7 @@ export const inputComponents = [
   },
   {
     __config__: {
+      componentCode: 'BIANJIQI',
       label: '编辑器',
       panel: 'lx-tinymce',
       showLabel: true,
@@ -190,6 +195,7 @@ export const inputComponents = [
 export const selectComponents = [
   {
     __config__: {
+      componentCode: 'XIALAXUANZE',
       label: '下拉选择', // 表单标签名称
       showLabel: true, // 显示表单标签
       tooltips: '', // 提示信息
@@ -239,6 +245,7 @@ export const selectComponents = [
   },
   {
     __config__: {
+      componentCode: 'JILIANXUANZE',
       label: '级联选择',
       showLabel: true,
       labelWidth: null,
@@ -291,6 +298,7 @@ export const selectComponents = [
   },
   {
     __config__: {
+      componentCode: 'DANXUANKUANGZU',
       label: '单选框组',
       labelWidth: null,
       showLabel: true,
@@ -330,6 +338,7 @@ export const selectComponents = [
   },
   {
     __config__: {
+      componentCode: 'DUOXUANKUANGZU',
       label: '多选框组',
       tag: 'object-checkbox-group',
       tagIcon: 'checkbox',
@@ -372,6 +381,7 @@ export const selectComponents = [
   },
   {
     __config__: {
+      componentCode: 'KAIGUAN',
       label: '开关',
       tag: 'el-switch',
       tagIcon: 'switch',
@@ -397,6 +407,7 @@ export const selectComponents = [
   },
   {
     __config__: {
+      componentCode: 'HUAKUAI',
       label: '滑块',
       tag: 'el-slider',
       tagIcon: 'slider',
@@ -423,6 +434,7 @@ export const selectComponents = [
   },
   {
     __config__: {
+      componentCode: 'SHIJIANXUANZE',
       label: '时间选择',
       tag: 'el-time-picker',
       tagIcon: 'time',
@@ -452,6 +464,7 @@ export const selectComponents = [
   },
   {
     __config__: {
+      componentCode: 'SHIJIANFANWEI',
       label: '时间范围',
       tag: 'time-range-picker',
       tagIcon: 'time-range',
@@ -481,6 +494,7 @@ export const selectComponents = [
   },
   {
     __config__: {
+      componentCode: 'RIQIXUANZE',
       label: '日期选择',
       tag: 'el-date-picker',
       tagIcon: 'date',
@@ -508,6 +522,7 @@ export const selectComponents = [
   },
   {
     __config__: {
+      componentCode: 'RIQIFANWEI',
       label: '日期范围',
       tag: 'date-range-picker',
       tagIcon: 'date-range',
@@ -538,6 +553,7 @@ export const selectComponents = [
   },
   {
     __config__: {
+      componentCode: 'PINFEN',
       label: '评分',
       tag: 'el-rate',
       tagIcon: 'rate',
@@ -562,6 +578,7 @@ export const selectComponents = [
   },
   {
     __config__: {
+      componentCode: 'YANSE',
       label: '颜色选择',
       tag: 'el-color-picker',
       tagIcon: 'color',
@@ -586,6 +603,7 @@ export const selectComponents = [
   },
   {
     __config__: {
+      componentCode: 'SHANGCHUAN',
       label: '上传',
       tag: 'file-upload',
       tagIcon: 'upload',
@@ -623,6 +641,7 @@ export const selectComponents = [
 export const layoutComponents = [
   {
     __config__: {
+      componentCode: 'HANGRONGQI',
       layout: 'rowFormItem',
       tagIcon: 'row',
       panel: 'lx-row',
@@ -634,6 +653,7 @@ export const layoutComponents = [
   },
   {
     __config__: {
+      componentCode: 'ANNIU',
       label: '按钮',
       tag: 'event-button',
       tagIcon: 'button',
@@ -666,6 +686,7 @@ export const layoutComponents = [
   },
   {
     __config__: {
+      componentCode: 'HTMLDAIMA',
       label: 'HTML代码',
       tag: 'html-interpreter',
       tagIcon: 'code',
@@ -677,6 +698,7 @@ export const layoutComponents = [
   },
   {
     __config__: {
+      componentCode: 'BIAOGEBUJU',
       label: '表格布局',
       tag: 'layout-table',
       panel: 'lx-layout-table',
@@ -711,6 +733,7 @@ export const layoutComponents = [
 export const seniorComponents = [
   {
     __config__: {
+      componentCode: 'BUMENXUANZE1',
       label: '部门选择1',
       showLabel: true,
       labelWidth: null,
@@ -752,6 +775,7 @@ export const seniorComponents = [
   },
   {
     __config__: {
+      componentCode: 'BUMENXUANZE2',
       label: '部门选择2',
       showLabel: true,
       labelWidth: null,
@@ -779,6 +803,19 @@ export const seniorComponents = [
         value: 'id'
       }
     },
+  },
+  {
+    __config__: {
+      componentCode: 'ZIBIAODAN',
+      label: '子表单',
+      tag: 'subform-table',
+      tagIcon: 'select',
+      panel: 'lx-subform-table',
+      layout: 'native',
+      defaultValue: [],
+      children: []
+    },
+    columns: []
   }
 ]
 
@@ -786,6 +823,7 @@ export const indexPageComponents =[
   {
 		// 组件的自定义配置
 		__config__: {
+      componentCode: 'WODEDAIBAN',
 			label: '我的待办',
 			panel: 'lx-my-backlog',
 			tag: 'my-backlog',
@@ -798,6 +836,7 @@ export const indexPageComponents =[
   {
     // 组件的自定义配置
     __config__: {
+      componentCode: 'TONGZHIGONGGAO',
       label: '通知公告',
       labelWidth: null,
       showLabel: false,
@@ -816,6 +855,7 @@ export const indexPageComponents =[
   {
     // 组件的自定义配置
     __config__: {
+      componentCode: 'CHANGYONGLIUCHENG',
       label: '常用流程',
       labelWidth: null,
       showLabel: false,
@@ -832,6 +872,7 @@ export const indexPageComponents =[
   {
     // 组件的自定义配置
     __config__: {
+      componentCode: 'DUOZHEXIANTU',
       label: '多折线图',
       labelWidth: null,
       showLabel: false,
@@ -847,6 +888,7 @@ export const indexPageComponents =[
   {
     // 组件的自定义配置
     __config__: {
+      componentCode: 'FENZUZHUZHUANGTU',
       label: '分组柱状图',
       labelWidth: null,
       showLabel: false,
@@ -862,6 +904,7 @@ export const indexPageComponents =[
   {
     // 组件的自定义配置
     __config__: {
+      componentCode: 'DENGLURIZHI',
       label: '登录日志',
       panel: 'lx-login-log',
       tag: 'login-log',
@@ -877,6 +920,7 @@ export const layoutPageComponents = [
   {
     // 组件的自定义配置
     __config__: {
+      componentCode: 'HENGXIANGDAOHANGTIAO',
       label: '横向导航条',
       panel: 'lx-page-container',
       tag: 'header-bar',
@@ -889,6 +933,7 @@ export const layoutPageComponents = [
   {
     // 组件的自定义配置
     __config__: {
+      componentCode: 'ZONGXIANGDAOHANGTIAO',
       label: '纵向导航条',
       panel: 'lx-nav-bar',
       tag: 'nav-bar',
@@ -900,6 +945,7 @@ export const layoutPageComponents = [
   {
     // 组件的自定义配置
     __config__: {
+      componentCode: 'DIBUDAOHANGTIAO',
       label: '底部导航条',
       labelWidth: null,
       showLabel: false,
@@ -914,6 +960,7 @@ export const layoutPageComponents = [
   },
   {
     __config__: {
+      componentCode: 'YEMIANRONGQI',
       label: '页面容器',
       panel: 'lx-page-container',
       tag: 'page-container',
@@ -927,6 +974,7 @@ export const layoutPageComponents = [
 export const formModelComponents = [
   {
     __config__: {
+      componentCode: 'BIAODANRONGQI',
       label: '表单容器',
       panel: 'lx-page-container',
       tag: 'form-container',
@@ -938,6 +986,7 @@ export const formModelComponents = [
   },
   {
     __config__: {
+      componentCode: 'HANGRONGQI',
       layout: 'rowFormItem',
       tagIcon: 'row',
       label: '行容器',
@@ -950,6 +999,7 @@ export const formModelComponents = [
   },
   {
     __config__: {
+      componentCode: 'ANNIU',
       label: '按钮',
       tag: 'event-button',
       tagIcon: 'button',
@@ -982,6 +1032,7 @@ export const formModelComponents = [
   },
   {
     __config__: {
+      componentCode: 'ANNIU',
       label: '保存',
       tag: 'event-button',
       tagIcon: 'button',
@@ -1015,6 +1066,7 @@ export const formModelComponents = [
   },
   {
     __config__: {
+      componentCode: 'ANNIU',
       label: '提交',
       tag: 'event-button',
       tagIcon: 'button',
@@ -1048,6 +1100,7 @@ export const formModelComponents = [
   },
   {
     __config__: {
+      componentCode: 'ANNIU',
       label: '关闭', 
       tag: 'event-button',
       tagIcon: 'button',
@@ -1081,6 +1134,7 @@ export const formModelComponents = [
   },
   {
     __config__: {
+      componentCode: 'ANNIU',
       label: '收藏',
       tag: 'event-button',
       tagIcon: 'button',
@@ -1117,6 +1171,7 @@ export const formModelComponents = [
 export const listModelComponnets = [
   {
     __config__: {
+      componentCode: 'LIEBIAORONGQI',
       label: '列表容器',
       panel: 'lx-page-container',
       tag: 'list-container',

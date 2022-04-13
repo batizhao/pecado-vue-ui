@@ -23,6 +23,7 @@ import DepartmentSelector1 from './DepartmentSelector/index-1.vue'
 import DepartmentSelector2 from './DepartmentSelector/index-2.vue'
 import tableTd from './LayoutTable/tableTd.vue'
 import LoginLog from './LoginLog'
+import SubformTable from './SubformTable/index.vue'
 Vue.component(MyBacklog.name, MyBacklog)
 Vue.component(UsedProcess.name, UsedProcess)
 Vue.component(Notice.name, Notice)
@@ -48,4 +49,5 @@ Vue.component(DepartmentSelector1.name, DepartmentSelector1)
 Vue.component(DepartmentSelector2.name, DepartmentSelector2)
 Vue.component(tableTd.name, tableTd)
 Vue.component(LoginLog.name, LoginLog)
+Vue.component(SubformTable.name, SubformTable)
 

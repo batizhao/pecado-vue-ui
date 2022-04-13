@@ -101,6 +101,7 @@ import LxPageContainer from './components/pageContainer.vue'
 import LxNavBar from './components/navBar.vue'
 import LxLayoutTable from './components/layoutTable/index.vue'
 import LxLoginLog from './components/loginLog.vue'
+import LxSubformTable from './components/subformTable/index.vue'
 
 export default {
   components: {
@@ -128,6 +129,7 @@ export default {
     LxNavBar,
     LxLayoutTable,
     LxLoginLog,
+    LxSubformTable
   },
   props: ['showField'],
   data () {
