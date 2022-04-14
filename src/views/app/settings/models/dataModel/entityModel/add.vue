@@ -246,9 +246,6 @@ export default {
     })
   },
   methods: {
-    indexMethod (index) {
-      return index + 1
-    },
     handleAdd () {
       this.$refs.actionEditTableRef.addRow()
     },

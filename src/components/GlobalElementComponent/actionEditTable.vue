@@ -20,6 +20,7 @@
             type="index"
             label="序号"
             width="55"
+            fixed="left"
             :index="indexMethod"
             :align="align"
           >
@@ -28,6 +29,7 @@
             v-for="(item, index) in tableColumns"
             :key="index"
             :align="align"
+            :min-width="item.width || 150"
             show-overflow-tooltip
           >
             <template slot="header">
@@ -150,7 +152,10 @@ export default {
       type: Boolean,
       default: true
     },
-    tableColumns: Array, // 列配置
+    tableColumns: { // 列配置
+      type: Array,
+      required: true
+    },
     size: { // 组件大小
       type: String,
       default: 'mini'

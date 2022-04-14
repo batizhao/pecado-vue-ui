@@ -16,8 +16,10 @@ keys.forEach(key => {
 
 function vModel(dataObject, defaultValue) {
 	dataObject.props.value = defaultValue
-
 	dataObject.on.input = val => {
+		if (this.subformTableDefaultValue !== undefined) {
+			this.subformTableDefaultValue.scoped.row[this.subformTableDefaultValue.prop] = val
+		}
 		this.$emit('input', val)
 	}
 }
@@ -57,7 +59,7 @@ function buildDataObject(confClone, dataObject) {
 		
 		const val = confClone[key]
 		if (key === '__vModel__') {
-			vModel.call(this, dataObject, confClone.__config__.defaultValue)
+			vModel.call(this, dataObject, this.subformTableDefaultValue === undefined ? confClone.__config__.defaultValue : this.subformTableDefaultValue.scoped.row[this.subformTableDefaultValue.prop])
 		} else if (dataObject[key] !== undefined) {
 			if (dataObject[key] === null
         || dataObject[key] instanceof RegExp
@@ -72,7 +74,7 @@ function buildDataObject(confClone, dataObject) {
 			dataObject.attrs[key] = val
 		}
 	})
-  // dataObject.style={display:confClone.__config__.show?undefined:'none'}
+	dataObject.scopedSlots = this.$scopedSlots
 	// 清理属性
 	clearAttrs(dataObject)
 }
@@ -114,6 +116,9 @@ export default {
 		conf: {
 			type: Object,
 			required: true
+		},
+		subformTableDefaultValue: {
+			type: Object
 		}
 	},
 	render(h) {

@@ -2,6 +2,30 @@
   <div>
     <el-form size="small" label-width="90px">
       <form-basic-setting>
+        <el-form-item label="复选框">
+          <el-switch v-model="activeData.showSelection" />
+        </el-form-item>
+        <el-form-item label="序号">
+          <el-switch v-model="activeData.showOrderNumber" />
+        </el-form-item>
+        <el-form-item label="操作列">
+          <el-switch v-model="activeData.operationColumn.show" />
+        </el-form-item>
+        <template v-if="activeData.operationColumn.show">
+          <el-form-item label="可移动">
+            <el-switch v-model="activeData.operationColumn.movable" />
+          </el-form-item>
+          <el-form-item label="操作列宽度">
+            <el-input-number v-model="activeData.operationColumn.width" :min="1" />
+          </el-form-item>
+          <el-form-item label="操作列固定">
+            <el-select v-model="activeData.operationColumn.fixed">
+              <el-option label="不固定" :value="false"></el-option>
+              <el-option label="固定在左侧" value="left"></el-option>
+              <el-option label="固定在右侧" value="right"></el-option>
+            </el-select>
+          </el-form-item>
+        </template>
       </form-basic-setting>
       <div>
         <el-divider>数据列</el-divider>
@@ -16,8 +40,8 @@
             <div class=" option-drag select-line-icon">
               <i class="el-icon-s-operation" />
             </div>
-            <el-input v-model="item.label" placeholder="标题" size="small" />
-            <el-input v-model="item.prop" placeholder="数据字段" size="small"/>
+            <el-input v-model="item.label" placeholder="标题" size="small" @change="changeRenderKey" />
+            <el-input v-model="item.prop" placeholder="数据字段" size="small" @change="changeRenderKey"/>
             <div class="edit-btn select-line-icon">
               <i class="el-icon-edit" @click="columnSetting(item, index)" />
             </div>
@@ -118,7 +142,7 @@ export default {
       })
       this.activeData.__config__.children.push(getComponent('DANHANGWENBEN'))
     },
-    deleteTableColumn () {
+    deleteTableColumn (index) {
       this.activeData.columns.splice(index, 1)
       this.activeData.__config__.children.splice(index, 1)
     },

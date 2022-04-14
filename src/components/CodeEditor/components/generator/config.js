@@ -26,7 +26,7 @@ export const inputComponents = [
       changeTag: true,
       tag: 'el-input',
       tagIcon: 'input',
-      defaultValue: undefined,
+      defaultValue: '',
       required: true,
       layout: 'colFormItem',
       span: 12,
@@ -66,7 +66,7 @@ export const inputComponents = [
       showLabel: true,
       tag: 'el-input',
       tagIcon: 'textarea',
-      defaultValue: undefined,
+      defaultValue: '',
       required: true,
       layout: 'colFormItem',
       span: 12,
@@ -102,7 +102,7 @@ export const inputComponents = [
       changeTag: true,
       tag: 'el-input',
       tagIcon: 'password',
-      defaultValue: undefined,
+      defaultValue: '',
       layout: 'colFormItem',
       span: 12,
       required: true,
@@ -142,7 +142,7 @@ export const inputComponents = [
       labelWidth: null,
       tag: 'el-input-number',
       tagIcon: 'number',
-      defaultValue: undefined,
+      defaultValue: '',
       span: 12,
       layout: 'colFormItem',
       required: true,
@@ -811,11 +811,20 @@ export const seniorComponents = [
       tag: 'subform-table',
       tagIcon: 'select',
       panel: 'lx-subform-table',
-      layout: 'native',
+      layout: 'subformTable',
+      span: 24,
       defaultValue: [],
       children: []
     },
-    columns: []
+    columns: [], // 列配置
+    showSelection: true, // 复选框
+    showOrderNumber: true, // 序号
+    operationColumn: { // 操作列配置
+      show: true, // 是否显示
+      fixed: false, // 固定
+      width: 150, // 宽度
+      movable: true // 可上下移动
+    }
   }
 ]
 

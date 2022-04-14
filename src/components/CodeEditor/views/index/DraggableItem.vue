@@ -178,6 +178,46 @@ const layouts = {
         {layoutTableButtons.tableTdButtons.apply(this, arguments)}
       </table-td>
     )
+  },
+  // 子表单布局
+  subformTable (h, currentItem, index, layoutTableItem) {
+    const { activeItem } = this.$listeners
+    const config = currentItem.__config__
+    const className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'
+    const componentScopedSlots = {}
+    const subformTableLayoutRefName = 'subformTableLayoutRef' + Math.floor(Math.random() * 100000)
+    currentItem.columns.map((item, cIndex) => {
+      const child = config.children[cIndex]
+      componentScopedSlots[item.prop + cIndex] = (scoped) => {
+        return h('render', {
+          props: {
+            key: child.renderKey,
+            conf: child,
+            subformTableDefaultValue: {
+              scoped,
+              prop: item.prop
+            }
+          },
+          on: {
+            input: () => {
+              currentItem.__config__.defaultValue = this.$refs[subformTableLayoutRefName].$children[0].getData()
+            }
+          }
+        })
+      }
+    })
+    return (
+      <el-col
+        span={config.span}
+        style={config.span === 0 && { width: 'auto', display: 'block' }}
+        class={className}
+        nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
+      >
+        <render ref={subformTableLayoutRefName} key={config.renderKey} conf={currentItem} scopedSlots={componentScopedSlots}>
+        </render>
+        {components.itemBtns.apply(this, arguments)}
+      </el-col>
+    )
   }
 }
 
