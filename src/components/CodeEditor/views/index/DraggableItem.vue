@@ -189,21 +189,40 @@ const layouts = {
     currentItem.columns.map((item, cIndex) => {
       const child = config.children[cIndex]
       componentScopedSlots[item.prop + cIndex] = (scoped) => {
-        return h('render', {
-          props: {
-            key: child.renderKey,
-            conf: child,
-            subformTableDefaultValue: {
-              scoped,
-              prop: item.prop
-            }
+        const childClassName = this.activeId === child.__config__.formId ? 'drawing-item active-from-item' : 'drawing-item'
+        return h('div', {
+          class: childClassName,
+          style: {
+            padding: '5px'
           },
           on: {
-            input: () => {
-              currentItem.__config__.defaultValue = this.$refs[subformTableLayoutRefName].$children[0].getData()
+            click: (event) => {
+              activeItem(child)
+              event.stopPropagation()
             }
           }
-        })
+        }, [
+          h('render', {
+            props: {
+              key: child.renderKey,
+              conf: child,
+              subformTableDefaultValue: {
+                scoped,
+                prop: item.prop
+              }
+            },
+            on: {
+              input: (value) => {
+                scoped.row[item.prop] = value
+              }
+            },
+            nativeOn: {
+              click: event => {
+                event.stopPropagation()
+              }
+            },
+          })
+        ])
       }
     })
     return (
@@ -213,7 +232,15 @@ const layouts = {
         class={className}
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
       >
-        <render ref={subformTableLayoutRefName} key={config.renderKey} conf={currentItem} scopedSlots={componentScopedSlots}>
+        <render
+          ref={subformTableLayoutRefName}
+          key={config.renderKey}
+          conf={currentItem}
+          scopedSlots={componentScopedSlots}
+          onInput={ event => {
+            this.$set(config, 'defaultValue', event)
+          }}
+        >
         </render>
         {components.itemBtns.apply(this, arguments)}
       </el-col>

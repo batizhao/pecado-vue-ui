@@ -30,11 +30,11 @@
       </el-button>
     </div>
 
-    <el-dialog title="预设正则列表" :visible.sync="dialogTableVisible">
-      <el-table :data="presetRegList">
-        <el-table-column property="label" label="类型" width="50"></el-table-column>
-        <el-table-column property="value" label="正则表达式" width="200"></el-table-column>
-        <el-table-column label="操作" width="100">
+    <el-dialog title="预设正则列表" :visible.sync="dialogTableVisible" :append-to-body="true">
+      <el-table :data="presetRegList" style="width: 100%;">
+        <el-table-column property="label" label="类型" min-width="50"></el-table-column>
+        <el-table-column property="value" label="正则表达式" min-width="200"></el-table-column>
+        <el-table-column label="操作" min-width="50">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text">选择</el-button>
           </template>

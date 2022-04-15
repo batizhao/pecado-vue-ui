@@ -4,6 +4,7 @@
       <el-form-item>
         <el-table
           :data="form.data"
+          :key="tableRenderKey"
           border
           size="mini"
           @selection-change="selectionChange"
@@ -25,89 +26,91 @@
             :align="align"
           >
           </el-table-column>
-          <el-table-column
-            v-for="(item, index) in tableColumns"
-            :key="index"
-            :align="align"
-            :min-width="item.width || 150"
-            show-overflow-tooltip
-          >
-            <template slot="header">
-              <span :class="{ 'red-star': hasRedStar(item.rules)}">{{item.label}}</span>
-            </template>
-            <template slot-scope="{ row, $index }">
-              <el-form-item
-                :prop="`data.${$index}.${item.prop}`"
-                :rules="item.rules"
-              >
-                <!-- 下拉框 -->
-                <template v-if="item.type === 'select'">
-                  <span v-if="isReadonly(row, item)">
-                    {{ getSelectorLabel(row, item) }}
-                  </span>
-                  <el-select
-                    v-if="!isReadonly(row, item)"
-                    v-model="row[item.prop]"
-                    style="width: 100%;"
-                    clearable
-                    :size="size"
-                    :disabled="item.disabled"
-                    @change="selectChange(item, row[item.prop], $index)"
-                  >
-                    <el-option
-                      v-for="option in item.options"
-                      :key="option[item.optionsProps ? item.optionsProps.value : 'value']"
-                      :label="option[item.optionsProps ? item.optionsProps.label : 'label']"
-                      :value="option[item.optionsProps ? item.optionsProps.value : 'value']"
-                    ></el-option>
-                  </el-select>
-                </template>
-                <!-- 数字输入框 -->
-                <template v-else-if="item.type === 'inputNumber'">
-                  <span v-if="isReadonly(row, item)">{{row[item.prop]}}</span>
-                  <el-input-number
-                    v-if="!isReadonly(row, item)"
-                    v-model="row[item.prop]"
-                    style="width: 100%;"
-                    :disabled="item.disabled"
-                    :size="size"
-                    :min="item.min"
-                    :max="item.max"
-                  ></el-input-number>
-                </template>
-                <!-- 单个复选框 -->
-                <template v-else-if="item.type === 'checkbox'">
-                  <el-checkbox
-                    v-model="row[item.prop]"
-                    :disabled="item.disabled || isReadonly(row, item)"
-                  ></el-checkbox>
-                </template>
-                <!-- 开关 -->
-                <template v-else-if="item.type === 'switch'">
-                  <el-switch
-                    v-model="row[item.prop]"
-                    :disabled="item.disabled || isReadonly(row, item)"
-                    :active-value="item.activeValue"
-                    :inactive-value="item.inactiveValue"
-                  ></el-switch>
-                </template>
-                <!-- 插槽 -->
-                <template v-else-if="item.type === 'slot'">
-                  <slot :name="item.slotName || item.prop" :row="row" :index="$index"></slot>
-                </template>
-                <!-- 默认为输入框 -->
-                <template v-else>
-                  <span v-if="isReadonly(row, item)">{{row[item.prop]}}</span>
-                  <el-input
-                    v-if="!isReadonly(row, item)"
-                    :size="size"
-                    v-model="row[item.prop]"
-                    :disabled="item.disabled"
-                  ></el-input>
-                </template>
-              </el-form-item>
-            </template>
-          </el-table-column>
+          <template v-for="(item, index) in newTableColumns">
+            <el-table-column
+              v-if="item.prop"
+              :key="index"
+              :align="align"
+              :min-width="item.width || 150"
+              show-overflow-tooltip
+            >
+              <template slot="header">
+                <span :class="{ 'red-star': item.hasRedStar}">{{item.label}}</span>
+              </template>
+              <template slot-scope="{ row, $index }">
+                <el-form-item
+                  :prop="`data.${$index}.${item.prop}`"
+                  :rules="item.rules"
+                >
+                  <!-- 下拉框 -->
+                  <template v-if="item.type === 'select'">
+                    <span v-if="isReadonly(row, item)">
+                      {{ getSelectorLabel(row, item) }}
+                    </span>
+                    <el-select
+                      v-if="!isReadonly(row, item)"
+                      v-model="row[item.prop]"
+                      style="width: 100%;"
+                      clearable
+                      :size="size"
+                      :disabled="item.disabled"
+                      @change="selectChange(item, row[item.prop], $index)"
+                    >
+                      <el-option
+                        v-for="option in item.options"
+                        :key="option[item.optionsProps ? item.optionsProps.value : 'value']"
+                        :label="option[item.optionsProps ? item.optionsProps.label : 'label']"
+                        :value="option[item.optionsProps ? item.optionsProps.value : 'value']"
+                      ></el-option>
+                    </el-select>
+                  </template>
+                  <!-- 数字输入框 -->
+                  <template v-else-if="item.type === 'inputNumber'">
+                    <span v-if="isReadonly(row, item)">{{row[item.prop]}}</span>
+                    <el-input-number
+                      v-if="!isReadonly(row, item)"
+                      v-model="row[item.prop]"
+                      style="width: 100%;"
+                      :disabled="item.disabled"
+                      :size="size"
+                      :min="item.min"
+                      :max="item.max"
+                    ></el-input-number>
+                  </template>
+                  <!-- 单个复选框 -->
+                  <template v-else-if="item.type === 'checkbox'">
+                    <el-checkbox
+                      v-model="row[item.prop]"
+                      :disabled="item.disabled || isReadonly(row, item)"
+                    ></el-checkbox>
+                  </template>
+                  <!-- 开关 -->
+                  <template v-else-if="item.type === 'switch'">
+                    <el-switch
+                      v-model="row[item.prop]"
+                      :disabled="item.disabled || isReadonly(row, item)"
+                      :active-value="item.activeValue"
+                      :inactive-value="item.inactiveValue"
+                    ></el-switch>
+                  </template>
+                  <!-- 插槽 -->
+                  <template v-else-if="item.type === 'slot'">
+                    <slot :name="item.slotName || item.prop" :row="row" :index="$index"></slot>
+                  </template>
+                  <!-- 默认为输入框 -->
+                  <template v-else>
+                    <span v-if="isReadonly(row, item)">{{row[item.prop]}}</span>
+                    <el-input
+                      v-if="!isReadonly(row, item)"
+                      :size="size"
+                      v-model="row[item.prop]"
+                      :disabled="item.disabled"
+                    ></el-input>
+                  </template>
+                </el-form-item>
+              </template>
+            </el-table-column>
+          </template>
           <el-table-column
             v-if="operationColumn.show"
             label="操作"
@@ -185,7 +188,17 @@ export default {
       form: {
         data: []
       },
-      globalId: 0
+      globalId: 0,
+      tableRenderKey: new Date() * 1
+    }
+  },
+  computed: {
+    newTableColumns () {
+      this.tableRenderKey = new Date() * 1 // 使表格重新渲染
+      return this.tableColumns.map(item => {
+        this.$set(item, 'hasRedStar', this.hasRedStar(item.rules))
+        return item
+      })
     }
   },
   created () {
@@ -194,6 +207,12 @@ export default {
   watch: {
     defaultData () {
       this.setDefaultValue()
+    },
+    'form.data': {
+      handler: function (value) {
+        this.$emit('change', value)
+      },
+      deep: true
     }
   },
   methods: {
@@ -230,7 +249,7 @@ export default {
     },
     addRow () {
       const row = {}
-      this.tableColumns.map(item => {
+      this.newTableColumns.map(item => {
         // 如果有默认值就设为默认值
         if (item.defaultValue !== undefined) {
           row[item.prop] = item.defaultValue

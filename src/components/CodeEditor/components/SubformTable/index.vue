@@ -21,6 +21,7 @@ export default {
           showOrderNumber={this.showOrderNumber}
           operationColumn={this.operationColumn}
           scopedSlots={scopedSlots}
+          onChange={this.change}
         >
         </action-edit-table>
       </div>
@@ -30,23 +31,42 @@ export default {
     columns: Array,
     showSelection: Boolean,
     showOrderNumber: Boolean,
-    operationColumn: Object
+    operationColumn: Object,
+    __config__: Object
   },
-  data () {
+  data () { 
     return {
       subformTableRefName: 'subformTableRef' + Math.floor(Math.random() * 100000)
     }
   },
   computed: {
     tableColumns () {
-      return this.columns.map((item, index) => ({
-        label: item.label,
-        prop: item.prop,
-        rules: [], // 暂时不用
-        width: item.width,
-        type: 'slot',
-        slotName: item.prop + index // 用prop加索引作为插槽名，规避prop重复引发的问题
-      }))
+      return this.columns.map((item, index) => {
+        let rulesResult = []
+        const config = this.__config__.children[index].__config__
+        if (config.required) {
+          const required = { required: config.required, message: config.placeholder }
+          if (Array.isArray(config.defaultValue)) {
+            required.type = 'array'
+          }
+          required.message === undefined && (required.message = `${config.label}不能为空`)
+          rulesResult.push(required)
+        }
+        // 其他正则校验添加
+        const otherRules = config.regList.map(item => {
+          item.pattern && (item.pattern = eval(item.pattern))
+          return item
+        })
+        rulesResult = rulesResult.concat(otherRules)
+        return {
+          label: item.label,
+          prop: item.prop,
+          rules: rulesResult,
+          width: item.width,
+          type: 'slot',
+          slotName: item.prop + index // 用prop加索引作为插槽名，规避prop重复引发的问题
+        }
+      })
     }
   },
   methods: {
@@ -59,6 +79,9 @@ export default {
     handleDel () {
       this.$refs[this.subformTableRefName].deleteRow()
     },
+    change (value) {
+      this.$emit('input', value)
+    }
   }
 }
 </script>

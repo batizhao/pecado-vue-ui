@@ -17,9 +17,6 @@ keys.forEach(key => {
 function vModel(dataObject, defaultValue) {
 	dataObject.props.value = defaultValue
 	dataObject.on.input = val => {
-		if (this.subformTableDefaultValue !== undefined) {
-			this.subformTableDefaultValue.scoped.row[this.subformTableDefaultValue.prop] = val
-		}
 		this.$emit('input', val)
 	}
 }
@@ -82,7 +79,7 @@ function buildDataObject(confClone, dataObject) {
 function clearAttrs(dataObject) {
 	const tag = dataObject.attrs.__config__.tag
 	// 在进行二次封装下拉框时，要用到__config__中的配置，要把他传入组件
-  if (!['object-selector', 'file-upload', 'object-cascader', 'department-selector-1', 'department-selector-2'].includes(tag)) {
+  if (!['object-selector', 'file-upload', 'object-cascader', 'department-selector-1', 'department-selector-2', 'subform-table'].includes(tag)) {
     delete dataObject.attrs.__config__
   }
   if (!['object-selector', 'object-checkbox-group', 'object-radio-group'].includes(tag)) {
