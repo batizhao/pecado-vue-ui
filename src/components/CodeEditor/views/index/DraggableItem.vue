@@ -180,7 +180,7 @@ const layouts = {
     )
   },
   // 子表单布局
-  subformTable (h, currentItem, index, layoutTableItem) {
+  subformTable (h, currentItem, index, list) {
     const { activeItem } = this.$listeners
     const config = currentItem.__config__
     const className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'

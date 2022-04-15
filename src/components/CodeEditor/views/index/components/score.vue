@@ -14,13 +14,6 @@
             <el-form-item label="是否禁用">
                 <el-switch v-model="activeData.disabled" />
             </el-form-item>
-            <el-form-item label="默认值">
-                <el-input-number
-                    :value="setDefaultValue(activeData.__config__.defaultValue)"
-                    placeholder="请输入默认值"
-                    @input="onDefaultValueInput"
-                />
-            </el-form-item>
             <el-form-item label="最大值">
                 <el-input-number v-model="activeData.max" placeholder="最大值" />
             </el-form-item>
@@ -29,7 +22,6 @@
     </div>
 </template>
 <script>
-import {setDefaultValue,onDefaultValueInput} from './utils'
 import mixins from './mixins'
 import formBasicSetting from './formBasicSetting.vue'
 export default {
@@ -43,8 +35,6 @@ export default {
         }
     },
     methods:{
-        setDefaultValue,
-        onDefaultValueInput
     }
 }
 </script>

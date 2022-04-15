@@ -11,13 +11,6 @@
       <el-form-item label="是否只读">
         <el-switch v-model="activeData.readonly" />
       </el-form-item>
-      <el-form-item label="默认值">
-        <el-input
-          :value="setDefaultValue(activeData.__config__.defaultValue)"
-          placeholder="请输入默认值"
-          @input="onDefaultValueInput"
-        />
-      </el-form-item>
       <el-form-item label="时间类型">
         <el-select v-model="activeData.type" placeholder="请选择时间类型" @change="dateTypeChange" :disabled="activeData.assemblyStatus">
           <el-option
@@ -58,7 +51,6 @@
 </template>
 
 <script>
-import { setDefaultValue, onDefaultValueInput } from './utils'
 import mixins from './mixins'
 import formBasicSetting from './formBasicSetting.vue'
 const dateTimeFormat = {
@@ -131,8 +123,6 @@ export default {
     }
   },
   methods: {
-    setDefaultValue,
-    onDefaultValueInput,
     setTimeValue(val, type) {
       const valueFormat = type === 'week' ? dateTimeFormat.date : val
       this.activeData.__config__.defaultValue = null

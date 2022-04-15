@@ -121,6 +121,54 @@ const layouts = {
         </div>
       </table-td>
     )
+  },
+  // 子表单布局
+  subformTable (h, currentItem, index, list) {
+    const listeners = buildListeners.call(this, currentItem);
+    const config = currentItem.__config__
+    const componentScopedSlots = {}
+    const subformTableLayoutRefName = 'subformTableLayoutRef' + Math.floor(Math.random() * 100000)
+    currentItem.columns.map((item, cIndex) => {
+      const child = config.children[cIndex]
+      componentScopedSlots[item.prop + cIndex] = (scoped) => {
+        return h('div', {
+          style: {
+            padding: '5px'
+          }
+        }, [
+          h('render', {
+            props: {
+              key: child.renderKey,
+              conf: child,
+              subformTableDefaultValue: {
+                scoped,
+                prop: item.prop
+              }
+            },
+            on: {
+              input: (value) => {
+                scoped.row[item.prop] = value
+              }
+            }
+          })
+        ])
+      }
+    })
+    return (
+      <el-col
+        span={config.span}
+        style={config.span === 0 && { width: 'auto', display: 'block' }}
+      >
+        <render
+          ref={subformTableLayoutRefName}
+          key={config.renderKey}
+          conf={currentItem}
+          scopedSlots={componentScopedSlots}
+          on={listeners}
+        >
+        </render>
+      </el-col>
+    )
   }
 };
 
@@ -274,7 +322,7 @@ export default {
         if (cur.__methods__ && cur.__methods__.onMounted) {
           mountedEvents.push(new Function(cur.__methods__.onMounted))
         }
-        if (config.children) this.initFormData(config.children, formData, mountedEvents);
+        if (config.children && (config.tag !== 'subform-table')) this.initFormData(config.children, formData, mountedEvents);
       });
 
       // 添加样式
@@ -309,19 +357,39 @@ export default {
       this.$refs[this.formConf.formRef].resetFields();
     },
     submitForm() {
-      return new Promise((resolve, reject) => {
+      // 查找页面中的子表单组件
+      const subformTableRefs = []
+      for (const key in this.$refs) {
+        if (key.startsWith('subformTableLayoutRef')) {
+          subformTableRefs.push(this.$refs[key])
+        }
+      }
+      // 子表单组件的校验
+      const promises = subformTableRefs.map(ref => {
+        return new Promise((resolve, reject) => {
+          ref.$children[0].getRef().validate(valid => {
+            valid ? resolve() : reject()
+          })
+        })
+      })
+      // 整个表单的校验
+      const formPromise = new Promise((resolve, reject) => {
         this.$refs[this.formConf.formRef].validate(valid => {
-          if (valid) {
-            if (this.showSubmit) {
-              this.$emit("submit", this[this.formConf.formModel]); // 触发sumit事件
-            }
-            resolve(this[this.formConf.formModel]);
-          } else {
-            this.msgError('表单校验不通过')
-            reject(new Error('表单校验不通过'))
+          valid ? resolve() : reject()
+        })
+      })
+      promises.push(formPromise)
+      return new Promise((resolve, reject) => {
+        Promise.all(promises).then(() => {
+          if (this.showSubmit) {
+            this.$emit("submit", this[this.formConf.formModel]); // 触发sumit事件
           }
-        });
-      });
+          resolve(this[this.formConf.formModel]);
+        }).catch(() => {
+          this.msgError('表单校验不通过')
+          reject(new Error('表单校验不通过'))
+        })
+      })
     },
     // 找到字段对应的配置对象
     recursion (field, callback) {

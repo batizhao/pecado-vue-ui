@@ -2,14 +2,6 @@
   <div>
     <el-form size="small" label-width="90px">
       <form-basic-setting>
-      <el-form-item label="默认值">
-        <el-input-number
-          :value="setDefaultValue(activeData.__config__.defaultValue)"
-          placeholder="请输入默认值"
-          @input="onDefaultValueInput"
-          clearable
-        />
-      </el-form-item>
       <el-form-item label="最小值">
         <el-input-number v-model="activeData.min" placeholder="最小值" />
       </el-form-item>
@@ -43,15 +35,12 @@
 <script>
 import formBasicSetting from './formBasicSetting.vue'
 import mixins from './mixins'
-import { setDefaultValue, onDefaultValueInput } from './utils'
 export default {
   components: {
     formBasicSetting
   },
   mixins: [mixins],
   methods: {
-    setDefaultValue,
-    onDefaultValueInput
   }
 }
 </script>

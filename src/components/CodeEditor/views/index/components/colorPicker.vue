@@ -34,14 +34,6 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="默认值">
-				<el-input
-					:value="setDefaultValue(activeData.__config__.defaultValue)"
-					placeholder="请输入默认值"
-					clearable
-					@input="onDefaultValueInput"
-				/>
-			</el-form-item>
       </form-basic-setting>
     </el-form>
   </div>
@@ -50,7 +42,6 @@
 <script>
 import formBasicSetting from './formBasicSetting.vue'
 import mixins from './mixins'
-import { setDefaultValue, onDefaultValueInput } from './utils'
 export default {
   components: {
     formBasicSetting
@@ -83,8 +74,6 @@ export default {
     }
   },
   methods: {
-    setDefaultValue,
-    onDefaultValueInput,
     colorFormatChange (val) {
       this.activeData.__config__.defaultValue = null
       this.activeData['show-alpha'] = val.indexOf('a') > -1

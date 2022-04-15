@@ -14,14 +14,6 @@
       <el-form-item label="是否多选">
         <el-switch v-model="activeData.multiple" :disabled="activeData.assemblyStatus" />
       </el-form-item>
-      <el-form-item label="默认值">
-        <el-input
-          :value="setDefaultValue(activeData.__config__.defaultValue)"
-          placeholder="请输入默认值"
-          clearable
-          @input="onDefaultValueInput"
-        />
-      </el-form-item>
       <el-form-item label="占位提示">
         <el-input
           v-model="activeData.placeholder"
@@ -38,7 +30,6 @@
 import formBasicSetting from './formBasicSetting.vue'
 import options from './options/index.vue'
 import mixins from './mixins'
-import { setDefaultValue, onDefaultValueInput } from './utils'
 export default {
   components: {
     options,
@@ -46,8 +37,6 @@ export default {
   },
   mixins: [mixins],
   methods: {
-    setDefaultValue,
-    onDefaultValueInput
   }
 }
 </script>

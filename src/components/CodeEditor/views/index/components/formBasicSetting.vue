@@ -42,6 +42,13 @@
     <el-form-item label="是否隐藏">
       <el-switch v-model="activeData.__config__.hidden" />
     </el-form-item>
+    <el-form-item label="默认值"  v-if="activeData.__config__.defaultValue !== undefined">
+        <el-input
+          :value="setDefaultValue(activeData.__config__.defaultValue)"
+          placeholder="请输入默认值"
+          @input="onDefaultValueInput"
+        />
+      </el-form-item>
     <slot></slot>
     <function-setting></function-setting>
   </div>
@@ -50,6 +57,7 @@
 <script>
 import mixins from './mixins'
 import functionSetting from './functionSetting.vue'
+import { setDefaultValue, onDefaultValueInput } from './utils'
 export default {
   mixins: [mixins],
   components: {
@@ -61,6 +69,8 @@ export default {
     this.keywords = keywords.split(',')
   },
   methods: {
+    setDefaultValue,
+    onDefaultValueInput,
     vModelChange (val) {
       // 校验字符
       if (!/^[a-zA-Z0-9]{1,30}$/.test(val)) {

@@ -189,16 +189,8 @@ export default {
         data: []
       },
       globalId: 0,
-      tableRenderKey: new Date() * 1
-    }
-  },
-  computed: {
-    newTableColumns () {
-      this.tableRenderKey = new Date() * 1 // 使表格重新渲染
-      return this.tableColumns.map(item => {
-        this.$set(item, 'hasRedStar', this.hasRedStar(item.rules))
-        return item
-      })
+      tableRenderKey: new Date() * 1,
+      newTableColumns: []
     }
   },
   created () {
@@ -213,6 +205,31 @@ export default {
         this.$emit('change', value)
       },
       deep: true
+    },
+    tableColumns: {
+      handler: function (value = [], oldValue = []) {
+        if (this.$parent.$options.name === 'subform-table') {
+          // 收集所有列的必填设置，如果有任一列必填设置变化，就使表格重新渲染
+          let allRequired = ''
+          let oldAllREquired = ''
+          value.map(item => {
+            allRequired += String(item.rules[0].required)
+          })
+          oldValue.map(item => {
+            oldAllREquired += String(item.rules[0].required)
+          })
+          if (allRequired !== oldAllREquired) {
+            this.tableRenderKey = new Date() * 1
+          }
+        }
+
+        this.newTableColumns = value.map(item => {
+          this.$set(item, 'hasRedStar', this.hasRedStar(item.rules))
+          return item
+        })
+      },
+      deep: true,
+      immediate: true
     }
   },
   methods: {

@@ -8,13 +8,6 @@
       <el-form-item label="是否禁用">
         <el-switch v-model="activeData.disabled" />
       </el-form-item>
-      <el-form-item label="默认值">
-        <el-input
-          :value="setDefaultValue(activeData.__config__.defaultValue)"
-          placeholder="请输入默认值"
-          @input="onDefaultValueInput"
-        />
-      </el-form-item>
       <el-form-item label="时间段" v-if="!activeData['is-range']">
         <el-input
           v-model="activeData['picker-options'].selectableRange"
@@ -50,7 +43,6 @@
 </template>
 
 <script>
-import { setDefaultValue, onDefaultValueInput } from './utils'
 import mixins from './mixins'
 import formBasicSetting from './formBasicSetting.vue'
 export default {
@@ -59,8 +51,6 @@ export default {
   },
   mixins: [mixins],
   methods: {
-    setDefaultValue,
-    onDefaultValueInput
   }
 }
 </script>

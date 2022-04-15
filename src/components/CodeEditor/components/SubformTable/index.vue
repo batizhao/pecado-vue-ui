@@ -44,7 +44,7 @@ export default {
       return this.columns.map((item, index) => {
         let rulesResult = []
         const config = this.__config__.children[index].__config__
-        if (config.required) {
+        if (config.required !== undefined) {
           const required = { required: config.required, message: config.placeholder }
           if (Array.isArray(config.defaultValue)) {
             required.type = 'array'
@@ -64,12 +64,16 @@ export default {
           rules: rulesResult,
           width: item.width,
           type: 'slot',
-          slotName: item.prop + index // 用prop加索引作为插槽名，规避prop重复引发的问题
+          slotName: item.prop + index, // 用prop加索引作为插槽名，规避prop重复引发的问题
+          defaultValue: config.defaultValue
         }
       })
     }
   },
   methods: {
+    getRef () {
+      return this.$refs[this.subformTableRefName].getRef()
+    },
     getData () {
       return this.$refs[this.subformTableRefName].getData()
     },
