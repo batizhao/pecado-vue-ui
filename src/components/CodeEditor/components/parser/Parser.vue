@@ -131,6 +131,7 @@ const layouts = {
     currentItem.columns.map((item, cIndex) => {
       const child = config.children[cIndex]
       componentScopedSlots[item.prop + cIndex] = (scoped) => {
+        const childListeners = subformTableBuildListeners.call(this, child, currentItem, subformTableLayoutRefName, scoped);
         return h('div', {
           style: {
             padding: '5px'
@@ -146,12 +147,11 @@ const layouts = {
               }
             },
             on: {
+              ...childListeners,
               input: (value) => {
                 scoped.row[item.prop] = value
-                // 获取子表单组件的数据
-                const subformTableData = this.$refs[subformTableLayoutRefName].$children[0].getData()
-                setValue.call(this, subformTableData, config, currentItem)
-              }
+                childListeners.input.call(this, value)
+              },
             }
           })
         ])
@@ -267,6 +267,34 @@ function buildListeners(scheme) {
     if (methods.onInput && typeof methods.onInput === 'string') {
       const met = new Function('value', methods.onInput)
       met.call(this, event);
+    }
+  }
+  return listeners;
+}
+function subformTableBuildListeners(scheme, parentScheme, subformTableLayoutRefName, scoped) {
+  const methods = scheme.__methods__ || {};
+  const listeners = {};
+
+  // 给__methods__中的方法绑定this和event
+  Object.keys(methods).forEach(key => {
+    let currentMethod = methods[key]
+    if (typeof methods[key] === 'string') {
+      currentMethod = new Function('value', 'index', currentMethod)
+    }
+    listeners[key] = event => {
+      const subformTableLayoutRef = this.$refs[subformTableLayoutRefName].$children[0]
+      currentMethod.call(subformTableLayoutRef, event, scoped.index);
+    }
+  });
+  // 响应 render.js 中的 vModel $emit('input', val)
+  listeners.input = event => {
+    // 获取子表单组件的数据
+    const subformTableLayoutRef = this.$refs[subformTableLayoutRefName].$children[0]
+    setValue.call(this, subformTableLayoutRef.getData(), parentScheme.__config__, parentScheme)
+    // input事件被重写 所以要把原来自定义的onInput加上
+    if (methods.onInput && typeof methods.onInput === 'string') {
+      const met = new Function('value', 'index', methods.onInput)
+      met.call(subformTableLayoutRef, event, scoped.index);
     }
   }
   return listeners;

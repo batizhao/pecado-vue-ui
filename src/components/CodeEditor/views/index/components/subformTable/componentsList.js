@@ -1,4 +1,5 @@
 import { inputComponents, selectComponents } from '@/components/CodeEditor/components/generator/config.js'
+import { deepClone } from '@/utils'
 function getList () {
   const list = inputComponents
     .concat(selectComponents)
@@ -20,7 +21,7 @@ export function getComponentsList () {
 }
 // 根据componentCode查询组件
 export function getComponent (componentCode) {
-  const obj = getList().find(item => item.__config__.componentCode === componentCode) || null
+  const obj = deepClone(getList().find(item => item.__config__.componentCode === componentCode)) || null
   if (obj) {
     const config = obj.__config__
     config.formId = getGlobalId()

@@ -140,7 +140,9 @@ export default {
         component: 'DANHANGWENBEN',
         width: '180'
       })
-      this.activeData.__config__.children.push(getComponent('DANHANGWENBEN'))
+      const obj = getComponent('DANHANGWENBEN')
+      obj.__config__.parentTag = 'subform-table'
+      this.activeData.__config__.children.push(obj)
     },
     deleteTableColumn (index) {
       this.activeData.columns.splice(index, 1)

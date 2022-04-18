@@ -135,6 +135,7 @@ export default {
           defaultValue: 'varchar',
           change: (value, item, index) => {
             this.$refs.actionEditTableRef.setValue(index, 'config', [])
+            this.$refs.actionEditTableRef.setValue(index, 'length', value === 'json' ? 0 : 255)
           }
         },
         {

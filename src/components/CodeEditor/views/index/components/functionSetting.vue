@@ -7,41 +7,57 @@
         <el-button icon="el-icon-edit" size="mini" @click="writeFunction(value, key)">编写</el-button>
       </li>
     </ul>
-    <action-dialog v-model="editorVisible" title="" @confirm="editorConfirm">
+    <action-dialog v-model="editorVisible" @confirm="editorConfirm" width="80%">
       <div class="editor-start-end">{{activeData.__vModel__}}.{{eventName}}({{params}}) {</div>
       <div id="editorJs" style="height: 400px;" />
       <div class="editor-start-end">}</div>
+      <template v-slot:title>
+        <span>{{eventName + '事件'}} </span>
+        <el-tooltip placement="top" effect="light">
+          <div slot="content">
+            <h4>基础组件API</h4>
+            <ol class="event-tips">
+              <li>
+                <span>获取值</span>
+                <span>this.getValue(field)</span>
+              </li>
+              <li>
+                <span>设置值</span>
+                <span>this.setValue(field, value)</span>
+              </li>
+              <li>
+                <span>设置禁用</span>
+                <span>this.setDisabled(field, value)</span>
+              </li>
+              <li>
+                <span>设置只读</span>
+                <span>this.setReadOnly(field, value)</span>
+              </li>
+              <li>
+                <span>设置隐藏</span>
+                <span>this.setHidden(field, value)</span>
+              </li>
+              <li>
+                <span>设置必填</span>
+                <span>this.setRequired(field, value)</span>
+              </li>
+              <li>
+                <span>设置指定属性值</span>
+                <span>this.setOption(field, key, value)</span>
+              </li>
+            </ol>
+            <h4>子表单组件API</h4>
+            <ol class="event-tips">
+              <li>
+                <span>设置值</span>
+                <span>this.setValue(index, attrName, value)</span>
+              </li>
+            </ol>
+          </div>
+          <i class="el-icon-question"></i>
+        </el-tooltip>
+      </template>
 
-      <ol class="event-tips">
-        <li>
-          <span>获取值</span>
-          <span>this.getValue(field)</span>
-        </li>
-        <li>
-          <span>设置值</span>
-          <span>this.setValue(field, value)</span>
-        </li>
-        <li>
-          <span>设置禁用</span>
-          <span>this.setDisabled(field, value)</span>
-        </li>
-        <li>
-          <span>设置只读</span>
-          <span>this.setReadOnly(field, value)</span>
-        </li>
-        <li>
-          <span>设置隐藏</span>
-          <span>this.setHidden(field, value)</span>
-        </li>
-        <li>
-          <span>设置必填</span>
-          <span>this.setRequired(field, value)</span>
-        </li>
-        <li>
-          <span>设置指定属性值</span>
-          <span>this.setOption(field, key, value)</span>
-        </li>
-      </ol>
     </action-dialog>
   </div>
 </template>
@@ -68,8 +84,15 @@ export default {
   },
   computed: {
     params () {
-      // 有些事件没有参数，比如onClear
-      return (['onClear'].includes(this.eventName)) ? '' : 'value'
+      if (['onClear'].includes(this.eventName)) {
+        // 有些事件没有参数，比如onClear
+        return ''
+      } else if (this.activeData.__config__.parentTag === 'subform-table') {
+        // 子表单组件的子组件事件有两个参数
+        return 'value, index'
+      } else {
+        return 'value'
+      }
     }
   },
   created () {
@@ -142,9 +165,9 @@ export default {
 }
 .event-tips {
   li {
+    margin-bottom: 5px;
     & > span:first-child {
       margin-right: 10px;
-      font-weight: bold;
     }
   }
 }

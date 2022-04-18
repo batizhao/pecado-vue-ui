@@ -8,6 +8,9 @@
     append-to-body
     :custom-class="customClass"
   >
+    <template v-slot:title>
+      <slot name="title"></slot>
+    </template>
     <slot></slot>
     <div slot="footer" v-if="showFooter">
       <el-button type="primary" @click="confirm" size="small" :loading="loading">确 定</el-button>
@@ -21,8 +24,7 @@ export default {
   props: {
     value: Boolean,
     title: {
-      type: String,
-      default: '标题'
+      type: String
     },
     width: {
       type: String,

@@ -71,6 +71,9 @@ export default {
     }
   },
   methods: {
+    setValue (index, attrName, value) {
+      this.$refs[this.subformTableRefName].setValue(index, attrName, value)
+    },
     getRef () {
       return this.$refs[this.subformTableRefName].getRef()
     },

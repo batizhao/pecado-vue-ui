@@ -33,10 +33,6 @@ export default {
           label: '表单描述',
           prop: 'description',
           type: 'textarea',
-        },
-        {
-          label: '保存接口地址',
-          prop: 'submitURL'
         }
       ]
     }
