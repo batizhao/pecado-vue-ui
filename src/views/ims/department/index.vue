@@ -235,9 +235,13 @@ export default {
     this.getList();
     this.listDictDataByCode("dept_type").then(response => {
       this.typeOptions = response.data;
+      const defaultData = this.typeOptions.find(item => item.isDefault === 'yes')
+      this.formTypeDefaultValue = defaultData.value
     });
     this.listDictDataByCode("dept_level").then(response => {
       this.levelOptions = response.data;
+      const defaultData = this.levelOptions.find(item => item.isDefault === 'yes')
+      this.formLevelDefaultValue = defaultData.value
     });
   },
   methods: {
@@ -297,7 +301,10 @@ export default {
     },
     // 表单重置
     reset() {
-      this.form = {};
+      this.form = {
+        type: this.formTypeDefaultValue,
+        level: this.formLevelDefaultValue
+      };
       this.resetForm("form");
     },
     /** 搜索按钮操作 */
