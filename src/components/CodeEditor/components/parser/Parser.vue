@@ -148,6 +148,9 @@ const layouts = {
             on: {
               input: (value) => {
                 scoped.row[item.prop] = value
+                // 获取子表单组件的数据
+                const subformTableData = this.$refs[subformTableLayoutRefName].$children[0].getData()
+                setValue.call(this, subformTableData, config, currentItem)
               }
             }
           })

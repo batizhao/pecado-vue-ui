@@ -21,7 +21,7 @@ export default {
           showOrderNumber={this.showOrderNumber}
           operationColumn={this.operationColumn}
           scopedSlots={scopedSlots}
-          onChange={this.change}
+          defaultData={this.__config__.defaultValue}
         >
         </action-edit-table>
       </div>
@@ -82,9 +82,6 @@ export default {
     },
     handleDel () {
       this.$refs[this.subformTableRefName].deleteRow()
-    },
-    change (value) {
-      this.$emit('input', value)
     }
   }
 }

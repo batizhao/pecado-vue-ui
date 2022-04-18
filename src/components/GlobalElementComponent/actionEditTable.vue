@@ -200,12 +200,6 @@ export default {
     defaultData () {
       this.setDefaultValue()
     },
-    'form.data': {
-      handler: function (value) {
-        this.$emit('change', value)
-      },
-      deep: true
-    },
     tableColumns: {
       handler: function (value = [], oldValue = []) {
         if (this.$parent.$options.name === 'subform-table') {

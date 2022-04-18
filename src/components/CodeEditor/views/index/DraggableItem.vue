@@ -214,6 +214,9 @@ const layouts = {
             on: {
               input: (value) => {
                 scoped.row[item.prop] = value
+                // 获取子表单组件的数据
+                const subformTableData = this.$refs[subformTableLayoutRefName].$children[0].getData()
+                this.$set(config, 'defaultValue', subformTableData)
               }
             },
             nativeOn: {
@@ -237,9 +240,6 @@ const layouts = {
           key={config.renderKey}
           conf={currentItem}
           scopedSlots={componentScopedSlots}
-          onInput={ event => {
-            this.$set(config, 'defaultValue', event)
-          }}
         >
         </render>
         {components.itemBtns.apply(this, arguments)}
