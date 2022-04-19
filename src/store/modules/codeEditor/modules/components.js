@@ -7,11 +7,7 @@ export default {
     activeIndex: [],
     formConf: {},
     currentComponet: null, // 当前选择的对象
-    renderModels: [], // 表格需要刷新数据时，存储要更新的组件的__vModel__
     formResetTimeStamp: 0, // 表格是否点击了重置按钮的标识，用时间戳更新并监听
-    renderNums: 0, // 批量新增表格组件 通过监听此值变化来提交表格数据
-    parseRenderKey: 0, // 通过监听renderKey来实现组件之间联动 (重新渲染parse)
-    currentFormId: 0 // 监听此值来实现点击组件跳转到对应的表单页面
   },
   getters: {
     getCurrentComponent: state => {
@@ -72,18 +68,6 @@ export default {
     },
     setDefaultValue (state, payload) {
       this.getters['codeEditor/components/getCurrentComponent'].__config__.defaultValue = payload
-    },
-    setRenderModels (state, renderModels) {
-      state.renderModels = renderModels
-    },
-    changeParseRenderKey (state) {
-      state.parseRenderKey = new Date().getTime().toString()
-    },
-    setCurrentFormId (state, currentFormId) {
-      state.currentFormId = currentFormId
-    },
-    setRenderNums (state, renderNums) {
-      state.renderNums = renderNums
     },
     setFormResetTimeStamp (state) {
       state.formResetTimeStamp = new Date().getTime()

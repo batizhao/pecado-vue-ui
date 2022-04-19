@@ -13,6 +13,19 @@ export const formConf = {
   isForm: true
 }
 
+const rowContainer = {
+  __config__: {
+    componentCode: 'HANGRONGQI',
+    layout: 'rowFormItem',
+    tagIcon: 'row',
+    panel: 'lx-row',
+    label: '行容器',
+    layoutTree: true,
+    span: 24,
+    document: 'https://element.eleme.cn/#/zh-CN/component/layout#row-attributes'
+  }
+}
+
 // 输入型组件 【左面板】
 export const inputComponents = [
   {
@@ -639,18 +652,7 @@ export const selectComponents = [
 
 // 布局型组件 【左面板】
 export const layoutComponents = [
-  {
-    __config__: {
-      componentCode: 'HANGRONGQI',
-      layout: 'rowFormItem',
-      tagIcon: 'row',
-      panel: 'lx-row',
-      label: '行容器',
-      layoutTree: true,
-      span: 24,
-      document: 'https://element.eleme.cn/#/zh-CN/component/layout#row-attributes'
-    }
-  },
+  rowContainer,
   {
     __config__: {
       componentCode: 'ANNIU',
@@ -977,7 +979,20 @@ export const layoutPageComponents = [
       span: 21,
       layout: 'native'
     }
-  }
+  },
+  {
+    __config__: {
+      componentCode: 'MIANBAOXIE',
+      label: '面包屑',
+      tagIcon: 'breadcrumb',
+      tag: 'breadcrumb',
+      panel: 'lx-breadcrumb',
+      layout: 'native',
+      span: 24
+    },
+    separator: undefined // 分隔符
+  },
+  rowContainer
 ]
 
 export const formModelComponents = [
@@ -993,19 +1008,7 @@ export const formModelComponents = [
     },
     url: '' // 请求接口
   },
-  {
-    __config__: {
-      componentCode: 'HANGRONGQI',
-      layout: 'rowFormItem',
-      tagIcon: 'row',
-      label: '行容器',
-      layoutTree: true,
-      document: 'https://element.eleme.cn/#/zh-CN/component/layout#row-attributes'
-    },
-    type: 'default',
-    justify: 'start',
-    align: 'top'
-  },
+  rowContainer,
   {
     __config__: {
       componentCode: 'ANNIU',

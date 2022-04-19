@@ -102,6 +102,7 @@ import LxNavBar from './components/navBar.vue'
 import LxLayoutTable from './components/layoutTable/index.vue'
 import LxLoginLog from './components/loginLog.vue'
 import LxSubformTable from './components/subformTable/index.vue'
+import LxBreadcrumb from './components/breadcrumb.vue'
 
 export default {
   components: {
@@ -129,7 +130,8 @@ export default {
     LxNavBar,
     LxLayoutTable,
     LxLoginLog,
-    LxSubformTable
+    LxSubformTable,
+    LxBreadcrumb,
   },
   props: ['showField'],
   data () {
@@ -144,9 +146,6 @@ export default {
     formConf: {
       get () {
         return this.$store.state.codeEditor.components.formConf
-      },
-      set (value) {
-        this.$store.commit('codeEditor.components.setFormConf', value)
       }
     },
     currentComponent () {

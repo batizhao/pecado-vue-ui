@@ -76,7 +76,10 @@ export default {
     },
     //关闭
     buttonEmitClose () {
-        this.$router.go(-1)
+      this.$router.go(-1)
+      // 面包屑
+      this.$store.commit('codeEditor/breadcrumb/popBreadcrumbNames')
+
     },
     //收藏
     collection () {

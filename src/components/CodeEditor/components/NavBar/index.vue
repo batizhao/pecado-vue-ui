@@ -32,6 +32,7 @@ export default {
       const { id } = this.$route.query
       if (id) {
         this.sideActiveIndex = id.toString()
+        this.setBreadcrumbNames(id)
       } else {
         // 默认选中第一个菜单
         this.navBarSelect(this.navBarMenuData[0])
@@ -51,6 +52,37 @@ export default {
           pageModelCode: data.pageModelCode
         }
       })
+      this.setBreadcrumbNames(data.id)
+    },
+    // 设置面包屑数据
+    setBreadcrumbNames (menuId) {
+      // 查询父级菜单的名称
+      let parentNames = []
+      let menuName = ''
+      const recursion = (list, name) => {
+        for (let item of list) {
+          if (name !== undefined) {
+            !item.parentNames && (item.parentNames = [])
+            item.parentNames.push(name)
+          }
+          if (String(item.id) === String(menuId)) {
+            parentNames = item.parentNames || []
+            menuName = item.name
+          }
+          if (item.children && item.children.length) {
+            recursion(item.children, item.name)
+          }
+        }
+      }
+      recursion(JSON.parse(JSON.stringify(this.navBarMenuData)))
+      this.$store.commit('codeEditor/breadcrumb/setBreadcrumbNames', [
+        ...parentNames.map(item => ({ name: item })),
+        {
+          name: menuName,
+          search: location.search
+        }
+      ])
+
     },
     // 获取侧边栏菜单数据
     getNavBarData () {

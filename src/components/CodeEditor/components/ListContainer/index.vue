@@ -130,7 +130,6 @@ export default {
     },
     // 表格内按钮点击事件
     tableActionButtonsClick (row, button) {
-      console.log("🚀 ~ file: index.vue ~ line 131 ~ tableActionButtonsClick ~ row, button", row, button)
       if (['edit', 'detail'].includes(button.operType)) {
         if (button.page && button.page.appPageCode) {
           // 如果配置了关联页面，直接跳转，带上数据id
@@ -143,6 +142,7 @@ export default {
               url: this.requestUrl
             }
           })
+          this.appendBreadcrumbNames(button.name)
         } else {
           this.msgError('请配置关联页面')
         }
@@ -170,6 +170,7 @@ export default {
               url: this.requestUrl
             }
           })
+          this.appendBreadcrumbNames(button.name)
         } else {
           this.msgError('请配置关联页面')
         }
@@ -197,6 +198,13 @@ export default {
           this.$refs.actionTableRef.getTableData()
         })
       }).catch(() => {})
+    },
+    // 添加面包屑导航
+    appendBreadcrumbNames (name) {
+      this.$store.commit('codeEditor/breadcrumb/appendBreadcrumbNames', {
+        name,
+        search: location.search
+      })
     }
   },
   created () {

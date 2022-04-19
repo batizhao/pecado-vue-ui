@@ -46,7 +46,7 @@ const layouts = {
       );
     }
     return (
-      <el-col v-show={!config.hidden} span={scheme.span}>
+      <el-col v-show={!config.hidden} span={config.span}>
         <el-row gutter={scheme.gutter}>
           <div class={'drag-wrapper flex-start-wrap component-style-panel-' + config.formId}>
             {child}
