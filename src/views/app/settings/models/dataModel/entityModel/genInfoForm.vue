@@ -4,10 +4,10 @@
       <el-col :span="12">
         <el-form-item prop="template">
           <span slot="label">生成模板</span>
-          <el-select v-model="info.template" @change="tplSelectChange">
+          <el-select v-model="info.template">
             <el-option label="单表" value="single" />
-            <el-option label="树表" value="tree" />
-            <el-option label="一对多表" value="onetomany" />
+            <el-option label="树" value="tree" />
+            <el-option label="一对多（JSON）" value="onetomany" />
           </el-select>
         </el-form-item>
       </el-col>
@@ -79,6 +79,7 @@
           </el-switch>
         </el-form-item>
       </el-col>
+      
       <el-col :span="12">
         <el-form-item prop="testcase">
           <span slot="label">
@@ -135,7 +136,7 @@
       </el-col>
     </el-row>    
 
-    <el-row v-show="info.template == 'onetomany'">
+    <!-- <el-row v-show="info.template == 'onetomany'">
       <el-divider content-position="left">关联信息</el-divider>
       <el-col :span="12">
         <el-form-item>
@@ -173,11 +174,11 @@
           </el-select>
         </el-form-item>
       </el-col>
-    </el-row>
+    </el-row> -->
   </el-form>
 </template>
 <script>
-import { entityModelDetail } from "@/api/app/dataModel.js";
+// import { entityModelDetail } from "@/api/app/dataModel.js";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
@@ -196,11 +197,11 @@ export default {
   },
   data() {
     return {
-      subColumns: [],
+      // subColumns: [],
       rules: {
-        template: [
-          { required: true, message: "请选择生成模板", trigger: "blur" }
-        ],
+        // template: [
+        //   { required: true, message: "请选择生成模板", trigger: "blur" }
+        // ],
         packageName: [
           { required: true, message: "请输入生成包路径", trigger: "blur" }
         ],
@@ -214,44 +215,44 @@ export default {
     };
   },
   created() {},
-  watch: {
-    'info.subTableId': function(val) {
-      this.setSubTableColumns(val);
-    }
-  },
+  // watch: {
+  //   'info.subTableId': function(val) {
+  //     this.setSubTableColumns(val);
+  //   }
+  // },
   methods: {
     /** 转换菜单数据结构 */
-    normalizer(node) {
-      if (node.children && !node.children.length) {
-        delete node.children;
-      }
-      return {
-        id: node.id,
-        label: node.name,
-        children: node.children
-      };
-    },
+    // normalizer(node) {
+    //   if (node.children && !node.children.length) {
+    //     delete node.children;
+    //   }
+    //   return {
+    //     id: node.id,
+    //     label: node.name,
+    //     children: node.children
+    //   };
+    // },
     /** 选择子表名触发 */
-    subSelectChange(value) {
-      this.info.subTableFkName = '';
-    },
+    // subSelectChange(value) {
+    //   this.info.subTableFkName = '';
+    // },
     /** 选择生成模板触发 */
-    tplSelectChange(value) {
-      if(value !== 'onetomany') {
-        this.info.subTableId = '';
-        this.info.subTableFkName = '';
-      }
-    },
+    // tplSelectChange(value) {
+    //   if(value !== 'onetomany') {
+    //     this.info.subTableId = '';
+    //     this.info.subTableFkName = '';
+    //   }
+    // },
     /** 设置关联外键 */
-    setSubTableColumns(value) {
-      const item = this.tables.find(item => item.id === value)
-      if (item) {
-        entityModelDetail(item.id).then(response => {
-            this.subColumns = JSON.parse(response.data.columnMetadata);
-          }
-        );
-      }
-    }
+    // setSubTableColumns(value) {
+    //   const item = this.tables.find(item => item.id === value)
+    //   if (item) {
+    //     entityModelDetail(item.id).then(response => {
+    //         this.subColumns = JSON.parse(response.data.columnMetadata);
+    //       }
+    //     );
+    //   }
+    // }
   }
 };
 </script>

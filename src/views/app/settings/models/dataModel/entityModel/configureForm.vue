@@ -47,6 +47,7 @@ export default {
             { value: 'BigDecimal' },
             { value: 'Date' },
             { value: 'LocalDateTime' },
+            { value: 'List' },
           ],
           optionsProps: {
             label: 'value',
@@ -94,6 +95,7 @@ export default {
             { value: 'imageUpload', label: '图片' },
             { value: 'fileUpload', label: '文件' },
             { value: 'editor', label: '编辑器' },
+            { value: 'subform', label: '子表单' },
           ],
           rules: [
             { required: true, trigger: 'change', message: '请选择' }
