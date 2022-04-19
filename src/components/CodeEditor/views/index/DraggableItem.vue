@@ -240,6 +240,10 @@ const layouts = {
           key={config.renderKey}
           conf={currentItem}
           scopedSlots={componentScopedSlots}
+          onInput={(value) => {
+            // 获取子表单组件的数据
+            this.$set(config, 'defaultValue', value)
+          }}
         >
         </render>
         {components.itemBtns.apply(this, arguments)}

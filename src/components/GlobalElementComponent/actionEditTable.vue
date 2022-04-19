@@ -116,7 +116,7 @@
             label="操作"
             align="center"
             :fixed="operationColumn.fixed"
-            :min-width="operationColumn.width"
+            :min-width="operationColumn.width || 150"
           >
             <template slot-scope="scope">
               <!-- 上移下移功能按钮 -->
@@ -284,6 +284,7 @@ export default {
       } else {
         tableData.push(row)
       }
+      this.$emit('change', this.getData())
     },
     deleteRow (callback) {
       if (!this.selectedItems.length) {
@@ -301,6 +302,7 @@ export default {
         }
         this.selectedItems = []
       }
+      this.$emit('change', this.getData())
     },
     moveUp (scope) {
       const delItem = this.form.data.splice(scope.$index, 1)

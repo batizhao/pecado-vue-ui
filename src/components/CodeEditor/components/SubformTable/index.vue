@@ -22,6 +22,7 @@ export default {
           operationColumn={this.operationColumn}
           scopedSlots={scopedSlots}
           defaultData={this.__config__.defaultValue}
+          onChange={this.onChange}
         >
         </action-edit-table>
       </div>
@@ -85,6 +86,9 @@ export default {
     },
     handleDel () {
       this.$refs[this.subformTableRefName].deleteRow()
+    },
+    onChange (value) {
+      this.$emit('input', value)
     }
   }
 }
