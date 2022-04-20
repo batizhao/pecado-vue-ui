@@ -53,6 +53,37 @@
                 <span>this.setValue(index, attrName, value)</span>
               </li>
             </ol>
+            <h4>用户API</h4>
+            <ol class="event-tips">
+              <li>
+                <span>获取当前用户信息</span>
+                <span>const user = this.getUserInfo()</span>
+              </li>
+              <li>
+                <span>用户姓名</span>
+                <span>user.name</span>
+              </li>
+              <li>
+                <span>用户名</span>
+                <span>user.username</span>
+              </li>
+              <li>
+                <span>用户所在部门Id集合</span>
+                <span>user.departmentId</span>
+              </li>
+              <li>
+                <span>用户角色编码集合</span>
+                <span>user.roleCode</span>
+              </li>
+              <li>
+                <span>用户权限标识集合</span>
+                <span>user.permissions</span>
+              </li>
+              <li>
+                <span>用户邮箱</span>
+                <span>user.email</span>
+              </li>
+            </ol>
           </div>
           <i class="el-icon-question"></i>
         </el-tooltip>

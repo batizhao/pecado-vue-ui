@@ -65,7 +65,12 @@ const user = {
           }
           commit('SET_NAME', me.username)
           commit('SET_AVATAR', avatar)
-          commit('SET_USERINFO', me)
+          commit('SET_USERINFO', { 
+            ...me, 
+            permissions: res.data.permissions, // 权限
+            roleCode: res.data.roles, // 角色标识
+            departmentId: res.data.deptIds // 部门id
+          })
           resolve(res)
         }).catch(error => {
           reject(error)

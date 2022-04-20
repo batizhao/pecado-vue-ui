@@ -336,7 +336,7 @@ export default {
   mounted() {
     // 执行所有组件的onMounted事件
     this.mountedEvents.map(fn => {
-      fn()
+      fn.call(this)
     })
   },
   methods: {
@@ -484,6 +484,10 @@ export default {
           return total[current]
         }, target)
       })
+    },
+    // 获取用户信息
+    getUserInfo () {
+      return JSON.parse(JSON.stringify(this.$store.state.user.userInfo))
     }
   },
   render(h) {
