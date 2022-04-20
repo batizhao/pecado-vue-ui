@@ -1,7 +1,7 @@
 <script>
 import { deepClone } from "../../utils/index";
 import render from "../render/render.js";
-import { addAllNodesStyleToDocument } from './addStyleToDocument.js'
+import { addAllNodesStyleToDocument, addCSS } from './addStyleToDocument.js'
 import { getLabels } from './addLabels.js'
 
 const layouts = {
@@ -34,6 +34,7 @@ const layouts = {
   rowFormItem(h, scheme) {
     let child = renderChildren.apply(this, arguments);
     const config = scheme.__config__
+    const styleSheets = config.styleSheets ? config.styleSheets.join(' ') : ''
     if (scheme.type === "flex") {
       child = (
         <el-row
@@ -48,7 +49,7 @@ const layouts = {
     return (
       <el-col v-show={!config.hidden} span={config.span}>
         <el-row gutter={scheme.gutter}>
-          <div class={'drag-wrapper flex-start-wrap component-style-panel-' + config.formId}>
+          <div class={`drag-wrapper flex-start-wrap component-style-panel-${config.formId} ${styleSheets}`}>
             {child}
           </div>
         </el-row>
@@ -186,7 +187,7 @@ function renderFrom(h) {
     )
   } else {
     return (
-      <el-row gutter={formConfCopy.gutter}  class="center-board-row">
+      <el-row gutter={formConfCopy.gutter}  class="center-board-row page-root">
         <el-form
           size={formConfCopy.size}
           label-position={formConfCopy.labelPosition}
@@ -358,6 +359,7 @@ export default {
 
       // 添加样式
       addAllNodesStyleToDocument(componentList)
+      addCSS('component-global-style-panel', this.formConf.styles)
       // 将editData中没有被vModel用到的属性都合并到formData中
       Object.assign(formData, this.editData)
     },

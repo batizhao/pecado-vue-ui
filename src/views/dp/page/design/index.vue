@@ -17,9 +17,7 @@
 </template>
 
 <script>
-import PortalSetting from '@/components/CodeEditor/views/index/PortalSetting'
 import codeEditor from '@/components/CodeEditor/views/index/Home.vue'
-
 import { addOrEditTemplate} from '@/api/dp/page/model.js'
 import { deepClone } from '@/components/CodeEditor/utils/index'
 import setFormDataToStore from '../../../app/settings/models/formModel/electronicForm/setFormDataToStore.js'
@@ -33,7 +31,6 @@ export default {
     leftComponents: Array
   },
   components: {
-    PortalSetting,
     codeEditor
   },
   data() {

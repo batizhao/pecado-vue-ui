@@ -69,6 +69,7 @@ const layouts = {
         {child}
       </el-row>
     }
+    const styleSheets = config.styleSheets ? config.styleSheets.join(' ') : ''
     return (
       <el-col span={config.span} class={className}>
         <el-row
@@ -80,7 +81,7 @@ const layouts = {
             list={config.children || []}
             animation={340}
             group="componentsGroup"
-            class={'drag-wrapper flex-start-wrap component-style-panel-' + config.formId}
+            class={`drag-wrapper flex-start-wrap component-style-panel-${config.formId} ${styleSheets}`}
           >
             {child}
           </draggable>

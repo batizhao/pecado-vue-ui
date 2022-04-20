@@ -2,8 +2,8 @@
   <div class="component-style-panel" v-if="activeData && activeData.__config__">
     <el-form size="small" label-width="70px">
       <el-form-item label="全局样式">
-        <el-button @click="setGlobalStyles" type="primary" size="mini">设置</el-button>
-        <global-styles ref="globalStylesRef"></global-styles>
+        <el-button @click="setGlobalStyles" type="primary" size="mini">编写</el-button>
+        <global-styles ref="globalStylesRef" @submit="globalStylesSubmit"></global-styles>
       </el-form-item>
       <el-form-item
         v-if="activeData.__config__.span !== undefined"
@@ -17,6 +17,16 @@
           :marks="{0: 'auto', 6: '25%', 12: '50%', 18: '75%', 24: '100%' }"
         />
       </el-form-item>
+      <el-form-item label="样式表">
+        <el-select v-model="activeData.__config__.styleSheets" multiple clearable>
+          <el-option
+            v-for="(item, index) in styleSheets"
+            :key="index"
+            :value="item"
+            :label="item"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="状态">
         <el-select v-model="styleStatus">
           <el-option value="default" label="默认状态"></el-option>
@@ -25,8 +35,9 @@
           <el-option value="focus" label="聚集焦点"></el-option>
         </el-select>
       </el-form-item>
+      
     </el-form>
-    <el-collapse v-model="activeNames">
+    <el-collapse v-model="activeNames" accordion>
       <el-collapse-item name="-1">
         <template slot="title">
           <div class="panel-title">
@@ -247,7 +258,7 @@
           </div>
          </el-form>
       </el-collapse-item>
-      <el-collapse-item name="5">
+      <el-collapse-item name="51">
         <template slot="title">
           <div class="panel-title">
             边框
@@ -349,7 +360,8 @@ export default {
 
       borderDirection: 'border',
       borderRadiusDirection: 'border',
-      initDown: true
+      initDown: true,
+      styleSheets: []
     }
   },
   computed: {
@@ -466,6 +478,9 @@ export default {
       }
     }
   },
+  created () {
+    this.getClassNames()
+  },
   methods: {
     setFourDirectionValue (attr, val) {
       [attr + 'Top', attr + 'Right', attr + 'Bottom', attr + 'Left'].forEach(key => {
@@ -476,7 +491,19 @@ export default {
       addOneNodeStyleToDocument(this.activeData)
     }, 500),
     setGlobalStyles () {
-      this.$refs.globalStylesRef.globalStylesVisible = true
+      this.$refs.globalStylesRef.open()
+    },
+    getClassNames () {
+      const styles = this.$store.state.codeEditor.components.formConf.styles || ''
+      const reg = /\n\.[\w-_]+/g
+      const res = styles.match(reg) || []
+      const arr = res.map(item => {
+        return item.substring(2)
+      })
+      this.styleSheets = Array.from(new Set(arr))
+    },
+    globalStylesSubmit () {
+      this.getClassNames()
     }
   }
 }

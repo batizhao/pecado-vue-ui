@@ -45,28 +45,24 @@ function transformObjectjToString (xStyles) {
   return result
 }
 
-// 组件label与实际HTML元素对应关系（目前唯一能区分所有组件的唯一字段就只有label了）
+// 组件label与实际HTML元素对应关系
 const markRelations = {
-  单行文本: '>input',
-  密码: '>input',
-  多行文本: '>textarea',
-  计数器: ' .el-input>input',
-  编辑器: '+div .tox-edit-area__iframe',
-  下拉选择: '>.el-select>.el-input>input',
-  级联选择: '>.el-input>input',
-  时间选择: '>input',
-  时间范围: '>input',
-  上传: ' .el-upload>button',
-  导航菜单: '>.el-menu',
-  回到顶部: '>.el-backtop',
-  轮播图: '>.el-carousel__container',
-  图标: '>.icon-component',
-  按钮: ' .el-button'
+  DANHANGWENBEN: '>input',
+  MIMA: '>input',
+  DUOHANGWENBEN: '>textarea',
+  JISHUQI: ' .el-input>input',
+  BIANJIQI: '+div .tox-edit-area__iframe',
+  XIALAXUANZE: '>.el-select>.el-input>input',
+  JILIANXUANZE: '>.el-input>input',
+  SHIJIANXUANZE: '>input',
+  SHIJIANFANWEI: '>input',
+  SHANGCHUAN: ' .el-upload>button',
+  ANNIU: ' .el-button'
 }
 function addOneNodeStyleToDocument (item) {
   let className = 'component-style-panel-' + item.__config__.formId
   const stylesData = item.styles
-  const componentTag = item.__config__.label
+  const componentCode = item.__config__.componentCode
   if (stylesData === undefined) {
     return
   }
@@ -77,7 +73,7 @@ function addOneNodeStyleToDocument (item) {
   let result = ''
   const id = className
 
-  if (componentTag && markRelations[componentTag]) className += markRelations[componentTag]
+  if (componentCode && markRelations[componentCode]) className += markRelations[componentCode]
 
   if (defaultStylesStr) result += `.${className}{${defaultStylesStr}}`
   if (hoverStylesStr) result += `.${className}:hover{${hoverStylesStr}}`

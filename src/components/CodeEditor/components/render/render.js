@@ -52,7 +52,8 @@ function buildDataObject(confClone, dataObject) {
 			this.$emit('nativeClick', val)
 		}
 		// 给每个组件添加class，用于样式面板添加样式
-		dataObject.class = 'component-style-panel-' + confClone.__config__.formId
+		const styleSheets = confClone.__config__.styleSheets ? confClone.__config__.styleSheets.join(' ') : ''
+		dataObject.class = `component-style-panel-${confClone.__config__.formId} ${styleSheets}`
 		
 		const val = confClone[key]
 		if (key === '__vModel__') {

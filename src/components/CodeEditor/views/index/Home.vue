@@ -70,7 +70,7 @@
       </div>
       <div class="center-scollbar-container" v-loading="saveLoading">
         <el-scrollbar class="center-scrollbar center-scrollbar-editor">
-          <el-row class="center-board-row center-board-row-editor" :gutter="formConf.gutter">
+          <el-row class="center-board-row page-root" :gutter="formConf.gutter">
             <el-form
               :size="formConf.size"
               :label-position="formConf.labelPosition"
