@@ -64,7 +64,7 @@
         </el-form-item>
       </el-col>
 
-      <el-col :span="12">
+      <!-- <el-col :span="12">
         <el-form-item prop="form">
           <span slot="label">
             生成表单模型
@@ -78,7 +78,7 @@
             inactive-value="no">
           </el-switch>
         </el-form-item>
-      </el-col>
+      </el-col> -->
       
       <el-col :span="12">
         <el-form-item prop="testcase">
