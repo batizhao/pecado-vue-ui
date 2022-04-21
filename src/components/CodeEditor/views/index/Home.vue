@@ -277,21 +277,33 @@ export default {
       }
     },
 
-    findOffset (drawingList, val, position) {
-      let res = ''
-      function _find (arr, val, position) {
-        let temp = ''
-        arr.forEach((item, index) => {
-          temp = position !== undefined ? position + ',' + index : index
+    findOffset (drawingList, val) {
+      let indexArrResult = []
+      const recursion = (list, parentIndexArr) => {
+        list.map((item, index) => {
+          !item.indexArr && (item.indexArr = [])
+          item.indexArr = parentIndexArr.concat(index)
           if (item.__config__.renderKey === val) {
-            res = temp
+            indexArrResult = item.indexArr || []
+          }
+          // 如果是表格布局组件，递归的是layoutTableData（二维数组）
+          if (item.__config__.tag === 'layout-table') {
+            item.layoutTableData.map((rowItem, rowIndex) => {
+              rowItem.map((tableCell, colIndex) => {
+                tableCell.indexArr = item.indexArr.concat([[rowIndex, colIndex]])
+                if (tableCell.__config__.children instanceof Array) {
+                  recursion(tableCell.__config__.children, tableCell.indexArr)
+                }
+              })
+            })
           } else if (item.__config__.children instanceof Array) {
-            temp = _find(item.__config__.children, val, temp)
+            recursion(item.__config__.children, item.indexArr)
           }
         })
       }
-      _find(drawingList, val, position)
-      return res.toString().split(',')
+      const drawingListCopy = JSON.parse(JSON.stringify(drawingList))
+      recursion(drawingListCopy, [])
+      return indexArrResult
     },
     onEnd (obj) {
       if (obj.from !== obj.to) {

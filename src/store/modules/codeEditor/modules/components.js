@@ -11,20 +11,20 @@ export default {
   },
   getters: {
     getCurrentComponent: state => {
-      const arr = state.activeIndex
-      let list = state.drawingList
-      if (arr.length === 1) {
-        list = list[arr[0]]
-      } else {
-        arr.forEach((key, index) => {
-          if (index === arr.length - 1) {
-            list = list[key]
+      const list = state.drawingList
+      let result = null
+      state.activeIndex.map((currentIndex, index) => {
+        if (index === 0) {
+          result = list[currentIndex]
+        } else {
+          if (result.__config__.tag === 'layout-table') {
+            result = result.layoutTableData[currentIndex[0]][currentIndex[1]]
           } else {
-            list = list[key].__config__.children
+            result = result.__config__.children[currentIndex]
           }
-        })
-      }
-      return list
+        }
+      })
+      return result
     }
   },
   mutations: {
