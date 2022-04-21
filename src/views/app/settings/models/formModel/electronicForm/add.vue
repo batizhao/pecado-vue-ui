@@ -33,6 +33,13 @@ export default {
           label: '表单描述',
           prop: 'description',
           type: 'textarea',
+        },
+        {
+          label: '保存地址',
+          prop: 'submitURL',
+          rules: [
+            { required: true, message: "请输入保存地址", trigger: "change" },
+          ]
         }
       ]
     }

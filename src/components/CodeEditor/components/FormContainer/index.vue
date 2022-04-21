@@ -43,6 +43,7 @@ export default {
         const data = JSON.parse(res.data.metadata).formData
         data.isForm = true
         this.formConf = data
+        this.getSubmitUrl(res.data.submitURL)
       }).catch(err => {
         this.errorTip = err
       })
@@ -73,6 +74,18 @@ export default {
     reset () {
       if (!this.formConf) return Promise.reject()
       return this.$refs.parseRef.resetForm()
+    },
+    getSubmitUrl (submitUrl) {
+      if (!submitUrl) {
+        this.msgError('请配置表单保存地址')
+        return
+      }
+      // 如果地址栏中没有operType和url
+      const { operType, url } = this.$route.query
+      if (!operType && !url) {
+        this.$route.query.operType = 'create'
+        this.$route.query.url = submitUrl
+      }
     }
 
   },

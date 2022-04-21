@@ -99,6 +99,10 @@ export default {
           prop: 'description'
         },
         {
+          label: '保存地址',
+          prop: 'submitURL'
+        },
+        {
           label: '表单状态',
           prop: 'status',
           width: 100,
