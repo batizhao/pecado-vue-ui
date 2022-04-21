@@ -2,6 +2,9 @@
   <div>
     <el-form size="small" label-width="90px">
       <form-basic-setting>
+        <el-form-item label="是否只读">
+          <el-switch v-model="activeData.readonly" @change="readonlyChange" />
+        </el-form-item>
         <el-form-item label="复选框">
           <el-switch v-model="activeData.showSelection" />
         </el-form-item>
@@ -167,6 +170,10 @@ export default {
           this.columnSettingVisible = false
         }
       })
+    },
+    readonlyChange (readonly) {
+      this.activeData.showSelection = !readonly
+      this.activeData.operationColumn.show = !readonly
     }
   }
 }

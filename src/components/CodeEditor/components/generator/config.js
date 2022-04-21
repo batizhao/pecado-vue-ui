@@ -826,7 +826,8 @@ export const seniorComponents = [
       fixed: false, // 固定
       width: 150, // 宽度
       movable: true // 可上下移动
-    }
+    },
+    readonly: false // 只读
   }
 ]
 

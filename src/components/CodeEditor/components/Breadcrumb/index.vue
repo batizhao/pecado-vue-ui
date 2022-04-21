@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-breadcrumb v-bind="$attrs">
-      <el-breadcrumb-item>控制台</el-breadcrumb-item>
+      <el-breadcrumb-item>工作台</el-breadcrumb-item>
       <el-breadcrumb-item
         v-for="(item, index) in breadcrumbNames"
         :key="index"

@@ -158,6 +158,11 @@ const layouts = {
         ])
       }
     })
+    if (this.readOnly) {
+      currentItem.readonly = true
+      currentItem.showSelection = false
+      currentItem.operationColumn.show = false
+    }
     return (
       <el-col
         span={config.span}

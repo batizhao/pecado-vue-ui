@@ -10,10 +10,16 @@ export default {
     })
     return (
       <div>
-        <div class="mb8">
-          <action-button actionType="1" onClick={() => this.handleAdd()}>新增</action-button>
-          <action-button actionType="2" onClick={() => this.handleDel()}>删除</action-button>
-        </div>
+        {
+          !this.readonly 
+          ? (
+            <div class="mb8">
+            <action-button actionType="1" onClick={() => this.handleAdd()}>新增{this.readonly}</action-button>
+            <action-button actionType="2" onClick={() => this.handleDel()}>删除</action-button>
+          </div>
+          )
+          : ''
+        }
         <action-edit-table
           ref={this.subformTableRefName}
           tableColumns={this.tableColumns}
@@ -33,7 +39,8 @@ export default {
     showSelection: Boolean,
     showOrderNumber: Boolean,
     operationColumn: Object,
-    __config__: Object
+    __config__: Object,
+    readonly: Boolean
   },
   data () { 
     return {
@@ -64,7 +71,7 @@ export default {
           prop: item.prop,
           rules: rulesResult,
           width: item.width,
-          type: 'slot',
+          type: this.readonly ? 'text' : 'slot',
           slotName: item.prop + index, // 用prop加索引作为插槽名，规避prop重复引发的问题
           defaultValue: config.defaultValue
         }

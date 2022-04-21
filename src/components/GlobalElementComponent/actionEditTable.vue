@@ -97,6 +97,10 @@
                   <template v-else-if="item.type === 'slot'">
                     <slot :name="item.slotName || item.prop" :row="row" :index="$index"></slot>
                   </template>
+                  <!-- 纯文字 -->
+                  <template v-else-if="item.type === 'text'">
+                    <span>{{row[item.prop]}}</span>
+                  </template>
                   <!-- 默认为输入框 -->
                   <template v-else>
                     <span v-if="isReadonly(row, item)">{{row[item.prop]}}</span>
@@ -224,6 +228,9 @@ export default {
       },
       deep: true,
       immediate: true
+    },
+    showSelection () {
+      this.tableRenderKey = new Date() * 1
     }
   },
   methods: {

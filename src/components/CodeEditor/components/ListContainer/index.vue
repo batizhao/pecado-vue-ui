@@ -136,6 +136,7 @@ export default {
           this.$router.push({
             path: this.currentPath,
             query: {
+              id: this.$route.query.id,
               ...button.page,
               formDataId: row.id,
               operType: button.operType,
@@ -165,6 +166,7 @@ export default {
           this.$router.push({
             path: this.currentPath,
             query: {
+              id: this.$route.query.id,
               ...button.page,
               operType: button.operType,
               url: this.requestUrl
