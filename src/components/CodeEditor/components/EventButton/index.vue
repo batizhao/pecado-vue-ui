@@ -6,14 +6,17 @@
 
     <!-- 意见弹窗， 不能加v-if -->
     <opinion ref="opinionRef" @buttonEmitSave="buttonEmitSave"></opinion>
+
+    <addUse ref="addUseRef"></addUse>
   </div>
 </template>
 
 <script>
 import opinion from './opinion.vue'
+import addUse from './addCommonUse.vue'
 import request from '@/utils/request'
 export default {
-  components: { opinion },
+  components: { opinion, addUse },
   inheritAttrs: false,
   name: 'event-button',
   props: {
@@ -94,6 +97,11 @@ export default {
              alert("抱歉，您所使用的浏览器无法完成此操作。\n\n加入收藏失败，请使用Ctrl+D进行添加");
           }
       }
+    },
+    //添加到常用应用
+    addCommonUse(){
+      let url = window.location.href;
+      this.$refs.addUseRef.open(url)
     }
   }
 }

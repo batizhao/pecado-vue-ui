@@ -103,6 +103,7 @@ import LxLayoutTable from './components/layoutTable/index.vue'
 import LxLoginLog from './components/loginLog.vue'
 import LxSubformTable from './components/subformTable/index.vue'
 import LxBreadcrumb from './components/breadcrumb.vue'
+import LxCommonUse from './components/commonUse.vue'
 
 export default {
   components: {
@@ -132,6 +133,7 @@ export default {
     LxLoginLog,
     LxSubformTable,
     LxBreadcrumb,
+    LxCommonUse,
   },
   props: ['showField'],
   data () {

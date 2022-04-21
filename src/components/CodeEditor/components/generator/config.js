@@ -926,6 +926,19 @@ export const indexPageComponents =[
     },
     url: '',
   },
+  {
+    // 组件的自定义配置
+    __config__: {
+      componentCode: 'CHANGYONGYINGYONG',
+      label: '常用应用',
+      panel: 'lx-common-use',
+      tag: 'common-use',
+      tagIcon: 'input',
+      layout: 'native',
+      span: 24,
+    },
+    url: '',
+  },
 ]
 
 export const layoutPageComponents = [
@@ -1177,6 +1190,40 @@ export const formModelComponents = [
     },
     eventSettings: {
       emit: 'collection'
+    }
+  },
+  {
+    __config__: {
+      componentCode: 'ANNIU',
+      label: '添加常用应用',
+      tag: 'event-button',
+      tagIcon: 'button',
+      panel: 'lx-button',
+      span: 0,
+      layout: 'native',
+      document: 'https://element.eleme.cn/#/zh-CN/component/button'
+    },
+    "__slot__": {
+      "default": "添加到常用应用"
+    },
+    type: 'primary',
+    functionButton:true,//判断是否是具体功能按钮
+    icon: 'el-icon-bell',
+    round: false,
+    size: 'medium',
+    plain: false,
+    circle: false,
+    disabled: false,
+    styles: {
+      defaultStyles: {
+        marginTop: '8px',
+        marginRight: '8px',
+        marginBottom: '8px',
+        marginLeft: '8px'
+      }
+    },
+    eventSettings: {
+      emit: 'addCommonUse'
     }
   }
 ]
