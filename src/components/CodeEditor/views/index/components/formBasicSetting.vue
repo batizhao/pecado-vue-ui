@@ -44,9 +44,9 @@
     </el-form-item>
     <el-form-item label="默认值"  v-if="activeData.__config__.defaultValue !== undefined">
         <el-input
-          :value="setDefaultValue(activeData.__config__.defaultValue)"
+          :value="getDefaultValue(activeData.__config__.defaultValue)"
           placeholder="请输入默认值"
-          @input="onDefaultValueInput"
+          @input="setDefaultValue"
         />
       </el-form-item>
     <slot></slot>
@@ -57,7 +57,7 @@
 <script>
 import mixins from './mixins'
 import functionSetting from './functionSetting.vue'
-import { setDefaultValue, onDefaultValueInput } from './utils'
+import { setDefaultValue, getDefaultValue } from './utils'
 export default {
   mixins: [mixins],
   components: {
@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     setDefaultValue,
-    onDefaultValueInput,
+    getDefaultValue,
     vModelChange (val) {
       // 校验字符
       if (!/^[a-zA-Z0-9]{1,30}$/.test(val)) {

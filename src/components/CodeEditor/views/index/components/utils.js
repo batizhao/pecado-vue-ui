@@ -1,33 +1,27 @@
-import { isNumberStr } from '../../../utils/index'
 import store from '@/store'
-function setDefaultValue (val) {
-  if (Array.isArray(val)) {
-    return val.join(',')
-  }
-  // if (['string', 'number'].indexOf(typeof val) > -1) {
-  //   return val
-  // }
-  if (typeof val === 'boolean') {
-    return `${val}`
+
+function ifStringify (val) {
+  const type = typeof val
+  return ['object', 'boolean'].includes(type)
+}
+
+function getDefaultValue (val) {
+  if (ifStringify(val)) {
+    return JSON.stringify(val)
   }
   return val
 }
-function onDefaultValueInput (str) {
+function setDefaultValue (val) {
   let defaultValue
-  if (Array.isArray(this.activeData.__config__.defaultValue)) {
-    // 数组
-    defaultValue = str.split(',').map(val => (isNumberStr(val) ? +val : val))
-  } else if (['true', 'false'].indexOf(str) > -1) {
-    // 布尔
-
-    defaultValue = JSON.parse(str)
+  if (ifStringify(this.activeData.__config__.defaultValue)) {
+    defaultValue = JSON.parse(val)
   } else {
-    // 字符串和数字
-    defaultValue = isNumberStr(str) ? +str : str
+    defaultValue = val
   }
   store.commit('codeEditor/components/setDefaultValue', defaultValue)
+
 }
 export {
   setDefaultValue,
-  onDefaultValueInput
+  getDefaultValue
 }
