@@ -733,7 +733,22 @@ export const layoutComponents = [
 
       ]
     ]
-  }
+  },
+  {
+    __config__: {
+      componentCode: 'FENGEXIAN',
+      label: '分割线',
+      panel: 'lx-split-line',
+      tag: 'split-line',
+      tagIcon: 'divider',
+      layout: 'native',
+      span: 24,
+    },
+    content:'',
+    direction:'center',
+    createdCode:'',
+    mountedCode:''
+  },
 ]
 
 export const seniorComponents = [
@@ -1229,21 +1244,6 @@ export const formModelComponents = [
     eventSettings: {
       emit: 'addCommonUse'
     }
-  },
-  {
-    __config__: {
-      componentCode: 'FENGEXIAN',
-      label: '分割线',
-      panel: 'lx-split-line',
-      tag: 'split-line',
-      tagIcon: 'divider',
-      layout: 'native',
-      span: 24,
-    },
-    content:'',
-    direction:'center',
-    createdCode:'',
-    mountedCode:''
   },
   {
     __config__: {
