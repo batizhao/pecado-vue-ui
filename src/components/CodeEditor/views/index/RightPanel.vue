@@ -1,9 +1,9 @@
 <template>
   <div class="right-board">
     <el-tabs v-model="currentTab" class="center-tabs">
-      <el-tab-pane label="组件属性" name="field" />
-      <el-tab-pane label="样式" name="style" />
       <el-tab-pane label="表单属性" name="form" v-if="formConf.isForm"/>
+      <el-tab-pane label="组件属性" name="field" />
+      <el-tab-pane label="组件样式" name="style" />
     </el-tabs>
     <div class="field-box">
       <el-scrollbar class="right-scrollbar">

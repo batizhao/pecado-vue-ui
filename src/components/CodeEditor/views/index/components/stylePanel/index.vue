@@ -495,7 +495,7 @@ export default {
     },
     getClassNames () {
       const styles = this.$store.state.codeEditor.components.formConf.styles || ''
-      const reg = /\n\.[\w-_]+/g
+      const reg = /\n[\.#][\w-_]+/g
       const res = styles.match(reg) || []
       const arr = res.map(item => {
         return item.substring(2)

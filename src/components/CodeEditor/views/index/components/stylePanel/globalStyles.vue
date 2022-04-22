@@ -7,6 +7,7 @@
     :append-to-body="true"
   >
     <div id="globalStyleEditorJs" style="height: 400px;" />
+    <span class="tips">注意: 样式类名只能包含数字、字母、下划线和连字符</span>
     <span slot="footer">
       <el-button @click="cancel" size="small">取消</el-button>
       <el-button type="primary" @click="submit" size="small">确 定</el-button>
@@ -82,3 +83,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+.tips {
+  display: block;
+  color: #ff4444;
+  padding-top: 5px;
+}
+</style>
