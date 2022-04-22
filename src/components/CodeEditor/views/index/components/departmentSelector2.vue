@@ -2,7 +2,6 @@
   <div>
     <el-form size="small" label-width="90px">
       <form-basic-setting>
-      </form-basic-setting>
       <template v-if="activeData.__config__.tag === 'department-selector-2'">
         <el-divider>分类</el-divider>
         <draggable :list="activeData.options" :animation="340">
@@ -43,6 +42,7 @@
           </div>
       </template>
       <options></options>
+      </form-basic-setting>
     </el-form>
   </div>
 </template>
@@ -69,12 +69,9 @@ export default {
   methods: {
     getDepartmentTypeOptions () {
       request({
-        url: '/system/dict/data',
-        params: {
-          code: 'department_type'
-        }
+        url: '/system/dictionary/dept_level'
       }).then(res => {
-        this.departmentTypeOptions = res.data.map(item => ({
+        this.departmentTypeOptions = this.activeData.options = res.data.map(item => ({
           label: item.label,
           value: item.value
         }))

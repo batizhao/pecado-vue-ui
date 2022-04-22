@@ -26,7 +26,7 @@
         :formOptions="formOptions"
         labelPosition="top"
       ></action-form>
-      <div class="tips" v-if="!formOptions.length">请添加分类</div>
+      <div class="tips" v-if="!formOptions.length">请在右侧配置面板中添加”分类”</div>
     </action-dialog>
   </div>
 </template>
@@ -102,7 +102,7 @@ export default {
             if (this.requestResults[type]) {
               resolve(this.requestResults[type])
             } else {
-              request({ method, url, params: { type } })
+              request({ method, url, params: { level: type } })
                 .then((res) => {
                   if (!dataPath) {
                     console.error('dataPath值不存在')
