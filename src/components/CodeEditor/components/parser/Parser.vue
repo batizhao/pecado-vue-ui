@@ -254,7 +254,7 @@ function buildListeners(scheme) {
   const config = scheme.__config__;
   const methods = scheme.__methods__ || {};
   const listeners = {};
-  const formGlobalMethods = this.formConf.__methods__.global + '\n'
+  const formGlobalMethods = this.formConf.__methods__ ? (this.formConf.__methods__.global + '\n') : ''
 
   // 给__methods__中的方法绑定this和event
   Object.keys(methods).forEach(key => {
@@ -281,7 +281,7 @@ function buildListeners(scheme) {
 function subformTableBuildListeners(scheme, parentScheme, subformTableLayoutRefName, scoped) {
   const methods = scheme.__methods__ || {};
   const listeners = {};
-  const formGlobalMethods = this.formConf.__methods__.global + '\n'
+  const formGlobalMethods = this.formConf.__methods__ ? (this.formConf.__methods__.global + '\n') : ''
 
   // 给__methods__中的方法绑定this和event
   Object.keys(methods).forEach(key => {
