@@ -21,7 +21,6 @@
           </el-select>
         </el-form-item>
       </form-basic-setting>
-      <splitLine-Create></splitLine-Create>
     </el-form>
   </div>
 </template>
@@ -29,12 +28,10 @@
 <script>
 import mixins from "./mixins";
 import formBasicSetting from "./formBasicSetting.vue";
-import splitLineCreate from "./splitLineCreate.vue";
 export default {
   mixins: [mixins],
   components: {
     formBasicSetting,
-    splitLineCreate,
   },
 };
 </script>

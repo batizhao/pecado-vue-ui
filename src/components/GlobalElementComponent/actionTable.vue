@@ -105,11 +105,11 @@ export default {
     },
     showBorder: { // 显示边框
       type: Boolean,
-      default: true
+      default: false
     },
     showStripe: { // 显示斑马纹
       type: Boolean,
-      default: true
+      default: false
     },
     operationColumn: { // 操作列配置
       type: Object,

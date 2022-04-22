@@ -10,14 +10,6 @@ export default {
   props: {
     content: String,
     direction: String,
-    createdCode: String,
-    mountedCode: String,
-  },
-  created() {
-    eval(this.createdCode);
-  },
-  mounted() {
-    eval(this.mountedCode);
   },
 };
 </script>
