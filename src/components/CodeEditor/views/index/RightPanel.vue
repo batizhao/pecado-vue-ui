@@ -105,6 +105,7 @@ import LxSubformTable from './components/subformTable/index.vue'
 import LxBreadcrumb from './components/breadcrumb.vue'
 import LxCommonUse from './components/commonUse.vue'
 import LxSplitLine from './components/splitLine.vue'
+import LxOpinion from './components/opinionShow.vue'
 
 export default {
   components: {
@@ -135,7 +136,8 @@ export default {
     LxSubformTable,
     LxBreadcrumb,
     LxCommonUse,
-    LxSplitLine
+    LxSplitLine,
+    LxOpinion,
   },
   props: ['showField'],
   data () {

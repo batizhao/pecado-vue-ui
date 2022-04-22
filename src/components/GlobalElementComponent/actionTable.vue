@@ -9,6 +9,8 @@
     <slot name="actionButtons"></slot>
     <el-table
       :data="data"
+      :border="showBorder"
+      :stripe="showStripe"
       v-loading="loading"
       :row-key="rowKey"
       :tree-props="treeProps"
@@ -19,6 +21,7 @@
         type="selection"
         width="55"
         align="center"
+        fixed
       >
       </el-table-column>
       <el-table-column
@@ -28,6 +31,7 @@
         width="55"
         :index="indexMethod"
         align="center"
+        fixed
       >
       </el-table-column>
       <el-table-column
@@ -35,7 +39,11 @@
         :key="index"
         v-bind="item"
         show-overflow-tooltip
-        align="center"
+        :align="item.alignment?item.alignment:'center'"
+        :width="(item.colWidth)?item.colWidth:''"
+        :fixed="(item.ifFixed)?true:false"
+        :sortable="(item.ifSort)?true:false"
+        :style="'display:'+(item.ifShow)?'block;':'none;'"
       >
         <template slot-scope="scope"> 
           <div v-if="item.slotName">
@@ -92,6 +100,14 @@ export default {
       default: true
     },
     showNumber: { // 显示序号
+      type: Boolean,
+      default: true
+    },
+    showBorder: { // 显示边框
+      type: Boolean,
+      default: true
+    },
+    showStripe: { // 显示斑马纹
       type: Boolean,
       default: true
     },

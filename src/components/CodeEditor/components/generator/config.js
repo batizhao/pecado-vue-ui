@@ -1241,6 +1241,34 @@ export const formModelComponents = [
     createdCode:'',
     mountedCode:''
   },
+  {
+    __config__: {
+      label: '审批意见',
+      panel: 'lx-opinion',
+      tag: 'opinion-show',
+      tagIcon: 'input',
+      layout: 'native',
+      span: 24,
+    },
+    showBorder: true,//是否带有边框
+    showLineNum: true, //是否显示行号
+    showCheckBox: false,//是否显示复选框
+    showPagination: false,//是否显示分页
+    showStripe: false,//是否斑马线 
+    url: '', // 请求接口
+    tableColumns: [
+      {
+        prop: "",
+        label: "",
+        colWidth: "",
+        // ifShow: false,
+        ifSort: false,
+        ifFixed: false,
+        alignment: "",
+        // format: "",
+      }
+    ]//表格列集合
+  },
 ]
 
 export const listModelComponnets = [
