@@ -1197,7 +1197,7 @@ export const formModelComponents = [
       componentCode: 'ANNIU',
       label: '添加常用应用',
       tag: 'event-button',
-      tagIcon: 'button',
+      tagIcon: 'commonUse',
       panel: 'lx-button',
       span: 0,
       layout: 'native',
@@ -1225,7 +1225,22 @@ export const formModelComponents = [
     eventSettings: {
       emit: 'addCommonUse'
     }
-  }
+  },
+  {
+    __config__: {
+      componentCode: 'FENGEXIAN',
+      label: '分割线',
+      panel: 'lx-split-line',
+      tag: 'split-line',
+      tagIcon: 'divider',
+      layout: 'native',
+      span: 24,
+    },
+    content:'',
+    direction:'center',
+    createdCode:'',
+    mountedCode:''
+  },
 ]
 
 export const listModelComponnets = [

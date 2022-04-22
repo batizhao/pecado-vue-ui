@@ -26,6 +26,7 @@ import LoginLog from './LoginLog'
 import SubformTable from './SubformTable/index.vue'
 import Breadcrumb from './Breadcrumb/index.vue'
 import CommonUse from './CommonUse/index.vue'
+import SplitLine from './SplitLine/index.vue'
 Vue.component(MyBacklog.name, MyBacklog)
 Vue.component(UsedProcess.name, UsedProcess)
 Vue.component(Notice.name, Notice)
@@ -54,5 +55,6 @@ Vue.component(LoginLog.name, LoginLog)
 Vue.component(SubformTable.name, SubformTable)
 Vue.component(Breadcrumb.name, Breadcrumb)
 Vue.component(CommonUse.name, CommonUse)
+Vue.component(SplitLine.name, SplitLine)
 
 
