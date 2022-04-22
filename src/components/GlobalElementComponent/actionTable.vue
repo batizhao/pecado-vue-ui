@@ -36,6 +36,7 @@
         v-bind="item"
         show-overflow-tooltip
         align="center"
+        :min-width="item.width || 150"
       >
         <template slot-scope="scope"> 
           <div v-if="item.slotName">
@@ -49,7 +50,7 @@
         label="操作"
         align="center"
         :fixed="operationColumn.fixed"
-        :min-width="operationColumn.width"
+        :min-width="operationColumn.width || 150"
       >
         <template slot-scope="scope">
           <slot name="action" :row="scope.row"></slot>

@@ -1,15 +1,17 @@
 <template>
-  <div v-if="activeData.on">
+  <div v-if="formConf ? formConf.__methods__ : activeData.on">
     <el-divider>事件</el-divider>
     <ul class="event-setting-buttons">
-      <li v-for="(value, key, index) in activeData.__methods__" :key="index">
+      <li v-for="(value, key, index) in formConf ? formConf.__methods__ : activeData.__methods__" :key="index">
         <span>{{key}}</span>
         <el-button icon="el-icon-edit" size="mini" @click="writeFunction(value, key)">编写</el-button>
       </li>
     </ul>
     <action-dialog v-model="editorVisible" @confirm="editorConfirm" width="80%">
-      <div class="editor-start-end">{{activeData.__vModel__}}.{{eventName}}({{params}}) {</div>
-      <div id="editorJs" style="height: 400px;" />
+      <div class="editor-start-end">
+        {{formConf ? 'form' : activeData.__vModel__}}.{{eventName}}({{params}}) {
+      </div>
+      <div :id="editorId" style="height: 400px;" />
       <div class="editor-start-end">}</div>
       <template v-slot:title>
         <span>{{eventName + '事件'}} </span>
@@ -99,11 +101,15 @@ import loadMonaco from '../../../utils/loadMonaco'
 let monaco
 export default {
   mixins: [mixins],
+  props: {
+    formConf: Object // 有这个参数就代表是表单的事件，否则就是组件的事件
+  },
   data () {
     return {
       editorVisible: false,
       editorStr: '',
-      eventName: ''
+      eventName: '',
+      editorId: 'editorJs' + Math.floor(Math.random() * 10000)
     }
   },
   watch: {
@@ -115,7 +121,8 @@ export default {
   },
   computed: {
     params () {
-      if (['onClear'].includes(this.eventName)) {
+      if (this.formConf) return ''
+      if (['onClear', 'onMounted'].includes(this.eventName)) {
         // 有些事件没有参数，比如onClear
         return ''
       } else if (this.activeData.__config__.parentTag === 'subform-table') {
@@ -132,6 +139,7 @@ export default {
   methods: {
     // 初始化__methods__的值
     setMethods () {
+      if (this.formConf) return
       if (!this.activeData.__methods__) {
         const onEvents = this.activeData.on
         if (onEvents) {
@@ -156,7 +164,7 @@ export default {
     onOpen() {
       loadMonaco(val => {
         monaco = val
-        this.setEditorValue('editorJs', this.editorStr)
+        this.setEditorValue(this.editorId, this.editorStr)
       })
     },
     setEditorValue(id, codeStr) {
@@ -172,7 +180,15 @@ export default {
       }
     },
     editorConfirm() {
-      this.activeData.__methods__[this.eventName] = this.jsonEditor.getValue()
+      let value = this.jsonEditor.getValue()
+      if (/^[\s]+$/.test(value)) { // 如果全是空白符
+        value = ''
+      }
+      if (this.formConf) {
+        this.formConf.__methods__[this.eventName] = value
+      } else {
+        this.activeData.__methods__[this.eventName] = value
+      }
       this.editorVisible = false
     }
   }

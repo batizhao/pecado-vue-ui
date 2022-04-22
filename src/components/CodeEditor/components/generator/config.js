@@ -10,7 +10,11 @@ export const formConf = {
   disabled: false,
   span: 24,
   formBtns: true,
-  isForm: true
+  isForm: true,
+  __methods__: {
+    global: '',
+    onMounted: ''
+  }
 }
 
 const rowContainer = {

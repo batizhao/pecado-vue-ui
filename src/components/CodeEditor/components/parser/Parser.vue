@@ -254,16 +254,16 @@ function buildListeners(scheme) {
   const config = scheme.__config__;
   const methods = scheme.__methods__ || {};
   const listeners = {};
+  const formGlobalMethods = this.formConf.__methods__.global + '\n'
 
   // 给__methods__中的方法绑定this和event
   Object.keys(methods).forEach(key => {
-    let currentMethod = methods[key]
-    if (typeof methods[key] === 'string') {
-      currentMethod = new Function('value', currentMethod)
-    }
     listeners[key] = event => {
-      // console.log(key + '事件被执行了--Parser');
-      currentMethod.call(this, event);
+      if (methods[key]) {
+        const met = new Function('value', 'index', formGlobalMethods + methods[key])
+        console.log(`%c -----------${key}事件触发了---------- value: ${event}`, 'color: #1890ff;')
+        met.call(this, event)
+      }
     }
   });
   // 响应 render.js 中的 vModel $emit('input', val)
@@ -271,8 +271,9 @@ function buildListeners(scheme) {
     setValue.call(this, event, config, scheme)
     // input事件被重写 所以要把原来自定义的onInput加上
     if (methods.onInput && typeof methods.onInput === 'string') {
-      const met = new Function('value', methods.onInput)
-      met.call(this, event);
+      const met = new Function('value', formGlobalMethods + methods.onInput)
+      console.log(`%c -----------onInput事件触发了----------- value: ${event}`, 'color: #1890ff;')
+      met.call(this, event)
     }
   }
   return listeners;
@@ -280,16 +281,17 @@ function buildListeners(scheme) {
 function subformTableBuildListeners(scheme, parentScheme, subformTableLayoutRefName, scoped) {
   const methods = scheme.__methods__ || {};
   const listeners = {};
+  const formGlobalMethods = this.formConf.__methods__.global + '\n'
 
   // 给__methods__中的方法绑定this和event
   Object.keys(methods).forEach(key => {
-    let currentMethod = methods[key]
-    if (typeof methods[key] === 'string') {
-      currentMethod = new Function('value', 'index', currentMethod)
-    }
     listeners[key] = event => {
-      const subformTableLayoutRef = this.$refs[subformTableLayoutRefName].$children[0]
-      currentMethod.call(subformTableLayoutRef, event, scoped.index);
+      if (methods[key]) {
+        const met = new Function('value', 'index', formGlobalMethods + methods[key])
+        const subformTableLayoutRef = this.$refs[subformTableLayoutRefName].$children[0]
+        console.log(`%c -----------${key}事件触发了---------- value: ${event} index: ${scoped.index}`, 'color: #1890ff;')
+        met.call(subformTableLayoutRef, event, scoped.index)
+      }
     }
   });
   // 响应 render.js 中的 vModel $emit('input', val)
@@ -298,9 +300,10 @@ function subformTableBuildListeners(scheme, parentScheme, subformTableLayoutRefN
     const subformTableLayoutRef = this.$refs[subformTableLayoutRefName].$children[0]
     setValue.call(this, subformTableLayoutRef.getData(), parentScheme.__config__, parentScheme)
     // input事件被重写 所以要把原来自定义的onInput加上
-    if (methods.onInput && typeof methods.onInput === 'string') {
-      const met = new Function('value', 'index', methods.onInput)
-      met.call(subformTableLayoutRef, event, scoped.index);
+    if (methods.onInput) {
+      const met = new Function('value', 'index', formGlobalMethods + methods.onInput)
+      console.log(`%c -----------onInput事件触发了----------- value: ${event} index: ${scoped.index}`, 'color: #1890ff;')
+      met.call(subformTableLayoutRef, event, scoped.index)
     }
   }
   return listeners;
@@ -340,6 +343,12 @@ export default {
     return data;
   },
   mounted() {
+    // 执行表单的onMounted事件
+    const formMethods = this.formConfCopy.__methods__
+    if (formMethods && formMethods.onMounted) {
+      const formFn = new Function(formMethods.onMounted)
+      formFn.call(this)
+    }
     // 执行所有组件的onMounted事件
     this.mountedEvents.map(fn => {
       fn.call(this)

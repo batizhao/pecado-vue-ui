@@ -8,6 +8,7 @@
       :showPagination="false"
       :showSelection="false"
       :showNumber="false"
+      :operationColumn="{show: true, width: 180}"
     >
       <template v-slot:status="scope">
         <el-switch

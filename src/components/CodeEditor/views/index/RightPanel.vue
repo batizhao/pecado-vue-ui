@@ -66,6 +66,7 @@
           <el-form-item label="表单按钮" v-if="formConf.formBtns !== undefined">
             <el-switch v-model="formConf.formBtns" />
           </el-form-item>
+          <function-setting :formConf="formConf"></function-setting>
         </el-form>
       </el-scrollbar>
     </div>
@@ -77,6 +78,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import functionSetting from './components/functionSetting.vue'
 import stylePanel from './components/stylePanel/index.vue'
 import LxInput from './components/input.vue'
 import LxSelect from './components/select.vue'
@@ -107,6 +109,7 @@ import LxCommonUse from './components/commonUse.vue'
 
 export default {
   components: {
+    functionSetting,
     stylePanel,
     LxInput,
     LxSelect,
