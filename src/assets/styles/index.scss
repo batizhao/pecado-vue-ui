@@ -172,13 +172,14 @@ aside {
 	margin: 0 !important;
   [class*='el-col-'] {
     float: unset;
+		overflow: hidden;
   }
-  .flex-start-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    align-items: flex-start;
-  }
+}
+.flex-start-wrap {
+	display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	align-items: flex-start;
 }
 .center-scrollbar {
 	.el-scrollbar__wrap {

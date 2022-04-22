@@ -20,6 +20,9 @@ const components = {
     ]
   }
 }
+function getSpan (span) {
+  return this.formConf.resolvingPowerType === 'H5' ? 24 : span
+}
 const layouts = {
   // 所有表单类填写组件用此布局
   colFormItem(h, currentItem, index, list) {
@@ -32,7 +35,7 @@ const layouts = {
     if (config.showLabel === false) labelWidth = '0'
     return (
       <el-col
-        span={config.span}
+        span={getSpan.call(this, config.span)}
         style={config.span === 0 && { width: 'auto', display: 'block' }}
         class={className}
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
@@ -64,14 +67,9 @@ const layouts = {
       ? 'drawing-row-item active-from-item'
       : 'drawing-row-item'
     let child = renderChildren.apply(this, arguments)
-    if (currentItem.type === 'flex') {
-      child = <el-row type={currentItem.type} justify={currentItem.justify} align={currentItem.align}>
-        {child}
-      </el-row>
-    }
     const styleSheets = config.styleSheets ? config.styleSheets.join(' ') : ''
     return (
-      <el-col span={config.span} class={className}>
+      <el-col span={getSpan.call(this, config.span)} class={className}>
         <el-row
           gutter={config.gutter}
           nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
@@ -97,7 +95,7 @@ const layouts = {
     const className = this.activeId === config.formId ? 'drawing-item active-from-item' : 'drawing-item'
     return (
       <el-col
-        span={config.span}
+        span={getSpan.call(this, config.span)}
         style={config.span === 0 && { width: 'auto', display: 'block' }}
         class={className}
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
@@ -116,7 +114,7 @@ const layouts = {
       : 'drawing-row-item'
     return (
       <el-col
-        span={config.span}
+        span={getSpan.call(this, config.span)}
         class={className}
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
       >
@@ -142,7 +140,7 @@ const layouts = {
     }
     return (
       <el-col
-        span={config.span}
+        span={getSpan.call(this, config.span)}
         style={config.span === 0 && { width: 'auto', display: 'block' }}
         class={className}
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
@@ -231,7 +229,7 @@ const layouts = {
     })
     return (
       <el-col
-        span={config.span}
+        span={getSpan.call(this, config.span)}
         style={config.span === 0 && { width: 'auto', display: 'block' }}
         class={className}
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}

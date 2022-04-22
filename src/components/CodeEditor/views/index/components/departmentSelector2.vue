@@ -52,11 +52,13 @@ import mixins from './mixins'
 import formBasicSetting from './formBasicSetting.vue'
 import options from './options/index.vue'
 import request from '@/utils/request'
+import draggable from 'vuedraggable'
 export default {
   mixins: [mixins],
   components: {
     formBasicSetting,
-    options
+    options,
+    draggable
   },
   data () {
     return {

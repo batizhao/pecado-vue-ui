@@ -21,10 +21,10 @@ export default {
     renderMenu
   },
   props:{
-    menuData: Array
-  },
+    },
   data(){
     return {
+      menuData: []
     }
   },
   methods:{

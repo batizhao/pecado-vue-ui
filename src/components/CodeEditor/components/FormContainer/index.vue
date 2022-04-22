@@ -98,7 +98,6 @@ export default {
 <style scoped>
 .form-container {
   min-height: 300px;
-  padding: 0 8%;
 }
 .form-container > .tip {
   text-align: center;

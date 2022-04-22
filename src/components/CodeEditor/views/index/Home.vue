@@ -49,24 +49,35 @@
         <div class="close-or-open right"  @click="rightBordShow = !rightBordShow" title="收起/展开 右侧面板">
           <i :class="!rightBordShow ? 'el-icon-d-arrow-left' : 'el-icon-d-arrow-right'"></i>
         </div>
-        <el-button icon="el-icon-video-play" type="text" :loading="saveLoading" @click="save">
-          保存
-        </el-button>
-        <!-- <el-button icon="el-icon-video-play" type="text" @click="run">
-          运行
-        </el-button> -->
-        <el-button icon="el-icon-view" type="text" @click="showJson">
-          查看json
-        </el-button>
-        <!-- <el-button icon="el-icon-download" type="text" @click="download">
-          导出vue文件
-        </el-button>
-        <el-button class="copy-btn-main" icon="el-icon-document-copy" type="text" @click="copy">
-          复制代码
-        </el-button> -->
-        <el-button class="delete-btn" icon="el-icon-delete" type="text" @click="empty">
-          清空
-        </el-button>
+        <div class="action-bar-content">
+          <!-- 空div占位用的 -->
+          <div></div>
+          <el-radio-group v-model="resolvingPowerType" size="mini" @change="changeResolvingPower">
+            <el-radio-button label="Pc"></el-radio-button>
+            <el-radio-button label="Pad"></el-radio-button>
+            <el-radio-button label="H5"></el-radio-button>
+          </el-radio-group>
+          <div>
+            <el-button icon="el-icon-video-play" type="text" :loading="saveLoading" @click="save">
+              保存
+            </el-button>
+            <!-- <el-button icon="el-icon-video-play" type="text" @click="run">
+              运行
+            </el-button> -->
+            <el-button icon="el-icon-view" type="text" @click="showJson">
+              查看json
+            </el-button>
+            <!-- <el-button icon="el-icon-download" type="text" @click="download">
+              导出vue文件
+            </el-button>
+            <el-button class="copy-btn-main" icon="el-icon-document-copy" type="text" @click="copy">
+              复制代码
+            </el-button> -->
+            <el-button class="delete-btn" icon="el-icon-delete" type="text" @click="empty">
+              清空
+            </el-button>
+          </div>
+        </div>
       </div>
       <div class="center-scollbar-container" v-loading="saveLoading">
         <el-scrollbar class="center-scrollbar center-scrollbar-editor">
@@ -216,7 +227,8 @@ export default {
       showFileName: false,
       resetIdGlobalNum: 0,
       leftBordShow: true,
-      rightBordShow: true
+      rightBordShow: true,
+      resolvingPowerType: 'Pc'
     }
   },
   computed: {
@@ -249,6 +261,23 @@ export default {
       'addDrawingList',
       'setDrawingList'
     ]),
+    changeResolvingPower (val) {
+      const editorDom = document.querySelector('.center-scrollbar-editor')
+      let pxValue = ''
+      let zoom = 1
+      let height = ''
+      if (val === 'Pad') {
+        pxValue = '820px'
+      } else if (val === 'H5') {
+        pxValue = '520px'
+        zoom = 0.75
+        height = '900px'
+      }
+      editorDom.style.width = pxValue
+      editorDom.style.zoom = zoom
+      editorDom.style.height = height
+      this.$set(this.formConf, 'resolvingPowerType', val)
+    },
     setObjectValueReduce (obj, strKeys, data) {
       const arr = strKeys.split('.')
       arr.reduce((pre, item, i) => {

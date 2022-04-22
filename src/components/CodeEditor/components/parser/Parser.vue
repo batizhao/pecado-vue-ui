@@ -19,7 +19,7 @@ const layouts = {
       }
     }
     return (
-      <el-col v-show={!config.hidden} span={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
+      <el-col v-show={!config.hidden} sm={24} md={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
         <el-form-item
           label-width={labelWidth} 
           label={config.showLabel ? config.label : ''}
@@ -35,19 +35,8 @@ const layouts = {
     let child = renderChildren.apply(this, arguments);
     const config = scheme.__config__
     const styleSheets = config.styleSheets ? config.styleSheets.join(' ') : ''
-    if (scheme.type === "flex") {
-      child = (
-        <el-row
-          type={scheme.type}
-          justify={scheme.justify}
-          align={scheme.align}
-        >
-          {child}
-        </el-row>
-      );
-    }
     return (
-      <el-col v-show={!config.hidden} span={config.span}>
+      <el-col v-show={!config.hidden} sm={24} md={config.span}>
         <el-row gutter={scheme.gutter}>
           <div class={`drag-wrapper flex-start-wrap component-style-panel-${config.formId} ${styleSheets}`}>
             {child}
@@ -65,7 +54,7 @@ const layouts = {
       }
     }
     return (
-      <el-col v-show={!config.hidden} span={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
+      <el-col v-show={!config.hidden} sm={24} md={config.span} style={config.span === 0 && { width: 'auto', display: 'block' }}>
         <render conf={scheme} on={listeners}></render>
       </el-col>
     )
@@ -74,7 +63,7 @@ const layouts = {
   parse(h, scheme) {
     const config = scheme.__config__;
     return (
-      <el-col v-show={!config.hidden} span={config.span}>
+      <el-col v-show={!config.hidden} sm={24} md={config.span}>
         <form-container ref="formContainerRef" url={scheme.url}></form-container>
       </el-col>
     )
@@ -95,7 +84,7 @@ const layouts = {
     return (
       <el-col
         v-show={!config.hidden}
-        span={config.span}
+        sm={24} md={config.span}
         style={config.span === 0 && { width: 'auto', display: 'block' }}
       >
         <table border="1" class="layout-table" style="width: 100%; table-layout: fixed;">
@@ -165,7 +154,7 @@ const layouts = {
     }
     return (
       <el-col
-        span={config.span}
+        sm={24} md={config.span}
         style={config.span === 0 && { width: 'auto', display: 'block' }}
       >
         <render
@@ -186,8 +175,10 @@ function renderFrom(h) {
 
   if (formConfCopy && !formConfCopy.isForm) {
     return (
-      <el-row>
-        <div style="height:100%">{renderFormItem.call(this, h, formConfCopy.fields)}</div>
+      <el-row  style="padding: 0;" class="center-board-row page-root">
+        <div class="flex-start-wrap">
+          {renderFormItem.call(this, h, formConfCopy.fields)}
+        </div>
       </el-row>
     )
   } else {

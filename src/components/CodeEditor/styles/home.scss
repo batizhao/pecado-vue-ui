@@ -63,6 +63,10 @@ $lighterBlue: #409eff;
   border: 1px solid #E5E6E8;
   border-top: none;
   box-shadow: 0 2px 6px #d1d1d1cc inset;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: auto;
 }
 .center-scrollbar-editor {
   background: #fff;
@@ -90,14 +94,17 @@ $lighterBlue: #409eff;
 .action-bar {
   position: relative;
   box-sizing: border-box;
-  padding-right: 35px;
+  padding: 1px 35px;
   border: 1px solid #f1e8e8;
   border-left: none;
   border-top: none;
-  height: 42px;
-  text-align: right;
   .delete-btn {
     color: #f56c6c;
+  }
+  .action-bar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 .logo-wrapper {
