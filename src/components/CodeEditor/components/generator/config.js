@@ -1,3 +1,40 @@
+//表单组件按钮
+const getBottonConfig = function(params) {
+  return {
+    __config__: {
+      componentCode: 'ANNIU',
+      label: params.label,
+      tag: 'event-button',
+      tagIcon: 'button',
+      panel: 'lx-button',
+      span: 0,
+      layout: 'native',
+      document: 'https://element.eleme.cn/#/zh-CN/component/button'
+    },
+    __slot__: {
+      default: params.__slot__
+    },
+    type: params.type,
+    functionButton:params.functionButton,//判断是否是具体功能按钮
+    icon: params.icon,
+    round: false,
+    size: '',
+    plain: false,
+    circle: false,
+    disabled: false,
+    styles: {
+      defaultStyles: {
+        marginTop: '8px',
+        marginRight: '8px',
+        marginBottom: '8px',
+        marginLeft: '8px'
+      }
+    },
+    eventSettings: {
+      emit: params.eventSettings
+    }
+  }
+}
 // 表单属性【右面板】
 export const formConf = {
   formRef: 'elForm',
@@ -1086,6 +1123,56 @@ export const formModelComponents = [
       }
     ]//表格列集合
   },
+  getBottonConfig({
+    label: '按钮',
+    __slot__: '主要按钮',
+    icon: 'el-icon-search',
+    functionButton: false,
+    type: 'primary',
+    eventSettings: ''
+  }),
+  getBottonConfig({
+    label: '保存',
+    __slot__: '保存',
+    icon: 'el-icon-circle-check',
+    functionButton: true,
+    type: 'primary',
+    eventSettings: 'buttonEmitSave'
+  }),
+  getBottonConfig({
+    label: '提交',
+    __slot__: '提交',
+    icon: 'el-icon-folder-checked',
+    functionButton: true,
+    type: 'primary',
+    eventSettings: 'buttonEmitSubmit'
+  }),
+  getBottonConfig({
+    label: '关闭',
+    __slot__: '关闭',
+    icon: 'el-icon-close',
+    functionButton: true,
+    type: 'default',
+    eventSettings: 'buttonEmitClose'
+  }),
+  getBottonConfig(
+    {
+      label: '收藏',
+      __slot__: '收藏',
+      icon: 'el-icon-star-off',
+      functionButton: true,
+      type: 'primary',
+      eventSettings: 'collection'
+    },
+  ),
+  getBottonConfig({
+    label: '添加常用应用',
+    __slot__: '添加到常用应用',
+    icon: 'el-icon-bell',
+    functionButton: true,
+    type: 'primary',
+    eventSettings: 'addCommonUse',
+  })
 ]
 
 export const listModelComponnets = [
@@ -1102,98 +1189,3 @@ export const listModelComponnets = [
     url: '' // 请求接口
   },
 ]
-
-//表单组件按钮整合
-const bottonObj = function(params) {
-  const obj = {
-    __config__: {
-      componentCode: 'ANNIU',
-      label: params.label,
-      tag: 'event-button',
-      tagIcon: 'button',
-      panel: 'lx-button',
-      span: 0,
-      layout: 'native',
-      document: 'https://element.eleme.cn/#/zh-CN/component/button'
-    },
-    __slot__: {
-      default: params.__slot__
-    },
-    type: params.type,
-    functionButton:params.functionButton,//判断是否是具体功能按钮
-    icon: params.icon,
-    round: false,
-    size: '',
-    plain: false,
-    circle: false,
-    disabled: false,
-    styles: {
-      defaultStyles: {
-        marginTop: '8px',
-        marginRight: '8px',
-        marginBottom: '8px',
-        marginLeft: '8px'
-      }
-    },
-    eventSettings: {
-      emit: params.eventSettings
-    }
-  }
-  formModelComponents.push(obj)
-}
-export const buttonList = [
-  {
-    label: '按钮',
-    __slot__: '主要按钮',
-    icon: 'el-icon-search',
-    functionButton: false,
-    type: 'primary',
-    eventSettings: ''
-  },
-  {
-    label: '保存',
-    __slot__: '保存',
-    icon: 'el-icon-circle-check',
-    functionButton: true,
-    type: 'primary',
-    eventSettings: 'buttonEmitSave'
-  },
-  {
-    label: '提交',
-    __slot__: '提交',
-    icon: 'el-icon-folder-checked',
-    functionButton: true,
-    type: 'primary',
-    eventSettings: 'buttonEmitSubmit'
-  },
-  {
-    label: '关闭',
-    __slot__: '关闭',
-    icon: 'el-icon-close',
-    functionButton: true,
-    type: 'default',
-    eventSettings: 'buttonEmitClose'
-  },
-  {
-    label: '收藏',
-    __slot__: '收藏',
-    icon: 'el-icon-star-off',
-    functionButton: true,
-    type: 'primary',
-    eventSettings: 'collection'
-  },
-  {
-    label: '添加常用应用',
-    __slot__: '添加到常用应用',
-    icon: 'el-icon-bell',
-    functionButton: true,
-    type: 'primary',
-    eventSettings: 'addCommonUse',
-  }
-]
-
-export function ButtonPush(){
-  for(let i=0;i<buttonList.length;i++){
-    bottonObj(buttonList[i])
-  }
-}

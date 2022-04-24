@@ -53,7 +53,7 @@ import addTemplate from './add.vue'
 import Design from '../design'
 import { addOrEditTemplate, deleteTemplate, changeFormStatus } from '@/api/dp/page/model.js'
 import { deepClone } from '@/components/CodeEditor/utils/index'
-import { indexPageComponents, layoutPageComponents, formModelComponents, listModelComponnets, ButtonPush } from '@/components/CodeEditor/components/generator/config'
+import { indexPageComponents, layoutPageComponents, formModelComponents, listModelComponnets} from '@/components/CodeEditor/components/generator/config'
 export default {
   components: {
     addTemplate,
@@ -144,7 +144,6 @@ export default {
     }
   },
   created () {
-    ButtonPush()
     this.getModuleTypeOptions()
   },
   methods: {
