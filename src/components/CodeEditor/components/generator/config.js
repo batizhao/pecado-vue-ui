@@ -1060,209 +1060,6 @@ export const formModelComponents = [
   rowContainer,
   {
     __config__: {
-      componentCode: 'ANNIU',
-      label: '按钮',
-      tag: 'event-button',
-      tagIcon: 'button',
-      panel: 'lx-button',
-      span: 0,
-      layout: 'native',
-      document: 'https://element.eleme.cn/#/zh-CN/component/button'
-    },
-    __slot__: {
-      default: '主要按钮'
-    },
-    type: 'primary',
-    icon: 'el-icon-search',
-    round: false,
-    size: '',
-    plain: false,
-    circle: false,
-    disabled: false,
-    styles: {
-      defaultStyles: {
-        marginTop: '8px',
-        marginRight: '8px',
-        marginBottom: '8px',
-        marginLeft: '8px'
-      }
-    },
-    eventSettings: {
-      emit: ''
-    }
-  },
-  {
-    __config__: {
-      componentCode: 'ANNIU',
-      label: '保存',
-      tag: 'event-button',
-      tagIcon: 'button',
-      panel: 'lx-button',
-      span: 0,
-      layout: 'native',
-      document: 'https://element.eleme.cn/#/zh-CN/component/button'
-    },
-    "__slot__": {
-      "default": "保存"
-    },
-    type: 'primary',
-    functionButton:true,//判断是否是具体功能按钮
-    icon: 'el-icon-circle-check',
-    round: false,
-    size: '',
-    plain: false,
-    circle: false,
-    disabled: false,
-    styles: {
-      defaultStyles: {
-        marginTop: '8px',
-        marginRight: '8px',
-        marginBottom: '8px',
-        marginLeft: '8px'
-      }
-    },
-    eventSettings: {
-      emit: 'buttonEmitSave'
-    }
-  },
-  {
-    __config__: {
-      componentCode: 'ANNIU',
-      label: '提交',
-      tag: 'event-button',
-      tagIcon: 'button',
-      panel: 'lx-button',
-      span: 0,
-      layout: 'native',
-      document: 'https://element.eleme.cn/#/zh-CN/component/button'
-    },
-    "__slot__": {
-      "default": "提交"
-    },
-    type: 'primary',
-    functionButton:true,
-    icon: 'el-icon-folder-checked',
-    round: false,
-    size: '',
-    plain: false,
-    circle: false,
-    disabled: false,
-    styles: {
-      defaultStyles: {
-        marginTop: '8px',
-        marginRight: '8px',
-        marginBottom: '8px',
-        marginLeft: '8px'
-      }
-    },
-    eventSettings: {
-      emit: 'buttonEmitSubmit'
-    }
-  },
-  {
-    __config__: {
-      componentCode: 'ANNIU',
-      label: '关闭', 
-      tag: 'event-button',
-      tagIcon: 'button',
-      panel: 'lx-button',
-      span: 0,  
-      layout: 'native',
-      document: 'https://element.eleme.cn/#/zh-CN/component/button'
-    },
-    "__slot__": {
-      "default": "关闭"
-    },
-    functionButton:true,
-    type: 'default',
-    icon: 'el-icon-close',
-    round: false,
-    size: '',
-    plain: false,
-    circle: false,
-    disabled: false,
-    styles: {
-      defaultStyles: {
-        marginTop: '8px',
-        marginRight: '8px',
-        marginBottom: '8px',
-        marginLeft: '8px'
-      }
-    },
-    eventSettings: {
-      emit: 'buttonEmitClose'
-    }
-  },
-  {
-    __config__: {
-      componentCode: 'ANNIU',
-      label: '收藏',
-      tag: 'event-button',
-      tagIcon: 'button',
-      panel: 'lx-button',
-      span: 0,
-      layout: 'native',
-      document: 'https://element.eleme.cn/#/zh-CN/component/button'
-    },
-    "__slot__": {
-      "default": "收藏"
-    },
-    type: 'primary',
-    functionButton:true,//判断是否是具体功能按钮
-    icon: 'el-icon-star-off',
-    round: false,
-    size: '',
-    plain: false,
-    circle: false,
-    disabled: false,
-    styles: {
-      defaultStyles: {
-        marginTop: '8px',
-        marginRight: '8px',
-        marginBottom: '8px',
-        marginLeft: '8px'
-      }
-    },
-    eventSettings: {
-      emit: 'collection'
-    }
-  },
-  {
-    __config__: {
-      componentCode: 'ANNIU',
-      label: '添加常用应用',
-      tag: 'event-button',
-      tagIcon: 'commonUse',
-      panel: 'lx-button',
-      span: 0,
-      layout: 'native',
-      document: 'https://element.eleme.cn/#/zh-CN/component/button'
-    },
-    "__slot__": {
-      "default": "添加到常用应用"
-    },
-    type: 'primary',
-    functionButton:true,//判断是否是具体功能按钮
-    icon: 'el-icon-bell',
-    round: false,
-    size: '',
-    plain: false,
-    circle: false,
-    disabled: false,
-    styles: {
-      defaultStyles: {
-        marginTop: '8px',
-        marginRight: '8px',
-        marginBottom: '8px',
-        marginLeft: '8px'
-      }
-    },
-    eventSettings: {
-      emit: 'addCommonUse'
-    }
-  },
-  {
-    __config__: {
       label: '审批意见',
       panel: 'lx-opinion',
       tag: 'opinion-show',
@@ -1305,3 +1102,98 @@ export const listModelComponnets = [
     url: '' // 请求接口
   },
 ]
+
+//表单组件按钮整合
+const bottonObj = function(params) {
+  const obj = {
+    __config__: {
+      componentCode: 'ANNIU',
+      label: params.label,
+      tag: 'event-button',
+      tagIcon: 'button',
+      panel: 'lx-button',
+      span: 0,
+      layout: 'native',
+      document: 'https://element.eleme.cn/#/zh-CN/component/button'
+    },
+    __slot__: {
+      default: params.__slot__
+    },
+    type: params.type,
+    functionButton:params.functionButton,//判断是否是具体功能按钮
+    icon: params.icon,
+    round: false,
+    size: '',
+    plain: false,
+    circle: false,
+    disabled: false,
+    styles: {
+      defaultStyles: {
+        marginTop: '8px',
+        marginRight: '8px',
+        marginBottom: '8px',
+        marginLeft: '8px'
+      }
+    },
+    eventSettings: {
+      emit: params.eventSettings
+    }
+  }
+  formModelComponents.push(obj)
+}
+export const buttonList = [
+  {
+    label: '按钮',
+    __slot__: '主要按钮',
+    icon: 'el-icon-search',
+    functionButton: false,
+    type: 'primary',
+    eventSettings: ''
+  },
+  {
+    label: '保存',
+    __slot__: '保存',
+    icon: 'el-icon-circle-check',
+    functionButton: true,
+    type: 'primary',
+    eventSettings: 'buttonEmitSave'
+  },
+  {
+    label: '提交',
+    __slot__: '提交',
+    icon: 'el-icon-folder-checked',
+    functionButton: true,
+    type: 'primary',
+    eventSettings: 'buttonEmitSubmit'
+  },
+  {
+    label: '关闭',
+    __slot__: '关闭',
+    icon: 'el-icon-close',
+    functionButton: true,
+    type: 'default',
+    eventSettings: 'buttonEmitClose'
+  },
+  {
+    label: '收藏',
+    __slot__: '收藏',
+    icon: 'el-icon-star-off',
+    functionButton: true,
+    type: 'primary',
+    eventSettings: 'collection'
+  },
+  {
+    label: '添加常用应用',
+    __slot__: '添加到常用应用',
+    icon: 'el-icon-bell',
+    functionButton: true,
+    type: 'primary',
+    eventSettings: 'addCommonUse',
+  }
+]
+
+export function ButtonPush(){
+  for(let i=0;i<buttonList.length;i++){
+    bottonObj(buttonList[i])
+  }
+}

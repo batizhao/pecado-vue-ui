@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-divider :content-position="direction">{{ content }}</el-divider>
+    <el-divider :content-position="direction || 'center'">{{ content }}</el-divider>
   </div>
 </template>
 

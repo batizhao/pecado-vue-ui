@@ -130,7 +130,6 @@ export default {
         ifSort: false,
         ifFixed: false,
         alignment: "",
-        format: "",
       });
     },
     //删除一行
