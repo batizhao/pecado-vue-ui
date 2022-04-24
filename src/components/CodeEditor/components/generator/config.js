@@ -732,7 +732,8 @@ export const layoutComponents = [
         },
 
       ]
-    ]
+    ],
+    border: true
   },
   {
     __config__: {

@@ -145,7 +145,7 @@ const layouts = {
         class={className}
         nativeOnClick={event => { activeItem(currentItem); event.stopPropagation() }}
       >
-        <table class="layout-table" style="width: 100%; table-layout: fixed;">
+        <table border={currentItem.border} class="layout-table" style="width: 100%; table-layout: fixed;">
           <tbody>
           {getTds()}
           </tbody>

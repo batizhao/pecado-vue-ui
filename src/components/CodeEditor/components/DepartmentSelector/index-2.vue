@@ -19,6 +19,7 @@
       v-model="dialogVisible"
       title="部门选择"
       @confirm="dialogConfirm"
+      width="80%"
     >
       <action-form
         :span="24"

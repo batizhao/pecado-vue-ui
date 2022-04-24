@@ -168,11 +168,8 @@ aside {
 
 // 表单页面的全局样式节点
 .center-board-row {
-  padding: 20px 40px;
-	margin: 0 !important;
   [class*='el-col-'] {
     float: unset;
-		overflow: hidden;
   }
 }
 .flex-start-wrap {

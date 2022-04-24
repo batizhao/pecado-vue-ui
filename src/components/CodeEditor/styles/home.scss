@@ -75,6 +75,7 @@ $lighterBlue: #409eff;
   border-right: 1px solid #f1e8e8;
   height: calc(100vh - 133px);
   box-shadow: 0px 0px 8px 0px #00000026;
+  width: 100%;
 }
 .center-board {
   box-sizing: border-box;
@@ -141,6 +142,7 @@ $lighterBlue: #409eff;
   height: 100%;
   width: 100%;
   min-height: 300px;
+  padding: 15px;
   .components-body {
     margin: 0;
     padding: 0;

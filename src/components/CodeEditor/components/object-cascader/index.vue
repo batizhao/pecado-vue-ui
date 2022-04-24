@@ -31,9 +31,9 @@ export default {
   async mounted () {
     await this.getOptions()
     this.setNewValue()
-    setTimeout(() => {
+    this.$nextTick(() => {
       this.handleChange()
-    }, 300)
+    })
   },
   methods: {
     setNewValue () {

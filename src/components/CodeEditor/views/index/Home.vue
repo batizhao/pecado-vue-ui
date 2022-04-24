@@ -264,18 +264,12 @@ export default {
     changeResolvingPower (val) {
       const editorDom = document.querySelector('.center-scrollbar-editor')
       let pxValue = ''
-      let zoom = 1
-      let height = ''
       if (val === 'Pad') {
         pxValue = '820px'
       } else if (val === 'H5') {
-        pxValue = '520px'
-        zoom = 0.75
-        height = '900px'
+        pxValue = '390px'
       }
       editorDom.style.width = pxValue
-      editorDom.style.zoom = zoom
-      editorDom.style.height = height
       this.$set(this.formConf, 'resolvingPowerType', val)
     },
     setObjectValueReduce (obj, strKeys, data) {

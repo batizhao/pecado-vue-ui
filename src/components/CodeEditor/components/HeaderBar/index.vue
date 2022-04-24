@@ -9,6 +9,7 @@
     </div>
     <div class="actions">
       <i class="el-icon-monitor" title="控制台" @click="jumpToManager"></i>
+      <i class="el-icon-menu menu" title="菜单" @click="changeNavbarShow"></i>
     </div>
   </div>
 </template>
@@ -32,6 +33,9 @@ export default {
       this.$router.push({
         path: '/admin'
       })
+    },
+    changeNavbarShow () {
+      this.$store.commit('codeEditor/navbar/setNavbarShow', !this.$store.state.codeEditor.navbar.navbarShow)
     }
   },
 }
@@ -76,15 +80,20 @@ export default {
   .actions{
     display: flex;
     height: 100%;
-    padding:0 20px;
     align-items: center;
     color: #fff;
     & > i {
       cursor: pointer;
+      margin-right: 16px;
     }
   }
   .nav-bar-icon {
     color: #fff !important;
+  }
+}
+@media screen and (min-width: 993px)  {
+  .actions .menu {
+    display: none;
   }
 }
 </style>

@@ -19,9 +19,10 @@
       v-model="dialogVisible"
       title="部门选择"
       @confirm="dialogConfirm"
+      width="80%"
     >
     <el-row>
-      <el-col :span="12">
+      <el-col :sm="24" :md="10">
         <el-tree
           show-checkbox
           check-strictly
@@ -32,7 +33,7 @@
           @check-change="treeCheck"
         ></el-tree>
       </el-col>
-      <el-col :span="12">
+      <el-col :sm="24" :md="14">
         <div class="selected-nodes">
           <draggable
             :list="selectedNodes"

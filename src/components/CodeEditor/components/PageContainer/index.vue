@@ -97,7 +97,6 @@ export default {
 <style scoped>
 .page-container {
   min-height: 300px;
-  padding: 10px 20px;
 }
 .page-container > .tip {
   text-align: center;

@@ -5,12 +5,12 @@
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
 
     <div class="right-menu">
+      <el-tooltip content="前台首页" effect="dark" placement="bottom">
+        <div class="right-menu-item hover-effect" @click="jumpToHome">
+          <i class="el-icon-s-home" style="font-size: 22px;"></i>
+        </div>
+      </el-tooltip>
       <template v-if="device!=='mobile'">
-        <el-tooltip content="前台首页" effect="dark" placement="bottom">
-          <div class="right-menu-item hover-effect" @click="jumpToHome">
-            <i class="el-icon-s-home" style="font-size: 22px;"></i>
-          </div>
-        </el-tooltip>
 
         <search id="header-search" class="right-menu-item" />
         

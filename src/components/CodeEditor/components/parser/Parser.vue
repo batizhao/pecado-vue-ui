@@ -87,7 +87,7 @@ const layouts = {
         sm={24} md={config.span}
         style={config.span === 0 && { width: 'auto', display: 'block' }}
       >
-        <table border="1" class="layout-table" style="width: 100%; table-layout: fixed;">
+        <table border={currentItem.border}  class="layout-table" style="width: 100%; table-layout: fixed;">
           <tbody>
           {getTds()}
           </tbody>

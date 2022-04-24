@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="navbar-container" :style="{ display: navbarShow ? 'block' : '' }">
     <render-menu
       v-if="sideActiveIndex"
       :menuData="navBarMenuData"
@@ -16,6 +16,11 @@ export default {
   name: 'nav-bar',
   components: {
     renderMenu
+  },
+  computed: {
+    navbarShow () {
+      return this.$store.state.codeEditor.navbar.navbarShow
+    }
   },
   async created () {
     await this.getNavBarData()
@@ -53,6 +58,7 @@ export default {
         }
       })
       this.setBreadcrumbNames(data.id)
+      this.$store.commit('codeEditor/navbar/setNavbarShow', false)
     },
     // 设置面包屑数据
     setBreadcrumbNames (menuId) {
@@ -106,6 +112,15 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+@media screen and (min-width: 993px)  {
+  .navbar-container {
+    display: block;
+  }
+}
+@media screen and (max-width: 993px)  {
+  .navbar-container {
+    display: none;
+  }
+}
 </style>
