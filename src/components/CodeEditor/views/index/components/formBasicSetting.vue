@@ -43,12 +43,28 @@
       <el-switch v-model="activeData.__config__.hidden" />
     </el-form-item>
     <el-form-item label="默认值"  v-if="activeData.__config__.defaultValue !== undefined">
-        <el-input
-          :value="getDefaultValue(activeData.__config__.defaultValue)"
-          placeholder="请输入默认值"
-          @input="setDefaultValue"
-        />
-      </el-form-item>
+      <el-input
+        :value="getDefaultValue(activeData.__config__.defaultValue)"
+        placeholder="请输入默认值"
+        @input="setDefaultValue"
+      />
+    </el-form-item>
+    <el-form-item label="组件尺寸" v-if="activeData.size !== undefined">
+      <el-radio-group v-model="activeData.size">
+        <el-radio-button label="">
+          默认
+        </el-radio-button>
+        <el-radio-button label="medium">
+          中等
+        </el-radio-button>
+        <el-radio-button label="small">
+          较小
+        </el-radio-button>
+        <el-radio-button label="mini">
+          迷你
+        </el-radio-button>
+      </el-radio-group>
+    </el-form-item>
     <slot></slot>
     <function-setting></function-setting>
   </div>

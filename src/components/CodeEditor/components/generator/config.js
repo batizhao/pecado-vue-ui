@@ -2,7 +2,7 @@
 export const formConf = {
   formRef: 'elForm',
   formModel: 'formData',
-  size: 'medium',
+  size: '',
   labelPosition: 'right',
   labelWidth: 100,
   formRules: 'rules',
@@ -63,6 +63,7 @@ export const inputComponents = [
       prepend: '',
       append: ''
     },
+    size: '',
     type: 'text',
     // 其余的为可直接写在组件标签上的属性
     placeholder: '请输入',
@@ -98,6 +99,7 @@ export const inputComponents = [
       'blur': 'onBlur',
       'clear': 'onClear'
     },
+    size: '',
     type: 'textarea',
     placeholder: '请输入',
     autosize: {
@@ -137,6 +139,7 @@ export const inputComponents = [
       prepend: '',
       append: ''
     },
+    size: '',
     type: 'password',
     placeholder: '请输入',
     'show-password': true,
@@ -171,6 +174,7 @@ export const inputComponents = [
       'focus': 'onFocus',
       'blur': 'onBlur'
     },
+    size: '',
     placeholder: '',
     min: undefined,
     max: undefined,
@@ -254,6 +258,7 @@ export const selectComponents = [
         value: 'id'
       }
     },
+    size: '',
     placeholder: '请选择',
     clearable: true,
     disabled: false,
@@ -306,6 +311,7 @@ export const selectComponents = [
         children: 'children'
       }
     },
+    size: '',
     placeholder: '请选择',
     'show-all-levels': true,
     disabled: false,
@@ -350,7 +356,7 @@ export const selectComponents = [
         value: 'value'
       }
     },
-    size: 'medium',
+    size: '',
     disabled: false
   },
   {
@@ -391,7 +397,7 @@ export const selectComponents = [
         value: 'value'
       }
     },
-    size: 'medium',
+    size: '',
     min: undefined, // 这里不能写null，会导致复选框无法勾选
     max: undefined,
     disabled: false
@@ -469,6 +475,7 @@ export const selectComponents = [
       'focus': 'onFocus',
       'blur': 'onBlur'
     },
+    size: '',
     'is-range': false,
     'picker-options': {
       selectableRange: '00:00:00 - 23:59:59'
@@ -500,6 +507,7 @@ export const selectComponents = [
       'focus': 'onFocus',
       'blur': 'onBlur'
     },
+    size: '',
     'is-range': true,
     disabled: false,
     clearable: true,
@@ -529,6 +537,7 @@ export const selectComponents = [
       'focus': 'onFocus',
       'blur': 'onBlur'
     },
+    size: '',
     placeholder: '请选择',
     type: 'date',
     disabled: false,
@@ -558,6 +567,7 @@ export const selectComponents = [
       'focus': 'onFocus',
       'blur': 'onBlur'
     },
+    size: '',
     type: 'daterange',
     'range-separator': '至',
     'start-placeholder': '开始日期',
@@ -613,10 +623,11 @@ export const selectComponents = [
       'change': 'onChange',
       'active-change': 'onActiveChange'
     },
+    size: '',
     'show-alpha': false,
     'color-format': '',
     disabled: false,
-    size: 'medium'
+    size: ''
   },
   {
     __config__: {
@@ -671,10 +682,11 @@ export const layoutComponents = [
     __slot__: {
       default: '主要按钮'
     },
+    size: '',
     type: 'primary',
     icon: 'el-icon-search',
     round: false,
-    size: 'medium',
+    size: '',
     plain: false,
     circle: false,
     disabled: false,
@@ -794,6 +806,7 @@ export const seniorComponents = [
         children: 'children'
       }
     },
+    size: '',
   },
   {
     __config__: {
@@ -825,6 +838,7 @@ export const seniorComponents = [
         value: 'id'
       }
     },
+    size: '',
   },
   {
     __config__: {
@@ -838,6 +852,7 @@ export const seniorComponents = [
       defaultValue: [],
       children: []
     },
+    size: 'small',
     columns: [], // 列配置
     showSelection: true, // 复选框
     showOrderNumber: true, // 序号
@@ -1060,7 +1075,7 @@ export const formModelComponents = [
     type: 'primary',
     icon: 'el-icon-search',
     round: false,
-    size: 'medium',
+    size: '',
     plain: false,
     circle: false,
     disabled: false,
@@ -1094,7 +1109,7 @@ export const formModelComponents = [
     functionButton:true,//判断是否是具体功能按钮
     icon: 'el-icon-circle-check',
     round: false,
-    size: 'medium',
+    size: '',
     plain: false,
     circle: false,
     disabled: false,
@@ -1128,7 +1143,7 @@ export const formModelComponents = [
     functionButton:true,
     icon: 'el-icon-folder-checked',
     round: false,
-    size: 'medium',
+    size: '',
     plain: false,
     circle: false,
     disabled: false,
@@ -1162,7 +1177,7 @@ export const formModelComponents = [
     type: 'default',
     icon: 'el-icon-close',
     round: false,
-    size: 'medium',
+    size: '',
     plain: false,
     circle: false,
     disabled: false,
@@ -1196,7 +1211,7 @@ export const formModelComponents = [
     functionButton:true,//判断是否是具体功能按钮
     icon: 'el-icon-star-off',
     round: false,
-    size: 'medium',
+    size: '',
     plain: false,
     circle: false,
     disabled: false,
@@ -1230,7 +1245,7 @@ export const formModelComponents = [
     functionButton:true,//判断是否是具体功能按钮
     icon: 'el-icon-bell',
     round: false,
-    size: 'medium',
+    size: '',
     plain: false,
     circle: false,
     disabled: false,

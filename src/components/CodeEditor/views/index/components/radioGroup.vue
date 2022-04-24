@@ -12,19 +12,6 @@
           </el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="组件尺寸" v-show="activeData.__config__.optionType === 'button'">
-        <el-radio-group v-model="activeData.size">
-          <el-radio-button label="medium">
-            中等
-          </el-radio-button>
-          <el-radio-button label="small">
-            较小
-          </el-radio-button>
-          <el-radio-button label="mini">
-            迷你
-          </el-radio-button>
-        </el-radio-group>
-      </el-form-item>
       <el-form-item label="是否带边框" v-show="activeData.__config__.optionType === 'default'">
         <el-switch v-model="activeData.__config__.border" />
       </el-form-item>

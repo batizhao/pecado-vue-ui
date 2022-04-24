@@ -1,12 +1,12 @@
 <template>
   <div class="action-edit-table">
-    <el-form ref="form" :model="form">
+    <el-form ref="form" :model="form" :size="size">
       <el-form-item>
         <el-table
           :data="form.data"
           :key="tableRenderKey"
           border
-          size="mini"
+          :size="size"
           @selection-change="selectionChange"
         >
           <el-table-column
@@ -52,7 +52,6 @@
                       v-model="row[item.prop]"
                       style="width: 100%;"
                       clearable
-                      :size="size"
                       :disabled="item.disabled"
                       @change="selectChange(item, row[item.prop], $index)"
                     >
@@ -72,7 +71,6 @@
                       v-model="row[item.prop]"
                       style="width: 100%;"
                       :disabled="item.disabled"
-                      :size="size"
                       :min="item.min"
                       :max="item.max"
                     ></el-input-number>
@@ -106,7 +104,6 @@
                     <span v-if="isReadonly(row, item)">{{row[item.prop]}}</span>
                     <el-input
                       v-if="!isReadonly(row, item)"
-                      :size="size"
                       v-model="row[item.prop]"
                       :disabled="item.disabled"
                     ></el-input>

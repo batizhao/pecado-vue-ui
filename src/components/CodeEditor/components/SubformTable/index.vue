@@ -14,14 +14,15 @@ export default {
           !this.readonly 
           ? (
             <div class="mb8">
-            <action-button actionType="1" onClick={() => this.handleAdd()}>新增{this.readonly}</action-button>
-            <action-button actionType="2" onClick={() => this.handleDel()}>删除</action-button>
+            <action-button actionType="1" size={this.tableSize} onClick={() => this.handleAdd()}>新增</action-button>
+            <action-button actionType="2" size={this.tableSize} onClick={() => this.handleDel()}>删除</action-button>
           </div>
           )
           : ''
         }
         <action-edit-table
           ref={this.subformTableRefName}
+          size={this.tableSize}
           tableColumns={this.tableColumns}
           showSelection={this.showSelection}
           showOrderNumber={this.showOrderNumber}
@@ -35,6 +36,7 @@ export default {
     )
   },
   props: {
+    size: String,
     columns: Array,
     showSelection: Boolean,
     showOrderNumber: Boolean,
@@ -76,6 +78,9 @@ export default {
           defaultValue: config.defaultValue
         }
       })
+    },
+    tableSize () {
+      return this.size || this.$store.state.codeEditor.components.formConf.size
     }
   },
   methods: {

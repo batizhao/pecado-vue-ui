@@ -5,19 +5,6 @@
       <el-form-item v-if="activeData.disabled !== undefined" label="是否禁用">
         <el-switch v-model="activeData.disabled" />
       </el-form-item>
-      <el-form-item label="组件尺寸">
-        <el-radio-group v-model="activeData.size">
-          <el-radio-button label="medium">
-            中等
-          </el-radio-button>
-          <el-radio-button label="small">
-            较小
-          </el-radio-button>
-          <el-radio-button label="mini">
-            迷你
-          </el-radio-button>
-        </el-radio-group>
-      </el-form-item>
       <el-form-item label="颜色格式">
         <el-select
           v-model="activeData['color-format']"
