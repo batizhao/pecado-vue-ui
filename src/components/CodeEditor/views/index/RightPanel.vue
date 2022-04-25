@@ -108,7 +108,7 @@ import LxBreadcrumb from './components/breadcrumb.vue'
 import LxCommonUse from './components/commonUse.vue'
 import LxSplitLine from './components/splitLine.vue'
 import LxOpinion from './components/opinionShow.vue'
-
+import LxFlowChart from './components/flowChart.vue'
 export default {
   components: {
     functionSetting,
@@ -141,6 +141,7 @@ export default {
     LxCommonUse,
     LxSplitLine,
     LxOpinion,
+    LxFlowChart
   },
   props: ['showField'],
   data () {
