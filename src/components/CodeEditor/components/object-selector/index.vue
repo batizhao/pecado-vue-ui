@@ -15,7 +15,7 @@
       <el-option
         v-for="(item, index) in options"
         :key="index"
-        :label="item.label"
+        :label="item.value[props.label]"
         :value="item.value"
         :disabled="item.disabled"
       ></el-option>
@@ -41,7 +41,7 @@ export default {
   },
   computed: {
     valueKey () {
-      return this.__config__.dataType === 'dynamic' ? this.props.value : 'id'
+      return this.props.value || 'id'
     }
   },
   watch: {
@@ -62,16 +62,16 @@ export default {
   methods: {
     setNewValue () {
       if (this.multiple) {
-        this.newValue = this.value ? this.value.map((id) => ({ id })) : null // 这里只能给null，如果给了其他值，会触发表单校验
-        const selectedItems = this.options.filter(item => this.value.includes(item.value.id))
+        this.newValue = this.value ? this.value.map((val) => ({ [this.valueKey]: val })) : null // 这里只能给null，如果给了其他值，会触发表单校验
+        const selectedItems = this.options.filter(item => this.value.includes(item.value[this.valueKey]))
         if (selectedItems.length) {
           this.$emit('change', selectedItems.map(item => (item.value)))
         } else {
           this.$emit('change', null)
         }
       } else {
-        this.newValue = this.value ? { id: this.value } : null
-        const selectedItems = this.options.filter(item => this.value === item.value.id)
+        this.newValue = this.value ? { [this.valueKey]: this.value } : null
+        const selectedItems = this.options.filter(item => this.value === item.value[this.valueKey])
         if (selectedItems.length) {
           this.$emit('change', selectedItems[0].value)
         } else {
@@ -80,7 +80,7 @@ export default {
       }
     },
     selectorChange (val) {
-      this.$emit('input', this.multiple ? val.map((item) => item.id) : val.id || '') // 修改value
+      this.$emit('input', this.multiple ? val.map((item) => item[this.valueKey]) : val[this.valueKey]) // 修改value
     },
     async getOptions () {
       this.newValue = null

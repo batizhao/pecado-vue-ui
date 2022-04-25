@@ -22,8 +22,7 @@ let monaco
 export default {
   data () {
     return {
-      globalStylesVisible: false,
-      monaco: null
+      globalStylesVisible: false
     }
   },
   watch: {

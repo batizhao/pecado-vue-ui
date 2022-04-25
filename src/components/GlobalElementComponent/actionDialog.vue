@@ -12,7 +12,8 @@
       <slot name="title"></slot>
     </template>
     <slot></slot>
-    <div slot="footer" v-if="showFooter">
+    <div slot="footer" v-if="showFooter" style="display: flex; justify-content: flex-end;">
+      <slot name="footer"></slot>
       <el-button type="primary" @click="confirm" size="small" :loading="loading">确 定</el-button>
       <el-button @click="cancel" size="small">取 消</el-button>
     </div>

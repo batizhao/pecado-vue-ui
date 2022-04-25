@@ -3,7 +3,7 @@
     <el-dialog
       title="添加选项"
       :close-on-click-modal="false"
-      :modal-append-to-body="false"
+      append-to-body
       @open="onOpen"
       @close="onClose"
       :visible.sync="visible"

@@ -1,0 +1,44 @@
+.select-item {
+  display: flex;
+  box-sizing: border-box;
+  border: 1px dashed #fff;
+  & .close-btn {
+    cursor: pointer;
+    font-size: 16px;
+    color: #f56c6c;
+  }
+  & .el-input + .el-input {
+    margin-left: 4px;
+  }
+}
+.select-item + .select-item {
+  margin-top: 4px;
+}
+.select-item.sortable-chosen {
+  border: 1px dashed #409eff;
+}
+.select-line-icon {
+  padding: 0 4px;
+  line-height: 32px;
+  font-size: 22px;
+  color: #777;
+}
+.option-drag {
+  cursor: move;
+}
+.custom-tree-node {
+  width: 100%;
+  font-size: 14px;
+  .node-operation {
+    float: right;
+  }
+  i[class*="el-icon"] + i[class*="el-icon"] {
+    margin-left: 6px;
+  }
+  .el-icon-plus {
+    color: #409eff;
+  }
+  .el-icon-delete {
+    color: #f56c6c;
+  }
+}

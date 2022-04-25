@@ -283,16 +283,16 @@ export const selectComponents = [
     __slot__: {
       options: [{
         label: '选项一',
-        id: '1'
+        value: '1'
       }, {
         label: '选项二',
-        id: '2'
+        value: '2'
       }]
     },
     props: {
       props: { // 配置选项的label和value的属性名称
         label: 'label',
-        value: 'id'
+        value: 'value'
       }
     },
     size: '',
@@ -331,20 +331,17 @@ export const selectComponents = [
       'remove-tag': 'onRemoveTag'
     },
     options: [{
-      id: 1,
       value: '1',
       label: '选项1',
       children: [{
-        id: 2,
         value: '2',
         label: '选项1-1'
       }]
     }],
     props: {
       props: {
-        multiple: false,
         label: 'label',
-        value: 'id',
+        value: 'value',
         children: 'children'
       }
     },
@@ -826,11 +823,9 @@ export const seniorComponents = [
       'focus': 'onFocus'
     },
     options: [{
-      id: 1,
       value: '1',
       name: '选项1',
       children: [{
-        id: 2,
         value: '2',
         name: '选项1-1'
       }]

@@ -20,8 +20,8 @@
           placeholder="请输入占位提示"
         />
       </el-form-item>
-      </form-basic-setting>
       <options></options>
+      </form-basic-setting>
     </el-form>
   </div>
 </template>

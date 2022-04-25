@@ -26,8 +26,8 @@
       <el-form-item label="选项分隔符">
         <el-input v-model="activeData.separator" placeholder="请输入选项分隔符" />
       </el-form-item>
-      </form-basic-setting>
       <options></options>
+      </form-basic-setting>
     </el-form>
   </div>
 </template>
