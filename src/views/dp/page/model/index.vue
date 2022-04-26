@@ -144,19 +144,6 @@ export default {
       }
     }
   },
-  watch:{
-    currentItem(val){
-      if (val.type === 'form') {
-        this.designTitle="表单模型"
-      } else if (val.type === 'index') {
-        this.designTitle="主页模型"
-      } else if (val.type === 'layout') {
-        this.designTitle="布局"
-      } else if (val.type === 'list') {
-        this.designTitle="列表模型"
-      }
-    }
-  },
   created () {
     this.getModuleTypeOptions()
   },
@@ -206,6 +193,7 @@ export default {
     },
     handleDesign (item) {
       this.currentItem = deepClone(item)
+      this.designTitle=this.getModuleTypeLabel(item.type)
       this.currentItem.pageMetadata = JSON.parse(this.currentItem.pageMetadata) || {}
       this.$nextTick(() => {
         this.$refs.designRef.open()
