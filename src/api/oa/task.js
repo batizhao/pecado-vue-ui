@@ -56,3 +56,11 @@ export function signTask(query) {
     params:query
   })
 }
+
+// 获取流程图
+export function getHighLightedNodeVoByProcessDefidId(processDefidId,sourceType) {
+  return request({
+    url: '/oa/repository/resource'+'?processDefId='+processDefidId+'&sourceType='+sourceType,
+    method: "get",
+  });
+}

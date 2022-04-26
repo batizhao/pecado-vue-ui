@@ -1118,6 +1118,17 @@ export const formModelComponents = [
       }
     ]//表格列集合
   },
+  {
+    __config__: {
+      label: '流程图',
+      panel: 'lx-flowChart',
+      tag: 'flow-chart',
+      tagIcon: 'input',
+      layout: 'native',
+      span: 24,
+    },
+    url: '/oa/repository/resource', // 请求接口
+  },
   getBottonConfig({
     label: '按钮',
     __slot__: '主要按钮',

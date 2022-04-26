@@ -35,6 +35,9 @@ import en from './assets/languages/en'
 // 全局注册二次封装element组件
 import './components/GlobalElementComponent/register'
 
+import {Base64} from 'js-base64'
+Vue.prototype.$Base64 = Base64;
+
 // 全局方法挂载
 Vue.prototype.listDictDataByCode = listDictDataByCode
 // Vue.prototype.getConfigKey = getConfigKey
