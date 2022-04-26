@@ -43,7 +43,7 @@
       <add-template ref="addTemplateRef" :moduleTypeOptions="moduleTypeOptions"></add-template>
     </action-dialog>
     <!-- 设计 -->
-    <Design ref="designRef" :modelData="currentItem" :leftComponents="leftComponents" @refresh="getTableData" />
+    <Design ref="designRef" :modelData="currentItem" :designTitle="designTitle" :leftComponents="leftComponents" @refresh="getTableData" />
 
   </div>
 </template>
@@ -107,7 +107,8 @@ export default {
       dialogTitle: '',
       submitLoading: false,
       currentItem:{},
-      moduleTypeOptions: [] // 模板类型选项
+      moduleTypeOptions: [], // 模板类型选项
+      designTitle:''
     }
   },
   computed: {
@@ -140,6 +141,19 @@ export default {
             list: listModelComponnets
           }
         ]
+      }
+    }
+  },
+  watch:{
+    currentItem(val){
+      if (val.type === 'form') {
+        this.designTitle="表单模型"
+      } else if (val.type === 'index') {
+        this.designTitle="主页模型"
+      } else if (val.type === 'layout') {
+        this.designTitle="布局"
+      } else if (val.type === 'list') {
+        this.designTitle="列表模型"
       }
     }
   },

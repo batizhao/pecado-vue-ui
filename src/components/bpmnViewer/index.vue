@@ -275,6 +275,9 @@ export default {
 /deep/ .el-input--default {
   position: unset;
 }
+/deep/ .bjs-crumb{
+  display: none;
+}
 </style>
 <style lang="scss">
 .bpmn-viewer-container {

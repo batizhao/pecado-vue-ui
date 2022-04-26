@@ -1,7 +1,7 @@
 <template>
   <action-dialog
     v-model="visible"
-    title="门户网站设计"
+    :title="designTitle || ''"
     :showFooter="false"
     fullscreen
     custom-class="web-design-dialog"
@@ -28,7 +28,11 @@ export default {
       type:Object,
       default: () => ({})
     },
-    leftComponents: Array
+    leftComponents: Array,
+    designTitle:{
+      type:String,
+      default: ''
+    }
   },
   components: {
     codeEditor
