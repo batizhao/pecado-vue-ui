@@ -34,7 +34,7 @@
       @confirm="dialogConfirm"
       width="30%"
     >
-      <add-component ref="addComponentRef"></add-component>
+      <add-component ref="addComponentRef" :appId="appId"></add-component>
     </action-dialog>
 
   </div>

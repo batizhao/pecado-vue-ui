@@ -8,7 +8,7 @@
           <el-breadcrumb-item>{{$route.query.name}}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <el-tabs v-model="activeName">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="数据模型" name="1">
           <entity-model v-if="activeName === '1'"></entity-model>
         </el-tab-pane>
@@ -58,10 +58,15 @@ export default {
   },
   data () {
     return {
-      activeName: '1',
+      activeName: sessionStorage.appActiveModel || '1',
       activeName_1: '1_1',
       activeName_2: '2_1',
       activeName_4: '4_1'
+    }
+  },
+  methods: {
+    handleClick () {
+      sessionStorage.appActiveModel = this.activeName
     }
   }
 }

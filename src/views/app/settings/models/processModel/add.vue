@@ -10,6 +10,7 @@
   </div>
 </template>
 <script>
+import { getListData } from '@/api/app/formModel.js'
 const getDefaultFrom = () => {
   return {
     processKey: '',
@@ -18,6 +19,7 @@ const getDefaultFrom = () => {
   }
 }
 export default {
+  props: ['appId'],
   data () {
     return {
       form: getDefaultFrom(),
@@ -43,9 +45,25 @@ export default {
           rules: [
             { required: true, message: "请输入版本", trigger: "change" },
           ]
+        },
+        {
+          label: '关联表单',
+          prop: 'formId',
+          type: 'select',
+          options: [],
+          optionsProps: {
+            label: 'name',
+            value: 'id'
+          }
         }
       ]
     }
+  },
+  created () {
+    getListData(this.appId).then(res => {
+      const target = this.formOptions.find(item => item.prop === 'formId')
+      target && (target.options = res.data.records)
+    })
   },
   methods: {
     submit () {

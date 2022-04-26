@@ -15,6 +15,7 @@
 <script>
 import Parser from '@/components/CodeEditor/components/parser/Parser.vue'
 import request from '@/utils/request'
+import { getAppProcess } from '@/api/oa/process.js'
 export default {
   name: 'form-container',
   components: {
@@ -31,7 +32,16 @@ export default {
       errorTip: ''
     }
   },
+  async created () {
+    // 渲染表单之前，要先获取流程相关配置对象，而且要根据流程的配置来决定表单组件是否禁用是否只读等
+    const { pageModelCode, taskId, taskType } = this.$route.query
+    await getAppProcess(pageModelCode, taskId, taskType).then(res => {
+      this.$store.commit('codeEditor/process/setProcessConfig', res.data)
+    })
+    this.getFormConf()
+  },
   methods: {
+    // 获取渲染表单的json
     async getFormConf () {
       if (!this.url) return
       // 如果是编辑或者详情页 就要获取数据做一下数据回填
@@ -88,9 +98,6 @@ export default {
       }
     }
 
-  },
-  created () {
-    this.getFormConf()
   }
 }
 </script>

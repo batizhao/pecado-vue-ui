@@ -1,12 +1,14 @@
 import request from '@/utils/request'
 
 // 获取app流程对象
-export function getAppProcess (appId, taskId) {
+export function getAppProcess (pageModelCode, taskId, taskType) {
   return request({
-    url: '/app/init/' + appId,
+    url: '/app/init',
     method: 'get',
     params: {
-      taskId
+      key: pageModelCode,
+      taskId,
+      taskType
     }
   })
 }

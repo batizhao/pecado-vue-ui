@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { getProcessConfigInfo, getAppProcess, getCandidate, startProcess, submitProcess } from '@/api/oa/process.js'
+import { getProcessConfigInfo, getCandidate, startProcess, submitProcess } from '@/api/oa/process.js'
 export default {
   data () {
     return {
@@ -105,13 +105,10 @@ export default {
         return
       }
       this.formData = formData
-      this.getAppProcess(this.$route.query.appId, this.taskId).then(() => {
-        this.opinionDialogVisible = true
-        this.$nextTick(() => {
-          this.$refs.actionFormRef.reset()
-        })
-      }).catch(err => {
-        this.msgError(err)
+      this.getAppProcess()
+      this.opinionDialogVisible = true
+      this.$nextTick(() => {
+        this.$refs.actionFormRef.reset()
       })
     },
     // 意见提交
@@ -207,34 +204,34 @@ export default {
       }, { procInstId })
     },
     // 获取app的流程定义id
-    getAppProcess (appId, taskId) {
-      return getAppProcess(appId, taskId).then(res => {
-        // 从地址栏判断是否有任务id
-        if (this.taskId) {
-          const task = res.data.task
-          if (task) {
-            this.processDefinitionId = task.config.processDefId // 流程定义id
-            this.taskDefKey = task.config.taskDefKey  // 流程审批环节id
-            this.procInstId = task.procInstId // 流程实例id
-            this.configObj = task.config
-            this.checkUserList = task.checkUserList // 任务处理的候选人列表
-            this.getProcessConfigInfo(this.taskDefKey)
-          } else {
-            return Promise.reject(`app(ID:${appId})无流程数据`)
-          }
+    getAppProcess () {
+      const { pageModelCode } = this.$route.query
+      const resData = this.$store.state.codeEditor.process.processConfig
+      // 从地址栏判断是否有任务id
+      if (this.taskId) {
+        const task = resData.task
+        if (task) {
+          this.processDefinitionId = task.config.processDefId // 流程定义id
+          this.taskDefKey = task.config.taskDefKey  // 流程审批环节id
+          this.procInstId = task.procInstId // 流程实例id
+          this.configObj = task.config
+          this.checkUserList = task.checkUserList // 任务处理的候选人列表
+          this.getProcessConfigInfo(this.taskDefKey)
         } else {
-          // 如果没有任务id就从process对象里取值
-          const process = res.data.process
-          if (process) {
-            this.processDefinitionId = process.dto.id // 流程定义id
-            this.taskDefKey = process.view.dto.id  // 流程审批环节id
-            this.configObj = process.view.config
-            this.getProcessConfigInfo(this.taskDefKey)
-          } else {
-            return Promise.reject(`app(ID:${appId})无流程数据`)
-          }
+          return Promise.reject(`表单未绑定流程(Code:${pageModelCode})`)
         }
-      })
+      } else {
+        // 如果没有任务id就从process对象里取值
+        const process = resData.process
+        if (process) {
+          this.processDefinitionId = process.dto.id // 流程定义id
+          this.taskDefKey = process.view.dto.id  // 流程审批环节id
+          this.configObj = process.view.config
+          this.getProcessConfigInfo(this.taskDefKey)
+        } else {
+          return Promise.reject(`表单未绑定流程(Code:${pageModelCode})`)
+        }
+      }
     },
     // 获取 下一节点 选项
     getProcessConfigInfo (taskDefKey) {
