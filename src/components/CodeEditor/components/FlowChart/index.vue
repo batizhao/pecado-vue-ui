@@ -42,7 +42,6 @@ export default {
         },
       }).then((res) => {
         this.flowChart.xml=this.$Base64.decode(res.data)
-        console.log('this.flowChart.xml',this.flowChart.xml);
       });
     },
   },
