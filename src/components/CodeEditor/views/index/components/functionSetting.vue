@@ -28,6 +28,10 @@
                 <span>this.setValue(field, value)</span>
               </li>
               <li>
+                <span>设置默认值</span>
+                <span>this.setDefaultValue(field, value)</span>
+              </li>
+              <li>
                 <span>设置禁用</span>
                 <span>this.setDisabled(field, value)</span>
               </li>

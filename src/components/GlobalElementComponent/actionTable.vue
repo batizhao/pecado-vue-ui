@@ -14,6 +14,7 @@
       v-loading="loading"
       :row-key="rowKey"
       :tree-props="treeProps"
+      :max-height="maxHeight"
       @selection-change="selectionChange"
     >
       <el-table-column
@@ -111,6 +112,7 @@ export default {
       type: Boolean,
       default: false
     },
+    maxHeight: [String, Number],
     operationColumn: { // 操作列配置
       type: Object,
       default: () => ({

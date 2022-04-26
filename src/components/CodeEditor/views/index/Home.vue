@@ -52,7 +52,7 @@
         <div class="action-bar-content">
           <!-- 空div占位用的 -->
           <div></div>
-          <el-radio-group v-model="resolvingPowerType" size="mini" @change="changeResolvingPower">
+          <el-radio-group v-model="formConf.resolvingPowerType" size="mini">
             <el-radio-button label="Pc"></el-radio-button>
             <el-radio-button label="Pad"></el-radio-button>
             <el-radio-button label="H5"></el-radio-button>
@@ -228,7 +228,7 @@ export default {
       resetIdGlobalNum: 0,
       leftBordShow: true,
       rightBordShow: true,
-      resolvingPowerType: 'Pc'
+      resolvingPowerType: ''
     }
   },
   computed: {
@@ -253,6 +253,11 @@ export default {
       this.$message.error('代码复制失败')
     })
   },
+  watch: {
+    'formConf.resolvingPowerType': function (val) {
+      this.changeResolvingPower(val)
+    }
+  },
   methods: {
     ...mapMutations('codeEditor/components', [
       'setFormData',
@@ -270,7 +275,6 @@ export default {
         pxValue = '390px'
       }
       editorDom.style.width = pxValue
-      this.$set(this.formConf, 'resolvingPowerType', val)
     },
     setObjectValueReduce (obj, strKeys, data) {
       const arr = strKeys.split('.')

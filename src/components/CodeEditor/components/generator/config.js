@@ -48,6 +48,7 @@ export const formConf = {
   span: 24,
   formBtns: true,
   isForm: true,
+  resolvingPowerType: 'Pc',
   __methods__: {
     global: '',
     onMounted: ''

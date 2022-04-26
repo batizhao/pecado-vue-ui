@@ -6,6 +6,7 @@
       :columns="columns"
       :showPagination="false"
       :showSelection="false"
+      :maxHeight="600"
     >
       <template v-slot:action="scope">
         <action-button actionType="3" @click="handleView(scope.row)" icon="el-icon-view">查看</action-button>

@@ -430,7 +430,7 @@ export default {
       })
     },
     // 找到字段对应的配置对象
-    recursion (field, callback) {
+    recursion (field, callback, origin) {
       let target = null
       const recursion = list => {
         for (let item of list) {
@@ -443,7 +443,7 @@ export default {
           }
         }
       }
-      recursion(this.formConfCopy.fields)
+      recursion(origin || this.formConfCopy.fields)
       if (target) {
         callback && callback(target)
         target.__config__.renderKey = String(new Date().getTime())
@@ -459,6 +459,11 @@ export default {
     setValue (field, value) {
       this.setOption(field, '__config__.defaultValue', value)
       this[this.formConf.formModel][field] = value
+    },
+    // 设置默认值
+    setDefaultValue (field, value) {
+      this.setValue(field, value)
+      this.setOption(field, '__config__.defaultValue', value, this.formConf.fields)
     },
     // 设置禁用
     setDisabled (field, value = true) {
@@ -479,7 +484,7 @@ export default {
       })
     },
     // 设置指定属性值
-    setOption (field, key, value) {
+    setOption (field, key, value, origin) {
       this.recursion(field, target => {
         const keyArr = key.split('.')
         keyArr.reduce((total, current, index) => {
@@ -490,7 +495,7 @@ export default {
           }
           return total[current]
         }, target)
-      })
+      }, origin)
     },
     // 获取用户信息
     getUserInfo () {
