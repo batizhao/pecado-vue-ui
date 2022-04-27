@@ -241,6 +241,11 @@ function setValue(event, config, scheme) {
   this.$set(this[this.formConf.formModel], scheme.__vModel__, event);
 }
 
+function eventLog (key, event, index) {
+  const val = typeof event === 'object' ? JSON.stringify(event) : event
+  console.log(`%c -----------${key}事件触发了----------- value: ${val}` + (index !== undefined ? ` index: ${index}` : ''), 'color: #1890ff;')
+}
+
 function buildListeners(scheme) {
   const config = scheme.__config__;
   const methods = scheme.__methods__ || {};
@@ -251,8 +256,8 @@ function buildListeners(scheme) {
   Object.keys(methods).forEach(key => {
     listeners[key] = event => {
       if (methods[key]) {
-        const met = new Function('value', 'index', formGlobalMethods + methods[key])
-        console.log(`%c -----------${key}事件触发了---------- value: ${event}`, 'color: #1890ff;')
+        const met = new Function('value', formGlobalMethods + methods[key])
+        eventLog(key, event)
         met.call(this, event)
       }
     }
@@ -263,7 +268,7 @@ function buildListeners(scheme) {
     // input事件被重写 所以要把原来自定义的onInput加上
     if (methods.onInput && typeof methods.onInput === 'string') {
       const met = new Function('value', formGlobalMethods + methods.onInput)
-      console.log(`%c -----------onInput事件触发了----------- value: ${event}`, 'color: #1890ff;')
+      eventLog('onInput', event)
       met.call(this, event)
     }
   }
@@ -280,7 +285,7 @@ function subformTableBuildListeners(scheme, parentScheme, subformTableLayoutRefN
       if (methods[key]) {
         const met = new Function('value', 'index', formGlobalMethods + methods[key])
         const subformTableLayoutRef = this.$refs[subformTableLayoutRefName].$children[0]
-        console.log(`%c -----------${key}事件触发了---------- value: ${event} index: ${scoped.index}`, 'color: #1890ff;')
+        eventLog(key, event, scoped.index)
         met.call(subformTableLayoutRef, event, scoped.index)
       }
     }
@@ -293,7 +298,7 @@ function subformTableBuildListeners(scheme, parentScheme, subformTableLayoutRefN
     // input事件被重写 所以要把原来自定义的onInput加上
     if (methods.onInput) {
       const met = new Function('value', 'index', formGlobalMethods + methods.onInput)
-      console.log(`%c -----------onInput事件触发了----------- value: ${event} index: ${scoped.index}`, 'color: #1890ff;')
+      eventLog('onInput', event, scoped.index)
       met.call(subformTableLayoutRef, event, scoped.index)
     }
   }

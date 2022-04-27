@@ -58,8 +58,12 @@
 
 <script>
 import request from '@/utils/request'
+import draggable from 'vuedraggable'
 export default {
   name: 'department-selector-1',
+  components: {
+    draggable
+  },
   props: {
     value: Array,
     __config__: Object,

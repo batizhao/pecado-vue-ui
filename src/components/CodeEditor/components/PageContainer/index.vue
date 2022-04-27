@@ -1,12 +1,12 @@
 <template>
-  <div class="page-container" :class="{'gray-back': !parserFormConf}">
+  <el-scrollbar class="page-container" :class="{'gray-back': !parserFormConf}">
     <parser
       v-if="parserShow && parserFormConf"
       :form-conf="parserFormConf"
       :showSubmit="false"
     />
     <div class="tip" v-else>{{`页面容器 ${errorTip}`}}</div>
-  </div>
+  </el-scrollbar>
 </template>
 
 <script>
@@ -98,7 +98,13 @@ export default {
 .page-container {
   min-height: 300px;
 }
-.page-container > .tip {
+.page-container >>> .el-scrollbar__wrap{
+  overflow-x: hidden;
+}
+.page-container >>> .el-scrollbar__bar.is-horizontal {
+  display: none;
+}
+.page-container .tip {
   text-align: center;
   line-height: 300px;
   font-size: 18px;

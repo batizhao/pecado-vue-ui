@@ -1,12 +1,13 @@
 <template>
-  <div class="navbar-container" :style="{ display: navbarShow ? 'block' : '' }">
+  <el-scrollbar class="navbar-container" :style="{ display: navbarShow ? 'block' : '' }">
     <render-menu
       v-if="sideActiveIndex"
       :menuData="navBarMenuData"
       :default-active="sideActiveIndex"
       @selectItem="navBarSelect"
+      style="height: 100%;"
     ></render-menu>
-  </div>
+  </el-scrollbar>
 </template>
 
 <script>
@@ -112,6 +113,12 @@ export default {
 }
 </script>
 
+<style scoped>
+.navbar-container >>> .el-scrollbar__wrap {
+  overflow-x: hidden;
+}
+
+</style>
 <style lang="scss" scoped>
 @media screen and (min-width: 993px)  {
   .navbar-container {

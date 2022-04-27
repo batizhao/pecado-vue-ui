@@ -1033,6 +1033,12 @@ export const layoutPageComponents = [
       tagIcon: 'input',
       layout: 'native',
       span: 3
+    },
+    styles: {
+      defaultStyles: {
+        height: 'calc(100vh - 50px)',
+        borderRight: '1px solid #e2e2e2'
+      }
     }
   },
   {
@@ -1060,6 +1066,11 @@ export const layoutPageComponents = [
       tagIcon: 'row',
       span: 21,
       layout: 'native'
+    },
+    styles: {
+      defaultStyles: {
+        height: 'calc(100vh - 110px)'
+      }
     }
   },
   {
@@ -1072,7 +1083,12 @@ export const layoutPageComponents = [
       layout: 'native',
       span: 24
     },
-    separator: undefined // 分隔符
+    separator: undefined, // 分隔符
+    styles: {
+      defaultStyles: {
+        height: '30px'
+      }
+    }
   },
   rowContainer
 ]

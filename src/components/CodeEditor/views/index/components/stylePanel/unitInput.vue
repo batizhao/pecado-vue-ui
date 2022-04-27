@@ -34,7 +34,7 @@ export default {
     },
     unitList: {
       type: Array,
-      default: () => ['px', '%', 'auto', 'em', 'rem']
+      default: () => ['px', '%', 'auto', 'em', 'rem', 'calc']
     },
     max: {
       type: Number
@@ -45,34 +45,40 @@ export default {
       get () {
         if (!this.value) return ''
         if (this.value === 'auto') {
-          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-          this.unitValue = 'auto'
+          this.setUnitValue('auto')
           return 'auto'
+        }
+        if (this.value.startsWith('calc')) {
+          this.setUnitValue('calc')
+          const matchResult = this.value.match(/calc\((.+)\)/)
+          return matchResult[1]
         }
         // 拆分数字和单位
         const matchResult = this.value.match(/([0-9.]+)(.+)/)
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.unitValue = matchResult[2]
+        this.setUnitValue(matchResult[2])
         return matchResult[1]
       },
       set (val) {
-        // 如果输入框为空，就输入一个undefined
-        // 如果为auto就输出auto
-        // 如果不为数字也输出undefined
-        // 如果为数字就输出数字加单位
-        // 如果数字大于max就重置为max值
         let result
-        const value = val.trim()
-        if (value !== '' && value !== 'auto') {
-          if (!isNaN(Number(value))) {
-            if (this.max !== undefined && Number(value) >= this.max) {
-              result = this.max + this.unitValue
+        const value = this.unitValue === 'calc' ? val : val.trim()
+        if (value === '') { // 如果输入框为空，就输入一个undefined
+          result = undefined
+        } else {
+          if (this.unitValue === 'auto') { // 如果单位为auto就输出auto
+            result = 'auto'
+          } else if (this.unitValue === 'calc') { // 如果单位为calc就用calc()包裹
+            result = `calc(${value})`
+          } else {
+            if (isNaN(Number(value))) { // 如果不为数字也输出undefined
+              result = undefined
             } else {
-              result = value + this.unitValue
+              if (this.max !== undefined && Number(value) >= this.max) { // 如果数字大于max就重置为max值
+                result = this.max + this.unitValue
+              } else {
+                result = value + this.unitValue // 如果为数字就输出数字加单位
+              }
             }
           }
-        } else if (value === 'auto') {
-          result = 'auto'
         }
         this.$emit('input', result)
         this.$emit('change', result)
@@ -88,8 +94,10 @@ export default {
     unitChange (val) {
       if (val === 'auto') {
         this.newValue = 'auto'
+      } else if (val === 'calc') {
+        this.newValue = '100vh - 70px'
       } else {
-        this.newValue = this.newValue === 'auto' ? '' : this.newValue
+        this.newValue = ''
       }
     },
     addNum () {
@@ -99,6 +107,9 @@ export default {
     minusNum () {
       if (Number(this.newValue) <= 0) return
       this.newValue = String(Number(this.newValue) - 1)
+    },
+    setUnitValue (val) {
+      this.unitValue = val
     }
   }
 }
