@@ -109,8 +109,6 @@ export default {
               this.$message.error(String(err))
               console.error(err)
             })
-        } else {
-          this.$message.error('请填写接口地址')
         }
       } else {
         this.options = this.__slot__.options.map(item => ({
@@ -119,6 +117,12 @@ export default {
           disabled: item.disabled
         }))
       }
+    },
+    setOptions (options) {
+      this.options = options.map(item => ({
+        label: item.label,
+        value: item
+      }))
     }
   }
 }

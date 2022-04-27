@@ -3,6 +3,7 @@ import { deepClone } from "../../utils/index";
 import render from "../render/render.js";
 import { addAllNodesStyleToDocument, addCSS } from './addStyleToDocument.js'
 import { getLabels } from './addLabels.js'
+import request from '@/utils/request'
 
 const layouts = {
   // 所有表单类填写组件用此布局
@@ -13,7 +14,7 @@ const layouts = {
     if (config.showLabel === false) labelWidth = "0";
     const getNode = () => {
       if (!this.readOnly) {
-        return <render conf={scheme} on={listeners}></render>
+        return <render ref={scheme.__config__.formId + 'Ref'} conf={scheme} on={listeners}></render>
       } else {
         return <div>{getLabels.call(this.editData, h, scheme.__config__.defaultValue, scheme)}</div>
       }
@@ -119,7 +120,7 @@ const layouts = {
     const listeners = buildListeners.call(this, currentItem);
     const config = currentItem.__config__
     const componentScopedSlots = {}
-    const subformTableLayoutRefName = 'subformTableLayoutRef' + Math.floor(Math.random() * 100000)
+    const subformTableLayoutRefName = config.formId + 'Ref'
     currentItem.columns.map((item, cIndex) => {
       const child = config.children[cIndex]
       componentScopedSlots[item.prop + cIndex] = (scoped) => {
@@ -333,7 +334,8 @@ export default {
       [this.formConf.formModel]: {},
       [this.formConf.formRules]: {},
       renderKey: '',
-      mountedEvents: []
+      mountedEvents: [],
+      request: request
     };
 
     this.buildRules(data.formConfCopy.fields, data[this.formConf.formRules]);
@@ -507,6 +509,18 @@ export default {
     // 获取用户信息
     getUserInfo () {
       return JSON.parse(JSON.stringify(this.$store.state.user.userInfo))
+    },
+    // 获取组件
+    getRef (field) {
+      let ref = null
+      this.recursion(field, target => {
+        if (target) {
+          ref = this.$refs[target.__config__.formId + 'Ref']
+        } else {
+          this.msgError(field + '组件不存在')
+        }
+      })
+      return ref ? ref.$children[0] : null
     }
   },
   render(h) {

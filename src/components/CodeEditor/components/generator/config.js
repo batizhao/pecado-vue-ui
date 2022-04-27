@@ -64,6 +64,7 @@ const rowContainer = {
     label: '行容器',
     layoutTree: true,
     span: 24,
+    children: [],
     document: 'https://element.eleme.cn/#/zh-CN/component/layout#row-attributes'
   }
 }

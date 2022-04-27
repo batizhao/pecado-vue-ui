@@ -2,8 +2,8 @@
   <div>
     <el-form size="small" label-width="90px">
       <form-basic-setting>
+        <options></options>
       </form-basic-setting>
-      <options></options>
     </el-form>
   </div>
 </template>

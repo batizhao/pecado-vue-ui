@@ -17,7 +17,7 @@
         <span>{{eventName + '事件'}} </span>
         <el-tooltip placement="top" effect="light">
           <div slot="content">
-            <h4>基础组件API</h4>
+            <h4>组件通用API</h4>
             <ol class="event-tips">
               <li>
                 <span>获取值</span>
@@ -51,12 +51,23 @@
                 <span>设置指定属性值</span>
                 <span>this.setOption(field, key, value)</span>
               </li>
+              <li>
+                <span>获取组件</span>
+                <span>const ref = this.getRef(field)</span>
+              </li>
             </ol>
-            <h4>子表单组件API</h4>
+            <h4>子表单内组件API</h4>
             <ol class="event-tips">
               <li>
                 <span>设置值</span>
                 <span>this.setValue(index, attrName, value)</span>
+              </li>
+            </ol>
+            <h4>下拉选择API</h4>
+            <ol class="event-tips">
+              <li>
+                <span>设置选项列表</span>
+                <span>this.getRef(field).setOpions(options)</span>
               </li>
             </ol>
             <h4>用户API</h4>
@@ -88,6 +99,17 @@
               <li>
                 <span>用户邮箱</span>
                 <span>user.email</span>
+              </li>
+            </ol>
+            <h4>请求API</h4>
+            <ol class="event-tips">
+              <li>
+                <span>Get请求</span>
+                <span>this.request.get(url).then(res => {})</span>
+              </li>
+              <li>
+                <span>Post请求</span>
+                <span>this.request.post(url, data).then(res => {})</span>
               </li>
             </ol>
           </div>

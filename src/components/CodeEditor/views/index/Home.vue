@@ -343,7 +343,6 @@ export default {
       }
       const drawingListCopy = JSON.parse(JSON.stringify(drawingList))
       recursion(drawingListCopy, [])
-      console.log("🚀 ~ file: Home.vue ~ line 342 ~ findOffset ~ drawingListCopy", drawingListCopy)
       return indexArrResult
     },
     onEnd (obj) {
