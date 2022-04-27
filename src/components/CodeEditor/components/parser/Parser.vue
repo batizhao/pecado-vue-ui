@@ -100,13 +100,15 @@ const layouts = {
     if (!currentItem) {
       return h('', {})
     }
+    const config = currentItem.__config__
     const child = renderChildren.apply(this, arguments)
+    const styleSheets = config.styleSheets ? config.styleSheets.join(' ') : ''
     return (
       <table-td
         rowspan={currentItem.rowspan}
         colspan={currentItem.colspan}
       >
-        <div class="drag-wrapper flex-start-wrap">
+        <div class={`drag-wrapper flex-start-wrap component-style-panel-${config.formId} ${styleSheets}`} v-show={!config.hidden}>
           {child}
         </div>
       </table-td>

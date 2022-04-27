@@ -180,6 +180,9 @@ $lighterBlue: #409eff;
       display: initial;
       z-index: 2;
     }
+    & > .layout-table-td-icon {
+      display: block !important;
+    }
     & > .component-name {
       color: $lighterBlue;
     }
@@ -223,6 +226,9 @@ $lighterBlue: #409eff;
     & > .drawing-item-copy,
     & > .drawing-item-delete {
       display: initial;
+    }
+    & > .layout-table-td-icon {
+      display: block !important;
     }
   }
   & > .drawing-item-copy,
@@ -274,18 +280,13 @@ $lighterBlue: #409eff;
     border: 1px dashed #369;
     padding: 3px;
     .layout-table-td-icon {
-      display: none;
       position: absolute;
       right: 2px;
       bottom: 0px;
       color: #409eff;
       font-size: 12px;
       cursor: pointer;
-    }
-    &:hover {
-      .layout-table-td-icon {
-        display: block;
-      }
+      display: none;
     }
   }
 }

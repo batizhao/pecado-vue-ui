@@ -14,7 +14,7 @@
 
         <!-- 样式面板 -->
         <div v-show="currentTab==='style'">
-          <style-panel></style-panel>
+          <style-panel v-if="currentComponent"></style-panel>
         </div>
 
         <!-- 表单属性 -->

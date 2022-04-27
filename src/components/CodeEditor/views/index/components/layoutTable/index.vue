@@ -2,7 +2,7 @@
   <div>
     <el-form size="small" label-width="90px">
       <form-basic-setting>
-        <el-form-item label="边框">
+        <el-form-item label="边框" v-if="activeData.border !== undefined">
           <el-switch v-model="activeData.border"></el-switch>
         </el-form-item>
       </form-basic-setting>

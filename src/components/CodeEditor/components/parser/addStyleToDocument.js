@@ -88,6 +88,14 @@ function addAllNodesStyleToDocument (drawingList) {
       if (item.__config__.children) {
         recursion(item.__config__.children)
       }
+      if (item.__config__.tag === 'layout-table') {
+        item.layoutTableData.map(rowItem => {
+          rowItem.map(cell => {
+            addOneNodeStyleToDocument(cell)
+            recursion(cell.__config__.children)
+          })
+        })
+      }
     }
   }
   recursion(drawingList)

@@ -763,21 +763,24 @@ export const layoutComponents = [
       [
         {
           __config__: {
+            label: '单元格',
             layout: 'tableCell',
-            children: []
+            children: [],
+            panel:'lx-layout-table'
           },
-          rowspan: 1, 
+          rowspan: 1,
           colspan: 1
         },
         { 
           __config__: {
+            label: '单元格',
             layout: 'tableCell',
-            children: []
+            children: [],
+            panel: 'lx-layout-table'
           },
           rowspan: 1, 
           colspan: 1
-        },
-
+        }
       ]
     ],
     border: true

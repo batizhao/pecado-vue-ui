@@ -298,9 +298,19 @@ export default {
 
     activeFormItem (item) {
       if (item && item.__config__) {
+        if (!item.__config__.formId || !item.__config__.renderKey) {
+          this.msgError('formId或renderKey不存在')
+          return
+        }
         this.activeId = item.__config__.formId
         const activeIndex = this.findOffset(this.drawingList, item.__config__.renderKey)
+        if (!activeIndex.length) {
+          this.msgError('activeIndex为空')
+          return
+        }
         this.setActiveIndex(activeIndex)
+      } else {
+        this.setActiveIndex([])
       }
     },
 
@@ -318,6 +328,9 @@ export default {
             item.layoutTableData.map((rowItem, rowIndex) => {
               rowItem.map((tableCell, colIndex) => {
                 tableCell.indexArr = item.indexArr.concat([[rowIndex, colIndex]])
+                if (tableCell.__config__.renderKey === val) {
+                  indexArrResult = tableCell.indexArr || []
+                }
                 if (tableCell.__config__.children instanceof Array) {
                   recursion(tableCell.__config__.children, tableCell.indexArr)
                 }
@@ -330,6 +343,7 @@ export default {
       }
       const drawingListCopy = JSON.parse(JSON.stringify(drawingList))
       recursion(drawingListCopy, [])
+      console.log("🚀 ~ file: Home.vue ~ line 342 ~ findOffset ~ drawingListCopy", drawingListCopy)
       return indexArrResult
     },
     onEnd (obj) {
@@ -365,8 +379,14 @@ export default {
         config.children.map((childItem) => {
           this.createIdAndKey(childItem)
         })
-      } else {
-        config.children = []
+      }
+      // 如果是表格布局
+      if (item.__config__.tag === 'layout-table') {
+        item.layoutTableData.map(rowItem => {
+          rowItem.map(cell => {
+            this.createIdAndKey(cell)
+          })
+        })
       }
       return item
     },

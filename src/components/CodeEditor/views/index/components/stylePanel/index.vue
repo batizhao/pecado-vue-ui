@@ -432,7 +432,7 @@ export default {
     '$store.state.codeEditor.components.activeIndex': function (val, old) {
       if (String(val) !== String(old)) {
         this.styleStatus = 'default'
-        const styles = this.activeData && (this.activeData.styles || {})
+        const styles = this.activeData.styles || {}
         this.defaultStyles = styles.defaultStyles || {}
         this.hoverStyles = styles.hoverStyles || {}
         this.activeStyles = styles.activeStyles || {}
@@ -440,12 +440,15 @@ export default {
       }
     },
     // 监听页面数据
-    '$store.state.codeEditor.components.drawingList': function (val) {
-      // 初始化一次性加载所有节点样式
-      if (this.initDown && val.length) {
-        addAllNodesStyleToDocument(val)
-        this.initDown = false
-      }
+    '$store.state.codeEditor.components.drawingList': {
+      handler: function (val) {
+        // 初始化一次性加载所有节点样式
+        if (this.initDown && val.length) {
+          addAllNodesStyleToDocument(val)
+          this.initDown = false
+        }
+      },
+      immediate: true
     },
     currentStatusStyle: {
       handler (val) {

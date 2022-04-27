@@ -1,11 +1,20 @@
 import store from '@/store'
-import { deepClone } from '@/utils'
+
+let num = 0
 const getCell = (rowspan = 1, colspan = 1) => {
+  const formId = Number(new Date().getTime() - 1642560259070 + num).toString(16)
+
+  num ++
   return {
     __config__: {
+      label: '单元格',
       layout: 'tableCell',
-      children: []
+      children: [],
+      panel:'lx-layout-table',
+      formId,
+      renderKey: `${formId}${+new Date()}`
     },
+    __vModel__: `field${formId}`,
     rowspan, 
     colspan
   }
