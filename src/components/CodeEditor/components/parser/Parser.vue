@@ -244,9 +244,9 @@ function setValue(event, config, scheme) {
   this.$set(this[this.formConf.formModel], scheme.__vModel__, event);
 }
 
-function eventLog (key, event, index) {
+function eventLog ( field, key, event, index) {
   const val = typeof event === 'object' ? JSON.stringify(event) : event
-  console.log(`%c -----------${key}事件触发了----------- value: ${val}` + (index !== undefined ? ` index: ${index}` : ''), 'color: #1890ff;')
+  console.log(`%c -----------${field}.${key}----------- value: ${val}` + (index !== undefined ? ` index: ${index}` : ''), 'color: #1890ff;')
 }
 
 function buildListeners(scheme) {
@@ -260,7 +260,7 @@ function buildListeners(scheme) {
     listeners[key] = event => {
       if (methods[key]) {
         const met = new Function('value', formGlobalMethods + methods[key])
-        eventLog(key, event)
+        eventLog(scheme.__vModel__, key, event)
         met.call(this, event)
       }
     }
@@ -271,7 +271,7 @@ function buildListeners(scheme) {
     // input事件被重写 所以要把原来自定义的onInput加上
     if (methods.onInput && typeof methods.onInput === 'string') {
       const met = new Function('value', formGlobalMethods + methods.onInput)
-      eventLog('onInput', event)
+      eventLog(scheme.__vModel__, 'onInput', event)
       met.call(this, event)
     }
   }
@@ -287,9 +287,8 @@ function subformTableBuildListeners(scheme, parentScheme, subformTableLayoutRefN
     listeners[key] = event => {
       if (methods[key]) {
         const met = new Function('value', 'index', formGlobalMethods + methods[key])
-        const subformTableLayoutRef = this.$refs[subformTableLayoutRefName].$children[0]
-        eventLog(key, event, scoped.index)
-        met.call(subformTableLayoutRef, event, scoped.index)
+        eventLog(scheme.__vModel__, key, event, scoped.index)
+        met.call(this, event, scoped.index)
       }
     }
   });
@@ -301,8 +300,8 @@ function subformTableBuildListeners(scheme, parentScheme, subformTableLayoutRefN
     // input事件被重写 所以要把原来自定义的onInput加上
     if (methods.onInput) {
       const met = new Function('value', 'index', formGlobalMethods + methods.onInput)
-      eventLog('onInput', event, scoped.index)
-      met.call(subformTableLayoutRef, event, scoped.index)
+      eventLog(scheme.__vModel__, 'onInput', event, scoped.index)
+      met.call(this, event, scoped.index)
     }
   }
   return listeners;
@@ -347,11 +346,13 @@ export default {
     const formMethods = this.formConfCopy.__methods__
     if (formMethods && formMethods.onMounted) {
       const formFn = new Function(formMethods.onMounted)
+      console.log(`%c -----------form.onMounted-----------`, 'color: #1890ff;')
       formFn.call(this)
     }
     // 执行所有组件的onMounted事件
-    this.mountedEvents.map(fn => {
-      fn.call(this)
+    this.mountedEvents.map(item => {
+      console.log(`%c -----------${item.field}.onMounted-----------`, 'color: #1890ff;')
+      item.fn.call(this)
     })
   },
   methods: {
@@ -366,7 +367,10 @@ export default {
         }
         // 收集onMounted事件
         if (cur.__methods__ && cur.__methods__.onMounted) {
-          mountedEvents.push(new Function(cur.__methods__.onMounted))
+          mountedEvents.push({
+            field: cur.__vModel__,
+            fn: new Function(cur.__methods__.onMounted)
+          })
         }
         if (config.children && (config.tag !== 'subform-table')) this.initFormData(config.children, formData, mountedEvents);
       });
@@ -455,7 +459,6 @@ export default {
       recursion(origin || this.formConfCopy.fields)
       if (target) {
         callback && callback(target)
-        target.__config__.renderKey = String(new Date().getTime())
       } else {
         console.error(`目标字段${field}不存在`);
       }

@@ -69,7 +69,7 @@ const user = {
             ...me, 
             permissions: res.data.permissions, // 权限
             roleCode: res.data.roles, // 角色标识
-            departmentId: res.data.deptIds // 部门id
+            departmentList: res.data.departmentList // 部门id及name集合
           })
           resolve(res)
         }).catch(error => {

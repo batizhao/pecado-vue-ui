@@ -26,8 +26,8 @@
           <el-input-number v-model="activeData.max" />
         </el-form-item>
       </template>
-      </form-basic-setting>
       <options></options>
+      </form-basic-setting>
     </el-form>
   </div>
 </template>

@@ -4,7 +4,10 @@
     <ul class="event-setting-buttons">
       <li v-for="(value, key, index) in formConf ? formConf.__methods__ : activeData.__methods__" :key="index">
         <span>{{key}}</span>
-        <el-button icon="el-icon-edit" size="mini" @click="writeFunction(value, key)">编写</el-button>
+        <el-badge is-dot v-if="value">
+          <el-button icon="el-icon-edit" size="mini" @click="writeFunction(value, key)">编写</el-button>
+        </el-badge>
+        <el-button v-else icon="el-icon-edit" size="mini" @click="writeFunction(value, key)">编写</el-button>
       </li>
     </ul>
     <action-dialog v-model="editorVisible" @confirm="editorConfirm" width="80%">
@@ -16,7 +19,7 @@
       <template v-slot:title>
         <span>{{eventName + '事件'}} </span>
         <el-tooltip placement="top" effect="light">
-          <div slot="content">
+          <div slot="content" style="height: 500px;overflow:auto;">
             <h4>组件通用API</h4>
             <ol class="event-tips">
               <li>
@@ -56,11 +59,11 @@
                 <span>const ref = this.getRef(field)</span>
               </li>
             </ol>
-            <h4>子表单内组件API</h4>
+            <h4>子表单API</h4>
             <ol class="event-tips">
               <li>
-                <span>设置值</span>
-                <span>this.setValue(index, attrName, value)</span>
+                <span>设置某行某个属性的值</span>
+                <span>this.getRef(field).setValue(index, attrName, value)</span>
               </li>
             </ol>
             <h4>下拉选择API</h4>
@@ -85,8 +88,8 @@
                 <span>user.username</span>
               </li>
               <li>
-                <span>用户所在部门Id集合</span>
-                <span>user.departmentId</span>
+                <span>用户所在部门id和name的集合</span>
+                <span>user.departmentList</span>
               </li>
               <li>
                 <span>用户角色编码集合</span>

@@ -58,8 +58,8 @@
           </template>
         </el-input>
       </el-form-item>
-      </form-basic-setting>
       <regular v-if="activeData.__config__.regList"></regular>
+      </form-basic-setting>
     </el-form>
     <icons-dialog
       :visible.sync="iconsVisible"
