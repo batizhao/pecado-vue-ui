@@ -83,8 +83,14 @@ export default {
       defaultZoom: 1,
     };
   },
+  // watch:{
+  //   row(val){
+  //     console.log('rowval',val);
+  //     this.init(null, val.processInstanceId,val.sourceType)
+  //   }
+  // },
   mounted() {
-    this.init(null, this.row.processInstanceId,this.row.sourceType);
+      this.init(null, this.row.processInstanceId,this.row.sourceType);
   },
   methods: {
     // 初始化
